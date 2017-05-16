@@ -1,0 +1,26 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "ENV": true,
+    "react": true,
+    "react-dom": true
+  },
+  "extends": [
+    "airbnb"
+  ],
+  "ecmaFeatures": {
+    "experimentalObjectRestSpread": true,
+    "jsx": true
+  },
+  "plugins": [
+    "react",
+    "jsx-a11y"
+  ],
+  "rules": {
+    "import/no-extraneous-dependencies": ["error", { "peerDependencies": true }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+  },
+}
