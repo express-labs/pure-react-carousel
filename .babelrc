@@ -1,3 +1,19 @@
 {
-  "presets": ["es2015-rollup", "react"]
+  "env": {
+    "development": {
+      "presets": ["es2015-rollup", "react"]
+    },
+    "production": {
+      "presets": ["es2015-rollup", "react"]
+    },
+    "test": {
+      "presets": [
+    		["es2015", { "modules": false }],
+    		"react"
+    	],
+			"plugins": [
+				"transform-es2015-modules-commonjs"
+			]
+    }
+  }
 }
