@@ -31,7 +31,7 @@
     "enzyme": "^2.8.2",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.0",
-    "eslint-config-mrb3k-jest": "git+https://github.com/mrbinky3000/eslint-config-mrb3k-jest.git",
+    "eslint-config-mrb3k-jest": "^0.0.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^5.0.1",
     "eslint-plugin-node": "^4.2.2",
