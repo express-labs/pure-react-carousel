@@ -2,10 +2,13 @@ import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import eslint from 'rollup-plugin-eslint';
 import livereload from 'rollup-plugin-livereload';
+import omit from 'object.omit';
 import path from 'path';
 import postcss from 'rollup-plugin-postcss';
+import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
+
 
 var pkg = require('./package.json');
 var cache;
@@ -18,7 +21,8 @@ export default {
   dest: 'dev/script/index.umd.js',
   sourceMap: true,
   sourceMapFile: path.resolve('dev/main.umd.js'),
-  external: Object.keys(pkg.peerDependencies), // exclude peerDependencies from our bundle
+  // exclude peerDependencies from our bundle, except for react, react-dom, prop-types when dev'ing
+  external: Object.keys(omit(pkg.peerDependencies, ['react', 'react-dom', 'prop-types'])),
   plugins: [
     postcss({
       extensions: ['.css']
@@ -33,6 +37,7 @@ export default {
         moduleDirectory: 'node_modules'
       }
     }),
+    replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
     commonjs(),
     eslint({
       exclude: [

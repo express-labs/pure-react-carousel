@@ -7,7 +7,7 @@
   "jsnext:main": "dist/index.es.js",
   "scripts": {
     "test": "jest",
-    "dev": "rollup -c rollup.config.dev.js",
+    "dev": "NODE_ENV=development rollup -w -c rollup.config.dev.js",
     "build": "NODE_ENV=production rollup -c rollup.config.cjs.js && NODE_ENV=production rollup -c rollup.config.es.js"
   },
   "repository": {
@@ -23,6 +23,7 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-jest": "^20.0.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2015-rollup": "^3.0.0",
@@ -33,8 +34,10 @@
     "eslint-config-mrb3k-jest": "git+https://github.com/mrbinky3000/eslint-config-mrb3k-jest.git",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^5.0.1",
+    "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-react": "^7.0.1",
     "jest": "^20.0.1",
+    "object.omit": "^2.0.1",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
@@ -51,12 +54,16 @@
     "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-serve": "^0.3.0",
     "rollup-plugin-uglify": "^1.0.2",
+    "rollup-watch": "^3.2.2",
     "uglify-js-harmony": "^2.7.7"
   },
   "peerDependencies": {
     "react": "15.x",
     "react-dom": "15.x",
     "prop-types": "15.x"
+  },
+  "dependencies": {
+    "object.omit": "^2.0.1"
   },
   "jest": {
     "globals": {

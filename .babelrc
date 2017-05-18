@@ -1,10 +1,16 @@
 {
   "env": {
     "development": {
-      "presets": ["es2015-rollup", "react"]
+      "presets": ["es2015-rollup", "react"],
+      "plugins": [
+        "transform-class-properties"
+      ]
     },
     "production": {
-      "presets": ["es2015-rollup", "react"]
+      "presets": ["es2015-rollup", "react"],
+      "plugins": [
+        "transform-class-properties"
+      ]
     },
     "test": {
       "presets": [
@@ -12,6 +18,7 @@
     		"react"
     	],
 			"plugins": [
+        "transform-class-properties",
 				"transform-es2015-modules-commonjs"
 			]
     }
