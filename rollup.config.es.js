@@ -20,6 +20,7 @@ export default {
   sourceMapFile: path.resolve('dist/main.es.js'),
   external: Object.keys(pkg.peerDependencies), // exclude peerDependencies from our bundle
   plugins: [
+    replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
     postcss({
       extensions: ['.css']
     }),
