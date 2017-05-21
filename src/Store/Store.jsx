@@ -9,10 +9,15 @@ export default class Store {
   constructor(initialState) {
     this.state = deepFreeze(deepMerge(DEFAULT_STATE, initialState));
     this.subscriptions = [];
+    this.setState = this.setState.bind(this);
+    this.getState = this.getState.bind(this);
+    this.subscribe = this.subscribe.bind(this);
+    this.updateSubscribers = this.updateSubscribers.bind(this);
   }
 
   setState(newState) {
     this.state = deepFreeze(deepMerge(this.state, newState));
+    this.updateSubscribers();
   }
 
   getState() {

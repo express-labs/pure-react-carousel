@@ -22,7 +22,7 @@ export default {
   sourceMap: true,
   sourceMapFile: path.resolve('dev/main.umd.js'),
   // exclude peerDependencies from our bundle, except for react, react-dom, prop-types when dev'ing
-  external: Object.keys(omit(pkg.peerDependencies, ['react', 'react-dom', 'prop-types'])),
+  external: Object.keys(omit(pkg.peerDependencies, ['react', 'react-dom'])),
   plugins: [
     postcss({
       extensions: ['.css']

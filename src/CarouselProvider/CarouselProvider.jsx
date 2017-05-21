@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Store from '../';
+import { Store } from '../';
 
 export default class CarouselProvider extends React.Component {
   static propTypes = {

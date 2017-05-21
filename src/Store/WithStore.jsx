@@ -1,29 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-export default function WithStore(WrappedComponent) {
-  return class extends React.Component {
+export default function WithStore(WrappedComponent, mapStateToProps) {
+  class Wrapper extends React.Component {
     static propTypes = {
-      store: PropTypes.shape({
-        setState: PropTypes.func,
-        state: PropTypes.func,
-      }).isRequired,
-      children: PropTypes.oneOfType([
+      children: React.PropTypes.oneOfType([
         React.PropTypes.arrayOf(React.PropTypes.node),
         React.PropTypes.node,
       ]).isRequired,
     }
 
     static contextTypes = {
-      theme: PropTypes.object,
-    }
-
-    constructor(props, context) {
-      super(props, context);
-      this.props.store = {
-        setState: this.context.store.setState,
-        state: this.context.store.getState(),
-      };
+      store: React.PropTypes.object,
     }
 
     componentDidMount() {
@@ -31,7 +18,17 @@ export default function WithStore(WrappedComponent) {
     }
 
     render() {
-      return <WrappedComponent {...this.props}>{this.props.children}</WrappedComponent>;
+      const stateProps = mapStateToProps(this.context.store.getState());
+      return (
+        <WrappedComponent
+          {...this.props}
+          {...stateProps}
+          store={{
+            setState: this.context.store.setState
+          }}
+        >{this.props.children}</WrappedComponent>);
     }
-  };
+  }
+
+  return Wrapper;
 }
