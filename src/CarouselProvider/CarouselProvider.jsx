@@ -4,17 +4,17 @@ import { Store } from '../';
 
 export default class CarouselProvider extends React.Component {
   static propTypes = {
-    // TODO:  Before release, see if I can lock this down to a specific object shape
-    // eslint-disable-next-line react/forbid-prop-types
-    initialState: PropTypes.object,
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]).isRequired,
+    visibleSlides: PropTypes.number,
+    totalSlides: PropTypes.number,
   }
 
   static defaultProps = {
-    initialState: {},
+    visibleSlides: 1,
+    totalSlides: 0,
   }
 
   static childContextTypes = {
@@ -23,7 +23,11 @@ export default class CarouselProvider extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.store = new Store(props.initialState);
+    const options = {
+      visibleSlides: props.visibleSlides,
+      totalSlides: props.totalSlides,
+    };
+    this.store = new Store(options);
   }
 
   getChildContext() {

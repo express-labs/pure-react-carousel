@@ -1,7 +1,7 @@
-import Slider from './Slider';
+import ButtonRight from './ButtonRight';
 import { WithStore } from '../';
 
-export default WithStore(Slider, state => ({
+export default WithStore(ButtonRight, state => ({
   visibleSlides: state.visibleSlides,
   totalSlides: state.totalSlides,
 }));

@@ -5,3 +5,7 @@ body {
 .headline {
   background-color: darkgrey;
 }
+
+.slider {
+  max-width: 600px;  
+}

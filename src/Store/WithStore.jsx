@@ -6,7 +6,11 @@ export default function WithStore(WrappedComponent, mapStateToProps) {
       children: React.PropTypes.oneOfType([
         React.PropTypes.arrayOf(React.PropTypes.node),
         React.PropTypes.node,
-      ]).isRequired,
+      ]),
+    }
+
+    static defaultProps = {
+      children: null,
     }
 
     static contextTypes = {
