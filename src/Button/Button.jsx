@@ -3,8 +3,14 @@ import PropTypes from 'prop-types';
 
 export default class Button extends React.Component {
   static propTypes = {
-    store: PropTypes.object.shape({ setState: PropTypes.func }).isRequired,
+    store: PropTypes.shape({ setState: PropTypes.func }).isRequired,
+    demo: PropTypes.number,
   }
+
+  static defaultProps = {
+    demo: 'Sup',
+  }
+
   constructor() {
     super();
     this.onClick = this.onClick.bind(this);

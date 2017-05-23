@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button, CarouselProvider } from '../';
+import s from './style.css';
 
 const DevelopmentApp = () => (
   <CarouselProvider>
-    <h1>Hello from my fake app!</h1>
+    <h1>Testing App!</h1>
     <Button>Hello</Button>
   </CarouselProvider>
 );

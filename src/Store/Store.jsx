@@ -5,7 +5,7 @@ const DEFAULT_STATE = {
 
 };
 
-export default class Store {
+const Store = class Store {
   constructor(initialState) {
     this.state = deepFreeze(deepMerge(DEFAULT_STATE, initialState));
     this.subscriptions = [];
@@ -31,4 +31,7 @@ export default class Store {
   updateSubscribers() {
     this.subscriptions.forEach(func => func());
   }
-}
+};
+
+
+export default Store;

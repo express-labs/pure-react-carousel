@@ -24,7 +24,7 @@ export default function WithStore(WrappedComponent, mapStateToProps) {
           {...this.props}
           {...stateProps}
           store={{
-            setState: this.context.store.setState
+            setState: this.context.store.setState,
           }}
         >{this.props.children}</WrappedComponent>);
     }

@@ -9,6 +9,12 @@ import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
 
+// postcss plugins
+import simplevars from 'postcss-simple-vars';
+import nested from 'postcss-nested';
+import cssnext from 'postcss-cssnext';
+import cssnano from 'cssnano';
+import postcssImport from 'postcss-import';
 
 var pkg = require('./package.json');
 var cache;
@@ -25,6 +31,13 @@ export default {
   external: Object.keys(omit(pkg.peerDependencies, ['react', 'react-dom'])),
   plugins: [
     postcss({
+      plugins: [
+        simplevars(),
+        nested(),
+        cssnext(),
+        cssnano(),
+        postcssImport(),
+      ],
       extensions: ['.css']
     }),
     resolve({
