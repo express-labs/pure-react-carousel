@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default class Button extends React.Component {
   static propTypes = {
     store: PropTypes.shape({ setState: PropTypes.func }).isRequired,
-    demo: PropTypes.number,
+    demo: PropTypes.string,
   }
 
   static defaultProps = {

@@ -1,7 +1,7 @@
 body {
   background-color: floralwhite;
+}
 
-  h1 {
-    background-color: darkgray;
-  }
+.headline {
+  background-color: darkgrey;
 }

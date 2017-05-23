@@ -11,13 +11,15 @@ import serve from 'rollup-plugin-serve';
 
 // postcss plugins
 import simplevars from 'postcss-simple-vars';
-import nested from 'postcss-nested';
 import cssnext from 'postcss-cssnext';
 import cssnano from 'cssnano';
 import postcssImport from 'postcss-import';
+import postcssModules from 'postcss-modules';
 
 var pkg = require('./package.json');
 var cache;
+
+const cssExportMap = {};
 
 export default {
   entry: 'src/app.js',
@@ -31,14 +33,23 @@ export default {
   external: Object.keys(omit(pkg.peerDependencies, ['react', 'react-dom'])),
   plugins: [
     postcss({
+      sourceMap: 'inline', // true, "inline" or false
+      extract : 'dev/style.css',
+      extensions: ['.css'],
       plugins: [
-        simplevars(),
-        nested(),
-        cssnext(),
-        cssnano(),
         postcssImport(),
+        simplevars(),
+        cssnext(),
+        postcssModules({
+          getJSON (id, exportTokens) {
+            cssExportMap[id] = exportTokens;
+          }
+        }),
+        cssnano(),
       ],
-      extensions: ['.css']
+      getExport (id) {
+        return cssExportMap[id];
+      },
     }),
     resolve({
       module: true,
@@ -54,7 +65,8 @@ export default {
     commonjs(),
     eslint({
       exclude: [
-        'src/styles/**'
+        '**/*.css',
+        'node_modules/**'
       ]
     }),
     babel({

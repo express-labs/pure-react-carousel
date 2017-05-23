@@ -41,7 +41,7 @@
     "object.omit": "^2.0.1",
     "postcss-cssnext": "^2.11.0",
     "postcss-import": "^10.0.0",
-    "postcss-nested": "^2.0.2",
+    "postcss-modules": "^0.8.0",
     "postcss-simple-vars": "^4.0.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
