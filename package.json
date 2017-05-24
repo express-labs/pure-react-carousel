@@ -68,6 +68,7 @@
   "dependencies": {
     "deep-freeze": "0.0.1",
     "deepmerge": "^1.3.2",
+    "equals": "^1.0.5",
     "object.omit": "^2.0.1",
     "prop-types": "15.x"
   },

@@ -1,4 +1,5 @@
 import React from 'react';
+import equal from 'equals';
 
 export default function WithStore(WrappedComponent, mapStateToProps) {
   class Wrapper extends React.Component {
@@ -17,16 +18,35 @@ export default function WithStore(WrappedComponent, mapStateToProps) {
       store: React.PropTypes.object,
     }
 
+    constructor(props, context) {
+      super(props, context);
+      this.state = {
+        stateProps: mapStateToProps(context.store.getState()),
+      };
+    }
+
     componentDidMount() {
-      this.context.store.subscribe(() => this.forceUpdate());
+      // this.context.store.subscribe(() => this.forceUpdate());
+      this.context.store.subscribe(() => this.updateStateProps());
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+      // Note: I suspect that I might have to check props.children too.
+      // Note: If we do go back to this.forceUpdate(), shouldComponentUpdate() is not called.
+      return !equal(nextState, this.state);
+    }
+
+    updateStateProps() {
+      this.setState({
+        stateProps: mapStateToProps(this.context.store.getState()),
+      });
     }
 
     render() {
-      const stateProps = mapStateToProps(this.context.store.getState());
       return (
         <WrappedComponent
           {...this.props}
-          {...stateProps}
+          {...this.state.stateProps}
           store={{
             setState: this.context.store.setState,
           }}

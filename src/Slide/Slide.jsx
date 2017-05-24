@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { computeSlideWidthPercent, randomHexColor } from '../helpers';
 import s from './styles.css';
 
-export default class Slide extends React.Component {
+export default class Slide extends React.PureComponent {
   static propTypes = {
     visibleSlides: PropTypes.number,
     totalSlides: PropTypes.number,
