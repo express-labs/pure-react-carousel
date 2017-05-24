@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Store } from '../';
+import { slideWidth, slideTrayWidth } from '../helpers';
 
 export default class CarouselProvider extends React.Component {
   static propTypes = {
@@ -10,11 +11,13 @@ export default class CarouselProvider extends React.Component {
     ]).isRequired,
     visibleSlides: PropTypes.number,
     totalSlides: PropTypes.number,
+    currentSlide: PropTypes.number,
   }
 
   static defaultProps = {
     visibleSlides: 1,
     totalSlides: 0,
+    currentSlide: 0,
   }
 
   static childContextTypes = {
@@ -26,6 +29,9 @@ export default class CarouselProvider extends React.Component {
     const options = {
       visibleSlides: props.visibleSlides,
       totalSlides: props.totalSlides,
+      currentSlide: props.currentSlide,
+      slideWidth: slideWidth(props.totalSlides),
+      slideTrayWidth: slideTrayWidth(props.totalSlides, props.visibleSlides),
     };
     this.store = new Store(options);
   }

@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { computeSlideWidthPercent, randomHexColor } from '../helpers';
-import s from './styles.css';
+import { pct, randomHexColor } from '../helpers';
+import s from './slide.css';
 
 export default class Slide extends React.PureComponent {
   static propTypes = {
-    visibleSlides: PropTypes.number,
-    totalSlides: PropTypes.number,
+    slideWidth: PropTypes.number,
     style: PropTypes.object,
   }
 
   static defaultProps = {
-    visibleSlides: 1,
-    totalSlides: 0,
+    slideWidth: 100,
     style: {},
   }
 
@@ -20,7 +18,7 @@ export default class Slide extends React.PureComponent {
     const style = Object.assign({
       backgroundColor: randomHexColor(),
     }, this.props.style, {
-      width: computeSlideWidthPercent(this.props.totalSlides, this.props.visibleSlides),
+      width: pct(this.props.slideWidth),
     });
 
     return <div className={s.slide} style={style} />;

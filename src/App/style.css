@@ -7,5 +7,9 @@ body {
 }
 
 .slider {
-  max-width: 600px;  
+  max-width: 600px;
+
+  & :global .slider__inner {
+    transition: margin-left 300ms;
+  }
 }

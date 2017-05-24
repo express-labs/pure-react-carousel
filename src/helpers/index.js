@@ -7,12 +7,18 @@ export function randomHexColor() {
   return `#${(Math.random() * 0xFFFFFF << 0).toString(16)}`;
 }
 
-export function computeSlideWidthPercent(totalSlides, visibleSlides) {
-  const sliderInnerWidth = (100 / visibleSlides) * totalSlides;
-  const slideWidth = sliderInnerWidth / totalSlides;
-  return `${slideWidth / (sliderInnerWidth / 100)}%`;
+export function slideUnit(visibleSlides = 1) {
+  return 100 / visibleSlides;
 }
 
-export function computeSliderInnerWidth(totalSlides, visibleSlides) {
-  return `${(100 / visibleSlides) * totalSlides}%`;
+export function slideWidth(totalSlides) {
+  return (1 / totalSlides) * 100;
+}
+
+export function slideTrayWidth(totalSlides, visibleSlides) {
+  return (100 * totalSlides) / visibleSlides;
+}
+
+export function pct(num) {
+  return `${num}%`;
 }

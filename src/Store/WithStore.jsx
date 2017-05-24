@@ -1,7 +1,7 @@
 import React from 'react';
 import equal from 'equals';
 
-export default function WithStore(WrappedComponent, mapStateToProps) {
+export default function WithStore(WrappedComponent, mapStateToProps = () => ({})) {
   class Wrapper extends React.Component {
     static propTypes = {
       children: React.PropTypes.oneOfType([
