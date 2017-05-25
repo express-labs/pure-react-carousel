@@ -27,8 +27,7 @@ coverage
 .lock-wscript
 
 # Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
-dev/script/
-dev/media/
+/dev/
 
 # Dependency directory
 node_modules
