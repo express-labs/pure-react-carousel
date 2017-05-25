@@ -39,7 +39,9 @@ export default {
       plugins: [
         postcssImport(),
         simplevars(),
-        cssnext(),
+        cssnext({
+          warnForDuplicates: false,
+        }),
         postcssModules({
           getJSON (id, exportTokens) {
             cssExportMap[id] = exportTokens;

@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,KACE,wBAA8B,CAC/B,AAED,mBACE,wBAA2B,CAC5B","file":"index.umd.css","sourcesContent":["body {\n  background-color: floralwhite;\n}\n\n.headline {\n  background-color: darkgrey;\n}\n"]}

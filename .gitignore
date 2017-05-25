@@ -26,9 +26,6 @@ coverage
 # node-waf configuration
 .lock-wscript
 
-# Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
-/dev/
-
 # Dependency directory
 node_modules
 
