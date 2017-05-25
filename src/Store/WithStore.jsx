@@ -31,9 +31,8 @@ export default function WithStore(WrappedComponent, mapStateToProps = () => ({})
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-      // Note: I suspect that I might have to check props.children too.
       // Note: If we do go back to this.forceUpdate(), shouldComponentUpdate() is not called.
-      return !equal(nextState, this.state);
+      return !equal(nextState, this.state) || !equal(nextProps, this.props);
     }
 
     updateStateProps() {

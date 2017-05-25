@@ -1,7 +1,8 @@
 {
   "presets": ["es2015-rollup", "react"],
   "plugins": [
-    "transform-class-properties"
+    "transform-class-properties",
+    "transform-object-rest-spread"
   ],
   "env": {
     "test": {

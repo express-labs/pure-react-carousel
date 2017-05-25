@@ -1,5 +1,8 @@
 export function cn(a) {
-  return a.join(' ').trim();
+  return a.map((b) => {
+    if (b === false) return null;
+    return b;
+  }).join(' ').replace(/\s+/g, ' ').trim();
 }
 
 export function randomHexColor() {

@@ -13,9 +13,9 @@ const Store = class Store {
     this.updateSubscribers = this.updateSubscribers.bind(this);
   }
 
-  setState(newState) {
+  setState(newState, cb = () => {}) {
     this.state = deepFreeze(deepMerge(this.state, newState));
-    this.updateSubscribers();
+    this.updateSubscribers(cb);
   }
 
   getState() {
@@ -26,8 +26,9 @@ const Store = class Store {
     this.subscriptions.push(func);
   }
 
-  updateSubscribers() {
+  updateSubscribers(cb) {
     this.subscriptions.forEach(func => func());
+    if (typeof cb === 'function') cb();
   }
 };
 
