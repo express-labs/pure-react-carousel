@@ -1,5 +1,6 @@
 import React from 'react';
 import equal from 'equals';
+import deepMerge from 'deepmerge';
 
 export default function WithStore(WrappedComponent, mapStateToProps = () => ({})) {
   class Wrapper extends React.Component {
@@ -42,10 +43,12 @@ export default function WithStore(WrappedComponent, mapStateToProps = () => ({})
     }
 
     render() {
+      // props assigned directly to this.props take precedence over store state.
+      const props = deepMerge(this.state.stateProps, this.props);
+
       return (
         <WrappedComponent
-          {...this.props}
-          {...this.state.stateProps}
+          {...props}
           store={{
             setState: this.context.store.setState,
           }}

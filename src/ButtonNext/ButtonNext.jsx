@@ -9,11 +9,12 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]).isRequired,
-    store: PropTypes.object.isRequired,
     currentSlide: PropTypes.number.isRequired,
+    disabled: PropTypes.bool,
+    step: PropTypes.number.isRequired,
+    store: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
-    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -51,8 +52,13 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
   }
 
   handleClick() {
+    const maxSlide = this.props.totalSlides - this.props.visibleSlides;
+    const nextSlide = Math.min(
+      (this.props.currentSlide + this.props.step),
+      maxSlide,
+    );
     this.props.store.setState({
-      currentSlide: this.props.currentSlide + 1,
+      currentSlide: nextSlide,
     });
   }
 

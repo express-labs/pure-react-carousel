@@ -12,6 +12,7 @@ const ButtonBack = class ButtonBack extends React.Component {
     store: PropTypes.object.isRequired,
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
+    step: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -39,8 +40,12 @@ const ButtonBack = class ButtonBack extends React.Component {
   }
 
   handleClick() {
+    const previousSlide = Math.max(
+      this.props.currentSlide - this.props.step,
+      0,
+    );
     this.props.store.setState({
-      currentSlide: this.props.currentSlide - 1,
+      currentSlide: previousSlide,
     });
   }
 

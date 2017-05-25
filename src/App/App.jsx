@@ -7,6 +7,7 @@ const DevelopmentApp = () => (
   <CarouselProvider
     visibleSlides={2}
     totalSlides={9}
+    step={2}
   >
     <h1 className={cn(['headline', s.headline])}>Carousel Dev App</h1>
     <Slider className={cn(['slider', s.slider])}>
