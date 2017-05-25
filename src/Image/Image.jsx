@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import omit from 'object.omit';
+import { cn } from '../helpers';
+import s from './Image.css';
 
 const LOADING = 'loading';
 const SUCCESS = 'success';
@@ -11,8 +12,9 @@ class Image extends React.Component {
     alt: PropTypes.string,
     onError: PropTypes.func,
     onLoad: PropTypes.func,
-    renderLoading: PropTypes.func,
     renderError: PropTypes.func,
+    renderLoading: PropTypes.func,
+    responsive: PropTypes.bool,
     src: PropTypes.string.isRequired,
   }
 
@@ -20,8 +22,9 @@ class Image extends React.Component {
     alt: '',
     onError: null,
     onLoad: null,
-    renderLoading: null,
     renderError: null,
+    renderLoading: null,
+    responsive: false,
   }
 
   constructor(props) {
@@ -55,8 +58,15 @@ class Image extends React.Component {
   }
 
   renderSuccess() {
-    const filteredProps = omit(this.props, ['children', 'src', 'alt', 'onLoad', 'onError', 'renderLoading', 'renderError']);
-    return <img src={this.props.src} alt={this.props.alt} {...filteredProps} />;
+    const {
+      alt, onError, onLoad, responsive, renderError, renderLoading, src, ...props
+    } = this.props;
+    const cssClass = cn([
+      s.image,
+      responsive && s.responsive,
+      'carousel__image',
+    ]);
+    return <img className={cssClass} src={src} alt={alt} {...props} />;
   }
 
   renderError() {

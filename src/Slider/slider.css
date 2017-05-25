@@ -1,0 +1,9 @@
+.slider {
+    overflow: hidden;
+
+    &Tray {
+      width: 100%;
+      overflow: hidden;
+      background-color: red;
+    }
+}

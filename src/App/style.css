@@ -1,0 +1,15 @@
+body {
+  background-color: floralwhite;
+}
+
+.headline {
+  background-color: darkgrey;
+}
+
+.slider {
+  max-width: 800px;
+
+  & :global .carousel__slide-tray {
+    transition: margin-left 300ms;
+  }
+}
