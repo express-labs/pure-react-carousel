@@ -13,7 +13,7 @@ const Store = class Store {
     this.updateSubscribers = this.updateSubscribers.bind(this);
   }
 
-  setState(newState, cb = () => {}) {
+  setState(newState, cb) {
     this.state = deepFreeze(deepMerge(this.state, newState));
     this.updateSubscribers(cb);
   }
@@ -28,7 +28,7 @@ const Store = class Store {
 
   updateSubscribers(cb) {
     this.subscriptions.forEach(func => func());
-    if (typeof cb === 'function') cb();
+    if (typeof cb === 'function') cb(this.getState());
   }
 };
 

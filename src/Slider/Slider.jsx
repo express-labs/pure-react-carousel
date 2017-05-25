@@ -6,6 +6,7 @@ import s from './slider.css';
 const Slider = class Slider extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
+    store: PropTypes.object.isRequired,
     className: PropTypes.string,
     style: PropTypes.object,
     currentSlide: PropTypes.number,
@@ -18,20 +19,33 @@ const Slider = class Slider extends React.Component {
     style: {},
     currentSlide: 0,
     slideTrayWidth: 100,
-    slideWidth: 100,
     visibleSlides: 1,
   }
 
   render() {
+    const {
+      className, currentSlide, slideTrayWidth, store, visibleSlides, ...props
+    } = this.props;
+
     const style = Object.assign({}, this.props.style, {
-      width: pct(this.props.slideTrayWidth),
-      marginLeft: pct(slideUnit(this.props.visibleSlides) * this.props.currentSlide * -1),
+      width: pct(slideTrayWidth),
+      marginLeft: pct(slideUnit(visibleSlides) * currentSlide * -1),
     });
 
+    const sliderClasses = cn([
+      s.slider,
+      'carousel__slide-show',
+      className,
+    ]);
+
+    const trayClasses = cn([
+      s.sliderTray,
+      'carousel__slide-tray',
+    ]);
 
     return (
-      <div className={cn(['slider', s.slider, this.props.className])}>
-        <div className={cn(['slider__inner', s.sliderInner])} style={style}>
+      <div className={sliderClasses} {...props}>
+        <div className={trayClasses} style={style}>
           {this.props.children}
         </div>
       </div>

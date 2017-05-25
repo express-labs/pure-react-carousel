@@ -9,14 +9,18 @@ const ButtonBack = class ButtonBack extends React.Component {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]).isRequired,
-    store: PropTypes.object.isRequired,
+    className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
+    onClick: PropTypes.func,
     step: PropTypes.number.isRequired,
+    store: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
     disabled: null,
+    onClick: null,
+    className: null,
   }
 
   static setDisabled(disabled, currentSlide) {
@@ -40,21 +44,30 @@ const ButtonBack = class ButtonBack extends React.Component {
   }
 
   handleClick() {
-    const previousSlide = Math.max(
-      this.props.currentSlide - this.props.step,
+    const { currentSlide, onClick, step, store } = this.props;
+    const newCurrentSlide = Math.max(
+      currentSlide - step,
       0,
     );
-    this.props.store.setState({
-      currentSlide: previousSlide,
-    });
+    store.setState({
+      currentSlide: newCurrentSlide,
+    }, onClick);
   }
 
   render() {
+    const { className, currentSlide, disabled, onClick, step, store, ...props } = this.props;
+    const cssClasses = cn([
+      s.buttonBack,
+      'carousel__back-button',
+      className,
+    ]);
+
     return (
       <button
-        className={cn(['button__back', s.ButtonBack])}
+        className={cssClasses}
         onClick={this.handleClick}
         disabled={this.state.disabled}
+        {...props}
       >{this.props.children}</button>
     );
   }

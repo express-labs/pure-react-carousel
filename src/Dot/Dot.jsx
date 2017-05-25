@@ -33,7 +33,7 @@ const Dot = class Dot extends React.Component {
     const { slide, store, onClick } = this.props;
     store.setState({
       currentSlide: slide,
-    }, typeof onClick === 'function' && onClick(slide));
+    }, onClick);
   }
 
   render() {

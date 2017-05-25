@@ -9,7 +9,7 @@ body {
 .slider {
   max-width: 600px;
 
-  & :global .slider__inner {
+  & :global .carousel__slide-tray {
     transition: margin-left 300ms;
   }
 }

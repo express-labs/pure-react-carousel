@@ -9,8 +9,10 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]).isRequired,
+    className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
+    onClick: PropTypes.func,
     step: PropTypes.number.isRequired,
     store: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
@@ -19,6 +21,8 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
 
   static defaultProps = {
     disabled: null,
+    className: null,
+    onClick: null,
   }
 
   static setDisabled(disabled, currentSlide, visibleSlides, totalSlides) {
@@ -52,22 +56,33 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
   }
 
   handleClick() {
+    const { currentSlide, onClick, step, store } = this.props;
     const maxSlide = this.props.totalSlides - this.props.visibleSlides;
-    const nextSlide = Math.min(
-      (this.props.currentSlide + this.props.step),
+    const newCurrentSlide = Math.min(
+      (currentSlide + step),
       maxSlide,
     );
-    this.props.store.setState({
-      currentSlide: nextSlide,
-    });
+    store.setState({
+      currentSlide: newCurrentSlide,
+    }, onClick);
   }
 
   render() {
+    const {
+      className, currentSlide, disabled, onClick, step, store, totalSlides, visibleSlides, ...props
+    } = this.props;
+    const cssClasses = cn([
+      s.buttonBack,
+      'carousel__next-button',
+      className,
+    ]);
+
     return (
       <button
-        className={cn(['button__next', s.ButtonNext])}
+        className={cssClasses}
         onClick={this.handleClick}
         disabled={this.state.disabled}
+        {...props}
       >{this.props.children}</button>
     );
   }
