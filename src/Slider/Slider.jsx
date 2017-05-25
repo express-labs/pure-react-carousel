@@ -25,7 +25,7 @@ const Slider = class Slider extends React.Component {
   render() {
     const style = Object.assign({}, this.props.style, {
       width: pct(this.props.slideTrayWidth),
-      marginLeft: pct(slideUnit(this.props.visibleSlides) * this.props.currentSlide),
+      marginLeft: pct(slideUnit(this.props.visibleSlides) * this.props.currentSlide * -1),
     });
 
 

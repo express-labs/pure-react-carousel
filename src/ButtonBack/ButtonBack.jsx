@@ -40,7 +40,7 @@ const ButtonBack = class ButtonBack extends React.Component {
 
   handleClick() {
     this.props.store.setState({
-      currentSlide: this.props.currentSlide + 1,
+      currentSlide: this.props.currentSlide - 1,
     });
   }
 

@@ -22,7 +22,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
 
   static setDisabled(disabled, currentSlide, visibleSlides, totalSlides) {
     if (disabled !== null) return disabled;
-    if (currentSlide === (-1 * (totalSlides - visibleSlides))) return true;
+    if (currentSlide === (totalSlides - visibleSlides)) return true;
     return false;
   }
 
@@ -52,7 +52,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
 
   handleClick() {
     this.props.store.setState({
-      currentSlide: this.props.currentSlide - 1,
+      currentSlide: this.props.currentSlide + 1,
     });
   }
 
