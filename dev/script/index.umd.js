@@ -11,6 +11,7 @@ object-assign
 @license MIT
 */
 
+/* eslint-disable no-unused-vars */
 var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
@@ -115,6 +116,17 @@ var index = shouldUseNative() ? Object.assign : function (target, source) {
  *
  */
 
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
 var validateFormat = function validateFormat(format) {};
 
 {
@@ -148,6 +160,13 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 var invariant_1 = invariant;
 
+/**
+ * Static poolers. Several custom versions for each potential number of
+ * arguments. A completely generic pooler is easy to implement, but would
+ * require accessing the `arguments` object. In each of these, `this` refers to
+ * the Class itself, not an instance. If any others are needed, simply add them
+ * here, or in their own files.
+ */
 var oneArgumentPooler = function (copyFieldsFrom) {
   var Klass = this;
   if (Klass.instancePool.length) {
@@ -247,6 +266,12 @@ var PooledClass_1 = PooledClass;
  * 
  */
 
+/**
+ * Keeps track of the current owner.
+ *
+ * The current owner is the component who should own any components that are
+ * currently being constructed.
+ */
 var ReactCurrentOwner = {
 
   /**
@@ -258,6 +283,17 @@ var ReactCurrentOwner = {
 };
 
 var ReactCurrentOwner_1 = ReactCurrentOwner;
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * 
+ */
 
 function makeEmptyFunction(arg) {
   return function () {
@@ -284,6 +320,13 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 var emptyFunction_1 = emptyFunction;
+
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
 
 var warning = emptyFunction_1;
 
@@ -365,6 +408,9 @@ var canDefineProperty_1 = canDefineProperty$1;
  *
  * 
  */
+
+// The Symbol used to tag the ReactElement type. If there is no native Symbol
+// nor polyfill, then a plain number is used for performance.
 
 var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol['for'] && Symbol['for']('react.element') || 0xeac7;
 
@@ -705,6 +751,8 @@ var ReactElement_1 = ReactElement;
  * 
  */
 
+/* global Symbol */
+
 var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
 var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
 
@@ -740,6 +788,13 @@ var getIteratorFn_1 = getIteratorFn;
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * 
+ */
+
+/**
+ * Escape and wrap key so it is safe to use as a reactid
+ *
+ * @param {string} key to be escaped.
+ * @return {string} the escaped key.
  */
 
 function escape(key) {
@@ -1208,6 +1263,9 @@ var emptyObject = {};
 
 var emptyObject_1 = emptyObject;
 
+/**
+ * Base class helpers for the updating state of a component.
+ */
 function ReactComponent(props, context, updater) {
   this.props = props;
   this.context = context;
@@ -1302,6 +1360,9 @@ ReactComponent.prototype.forceUpdate = function (callback) {
 
 var ReactComponent_1 = ReactComponent;
 
+/**
+ * Base class helpers for the updating state of a component.
+ */
 function ReactPureComponent(props, context, updater) {
   // Duplicated from ReactComponent.
   this.props = props;
@@ -2664,6 +2725,11 @@ var ReactElementValidator$2 = {
 
 var ReactElementValidator_1 = ReactElementValidator$2;
 
+/**
+ * Create a factory that creates HTML tag elements.
+ *
+ * @private
+ */
 var createDOMFactory = ReactElement_1.createFactory;
 {
   var ReactElementValidator$1 = ReactElementValidator_1;
@@ -3374,6 +3440,11 @@ var factoryWithTypeCheckers = function(isValidElement, throwOnDirectAccess) {
   return ReactPropTypes;
 };
 
+// React 15.5 references this module, and assumes PropTypes are still callable in production.
+// Therefore we re-export development-only version with all the PropTypes checks here.
+// However if one is migrating to the `prop-types` npm library, they will go through the
+// `index.js` entry point, and it will branch depending on the environment.
+
 var factory_1 = function(isValidElement) {
   // It is still allowed in 15.5.
   var throwOnDirectAccess = false;
@@ -3398,6 +3469,20 @@ var ReactPropTypes = factory_1(isValidElement);
 
 var ReactVersion = '15.5.4';
 
+/**
+ * Returns the first child in a collection of children and verifies that there
+ * is only one child in the collection.
+ *
+ * See https://facebook.github.io/react/docs/top-level-api.html#react.children.only
+ *
+ * The current implementation of this function assumes that a single child gets
+ * passed without a wrapper, but the purpose of this helper function is to
+ * abstract away the particular structure of children.
+ *
+ * @param {?object} children Child collection structure.
+ * @return {ReactElement} The first and only `ReactElement` contained in the
+ * structure.
+ */
 function onlyChild(children) {
   !ReactElement_1.isValidElement(children) ? invariant_1(false, 'React.Children.only expected to receive a single React element child.') : void 0;
   return children;
@@ -3954,6 +4039,9 @@ var ARIADOMPropertyConfig = {
 
 var ARIADOMPropertyConfig_1 = ARIADOMPropertyConfig;
 
+/**
+ * Injectable ordering of event plugins.
+ */
 var eventPluginOrder = null;
 
 /**
@@ -4263,6 +4351,14 @@ var ReactErrorUtils = {
 
 var ReactErrorUtils_1 = ReactErrorUtils;
 
+/**
+ * Injected dependencies:
+ */
+
+/**
+ * - `ComponentTree`: [required] Module that can convert between React instances
+ *   and actual node references.
+ */
 var ComponentTree;
 var TreeTraversal;
 var injection = {
@@ -4462,6 +4558,19 @@ var EventPluginUtils = {
 
 var EventPluginUtils_1 = EventPluginUtils;
 
+/**
+ * Accumulates items that must not be null or undefined into the first one. This
+ * is used to conserve memory by avoiding array allocations, and thus sacrifices
+ * API cleanness. Since `current` can be null before being passed in and not
+ * null after this function, make sure to assign it back to `current`:
+ *
+ * `a = accumulateInto(a, b);`
+ *
+ * This API should be sparingly used. Try `accumulate` for something cleaner.
+ *
+ * @return {*|array<*>} An accumulation of items.
+ */
+
 function accumulateInto(current, next) {
   !(next != null) ? invariant_1(false, 'accumulateInto(...): Accumulated items must not be null or undefined.') : void 0;
 
@@ -4501,6 +4610,14 @@ var accumulateInto_1 = accumulateInto;
  * 
  */
 
+/**
+ * @param {array} arr an "accumulation" of items which is either an Array or
+ * a single item. Useful when paired with the `accumulate` module. This is a
+ * simple utility that allows us to reason about a collection of items, but
+ * handling the case when there is exactly one item (and we do not need to
+ * allocate an array).
+ */
+
 function forEachAccumulated(arr, cb, scope) {
   if (Array.isArray(arr)) {
     arr.forEach(cb, scope);
@@ -4511,6 +4628,9 @@ function forEachAccumulated(arr, cb, scope) {
 
 var forEachAccumulated_1 = forEachAccumulated;
 
+/**
+ * Internal store for event listeners
+ */
 var listenerBank = {};
 
 /**
@@ -4913,6 +5033,13 @@ var ExecutionEnvironment$1 = {
 
 var ExecutionEnvironment_1 = ExecutionEnvironment$1;
 
+/**
+ * Static poolers. Several custom versions for each potential number of
+ * arguments. A completely generic pooler is easy to implement, but would
+ * require accessing the `arguments` object. In each of these, `this` refers to
+ * the Class itself, not an instance. If any others are needed, simply add them
+ * here, or in their own files.
+ */
 var oneArgumentPooler$1 = function (copyFieldsFrom) {
   var Klass = this;
   if (Klass.instancePool.length) {
@@ -5020,6 +5147,17 @@ function getTextContentAccessor() {
 
 var getTextContentAccessor_1 = getTextContentAccessor;
 
+/**
+ * This helper class stores information about text content of a target node,
+ * allowing comparison of content before and after a given event.
+ *
+ * Identify the node where selection currently begins, then observe
+ * both its text content and its current position in the DOM. Since the
+ * browser may natively replace the target node during composition, we can
+ * use its position to find its replacement.
+ *
+ * @param {DOMEventTarget} root
+ */
 function FallbackCompositionState(root) {
   this._root = root;
   this._startText = this.getText();
@@ -5333,6 +5471,10 @@ function getPooledWarningPropertyDefinition(propName, getVal) {
   }
 }
 
+/**
+ * @interface Event
+ * @see http://www.w3.org/TR/DOM-Level-3-Events/#events-compositionevents
+ */
 var CompositionEventInterface = {
   data: null
 };
@@ -5351,6 +5493,11 @@ SyntheticEvent_1.augmentClass(SyntheticCompositionEvent, CompositionEventInterfa
 
 var SyntheticCompositionEvent_1 = SyntheticCompositionEvent;
 
+/**
+ * @interface Event
+ * @see http://www.w3.org/TR/2013/WD-DOM-Level-3-Events-20131105
+ *      /#events-inputevents
+ */
 var InputEventInterface = {
   data: null
 };
@@ -5860,6 +6007,11 @@ var ReactFeatureFlags = {
 
 var ReactFeatureFlags_1 = ReactFeatureFlags;
 
+/**
+ * @param {?object} object
+ * @return {boolean} True if `object` is a valid owner.
+ * @final
+ */
 function isValidOwner(object) {
   return !!(object && typeof object.attachRef === 'function' && typeof object.detachRef === 'function');
 }
@@ -6067,6 +6219,19 @@ if (ExecutionEnvironment_1.canUseDOM) {
 }
 
 var performance_1 = performance$1 || {};
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ */
+
+
 
 var performanceNow;
 
@@ -6425,6 +6590,8 @@ if (/[?&]react_perf\b/.test(url)) {
 
 var ReactDebugTool_1 = ReactDebugTool$1;
 
+// Trust the developer to only use ReactInstrumentation with a __DEV__ check
+
 var debugTool = null;
 
 {
@@ -6434,6 +6601,10 @@ var debugTool = null;
 
 var ReactInstrumentation$1 = { debugTool: debugTool };
 
+/**
+ * Helper to call ReactRef.attachRefs with this composite component, split out
+ * to avoid allocations in the transaction mount-ready queue.
+ */
 function attachRefs() {
   ReactRef_1.attachRefs(this, this._currentElement);
 }
@@ -7027,6 +7198,14 @@ var ReactUpdates_1 = ReactUpdates;
  *
  */
 
+/**
+ * Gets the target node from a native browser event by accounting for
+ * inconsistencies in browser DOM APIs.
+ *
+ * @param {object} nativeEvent Native browser event.
+ * @return {DOMEventTarget} Target node.
+ */
+
 function getEventTarget(nativeEvent) {
   var target = nativeEvent.target || nativeEvent.srcElement || window;
 
@@ -7097,6 +7276,10 @@ var isEventSupported_1 = isEventSupported;
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * 
+ */
+
+/**
+ * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/the-input-element.html#input-type-attr-summary
  */
 
 var supportedInputTypes = {
@@ -7466,10 +7649,24 @@ var ChangeEventPlugin_1 = ChangeEventPlugin;
  *
  */
 
+/**
+ * Module that is injectable into `EventPluginHub`, that specifies a
+ * deterministic ordering of `EventPlugin`s. A convenient way to reason about
+ * plugins, without having to package every one of them. This is better than
+ * having plugins be ordered in the same order that they are injected because
+ * that ordering would be influenced by the packaging order.
+ * `ResponderEventPlugin` must occur before `SimpleEventPlugin` so that
+ * preventing default on events is convenient in `SimpleEventPlugin` handlers.
+ */
+
 var DefaultEventPluginOrder = ['ResponderEventPlugin', 'SimpleEventPlugin', 'TapEventPlugin', 'EnterLeaveEventPlugin', 'ChangeEventPlugin', 'SelectEventPlugin', 'BeforeInputEventPlugin'];
 
 var DefaultEventPluginOrder_1 = DefaultEventPluginOrder;
 
+/**
+ * @interface UIEvent
+ * @see http://www.w3.org/TR/DOM-Level-3-Events/
+ */
 var UIEventInterface = {
   view: function (event) {
     if (event.view) {
@@ -7544,6 +7741,11 @@ var ViewportMetrics_1 = ViewportMetrics;
  *
  */
 
+/**
+ * Translation from modifier key to the associated property in the event.
+ * @see http://www.w3.org/TR/DOM-Level-3-Events/#keys-Modifiers
+ */
+
 var modifierKeyToProp = {
   'Alt': 'altKey',
   'Control': 'ctrlKey',
@@ -7570,6 +7772,10 @@ function getEventModifierState(nativeEvent) {
 
 var getEventModifierState_1 = getEventModifierState;
 
+/**
+ * @interface MouseEvent
+ * @see http://www.w3.org/TR/DOM-Level-3-Events/
+ */
 var MouseEventInterface = {
   screenX: null,
   screenY: null,
@@ -7957,6 +8163,10 @@ var DOMNamespaces_1 = DOMNamespaces;
 
 /* globals MSApp */
 
+/**
+ * Create a function which has 'unsafe' privileges (required by windows8 apps)
+ */
+
 var createMicrosoftUnsafeLocalFunction = function (func) {
   if (typeof MSApp !== 'undefined' && MSApp.execUnsafeLocalFunction) {
     return function (arg0, arg1, arg2, arg3) {
@@ -8089,6 +8299,12 @@ var setInnerHTML_1 = setInnerHTML;
  *
  */
 
+// code copied and modified from escape-html
+/**
+ * Module variables.
+ * @private
+ */
+
 var matchHtmlRegExp = /["'&<>]/;
 
 /**
@@ -8169,6 +8385,16 @@ function escapeTextContentForBrowser(text) {
 
 var escapeTextContentForBrowser_1 = escapeTextContentForBrowser;
 
+/**
+ * Set the textContent property of a node, ensuring that whitespace is preserved
+ * even in IE8. innerText is a poor substitute for textContent and, among many
+ * issues, inserts <br> instead of the literal newline chars. innerHTML behaves
+ * as it should.
+ *
+ * @param {DOMElement} node
+ * @param {string} text
+ * @internal
+ */
 var setTextContent = function (node, text) {
   if (text) {
     var firstChild = node.firstChild;
@@ -8295,6 +8521,28 @@ DOMLazyTree.queueText = queueText;
 
 var DOMLazyTree_1 = DOMLazyTree;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ */
+
+
+
+/**
+ * Convert array-like objects to arrays.
+ *
+ * This API assumes the caller knows the contents of the data type. For less
+ * well defined inputs use createArrayFromMixed.
+ *
+ * @param {object|function|filelist} obj
+ * @return {array}
+ */
 function toArray$1(obj) {
   var length = obj.length;
 
@@ -8398,6 +8646,25 @@ function createArrayFromMixed(obj) {
 
 var createArrayFromMixed_1 = createArrayFromMixed;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
+/*eslint-disable fb-www/unsafe-html */
+
+
+
+
+
+/**
+ * Dummy container used to detect which wraps are necessary.
+ */
 var dummyNode$1 = ExecutionEnvironment_1.canUseDOM ? document.createElement('div') : null;
 
 /**
@@ -8472,6 +8739,28 @@ function getMarkupWrap(nodeName) {
 
 var getMarkupWrap_1 = getMarkupWrap;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ */
+
+/*eslint-disable fb-www/unsafe-html*/
+
+
+
+
+
+
+
+/**
+ * Dummy container used to render all markup.
+ */
 var dummyNode = ExecutionEnvironment_1.canUseDOM ? document.createElement('div') : null;
 
 /**
@@ -8763,6 +9052,9 @@ var DOMChildrenOperations = {
 
 var DOMChildrenOperations_1 = DOMChildrenOperations;
 
+/**
+ * Operations used to process updates to DOM nodes.
+ */
 var ReactDOMIDOperations = {
 
   /**
@@ -8779,6 +9071,11 @@ var ReactDOMIDOperations = {
 
 var ReactDOMIDOperations_1 = ReactDOMIDOperations;
 
+/**
+ * Abstracts away all functionality of the reconciler that requires knowledge of
+ * the browser context. TODO: These callers should be refactored to avoid the
+ * need for this injection.
+ */
 var ReactComponentBrowserEnvironment = {
 
   processChildrenUpdates: ReactDOMIDOperations_1.dangerouslyProcessChildrenUpdates,
@@ -8797,6 +9094,10 @@ var ReactComponentBrowserEnvironment_1 = ReactComponentBrowserEnvironment;
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
+ */
+
+/**
+ * @param {DOMElement} node input/textarea to focus
  */
 
 function focusNode(node) {
@@ -8826,6 +9127,10 @@ var AutoFocusUtils_1 = AutoFocusUtils;
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
+ */
+
+/**
+ * CSS properties which accept numbers but are not in units of "px".
  */
 
 var isUnitlessNumber = {
@@ -8960,6 +9265,17 @@ var CSSProperty = {
 
 var CSSProperty_1 = CSSProperty;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ */
+
 var _hyphenPattern = /-(.)/g;
 
 /**
@@ -9068,6 +9384,17 @@ function dangerousStyleValue(name, value, component) {
 
 var dangerousStyleValue_1 = dangerousStyleValue;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ */
+
 var _uppercasePattern = /([A-Z])/g;
 
 /**
@@ -9122,6 +9449,10 @@ var hyphenateStyleName_1 = hyphenateStyleName;
  *
  * 
  * @typechecks static-only
+ */
+
+/**
+ * Memoizes the return value of a function that accepts one string argument.
  */
 
 function memoizeStringOnly(callback) {
@@ -9323,6 +9654,12 @@ var CSSPropertyOperations = {
 
 var CSSPropertyOperations_1 = CSSPropertyOperations;
 
+/**
+ * Escapes attribute value to prevent scripting attacks.
+ *
+ * @param {*} value Value to escape.
+ * @return {string} An escaped string.
+ */
 function quoteAttributeValueForBrowser(value) {
   return '"' + escapeTextContentForBrowser_1(value) + '"';
 }
@@ -9566,6 +9903,13 @@ var ReactEventEmitterMixin = {
 
 var ReactEventEmitterMixin_1 = ReactEventEmitterMixin;
 
+/**
+ * Generate a mapping of standard vendor prefixes using the defined style property and event name.
+ *
+ * @param {string} styleProp
+ * @param {string} eventName
+ * @returns {object}
+ */
 function makePrefixMap(styleProp, eventName) {
   var prefixes = {};
 
@@ -9645,6 +9989,61 @@ function getVendorPrefixedEventName(eventName) {
 }
 
 var getVendorPrefixedEventName_1 = getVendorPrefixedEventName;
+
+/**
+ * Summary of `ReactBrowserEventEmitter` event handling:
+ *
+ *  - Top-level delegation is used to trap most native browser events. This
+ *    may only occur in the main thread and is the responsibility of
+ *    ReactEventListener, which is injected and can therefore support pluggable
+ *    event sources. This is the only work that occurs in the main thread.
+ *
+ *  - We normalize and de-duplicate events to account for browser quirks. This
+ *    may be done in the worker thread.
+ *
+ *  - Forward these native events (with the associated top-level type used to
+ *    trap it) to `EventPluginHub`, which in turn will ask plugins if they want
+ *    to extract any synthetic events.
+ *
+ *  - The `EventPluginHub` will then process each event by annotating them with
+ *    "dispatches", a sequence of listeners and IDs that care about that event.
+ *
+ *  - The `EventPluginHub` then dispatches the events.
+ *
+ * Overview of React and the event system:
+ *
+ * +------------+    .
+ * |    DOM     |    .
+ * +------------+    .
+ *       |           .
+ *       v           .
+ * +------------+    .
+ * | ReactEvent |    .
+ * |  Listener  |    .
+ * +------------+    .                         +-----------+
+ *       |           .               +--------+|SimpleEvent|
+ *       |           .               |         |Plugin     |
+ * +-----|------+    .               v         +-----------+
+ * |     |      |    .    +--------------+                    +------------+
+ * |     +-----------.--->|EventPluginHub|                    |    Event   |
+ * |            |    .    |              |     +-----------+  | Propagators|
+ * | ReactEvent |    .    |              |     |TapEvent   |  |------------|
+ * |  Emitter   |    .    |              |<---+|Plugin     |  |other plugin|
+ * |            |    .    |              |     +-----------+  |  utilities |
+ * |     +-----------.--->|              |                    +------------+
+ * |     |      |    .    +--------------+
+ * +-----|------+    .                ^        +-----------+
+ *       |           .                |        |Enter/Leave|
+ *       +           .                +-------+|Plugin     |
+ * +-------------+   .                         +-----------+
+ * | application |   .
+ * |-------------|   .
+ * |             |   .
+ * |             |   .
+ * +-------------+   .
+ *                   .
+ *    React Core     .  General Purpose Event Plugin System
+ */
 
 var hasEventPageXY;
 var alreadyListeningTo = {};
@@ -10756,6 +11155,15 @@ var ReactComponentEnvironment_1 = ReactComponentEnvironment;
  *
  */
 
+/**
+ * `ReactInstanceMap` maintains a mapping from a public facing stateful
+ * instance (key) and the internal representation (value). This allows public
+ * methods to accept the user facing instance as an argument and map them back
+ * to internal methods.
+ */
+
+// TODO: Replace this with ES6: var ReactInstanceMap = new Map();
+
 var ReactInstanceMap = {
 
   /**
@@ -10968,6 +11376,18 @@ var shallowEqual_1 = shallowEqual;
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
+ */
+
+/**
+ * Given a `prevElement` and `nextElement`, determines if the existing
+ * instance should be updated as opposed to being destroyed or replaced by a new
+ * instance. Both arguments are elements. This ensures that this logic can
+ * operate on stateless trees without any backing instance.
+ *
+ * @param {?object} prevElement
+ * @param {?object} nextElement
+ * @return {boolean} True if the existing instance should be updated.
+ * @protected
  */
 
 function shouldUpdateReactComponent(prevElement, nextElement) {
@@ -11941,6 +12361,7 @@ function getNextDebugID() {
 
 var getNextDebugID_1 = getNextDebugID;
 
+// To avoid a cyclic dependency, we create the final class in this module
 var ReactCompositeComponentWrapper = function (element) {
   this.construct(element);
 };
@@ -12057,6 +12478,13 @@ var instantiateReactComponent_1 = instantiateReactComponent;
  * 
  */
 
+/**
+ * Escape and wrap key so it is safe to use as a reactid
+ *
+ * @param {string} key to be escaped.
+ * @return {string} the escaped key.
+ */
+
 function escape$1(key) {
   var escapeRegex = /[=:]/g;
   var escaperLookup = {
@@ -12107,6 +12535,9 @@ var KeyEscapeUtils_1$2 = KeyEscapeUtils$2;
  * 
  */
 
+// The Symbol used to tag the ReactElement type. If there is no native Symbol
+// nor polyfill, then a plain number is used for performance.
+
 var REACT_ELEMENT_TYPE$2 = typeof Symbol === 'function' && Symbol['for'] && Symbol['for']('react.element') || 0xeac7;
 
 var ReactElementSymbol$2 = REACT_ELEMENT_TYPE$2;
@@ -12121,6 +12552,8 @@ var ReactElementSymbol$2 = REACT_ELEMENT_TYPE$2;
  *
  * 
  */
+
+/* global Symbol */
 
 var ITERATOR_SYMBOL$1 = typeof Symbol === 'function' && Symbol.iterator;
 var FAUX_ITERATOR_SYMBOL$1 = '@@iterator'; // Before Symbol spec.
@@ -12491,6 +12924,13 @@ function flattenChildren$1(children, selfDebugID) {
 
 var flattenChildren_1 = flattenChildren$1;
 
+/**
+ * Make an update for markup to be rendered and inserted at a supplied index.
+ *
+ * @param {string} markup Markup that renders into an element.
+ * @param {number} toIndex Destination index.
+ * @private
+ */
 function makeInsertMarkup(markup, afterNode, toIndex) {
   // NOTE: Null values reduce hidden classes.
   return {
@@ -13248,6 +13688,11 @@ var ReactServerUpdateQueue = function () {
 
 var ReactServerUpdateQueue_1 = ReactServerUpdateQueue;
 
+/**
+ * Executed within the scope of the `Transaction` instance. Consider these as
+ * being member methods, but with an implied ordering while being isolated from
+ * each other.
+ */
 var TRANSACTION_WRAPPERS$1 = [];
 
 {
@@ -14674,6 +15119,10 @@ index(ReactDOMEmptyComponent.prototype, {
 
 var ReactDOMEmptyComponent_1 = ReactDOMEmptyComponent;
 
+/**
+ * Return the lowest common ancestor of A and B, or null if they are in
+ * different trees.
+ */
 function getLowestCommonAncestor(instA, instB) {
   !('_hostNode' in instA) ? invariant_1(false, 'getNodeFromInstance: Invalid argument.') : void 0;
   !('_hostNode' in instB) ? invariant_1(false, 'getNodeFromInstance: Invalid argument.') : void 0;
@@ -14790,6 +15239,21 @@ var ReactDOMTreeTraversal = {
   traverseEnterLeave: traverseEnterLeave
 };
 
+/**
+ * Text nodes violate a couple assumptions that React makes about components:
+ *
+ *  - When mounting text into the DOM, adjacent text nodes are merged.
+ *  - Text nodes cannot be assigned a React root ID.
+ *
+ * This component is used to wrap strings between comment nodes so that they
+ * can undergo the same reconciliation that is applied to elements.
+ *
+ * TODO: Investigate representing React components in the DOM with text nodes.
+ *
+ * @class ReactDOMTextComponent
+ * @extends ReactComponent
+ * @internal
+ */
 var ReactDOMTextComponent = function (text) {
   // TODO: This is really a ReactText (ReactNode), not a ReactElement
   this._currentElement = text;
@@ -14965,6 +15429,30 @@ var ReactDefaultBatchingStrategy = {
 
 var ReactDefaultBatchingStrategy_1 = ReactDefaultBatchingStrategy;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @typechecks
+ */
+
+
+
+/**
+ * Upstream version of event listener. Does not take into account specific
+ * nature of platform.
+ */
 var EventListener = {
   /**
    * Listen to DOM events during the bubble phase.
@@ -15034,6 +15522,17 @@ var EventListener_1 = EventListener;
  * @typechecks
  */
 
+/**
+ * Gets the scroll position of the supplied element or window.
+ *
+ * The return values are unbounded, unlike `getScrollPosition`. This means they
+ * may be negative or exceed the element boundaries (which is possible using
+ * inertial scrolling).
+ *
+ * @param {DOMWindow|DOMElement} scrollable
+ * @return {object} Map with `x` and `y` keys.
+ */
+
 function getUnboundedScrollPosition(scrollable) {
   if (scrollable.Window && scrollable instanceof scrollable.Window) {
     return {
@@ -15049,6 +15548,11 @@ function getUnboundedScrollPosition(scrollable) {
 
 var getUnboundedScrollPosition_1 = getUnboundedScrollPosition;
 
+/**
+ * Find the deepest React component completely containing the root of the
+ * passed-in instance (for use when entire React trees are nested within each
+ * other). If React trees are not nested, returns null.
+ */
 function findParent(inst) {
   // TODO: It may be a good idea to cache this to prevent unnecessary DOM
   // traversal, but caching is difficult to do correctly without using a
@@ -15199,6 +15703,13 @@ var ReactInjection_1 = ReactInjection;
  *
  */
 
+/**
+ * Given any node return the first leaf node without children.
+ *
+ * @param {DOMElement|DOMTextNode} node
+ * @return {DOMElement|DOMTextNode}
+ */
+
 function getLeafNode(node) {
   while (node && node.firstChild) {
     node = node.firstChild;
@@ -15254,6 +15765,11 @@ function getNodeForCharacterOffset(root, offset) {
 
 var getNodeForCharacterOffset_1 = getNodeForCharacterOffset;
 
+/**
+ * While `isCollapsed` is available on the Selection object and `collapsed`
+ * is available on the Range object, IE11 sometimes gets them wrong.
+ * If the anchor/focus nodes and offsets are the same, the range is collapsed.
+ */
 function isCollapsed(anchorNode, anchorOffset, focusNode, focusOffset) {
   return anchorNode === focusNode && anchorOffset === focusOffset;
 }
@@ -15444,6 +15960,21 @@ var ReactDOMSelection = {
 
 var ReactDOMSelection_1 = ReactDOMSelection;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ */
+
+/**
+ * @param {*} object The object to check.
+ * @return {boolean} Whether or not the object is a DOM node.
+ */
 function isNode(object) {
   var doc = object ? object.ownerDocument || object : document;
   var defaultView = doc.defaultView || window;
@@ -15452,12 +15983,47 @@ function isNode(object) {
 
 var isNode_1 = isNode;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ */
+
+
+
+/**
+ * @param {*} object The object to check.
+ * @return {boolean} Whether or not the object is a DOM text node.
+ */
 function isTextNode(object) {
   return isNode_1(object) && object.nodeType == 3;
 }
 
 var isTextNode_1 = isTextNode;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * 
+ */
+
+
+
+/*eslint-disable no-bitwise */
+
+/**
+ * Checks if a given DOM node contains or is another DOM node.
+ */
 function containsNode(outerNode, innerNode) {
   if (!outerNode || !innerNode) {
     return false;
@@ -15478,6 +16044,29 @@ function containsNode(outerNode, innerNode) {
 
 var containsNode_1 = containsNode;
 
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ */
+
+/* eslint-disable fb-www/typeof-undefined */
+
+/**
+ * Same as document.activeElement but wraps in a try-catch block. In IE it is
+ * not safe to call document.activeElement if there is nothing focused.
+ *
+ * The activeElement will be null only if the document or document body is not
+ * yet defined.
+ *
+ * @param {?DOMDocument} doc Defaults to current document.
+ * @return {?DOMElement}
+ */
 function getActiveElement(doc) /*?DOMElement*/{
   doc = doc || (typeof document !== 'undefined' ? document : undefined);
   if (typeof doc === 'undefined') {
@@ -15598,6 +16187,10 @@ var ReactInputSelection = {
 
 var ReactInputSelection_1 = ReactInputSelection;
 
+/**
+ * Ensures that, when possible, the selection range (currently selected text
+ * input) is not disturbed by performing the transaction.
+ */
 var SELECTION_RESTORATION = {
   /**
    * @return {Selection} Selection information.
@@ -16219,6 +16812,11 @@ var SelectEventPlugin = {
 
 var SelectEventPlugin_1 = SelectEventPlugin;
 
+/**
+ * @interface Event
+ * @see http://www.w3.org/TR/css3-animations/#AnimationEvent-interface
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/AnimationEvent
+ */
 var AnimationEventInterface = {
   animationName: null,
   elapsedTime: null,
@@ -16239,6 +16837,10 @@ SyntheticEvent_1.augmentClass(SyntheticAnimationEvent, AnimationEventInterface);
 
 var SyntheticAnimationEvent_1 = SyntheticAnimationEvent;
 
+/**
+ * @interface Event
+ * @see http://www.w3.org/TR/clipboard-apis/
+ */
 var ClipboardEventInterface = {
   clipboardData: function (event) {
     return 'clipboardData' in event ? event.clipboardData : window.clipboardData;
@@ -16259,6 +16861,10 @@ SyntheticEvent_1.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 
 var SyntheticClipboardEvent_1 = SyntheticClipboardEvent;
 
+/**
+ * @interface FocusEvent
+ * @see http://www.w3.org/TR/DOM-Level-3-Events/
+ */
 var FocusEventInterface = {
   relatedTarget: null
 };
@@ -16285,6 +16891,17 @@ var SyntheticFocusEvent_1 = SyntheticFocusEvent;
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
+ */
+
+/**
+ * `charCode` represents the actual "character code" and is safe to use with
+ * `String.fromCharCode`. As such, only keys that correspond to printable
+ * characters produce a valid `charCode`, the only exception to this is Enter.
+ * The Tab-key is considered non-printable and does not have a `charCode`,
+ * presumably because it does not produce a tab-character in browsers.
+ *
+ * @param {object} nativeEvent Native browser event.
+ * @return {number} Normalized `charCode` property.
  */
 
 function getEventCharCode(nativeEvent) {
@@ -16314,6 +16931,10 @@ function getEventCharCode(nativeEvent) {
 
 var getEventCharCode_1 = getEventCharCode;
 
+/**
+ * Normalization of deprecated HTML5 `key` values
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent#Key_names
+ */
 var normalizeKey = {
   'Esc': 'Escape',
   'Spacebar': ' ',
@@ -16398,6 +17019,10 @@ function getEventKey(nativeEvent) {
 
 var getEventKey_1 = getEventKey;
 
+/**
+ * @interface KeyboardEvent
+ * @see http://www.w3.org/TR/DOM-Level-3-Events/
+ */
 var KeyboardEventInterface = {
   key: getEventKey_1,
   location: null,
@@ -16460,6 +17085,10 @@ SyntheticUIEvent_1.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 var SyntheticKeyboardEvent_1 = SyntheticKeyboardEvent;
 
+/**
+ * @interface DragEvent
+ * @see http://www.w3.org/TR/DOM-Level-3-Events/
+ */
 var DragEventInterface = {
   dataTransfer: null
 };
@@ -16478,6 +17107,10 @@ SyntheticMouseEvent_1.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 var SyntheticDragEvent_1 = SyntheticDragEvent;
 
+/**
+ * @interface TouchEvent
+ * @see http://www.w3.org/TR/touch-events/
+ */
 var TouchEventInterface = {
   touches: null,
   targetTouches: null,
@@ -16503,6 +17136,11 @@ SyntheticUIEvent_1.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 var SyntheticTouchEvent_1 = SyntheticTouchEvent;
 
+/**
+ * @interface Event
+ * @see http://www.w3.org/TR/2009/WD-css3-transitions-20090320/#transition-events-
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/TransitionEvent
+ */
 var TransitionEventInterface = {
   propertyName: null,
   elapsedTime: null,
@@ -16523,6 +17161,10 @@ SyntheticEvent_1.augmentClass(SyntheticTransitionEvent, TransitionEventInterface
 
 var SyntheticTransitionEvent_1 = SyntheticTransitionEvent;
 
+/**
+ * @interface WheelEvent
+ * @see http://www.w3.org/TR/DOM-Level-3-Events/
+ */
 var WheelEventInterface = {
   deltaX: function (event) {
     return 'deltaX' in event ? event.deltaX :
@@ -16559,6 +17201,24 @@ SyntheticMouseEvent_1.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 var SyntheticWheelEvent_1 = SyntheticWheelEvent;
 
+/**
+ * Turns
+ * ['abort', ...]
+ * into
+ * eventTypes = {
+ *   'abort': {
+ *     phasedRegistrationNames: {
+ *       bubbled: 'onAbort',
+ *       captured: 'onAbortCapture',
+ *     },
+ *     dependencies: ['topAbort'],
+ *   },
+ *   ...
+ * };
+ * topLevelEventsToDispatchConfig = {
+ *   'topAbort': { sameConfig }
+ * };
+ */
 var eventTypes$4 = {};
 var topLevelEventsToDispatchConfig = {};
 ['abort', 'animationEnd', 'animationIteration', 'animationStart', 'blur', 'canPlay', 'canPlayThrough', 'click', 'contextMenu', 'copy', 'cut', 'doubleClick', 'drag', 'dragEnd', 'dragEnter', 'dragExit', 'dragLeave', 'dragOver', 'dragStart', 'drop', 'durationChange', 'emptied', 'encrypted', 'ended', 'error', 'focus', 'input', 'invalid', 'keyDown', 'keyPress', 'keyUp', 'load', 'loadedData', 'loadedMetadata', 'loadStart', 'mouseDown', 'mouseMove', 'mouseOut', 'mouseOver', 'mouseUp', 'paste', 'pause', 'play', 'playing', 'progress', 'rateChange', 'reset', 'scroll', 'seeked', 'seeking', 'stalled', 'submit', 'suspend', 'timeUpdate', 'touchCancel', 'touchEnd', 'touchMove', 'touchStart', 'transitionEnd', 'volumeChange', 'waiting', 'wheel'].forEach(function (event) {
@@ -17432,6 +18092,14 @@ function getHostComponentFromComposite(inst) {
 
 var getHostComponentFromComposite_1 = getHostComponentFromComposite;
 
+/**
+ * Returns the DOM node rendered by this element.
+ *
+ * See https://facebook.github.io/react/docs/top-level-api.html#reactdom.finddomnode
+ *
+ * @param {ReactComponent|DOMElement} componentOrElement
+ * @return {?DOMElement} The root node of this element.
+ */
 function findDOMNode(componentOrElement) {
   {
     var owner = ReactCurrentOwner_1.current;
@@ -18736,6 +19404,7 @@ var types = exports.types = {
 };
 });
 
+// (any, any, [array]) -> boolean
 function equal(a, b, memos){
   // All identical values are equivalent
   if (a === b) return true
