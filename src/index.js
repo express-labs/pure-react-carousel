@@ -1,6 +1,5 @@
-export { default as Button } from './Button';
-export { default as ButtonLeft } from './ButtonLeft';
-export { default as ButtonRight } from './ButtonRight';
+export { default as ButtonBack } from './ButtonBack';
+export { default as ButtonNext } from './ButtonNext';
 export { default as CarouselProvider } from './CarouselProvider/CarouselProvider';
 export { default as Image } from './Image/Image';
 export { default as PassThrough } from './PassThrough/PassThrough';

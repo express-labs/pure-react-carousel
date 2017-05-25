@@ -1,9 +1,7 @@
 import deepMerge from 'deepmerge';
 import deepFreeze from 'deep-freeze';
 
-const DEFAULT_STATE = {
-
-};
+const DEFAULT_STATE = {};
 
 const Store = class Store {
   constructor(initialState) {
@@ -32,6 +30,5 @@ const Store = class Store {
     this.subscriptions.forEach(func => func());
   }
 };
-
 
 export default Store;

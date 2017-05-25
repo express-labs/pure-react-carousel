@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonLeft, ButtonRight, CarouselProvider, Slider, Slide } from '../';
+import { ButtonBack, ButtonNext, CarouselProvider, Slider, Slide } from '../';
 import s from './style.css';
 import { cn } from '../helpers';
 
@@ -20,8 +20,11 @@ const DevelopmentApp = () => (
       <Slide />
       <Slide />
     </Slider>
-    <ButtonLeft>Left</ButtonLeft>
-    <ButtonRight>Right</ButtonRight>
+    <ButtonBack>Back</ButtonBack>
+    <ButtonNext>Next</ButtonNext>
+    <div>
+      <p>Dot Group</p>
+    </div>
   </CarouselProvider>
 );
 

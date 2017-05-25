@@ -9,15 +9,17 @@ export default class CarouselProvider extends React.Component {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]).isRequired,
-    visibleSlides: PropTypes.number,
-    totalSlides: PropTypes.number,
     currentSlide: PropTypes.number,
+    step: PropTypes.number,
+    totalSlides: PropTypes.number,
+    visibleSlides: PropTypes.number,
   }
 
   static defaultProps = {
-    visibleSlides: 1,
-    totalSlides: 0,
     currentSlide: 0,
+    step: 1,
+    totalSlides: 0,
+    visibleSlides: 1,
   }
 
   static childContextTypes = {
@@ -27,11 +29,12 @@ export default class CarouselProvider extends React.Component {
   constructor(props, context) {
     super(props, context);
     const options = {
-      visibleSlides: props.visibleSlides,
-      totalSlides: props.totalSlides,
       currentSlide: props.currentSlide,
-      slideWidth: slideWidth(props.totalSlides),
       slideTrayWidth: slideTrayWidth(props.totalSlides, props.visibleSlides),
+      slideWidth: slideWidth(props.totalSlides),
+      step: props.step,
+      totalSlides: props.totalSlides,
+      visibleSlides: props.visibleSlides,
     };
     this.store = new Store(options);
   }
