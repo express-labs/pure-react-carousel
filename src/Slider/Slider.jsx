@@ -23,7 +23,7 @@ const Slider = class Slider extends React.Component {
 
   render() {
     const {
-      className, currentSlide, slideTrayWidth, slideWidth, store, visibleSlides, ...props
+      className, children, currentSlide, slideTrayWidth, slideWidth, store, visibleSlides, ...props
     } = this.props;
 
     const style = {
@@ -45,7 +45,7 @@ const Slider = class Slider extends React.Component {
     return (
       <div className={sliderClasses} {...props}>
         <div className={trayClasses} style={style}>
-          {this.props.children}
+          {children}
         </div>
       </div>
     );

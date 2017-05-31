@@ -18553,7 +18553,7 @@ var ImageWithZoom$1 = (_temp$4 = _class$4 = function (_React$Component) {
   tag: 'div'
 }, _temp$4);
 
-var s$6 = { "slide": "_slide_bdmp1_1" };
+var s$6 = { "slide": "_slide_uc7ti_1", "focusRing": "_focusRing_uc7ti_12" };
 
 var _class$5;
 var _temp$5;
@@ -18563,20 +18563,62 @@ var Slide$1 = (_temp$5 = _class$5 = function (_React$PureComponent) {
 
   function Slide() {
     classCallCheck(this, Slide);
-    return possibleConstructorReturn(this, (Slide.__proto__ || Object.getPrototypeOf(Slide)).apply(this, arguments));
+
+    var _this = possibleConstructorReturn(this, (Slide.__proto__ || Object.getPrototypeOf(Slide)).call(this));
+
+    _this.handleOnFocus = _this.handleOnFocus.bind(_this);
+    _this.handleOnBlur = _this.handleOnBlur.bind(_this);
+    _this.state = {
+      focused: false
+    };
+    return _this;
   }
 
   createClass(Slide, [{
+    key: 'isVisible',
+    value: function isVisible() {
+      var _props = this.props,
+          currentSlide = _props.currentSlide,
+          index = _props.index,
+          visibleSlides = _props.visibleSlides;
+
+      return index >= currentSlide && index < currentSlide + visibleSlides;
+    }
+  }, {
+    key: 'handleOnFocus',
+    value: function handleOnFocus() {
+      this.setState({
+        focused: true
+      });
+    }
+  }, {
+    key: 'handleOnBlur',
+    value: function handleOnBlur() {
+      this.setState({
+        focused: false
+      });
+    }
+  }, {
+    key: 'renderFocusRing',
+    value: function renderFocusRing() {
+      if (this.state.focused) return react.createElement('div', { className: s$6.focusRing });
+      return null;
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _props = this.props,
-          children = _props.children,
-          className = _props.className,
-          slideWidth$$1 = _props.slideWidth,
-          store = _props.store,
-          style = _props.style,
-          Tag = _props.tag,
-          props = objectWithoutProperties(_props, ['children', 'className', 'slideWidth', 'store', 'style', 'tag']);
+      var _props2 = this.props,
+          children = _props2.children,
+          className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          index = _props2.index,
+          slideWidth$$1 = _props2.slideWidth,
+          store = _props2.store,
+          style = _props2.style,
+          tabIndex = _props2.tabIndex,
+          Tag = _props2.tag,
+          visibleSlides = _props2.visibleSlides,
+          props = objectWithoutProperties(_props2, ['children', 'className', 'currentSlide', 'index', 'slideWidth', 'store', 'style', 'tabIndex', 'tag', 'visibleSlides']);
 
 
       var newStyle = Object.assign({
@@ -18586,10 +18628,20 @@ var Slide$1 = (_temp$5 = _class$5 = function (_React$PureComponent) {
 
       var newClassName = cn([s$6.slide, 'carousel__slide', className]);
 
+      var defaultTabIndex = this.isVisible() ? 0 : -1;
+      var newTabIndex = typeof tabIndex === 'boolean' ? tabIndex : defaultTabIndex;
+
       return react.createElement(
         Tag,
-        _extends({ className: newClassName, style: newStyle }, props),
-        this.props.children
+        _extends({
+          tabIndex: newTabIndex,
+          onFocus: this.handleOnFocus,
+          onBlur: this.handleOnBlur,
+          className: newClassName,
+          style: newStyle
+        }, props),
+        this.props.children,
+        this.renderFocusRing()
       );
     }
   }]);
@@ -18597,22 +18649,28 @@ var Slide$1 = (_temp$5 = _class$5 = function (_React$PureComponent) {
 }(react.PureComponent), _class$5.propTypes = {
   children: index$3.oneOfType([index$3.arrayOf(index$3.node), index$3.node]),
   className: index$3.string,
-  slideWidth: index$3.number,
-  style: index$3.object,
+  currentSlide: index$3.number.isRequired,
+  index: index$3.number.isRequired,
+  slideWidth: index$3.number.isRequired,
   store: index$3.object,
-  tag: index$3.string
+  style: index$3.object,
+  tabIndex: index$3.number,
+  tag: index$3.string,
+  visibleSlides: index$3.number.isRequired
 }, _class$5.defaultProps = {
   children: null,
   className: null,
-  slideWidth: 100,
-  style: {},
   store: null,
+  style: {},
+  tabIndex: null,
   tag: 'div'
 }, _temp$5);
 
 var Slide$$1 = WithStore(Slide$1, function (state) {
   return {
-    slideWidth: state.slideWidth
+    slideWidth: state.slideWidth,
+    visibleSlides: state.visibleSlides,
+    currentSlide: state.currentSlide
   };
 });
 
@@ -18634,12 +18692,13 @@ var Slider$1 = (_temp$6 = _class$6 = function (_React$Component) {
     value: function render() {
       var _props = this.props,
           className = _props.className,
+          children = _props.children,
           currentSlide = _props.currentSlide,
           slideTrayWidth$$1 = _props.slideTrayWidth,
           slideWidth$$1 = _props.slideWidth,
           store = _props.store,
           visibleSlides = _props.visibleSlides,
-          props = objectWithoutProperties(_props, ['className', 'currentSlide', 'slideTrayWidth', 'slideWidth', 'store', 'visibleSlides']);
+          props = objectWithoutProperties(_props, ['className', 'children', 'currentSlide', 'slideTrayWidth', 'slideWidth', 'store', 'visibleSlides']);
 
 
       var style = {
@@ -18657,7 +18716,7 @@ var Slider$1 = (_temp$6 = _class$6 = function (_React$Component) {
         react.createElement(
           'div',
           { className: trayClasses, style: style },
-          this.props.children
+          children
         )
       );
     }
@@ -19104,32 +19163,32 @@ var DevelopmentApp = function DevelopmentApp() {
       { className: cn(['slider', s$8.slider]) },
       react.createElement(
         Slide$$1,
-        null,
+        { tag: 'a', index: 0 },
         react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img01.jpeg' })
       ),
       react.createElement(
         Slide$$1,
-        null,
+        { tag: 'a', index: 1 },
         react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img02.jpeg' })
       ),
       react.createElement(
         Slide$$1,
-        null,
+        { tag: 'a', index: 2 },
         react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img03.jpeg' })
       ),
       react.createElement(
         Slide$$1,
-        null,
+        { tag: 'a', index: 3 },
         react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img04.jpeg' })
       ),
       react.createElement(
         Slide$$1,
-        null,
+        { tag: 'a', index: 4 },
         react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img05.jpeg' })
       ),
       react.createElement(
         Slide$$1,
-        null,
+        { tag: 'a', index: 5 },
         react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img06.jpeg' })
       )
     ),

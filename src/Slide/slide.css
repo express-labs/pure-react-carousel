@@ -1,4 +1,27 @@
 .slide {
   display: block;
   float: left;
+  box-sizing: border-box;
+  position: relative;
+
+  &:focus {
+    outline: none !important;
+  }
+}
+
+.focusRing {
+  position: absolute;
+  top: 5px;
+  right:  5px;
+  bottom:  5px;
+  left:  5px;
+  outline-width: 5px;
+  outline-style: solid;
+  outline-color: Highlight;
+  pointer-events: none;
+
+  @media (-webkit-min-device-pixel-ratio:0) {
+    outline-color: -webkit-focus-ring-color;
+    outline-style: auto;
+  }
 }
