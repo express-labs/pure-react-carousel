@@ -1,30 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cn } from '../helpers';
+import { cn, LOADING, SUCCESS, ERROR } from '../helpers';
 import s from './Image.css';
-
-const LOADING = 'loading';
-const SUCCESS = 'success';
-const ERROR = 'error';
 
 class Image extends React.Component {
   static propTypes = {
     alt: PropTypes.string,
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node,
+    ]),
+    className: PropTypes.string,
+    isBgImage: PropTypes.bool,
+    isResponsive: PropTypes.bool,
     onError: PropTypes.func,
     onLoad: PropTypes.func,
     renderError: PropTypes.func,
     renderLoading: PropTypes.func,
-    responsive: PropTypes.bool,
+    style: PropTypes.object,
     src: PropTypes.string.isRequired,
+    tag: PropTypes.string,
   }
 
   static defaultProps = {
     alt: '',
+    children: null,
+    className: null,
+    isBgImage: false,
+    isResponsive: false,
     onError: null,
     onLoad: null,
     renderError: null,
     renderLoading: null,
-    responsive: false,
+    tag: 'img',
+    style: null,
   }
 
   constructor(props) {
@@ -52,36 +61,87 @@ class Image extends React.Component {
     if (this.props.onError) this.props.onError(ev);
   }
 
-  renderLoading() {
+  tempTag() {
+    return this.props.tag === 'img' ? 'div' : this.props.tag;
+  }
+
+  renderLoading(props) {
     if (this.props.renderLoading) return this.props.renderLoading();
-    return <span>Loading</span>;
-  }
 
-  renderSuccess() {
-    const {
-      alt, onError, onLoad, responsive, renderError, renderLoading, src, ...props
-    } = this.props;
-    const cssClass = cn([
+    const Tag = this.tempTag();
+
+    const newClassName = cn([
       s.image,
-      responsive && s.responsive,
+      s.imageLoading,
+      this.props.isResponsive && s.responsive,
       'carousel__image',
+      'carousel__image--loading',
+      this.props.className,
     ]);
-    return <img className={cssClass} src={src} alt={alt} {...props} />;
+
+    return <Tag className={newClassName} {...props}>{this.props.children}</Tag>;
   }
 
-  renderError() {
+  renderError(props) {
     if (this.props.renderError) return this.props.renderError();
-    return <span>Error</span>;
+
+    const Tag = this.tempTag();
+
+    const newClassName = cn([
+      s.image,
+      s.imageError,
+      this.props.isResponsive && s.responsive,
+      'carousel__image',
+      'carousel__image--error',
+      this.props.className,
+    ]);
+
+    return <Tag className={newClassName} {...props}>{this.props.children}</Tag>;
+  }
+
+  renderSuccess(props) {
+    const { style, src, alt, tag: Tag } = this.props;
+    const newClassName = cn([
+      s.image,
+      this.props.isResponsive && s.responsive,
+      'carousel__image',
+      this.props.isBgImage && 'carousel__image--with-background',
+      'carousel__image--success',
+      this.props.className,
+    ]);
+
+    const newStyle = Object.assign({}, style, {
+      backgroundImage: `url("${src}")`,
+      backgroundSize: 'cover',
+      color: 'red',
+    });
+
+    let filterdProps = props;
+
+    if (Tag !== 'img') {
+      filterdProps = { src, ...props };
+    }
+
+    return (
+      <Tag {...filterdProps} className={newClassName} style={newStyle} alt={alt}>
+        {this.props.children}
+      </Tag>
+    );
   }
 
   render() {
+    const {
+      children, className, isBgImage, isResponsive, onError, onLoad, renderError, renderLoading,
+      tag, ...props
+    } = this.props;
+
     switch (this.state.imageStatus) {
       case LOADING:
-        return this.renderLoading();
+        return this.renderLoading(props);
       case SUCCESS:
-        return this.renderSuccess();
+        return this.renderSuccess(props);
       case ERROR:
-        return this.renderError();
+        return this.renderError(props);
       default:
         throw new Error('unknown value for this.state.imageStatus');
     }

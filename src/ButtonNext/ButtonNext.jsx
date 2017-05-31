@@ -72,7 +72,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
       className, currentSlide, disabled, onClick, step, store, totalSlides, visibleSlides, ...props
     } = this.props;
     const cssClasses = cn([
-      s.buttonBack,
+      s.buttonNext,
       'carousel__next-button',
       className,
     ]);

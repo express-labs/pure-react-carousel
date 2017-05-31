@@ -25,3 +25,7 @@ export function slideTrayWidth(totalSlides, visibleSlides) {
 export function pct(num) {
   return `${num}%`;
 }
+
+export const LOADING = 'loading';
+export const SUCCESS = 'success';
+export const ERROR = 'error';
