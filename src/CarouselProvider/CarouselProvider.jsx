@@ -10,6 +10,7 @@ export default class CarouselProvider extends React.Component {
       PropTypes.node,
     ]).isRequired,
     currentSlide: PropTypes.number,
+    hasMasterSpinner: PropTypes.boolean,
     step: PropTypes.number,
     totalSlides: PropTypes.number,
     visibleSlides: PropTypes.number,
@@ -17,6 +18,7 @@ export default class CarouselProvider extends React.Component {
 
   static defaultProps = {
     currentSlide: 0,
+    hasMasterSpinner: false,
     step: 1,
     totalSlides: 0,
     visibleSlides: 1,
@@ -30,6 +32,9 @@ export default class CarouselProvider extends React.Component {
     super(props, context);
     const options = {
       currentSlide: props.currentSlide,
+      hasMasterSpinner: props.hasMasterSpinner,
+      imageErrorCount: 0,
+      imageSuccessCount: 0,
       slideTrayWidth: slideTrayWidth(props.totalSlides, props.visibleSlides),
       slideWidth: slideWidth(props.totalSlides),
       step: props.step,

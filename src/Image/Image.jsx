@@ -65,9 +65,12 @@ class Image extends React.Component {
     return this.props.tag === 'img' ? 'div' : this.props.tag;
   }
 
-  renderLoading(props) {
-    if (this.props.renderLoading) return this.props.renderLoading();
+  customRender(propName) {
+    if (this.props[propName]) return this.props[propName]();
+    return this.props.children;
+  }
 
+  renderLoading(props) {
     const Tag = this.tempTag();
 
     const newClassName = cn([
@@ -79,7 +82,7 @@ class Image extends React.Component {
       this.props.className,
     ]);
 
-    return <Tag className={newClassName} {...props}>{this.props.children}</Tag>;
+    return <Tag className={newClassName} {...props}>{this.customRender('renderLoading')}</Tag>;
   }
 
   renderError(props) {
@@ -96,7 +99,7 @@ class Image extends React.Component {
       this.props.className,
     ]);
 
-    return <Tag className={newClassName} {...props}>{this.props.children}</Tag>;
+    return <Tag className={newClassName} {...props}>{this.customRender('renderError')}</Tag>;
   }
 
   renderSuccess(props) {

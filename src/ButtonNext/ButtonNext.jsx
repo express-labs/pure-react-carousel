@@ -33,7 +33,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleOnClick = this.handleOnClick.bind(this);
     this.state = {
       disabled: ButtonNext.setDisabled(
         props.disabled,
@@ -55,7 +55,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     });
   }
 
-  handleClick() {
+  handleOnClick(ev) {
     const { currentSlide, onClick, step, store } = this.props;
     const maxSlide = this.props.totalSlides - this.props.visibleSlides;
     const newCurrentSlide = Math.min(
@@ -64,14 +64,15 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     );
     store.setState({
       currentSlide: newCurrentSlide,
-    }, onClick);
+    }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
     const {
       className, currentSlide, disabled, onClick, step, store, totalSlides, visibleSlides, ...props
     } = this.props;
-    const cssClasses = cn([
+
+    const newClassName = cn([
       s.buttonNext,
       'carousel__next-button',
       className,
@@ -79,8 +80,9 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
 
     return (
       <button
-        className={cssClasses}
-        onClick={this.handleClick}
+        aria-label="next"
+        className={newClassName}
+        onClick={this.handleOnClick}
         disabled={this.state.disabled}
         {...props}
       >{this.props.children}</button>

@@ -1,9 +1,14 @@
 import React from 'react';
 import {
-  ButtonBack, ButtonNext, CarouselProvider, Slider, Slide, DotGroup, ImageWithZoom
+  ButtonBack, ButtonFirst, ButtonLast, ButtonNext,
+  CarouselProvider, DotGroup, ImageWithZoom, Slide, Slider,
 } from '../';
 import s from './style.css';
 import { cn } from '../helpers';
+
+// function demoClick(ev) {
+//   console.log('ev', Object.assign({}, ev));
+// }
 
 const DevelopmentApp = () => (
   <CarouselProvider
@@ -32,8 +37,10 @@ const DevelopmentApp = () => (
         <ImageWithZoom isResponsive src="./media/img06.jpeg" />
       </Slide>
     </Slider>
+    <ButtonFirst>First</ButtonFirst>
     <ButtonBack>Back</ButtonBack>
     <ButtonNext>Next</ButtonNext>
+    <ButtonLast>Last</ButtonLast>
     <DotGroup />
   </CarouselProvider>
 );

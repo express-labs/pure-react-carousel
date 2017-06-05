@@ -43,7 +43,7 @@ const Slider = class Slider extends React.Component {
     ]);
 
     return (
-      <div className={sliderClasses} {...props}>
+      <div className={sliderClasses} aria-live="polite" {...props}>
         <div className={trayClasses} style={style}>
           {children}
         </div>

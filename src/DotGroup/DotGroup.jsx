@@ -35,14 +35,15 @@ const DotGroup = class DotGroup extends React.Component {
 
   render() {
     const { className, currentSlide, store, totalSlides, visibleSlides, ...props } = this.props;
-    const cssClasses = cn([
+
+    const newClassName = cn([
       s.DotGroup,
       'carousel__dot-group',
       className,
     ]);
 
     return (
-      <div className={cssClasses} {...props}>
+      <div className={newClassName} {...props}>
         {this.renderDots()}
       </div>
     );

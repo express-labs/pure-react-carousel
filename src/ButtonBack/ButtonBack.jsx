@@ -31,7 +31,7 @@ const ButtonBack = class ButtonBack extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleOnClick = this.handleOnClick.bind(this);
     this.state = {
       disabled: ButtonBack.setDisabled(props.disabled, props.currentSlide),
     };
@@ -43,7 +43,7 @@ const ButtonBack = class ButtonBack extends React.Component {
     });
   }
 
-  handleClick() {
+  handleOnClick(ev) {
     const { currentSlide, onClick, step, store } = this.props;
     const newCurrentSlide = Math.max(
       currentSlide - step,
@@ -51,12 +51,13 @@ const ButtonBack = class ButtonBack extends React.Component {
     );
     store.setState({
       currentSlide: newCurrentSlide,
-    }, onClick);
+    }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
     const { className, currentSlide, disabled, onClick, step, store, ...props } = this.props;
-    const cssClasses = cn([
+
+    const newClassName = cn([
       s.buttonBack,
       'carousel__back-button',
       className,
@@ -64,8 +65,9 @@ const ButtonBack = class ButtonBack extends React.Component {
 
     return (
       <button
-        className={cssClasses}
-        onClick={this.handleClick}
+        aria-label="previous"
+        className={newClassName}
+        onClick={this.handleOnClick}
         disabled={this.state.disabled}
         {...props}
       >{this.props.children}</button>

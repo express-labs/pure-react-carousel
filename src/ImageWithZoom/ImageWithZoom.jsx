@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image } from '../';
-import { cn, pct } from '../helpers';
+import { cn } from '../helpers';
 import s from './ImageWithZoom.css';
 
 const ImageWithZoom = class ImageWithZoom extends React.Component {
@@ -65,7 +65,11 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
     return (
       <Tag className={s.container}>
-        <Image className={imageClassName} src={src} isResponsive />
+        <Image
+          className={imageClassName}
+          src={src}
+          isResponsive
+        />
         <Image
           className={overlayClassName}
           tag="div"
