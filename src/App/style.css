@@ -7,7 +7,6 @@ body {
 }
 
 .slider {
-  width: 100%;
   max-width: 800px;
 
   & :global {
@@ -18,9 +17,11 @@ body {
       /* transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.275); /* easeOutBack */
     }
 
-    & .carousel__image {
+    & .carousel__image--with-background {
       height: 0;
       padding-bottom: calc(40000% / 300);
     }
+
+
   }
 }

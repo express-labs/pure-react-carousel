@@ -14,8 +14,8 @@ export function slideUnit(visibleSlides = 1) {
   return 100 / visibleSlides;
 }
 
-export function slideWidth(totalSlides) {
-  return (1 / totalSlides) * 100;
+export function slideWidth(totalSlides, visibleSlides) {
+  return ((100 / totalSlides) * visibleSlides) / visibleSlides;
 }
 
 export function slideTrayWidth(totalSlides, visibleSlides) {

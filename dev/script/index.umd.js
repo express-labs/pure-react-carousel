@@ -17798,8 +17798,8 @@ function cn(a) {
 
 
 
-function slideWidth(totalSlides) {
-  return 1 / totalSlides * 100;
+function slideWidth(totalSlides, visibleSlides) {
+  return 100 / totalSlides * visibleSlides / visibleSlides;
 }
 
 function slideTrayWidth(totalSlides, visibleSlides) {
@@ -18092,7 +18092,7 @@ var ButtonNext$1 = (_temp$2 = _class$2 = function (_React$PureComponent) {
     key: 'setDisabled',
     value: function setDisabled(disabled, currentSlide, visibleSlides, totalSlides) {
       if (disabled !== null) return disabled;
-      if (currentSlide === totalSlides - visibleSlides) return true;
+      if (currentSlide >= totalSlides - visibleSlides) return true;
       return false;
     }
   }]);
@@ -18281,10 +18281,11 @@ var CarouselProvider$$1 = function (_React$Component) {
     var options = {
       currentSlide: props.currentSlide,
       hasMasterSpinner: props.hasMasterSpinner,
+      masterSpinnerThreshold: 0,
       imageErrorCount: 0,
       imageSuccessCount: 0,
       slideTrayWidth: slideTrayWidth(props.totalSlides, props.visibleSlides),
-      slideWidth: slideWidth(props.totalSlides),
+      slideWidth: slideWidth(props.totalSlides, props.visibleSlides),
       step: props.step,
       totalSlides: props.totalSlides,
       visibleSlides: props.visibleSlides
@@ -18314,7 +18315,7 @@ var CarouselProvider$$1 = function (_React$Component) {
 CarouselProvider$$1.propTypes = {
   children: index$3.oneOfType([index$3.arrayOf(index$3.node), index$3.node]).isRequired,
   currentSlide: index$3.number,
-  hasMasterSpinner: index$3.boolean,
+  hasMasterSpinner: index$3.bool,
   step: index$3.number,
   totalSlides: index$3.number,
   visibleSlides: index$3.number
@@ -18323,7 +18324,7 @@ CarouselProvider$$1.defaultProps = {
   currentSlide: 0,
   hasMasterSpinner: false,
   step: 1,
-  totalSlides: 0,
+  totalSlides: 1,
   visibleSlides: 1
 };
 CarouselProvider$$1.childContextTypes = {
@@ -18491,6 +18492,10 @@ var Image$1 = function (_React$Component) {
     _this.image = document.createElement('img');
     _this.handleImageLoad = _this.handleImageLoad.bind(_this);
     _this.handleImageError = _this.handleImageError.bind(_this);
+
+    if (props.hasMasterSpinner) {
+      props.store.subscribeMasterSpinner();
+    }
     return _this;
   }
 
@@ -18505,12 +18510,14 @@ var Image$1 = function (_React$Component) {
     key: 'handleImageLoad',
     value: function handleImageLoad(ev) {
       this.setState({ imageStatus: SUCCESS });
+      this.props.store.masterSpinnerSuccess();
       if (this.props.onLoad) this.props.onLoad(ev);
     }
   }, {
     key: 'handleImageError',
     value: function handleImageError(ev) {
       this.setState({ imageStatus: ERROR });
+      this.props.store.masterSpinnerError();
       if (this.props.onError) this.props.onError(ev);
     }
   }, {
@@ -18563,16 +18570,16 @@ var Image$1 = function (_React$Component) {
 
       var newClassName = cn([s$6.image, this.props.isResponsive && s$6.responsive, 'carousel__image', this.props.isBgImage && 'carousel__image--with-background', 'carousel__image--success', this.props.className]);
 
-      var newStyle = Object.assign({}, style, {
-        backgroundImage: 'url("' + src + '")',
-        backgroundSize: 'cover',
-        color: 'red'
-      });
+      var newStyle = Object.assign({}, style);
 
       var filterdProps = props;
 
       if (Tag !== 'img') {
         filterdProps = _extends({ src: src }, props);
+        newStyle = Object.assign({}, style, {
+          backgroundImage: 'url("' + src + '")',
+          backgroundSize: 'cover'
+        });
       }
 
       return react.createElement(
@@ -18587,14 +18594,16 @@ var Image$1 = function (_React$Component) {
       var _props2 = this.props,
           children = _props2.children,
           className = _props2.className,
+          hasMasterSpinner = _props2.hasMasterSpinner,
           isBgImage = _props2.isBgImage,
           isResponsive = _props2.isResponsive,
           onError = _props2.onError,
           onLoad = _props2.onLoad,
           renderError = _props2.renderError,
           renderLoading = _props2.renderLoading,
+          store = _props2.store,
           tag = _props2.tag,
-          props = objectWithoutProperties(_props2, ['children', 'className', 'isBgImage', 'isResponsive', 'onError', 'onLoad', 'renderError', 'renderLoading', 'tag']);
+          props = objectWithoutProperties(_props2, ['children', 'className', 'hasMasterSpinner', 'isBgImage', 'isResponsive', 'onError', 'onLoad', 'renderError', 'renderLoading', 'store', 'tag']);
 
 
       switch (this.state.imageStatus) {
@@ -18616,14 +18625,16 @@ Image$1.propTypes = {
   alt: index$3.string,
   children: index$3.oneOfType([index$3.arrayOf(index$3.node), index$3.node]),
   className: index$3.string,
+  hasMasterSpinner: index$3.bool.isRequired,
   isBgImage: index$3.bool,
   isResponsive: index$3.bool,
   onError: index$3.func,
   onLoad: index$3.func,
   renderError: index$3.func,
   renderLoading: index$3.func,
-  style: index$3.object,
   src: index$3.string.isRequired,
+  store: index$3.object.isRequired,
+  style: index$3.object,
   tag: index$3.string
 };
 Image$1.defaultProps = {
@@ -18640,7 +18651,13 @@ Image$1.defaultProps = {
   style: null
 };
 
-var s$7 = { "container": "_container_19kle_1", "overlay": "_overlay_19kle_6", "hover": "_hover_19kle_17" };
+var Image$$1 = WithStore(Image$1, function (state) {
+  return {
+    hasMasterSpinner: state.hasMasterSpinner
+  };
+});
+
+var s$7 = { "container": "_container_174d0_1", "overlay": "_overlay_174d0_6", "hover": "_hover_174d0_17", "loading": "_loading_174d0_22", "imageLoadingSpinnerContainer": "_imageLoadingSpinnerContainer_174d0_26", "imageLoadingSpinner": "_imageLoadingSpinner_174d0_26", "spin": "_spin_174d0_1" };
 
 var _class$6;
 var _temp$6;
@@ -18654,16 +18671,25 @@ var ImageWithZoom$1 = (_temp$6 = _class$6 = function (_React$Component) {
     var _this = possibleConstructorReturn(this, (ImageWithZoom$$1.__proto__ || Object.getPrototypeOf(ImageWithZoom$$1)).call(this));
 
     _this.state = {
+      isImageLoading: true,
       hovering: false,
       style: {}
     };
     _this.handleOnMouseOver = _this.handleOnMouseOver.bind(_this);
     _this.handleOnMouseOut = _this.handleOnMouseOut.bind(_this);
     _this.handleOnMouseMove = _this.handleOnMouseMove.bind(_this);
+    _this.handleImageComplete = _this.handleImageComplete.bind(_this);
     return _this;
   }
 
   createClass(ImageWithZoom$$1, [{
+    key: 'handleImageComplete',
+    value: function handleImageComplete() {
+      this.setState({
+        isImageLoading: false
+      });
+    }
+  }, {
     key: 'handleOnMouseOver',
     value: function handleOnMouseOver() {
       this.setState({
@@ -18685,6 +18711,21 @@ var ImageWithZoom$1 = (_temp$6 = _class$6 = function (_React$Component) {
       this.setState({ x: x, y: y });
     }
   }, {
+    key: 'renderLoading',
+    value: function renderLoading() {
+      if (this.state.isImageLoading) {
+        return react.createElement(
+          'div',
+          {
+            className: cn([s$7.imageLoadingSpinnerContainer, 'carousel__image-loading-spinner-container'])
+          },
+          react.createElement('div', { className: cn([s$7.imageLoadingSpinner, 'carousel__image-loading-spinner']) })
+        );
+      }
+
+      return null;
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _props = this.props,
@@ -18702,12 +18743,14 @@ var ImageWithZoom$1 = (_temp$6 = _class$6 = function (_React$Component) {
       return react.createElement(
         Tag,
         { className: s$7.container },
-        react.createElement(Image$1, {
+        react.createElement(Image$$1, {
           className: imageClassName,
           src: src,
-          isResponsive: true
+          isResponsive: true,
+          onLoad: this.handleImageComplete,
+          onError: this.handleImageComplete
         }),
-        react.createElement(Image$1, {
+        react.createElement(Image$$1, {
           className: overlayClassName,
           tag: 'div',
           src: src,
@@ -18717,7 +18760,8 @@ var ImageWithZoom$1 = (_temp$6 = _class$6 = function (_React$Component) {
           onMouseOver: this.handleOnMouseOver,
           onMouseOut: this.handleOnMouseOut,
           onMouseMove: this.handleOnMouseMove
-        })
+        }),
+        this.renderLoading()
       );
     }
   }]);
@@ -18863,7 +18907,7 @@ var Slide$$1 = WithStore(Slide$1, function (state) {
   };
 });
 
-var s$9 = { "slider": "_slider_175y1_1", "sliderTray": "_sliderTray_175y1_1" };
+var s$9 = { "slider": "_slider_s78ea_1", "sliderTray": "_sliderTray_s78ea_1", "masterSpinnerContainer": "_masterSpinnerContainer_s78ea_11", "masterSpinner": "_masterSpinner_s78ea_11", "spin": "_spin_s78ea_1" };
 
 var _class$8;
 var _temp$8;
@@ -18877,17 +18921,47 @@ var Slider$1 = (_temp$8 = _class$8 = function (_React$Component) {
   }
 
   createClass(Slider, [{
+    key: 'renderMasterSpinner',
+    value: function renderMasterSpinner() {
+      var _props = this.props,
+          hasMasterSpinner = _props.hasMasterSpinner,
+          masterSpinnerErrorCount = _props.masterSpinnerErrorCount,
+          masterSpinnerSuccessCount = _props.masterSpinnerSuccessCount,
+          masterSpinnerSubscriptionCount = _props.masterSpinnerSubscriptionCount;
+
+
+      var testImageCountReached = masterSpinnerErrorCount + masterSpinnerSuccessCount === masterSpinnerSubscriptionCount;
+
+      var testInitialLoad = masterSpinnerSubscriptionCount === 0;
+
+      if (hasMasterSpinner && (!testImageCountReached || testInitialLoad)) {
+        return react.createElement(
+          'div',
+          {
+            className: cn(['carousel__master-spinner-container', s$9.masterSpinnerContainer])
+          },
+          react.createElement('div', { className: cn(['carousel__master-spinner', s$9.masterSpinner]) })
+        );
+      }
+
+      return null;
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _props = this.props,
-          className = _props.className,
-          children = _props.children,
-          currentSlide = _props.currentSlide,
-          slideTrayWidth$$1 = _props.slideTrayWidth,
-          slideWidth$$1 = _props.slideWidth,
-          store = _props.store,
-          visibleSlides = _props.visibleSlides,
-          props = objectWithoutProperties(_props, ['className', 'children', 'currentSlide', 'slideTrayWidth', 'slideWidth', 'store', 'visibleSlides']);
+      var _props2 = this.props,
+          children = _props2.children,
+          className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          hasMasterSpinner = _props2.hasMasterSpinner,
+          masterSpinnerSuccessCount = _props2.masterSpinnerSuccessCount,
+          masterSpinnerErrorCount = _props2.masterSpinnerErrorCount,
+          masterSpinnerSubscriptionCount = _props2.masterSpinnerSubscriptionCount,
+          slideTrayWidth$$1 = _props2.slideTrayWidth,
+          slideWidth$$1 = _props2.slideWidth,
+          store = _props2.store,
+          visibleSlides = _props2.visibleSlides,
+          props = objectWithoutProperties(_props2, ['children', 'className', 'currentSlide', 'hasMasterSpinner', 'masterSpinnerSuccessCount', 'masterSpinnerErrorCount', 'masterSpinnerSubscriptionCount', 'slideTrayWidth', 'slideWidth', 'store', 'visibleSlides']);
 
 
       var style = {
@@ -18906,19 +18980,24 @@ var Slider$1 = (_temp$8 = _class$8 = function (_React$Component) {
           'div',
           { className: trayClasses, style: style },
           children
-        )
+        ),
+        this.renderMasterSpinner()
       );
     }
   }]);
   return Slider;
 }(react.Component), _class$8.propTypes = {
   children: index$3.node.isRequired,
-  store: index$3.object.isRequired,
   className: index$3.string,
-  style: index$3.object,
   currentSlide: index$3.number.isRequired,
+  hasMasterSpinner: index$3.bool.isRequired,
+  masterSpinnerErrorCount: index$3.number.isRequired,
+  masterSpinnerSuccessCount: index$3.number.isRequired,
+  masterSpinnerSubscriptionCount: index$3.number.isRequired,
   slideTrayWidth: index$3.number.isRequired,
   slideWidth: index$3.number.isRequired,
+  store: index$3.object.isRequired,
+  style: index$3.object,
   visibleSlides: index$3.number
 }, _class$8.defaultProps = {
   className: '',
@@ -18930,11 +19009,11 @@ var Slider$$1 = WithStore(Slider$1, function (state) {
   return {
     currentSlide: state.currentSlide,
     hasMasterSpinner: state.hasMasterSpinner,
-    imageErrorCount: state.imageErrorCount,
-    imageSuccessCount: state.imageSuccessCount,
+    masterSpinnerErrorCount: state.masterSpinnerErrorCount,
+    masterSpinnerSuccessCount: state.masterSpinnerSuccessCount,
+    masterSpinnerSubscriptionCount: state.masterSpinnerSubscriptionCount,
     slideTrayWidth: state.slideTrayWidth,
     slideWidth: state.slideWidth,
-    totalSlides: state.totalSlides,
     visibleSlides: state.visibleSlides
   };
 });
@@ -19039,7 +19118,11 @@ var index$5 = function deepFreeze (o) {
   return o;
 };
 
-var DEFAULT_STATE = {};
+var DEFAULT_STATE = {
+  masterSpinnerSubscriptionCount: 0,
+  masterSpinnerErrorCount: 0,
+  masterSpinnerSuccessCount: 0
+};
 
 var Store = function () {
   function Store(initialState) {
@@ -19051,6 +19134,9 @@ var Store = function () {
     this.getState = this.getState.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.updateSubscribers = this.updateSubscribers.bind(this);
+    this.subscribeMasterSpinner = this.subscribeMasterSpinner.bind(this);
+    this.masterSpinnerSuccess = this.masterSpinnerSuccess.bind(this);
+    this.masterSpinnerError = this.masterSpinnerError.bind(this);
   }
 
   createClass(Store, [{
@@ -19076,6 +19162,27 @@ var Store = function () {
         return func();
       });
       if (typeof cb === 'function') cb(this.getState());
+    }
+  }, {
+    key: 'subscribeMasterSpinner',
+    value: function subscribeMasterSpinner() {
+      this.setState({
+        masterSpinnerSubscriptionCount: this.state.masterSpinnerSubscriptionCount + 1
+      });
+    }
+  }, {
+    key: 'masterSpinnerSuccess',
+    value: function masterSpinnerSuccess() {
+      this.setState({
+        masterSpinnerSuccessCount: this.state.masterSpinnerSuccessCount + 1
+      });
+    }
+  }, {
+    key: 'masterSpinnerError',
+    value: function masterSpinnerError() {
+      this.setState({
+        masterSpinnerErrorCount: this.state.masterSpinnerErrorCount + 1
+      });
     }
   }]);
   return Store;
@@ -19284,7 +19391,6 @@ function WithStore(WrappedComponent) {
       value: function componentDidMount() {
         var _this2 = this;
 
-        // this.context.store.subscribe(() => this.forceUpdate());
         this.context.store.subscribe(function () {
           return _this2.updateStateProps();
         });
@@ -19292,7 +19398,6 @@ function WithStore(WrappedComponent) {
     }, {
       key: 'shouldComponentUpdate',
       value: function shouldComponentUpdate(nextProps, nextState) {
-        // Note: If we do go back to this.forceUpdate(), shouldComponentUpdate() is not called.
         return !index$6(nextState, this.state) || !index$6(nextProps, this.props);
       }
     }, {
@@ -19305,14 +19410,16 @@ function WithStore(WrappedComponent) {
     }, {
       key: 'render',
       value: function render() {
-        // props assigned directly to this.props take precedence over store state.
         var props = index$4(this.state.stateProps, this.props);
 
         return react.createElement(
           WrappedComponent,
           _extends({}, props, {
             store: {
-              setState: this.context.store.setState
+              setState: this.context.store.setState,
+              subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
+              masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
+              masterSpinnerError: this.context.store.masterSpinnerError
             }
           }),
           this.props.children
@@ -19336,76 +19443,219 @@ function WithStore(WrappedComponent) {
   return Wrapper;
 }
 
-var s$10 = { "slider": "_slider_1ico9_9", "headline": "_headline_1ico9_5" };
+var s$10 = { "slider": "_slider_ws5k4_9", "headline": "_headline_ws5k4_5" };
 
 var DevelopmentApp = function DevelopmentApp() {
   return react.createElement(
-    CarouselProvider$$1,
-    {
-      visibleSlides: 2,
-      totalSlides: 6,
-      step: 2
-    },
+    'div',
+    null,
     react.createElement(
-      'h1',
-      { className: cn(['headline', s$10.headline]) },
-      'Carousel Dev App'
-    ),
-    react.createElement(
-      Slider$$1,
-      { className: cn(['slider', s$10.slider]) },
+      'section',
+      null,
       react.createElement(
-        Slide$$1,
-        { tag: 'a', index: 0 },
-        react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img01.jpeg' })
-      ),
-      react.createElement(
-        Slide$$1,
-        { tag: 'a', index: 1 },
-        react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img02.jpeg' })
-      ),
-      react.createElement(
-        Slide$$1,
-        { tag: 'a', index: 2 },
-        react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img03.jpeg' })
-      ),
-      react.createElement(
-        Slide$$1,
-        { tag: 'a', index: 3 },
-        react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img04.jpeg' })
-      ),
-      react.createElement(
-        Slide$$1,
-        { tag: 'a', index: 4 },
-        react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img05.jpeg' })
-      ),
-      react.createElement(
-        Slide$$1,
-        { tag: 'a', index: 5 },
-        react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img06.jpeg' })
+        CarouselProvider$$1,
+        {
+          visibleSlides: 2,
+          totalSlides: 6,
+          step: 2,
+          hasMasterSpinner: true
+        },
+        react.createElement(
+          'h1',
+          { className: cn(['headline', s$10.headline]) },
+          'Carousel (With Master Loading Spinner)'
+        ),
+        react.createElement(
+          'p',
+          null,
+          'This spinner will go away after all the images have loaded.'
+        ),
+        react.createElement(
+          Slider$$1,
+          { className: cn(['slider', s$10.slider]) },
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 0 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img01.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 1 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img02.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 2 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img03.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 3 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img04.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 4 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img05.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 5 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img06.jpeg' })
+          )
+        ),
+        react.createElement(
+          ButtonFirst$$1,
+          null,
+          'First'
+        ),
+        react.createElement(
+          ButtonBack$$1,
+          null,
+          'Back'
+        ),
+        react.createElement(
+          ButtonNext$$1,
+          null,
+          'Next'
+        ),
+        react.createElement(
+          ButtonLast$$1,
+          null,
+          'Last'
+        ),
+        react.createElement(DotGroup$$1, null)
       )
     ),
     react.createElement(
-      ButtonFirst$$1,
+      'section',
       null,
-      'First'
+      react.createElement(
+        CarouselProvider$$1,
+        {
+          visibleSlides: 2,
+          totalSlides: 6,
+          step: 2
+        },
+        react.createElement(
+          'h1',
+          { className: cn(['headline', s$10.headline]) },
+          'Carousel (With Individual Spinners)'
+        ),
+        react.createElement(
+          'p',
+          null,
+          'Each ImageWithZoom component has it\'s own spinner'
+        ),
+        react.createElement(
+          Slider$$1,
+          { className: cn(['slider', s$10.slider]) },
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 0 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img01.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 1 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img02.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 2 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img03.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 3 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img04.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 4 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img05.jpeg' })
+          ),
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 5 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img06.jpeg' })
+          )
+        ),
+        react.createElement(
+          ButtonFirst$$1,
+          null,
+          'First'
+        ),
+        react.createElement(
+          ButtonBack$$1,
+          null,
+          'Back'
+        ),
+        react.createElement(
+          ButtonNext$$1,
+          null,
+          'Next'
+        ),
+        react.createElement(
+          ButtonLast$$1,
+          null,
+          'Last'
+        ),
+        react.createElement(DotGroup$$1, null)
+      )
     ),
     react.createElement(
-      ButtonBack$$1,
+      'section',
       null,
-      'Back'
-    ),
-    react.createElement(
-      ButtonNext$$1,
-      null,
-      'Next'
-    ),
-    react.createElement(
-      ButtonLast$$1,
-      null,
-      'Last'
-    ),
-    react.createElement(DotGroup$$1, null)
+      react.createElement(
+        CarouselProvider$$1,
+        {
+          visibleSlides: 2,
+          totalSlides: 1,
+          step: 2
+        },
+        react.createElement(
+          'h1',
+          { className: cn(['headline', s$10.headline]) },
+          'Carousel (Just One Image)'
+        ),
+        react.createElement(
+          'p',
+          null,
+          'Single image'
+        ),
+        react.createElement(
+          Slider$$1,
+          { className: cn(['slider', s$10.slider]) },
+          react.createElement(
+            Slide$$1,
+            { tag: 'a', index: 0 },
+            react.createElement(ImageWithZoom$1, { isResponsive: true, src: './media/img01.jpeg' })
+          )
+        ),
+        react.createElement(
+          ButtonFirst$$1,
+          null,
+          'First'
+        ),
+        react.createElement(
+          ButtonBack$$1,
+          null,
+          'Back'
+        ),
+        react.createElement(
+          ButtonNext$$1,
+          null,
+          'Next'
+        ),
+        react.createElement(
+          ButtonLast$$1,
+          null,
+          'Last'
+        ),
+        react.createElement(DotGroup$$1, null)
+      )
+    )
   );
 };
 
