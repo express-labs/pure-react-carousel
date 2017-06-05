@@ -14,11 +14,13 @@ export default class CarouselProvider extends React.Component {
     step: PropTypes.number,
     totalSlides: PropTypes.number,
     visibleSlides: PropTypes.number,
+    isTouchEnabled: PropTypes.bool,
   }
 
   static defaultProps = {
     currentSlide: 0,
     hasMasterSpinner: false,
+    isTouchEnabled: true,
     step: 1,
     totalSlides: 1,
     visibleSlides: 1,
@@ -33,9 +35,10 @@ export default class CarouselProvider extends React.Component {
     const options = {
       currentSlide: props.currentSlide,
       hasMasterSpinner: props.hasMasterSpinner,
-      masterSpinnerThreshold: 0,
       imageErrorCount: 0,
       imageSuccessCount: 0,
+      isTouchEnabled: props.isTouchEnabled,
+      masterSpinnerThreshold: 0,
       slideTrayWidth: slideTrayWidth(props.totalSlides, props.visibleSlides),
       slideWidth: slideWidth(props.totalSlides, props.visibleSlides),
       step: props.step,
