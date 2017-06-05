@@ -27,12 +27,10 @@ export default function WithStore(WrappedComponent, mapStateToProps = () => ({})
     }
 
     componentDidMount() {
-      // this.context.store.subscribe(() => this.forceUpdate());
       this.context.store.subscribe(() => this.updateStateProps());
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-      // Note: If we do go back to this.forceUpdate(), shouldComponentUpdate() is not called.
       return !equal(nextState, this.state) || !equal(nextProps, this.props);
     }
 
@@ -43,7 +41,6 @@ export default function WithStore(WrappedComponent, mapStateToProps = () => ({})
     }
 
     render() {
-      // props assigned directly to this.props take precedence over store state.
       const props = deepMerge(this.state.stateProps, this.props);
 
       return (
@@ -51,6 +48,9 @@ export default function WithStore(WrappedComponent, mapStateToProps = () => ({})
           {...props}
           store={{
             setState: this.context.store.setState,
+            subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
+            masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
+            masterSpinnerError: this.context.store.masterSpinnerError,
           }}
         >{this.props.children}</WrappedComponent>);
     }

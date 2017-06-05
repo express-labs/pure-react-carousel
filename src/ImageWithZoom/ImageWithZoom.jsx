@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image } from '../';
-import { cn, pct } from '../helpers';
+import { cn } from '../helpers';
 import s from './ImageWithZoom.css';
 
 const ImageWithZoom = class ImageWithZoom extends React.Component {
@@ -20,12 +20,20 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
   constructor() {
     super();
     this.state = {
+      isImageLoading: true,
       hovering: false,
       style: {},
     };
     this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
     this.handleOnMouseOut = this.handleOnMouseOut.bind(this);
     this.handleOnMouseMove = this.handleOnMouseMove.bind(this);
+    this.handleImageComplete = this.handleImageComplete.bind(this);
+  }
+
+  handleImageComplete() {
+    this.setState({
+      isImageLoading: false,
+    });
   }
 
   handleOnMouseOver() {
@@ -46,6 +54,21 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     this.setState({ x, y });
   }
 
+  renderLoading() {
+    if (this.state.isImageLoading) {
+      return (
+        <div
+          className={cn([s.imageLoadingSpinnerContainer, 'carousel__image-loading-spinner-container'])}
+        >
+          <div className={cn([s.imageLoadingSpinner, 'carousel__image-loading-spinner'])} />
+        </div>
+      );
+    }
+
+    return null;
+  }
+
+
   render() {
     const { tag: Tag, src } = this.props;
 
@@ -65,7 +88,13 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
     return (
       <Tag className={s.container}>
-        <Image className={imageClassName} src={src} isResponsive />
+        <Image
+          className={imageClassName}
+          src={src}
+          isResponsive
+          onLoad={this.handleImageComplete}
+          onError={this.handleImageComplete}
+        />
         <Image
           className={overlayClassName}
           tag="div"
@@ -77,6 +106,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
           onMouseOut={this.handleOnMouseOut}
           onMouseMove={this.handleOnMouseMove}
         />
+        {this.renderLoading()}
       </Tag>
     );
   }

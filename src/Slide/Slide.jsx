@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cn, pct, randomHexColor } from '../helpers';
+import { cn, pct } from '../helpers';
 import s from './slide.css';
 
 const Slide = class Slide extends React.PureComponent {
@@ -12,6 +12,8 @@ const Slide = class Slide extends React.PureComponent {
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     index: PropTypes.number.isRequired,
+    onBlur: PropTypes.func,
+    onFocus: PropTypes.func,
     slideWidth: PropTypes.number.isRequired,
     store: PropTypes.object,
     style: PropTypes.object,
@@ -23,10 +25,12 @@ const Slide = class Slide extends React.PureComponent {
   static defaultProps = {
     children: null,
     className: null,
+    onBlur: null,
+    onFocus: null,
     store: null,
     style: {},
     tabIndex: null,
-    tag: 'div',
+    tag: 'li',
   }
 
   constructor() {
@@ -43,16 +47,18 @@ const Slide = class Slide extends React.PureComponent {
     return index >= currentSlide && index < currentSlide + visibleSlides;
   }
 
-  handleOnFocus() {
+  handleOnFocus(ev) {
+    const { onFocus } = this.props;
     this.setState({
       focused: true,
-    });
+    }, onFocus !== null && onFocus.call(this, ev));
   }
 
-  handleOnBlur() {
+  handleOnBlur(ev) {
+    const { onBlur } = this.props;
     this.setState({
       focused: false,
-    });
+    }, onBlur !== null && onBlur.call(this, ev));
   }
 
   renderFocusRing() {
@@ -63,11 +69,10 @@ const Slide = class Slide extends React.PureComponent {
   render() {
     const {
       children, className, currentSlide, index, slideWidth, store, style, tabIndex, tag: Tag,
-      visibleSlides, ...props
+      visibleSlides, onFocus, onBlur, ...props
     } = this.props;
 
     const newStyle = Object.assign({
-      backgroundColor: randomHexColor(),
       width: pct(this.props.slideWidth),
     }, style);
 
@@ -83,12 +88,16 @@ const Slide = class Slide extends React.PureComponent {
     return (
       <Tag
         tabIndex={newTabIndex}
+        aria-hidden={!this.isVisible()}
         onFocus={this.handleOnFocus}
         onBlur={this.handleOnBlur}
         className={newClassName}
         style={newStyle}
         {...props}
-      >{this.props.children}{this.renderFocusRing()}</Tag>
+      >
+        {this.props.children}
+        {this.renderFocusRing()}
+      </Tag>
     );
   }
 };

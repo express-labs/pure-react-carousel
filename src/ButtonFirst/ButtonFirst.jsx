@@ -1,61 +1,63 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import s from './ButtonFirst.css';
 import { cn } from '../helpers';
-import s from './Dot.css';
 
-const Dot = class Dot extends React.Component {
+const ButtonFirst = class ButtonFirst extends React.Component {
   static propTypes = {
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]).isRequired,
     className: PropTypes.string,
+    currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
-    selected: PropTypes.bool,
     onClick: PropTypes.func,
-    slide: PropTypes.number.isRequired,
     store: PropTypes.object.isRequired,
+    totalSlides: PropTypes.number.isRequired,
   }
 
   static defaultProps = {
     className: null,
-    disabled: false,
+    disabled: null,
     onClick: null,
-    selected: false,
   }
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
   handleOnClick(ev) {
-    const { slide, store, onClick } = this.props;
+    const { store, onClick } = this.props;
     store.setState({
-      currentSlide: slide,
+      currentSlide: 0,
     }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
-    const { children, className, onClick, slide, store, ...props } = this.props;
+    const {
+      className, currentSlide, disabled, onClick, store, totalSlides, ...props
+    } = this.props;
 
     const newClassName = cn([
-      s.dot,
-      this.props.selected && s.dotSelected,
-      'carousel__dot',
-      `carousel__dot--${slide}`,
-      this.props.selected && 'carousel__dot--selected',
+      s.buttonFirst,
+      'carousel__first-button',
       className,
     ]);
 
+    const newDisabled = disabled !== null ? disabled : currentSlide === 0;
+
     return (
       <button
-        onClick={this.handleOnClick}
+        aria-label="first"
         className={newClassName}
+        onClick={this.handleOnClick}
+        disabled={newDisabled}
         {...props}
       >{this.props.children}</button>
     );
   }
 };
 
-export default Dot;
+export default ButtonFirst;

@@ -6,12 +6,16 @@ import s from './slider.css';
 const Slider = class Slider extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    store: PropTypes.object.isRequired,
     className: PropTypes.string,
-    style: PropTypes.object,
     currentSlide: PropTypes.number.isRequired,
+    hasMasterSpinner: PropTypes.bool.isRequired,
+    masterSpinnerErrorCount: PropTypes.number.isRequired,
+    masterSpinnerSuccessCount: PropTypes.number.isRequired,
+    masterSpinnerSubscriptionCount: PropTypes.number.isRequired,
     slideTrayWidth: PropTypes.number.isRequired,
     slideWidth: PropTypes.number.isRequired,
+    store: PropTypes.object.isRequired,
+    style: PropTypes.object,
     visibleSlides: PropTypes.number,
   }
 
@@ -21,9 +25,37 @@ const Slider = class Slider extends React.Component {
     visibleSlides: 1,
   }
 
+  renderMasterSpinner() {
+    const {
+      hasMasterSpinner, masterSpinnerErrorCount,
+      masterSpinnerSuccessCount, masterSpinnerSubscriptionCount,
+    } = this.props;
+
+    const testImageCountReached = (
+      masterSpinnerErrorCount + masterSpinnerSuccessCount
+    ) === masterSpinnerSubscriptionCount;
+
+    const testInitialLoad = masterSpinnerSubscriptionCount === 0;
+
+    if (hasMasterSpinner && (!testImageCountReached || testInitialLoad)) {
+      return (
+        <div
+          className={cn(['carousel__master-spinner-container', s.masterSpinnerContainer])}
+        >
+          <div className={cn(['carousel__master-spinner', s.masterSpinner])} />
+        </div>
+      );
+    }
+
+    return null;
+  }
+
   render() {
     const {
-      className, children, currentSlide, slideTrayWidth, slideWidth, store, visibleSlides, ...props
+      children, className, currentSlide, hasMasterSpinner, masterSpinnerSuccessCount,
+      masterSpinnerErrorCount, masterSpinnerSubscriptionCount, slideTrayWidth, slideWidth, store,
+      visibleSlides,
+      ...props
     } = this.props;
 
     const style = {
@@ -43,10 +75,11 @@ const Slider = class Slider extends React.Component {
     ]);
 
     return (
-      <div className={sliderClasses} {...props}>
+      <div className={sliderClasses} aria-live="polite" {...props}>
         <div className={trayClasses} style={style}>
           {children}
         </div>
+        {this.renderMasterSpinner()}
       </div>
     );
   }
