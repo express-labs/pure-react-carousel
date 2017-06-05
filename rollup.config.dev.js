@@ -9,9 +9,17 @@ import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
 
+// postcss plugins
+import simplevars from 'postcss-simple-vars';
+import cssnext from 'postcss-cssnext';
+import cssnano from 'cssnano';
+import postcssImport from 'postcss-import';
+import postcssModules from 'postcss-modules';
 
 var pkg = require('./package.json');
 var cache;
+
+const cssExportMap = {};
 
 export default {
   entry: 'src/app.js',
@@ -22,10 +30,28 @@ export default {
   sourceMap: true,
   sourceMapFile: path.resolve('dev/main.umd.js'),
   // exclude peerDependencies from our bundle, except for react, react-dom, prop-types when dev'ing
-  external: Object.keys(omit(pkg.peerDependencies, ['react', 'react-dom', 'prop-types'])),
+  external: Object.keys(omit(pkg.peerDependencies, ['react', 'react-dom'])),
   plugins: [
     postcss({
-      extensions: ['.css']
+      sourceMap: 'inline', // true, "inline" or false
+      extract : 'dev/style.css',
+      extensions: ['.css'],
+      plugins: [
+        postcssImport(),
+        simplevars(),
+        cssnext({
+          warnForDuplicates: false,
+        }),
+        postcssModules({
+          getJSON (id, exportTokens) {
+            cssExportMap[id] = exportTokens;
+          }
+        }),
+        cssnano(),
+      ],
+      getExport (id) {
+        return cssExportMap[id];
+      },
     }),
     resolve({
       module: true,
@@ -41,7 +67,8 @@ export default {
     commonjs(),
     eslint({
       exclude: [
-        'src/styles/**'
+        '**/*.css',
+        'node_modules/**'
       ]
     }),
     babel({

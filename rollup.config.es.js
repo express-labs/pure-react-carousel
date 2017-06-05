@@ -8,8 +8,17 @@ import resolve from 'rollup-plugin-node-resolve';
 import uglify from 'rollup-plugin-uglify';
 import { minify } from 'uglify-js-harmony'; // ES6 minification is experimental as of 5/16/17
 
+// postcss plugins
+import simplevars from 'postcss-simple-vars';
+import cssnext from 'postcss-cssnext';
+import cssnano from 'cssnano';
+import postcssImport from 'postcss-import';
+import postcssModules from 'postcss-modules';
+
 var pkg = require('./package.json');
 var cache;
+
+const cssExportMap = {};
 
 export default {
   entry: 'src/index.js',
@@ -20,9 +29,23 @@ export default {
   sourceMapFile: path.resolve('dist/main.es.js'),
   external: Object.keys(pkg.peerDependencies), // exclude peerDependencies from our bundle
   plugins: [
-    replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
     postcss({
-      extensions: ['.css']
+      extensions: ['.css'],
+      extract: 'dist/react-carousel.css',
+      plugins: [
+        postcssImport(),
+        simplevars(),
+        cssnext(),
+        postcssModules({
+          getJSON (id, exportTokens) {
+            cssExportMap[id] = exportTokens;
+          }
+        }),
+        cssnano(),
+      ],
+      getExport (id) {
+        return cssExportMap[id];
+      },
     }),
     resolve({
       module: true,
@@ -34,14 +57,18 @@ export default {
         moduleDirectory: 'node_modules'
       }
     }),
+    replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
     commonjs(),
     eslint({
       exclude: [
-        'src/styles/**'
+        '**/*.css',
+        'node_modules/**'
       ]
     }),
     babel({
-      exclude: 'node_modules/**',
+      exclude: [
+        'node_modules/**',
+      ],
     }),
     replace({
       include: 'src/**',

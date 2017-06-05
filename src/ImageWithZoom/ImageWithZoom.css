@@ -1,0 +1,62 @@
+.container {
+  position: relative;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 300ms, transform 300ms;
+  cursor: zoom-in;
+}
+
+.hover {
+  opacity: 1;
+  transform: scale(2);
+}
+
+.loading {
+  opacity: 1;
+}
+
+.imageLoadingSpinnerContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #f7f2e8;
+}
+
+.imageLoadingSpinner {
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  border-width: 4px;
+  border-style: solid;
+  border-top-color: black;
+  border-right-color: darkgrey;
+  border-bottom-color: darkgrey;
+  border-left-color: darkgrey;
+  top: calc(50% - 15px);
+  left: calc(50% - 15px);
+  position: absolute;
+  animation-duration: 1s;
+  animation-name: spin;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
