@@ -21,7 +21,10 @@ const DevelopmentApp = () => (
         hasMasterSpinner
       >
         <h1 className={cn(['headline', s.headline])}>Carousel (With Master Loading Spinner)</h1>
-        <p>This spinner will go away after all the images have loaded.</p>
+        <p>
+          This spinner will go away after all the images have loaded. You might want to use Chrome
+          dev tools to throttle the network connection so you can see the spinner.
+        </p>
         <Slider className={cn(['slider', s.slider])}>
           <Slide tag="a" index={0}>
             <ImageWithZoom isResponsive src="./media/img01.jpeg" />
@@ -57,7 +60,10 @@ const DevelopmentApp = () => (
         step={2}
       >
         <h1 className={cn(['headline', s.headline])}>Carousel (With Individual Spinners)</h1>
-        <p>Each ImageWithZoom component has it&apos;s own spinner</p>
+        <p>
+          Each ImageWithZoom component has it&apos;s own spinner. You might want to use Chrome
+          dev tools to throttle the network connection so you can see the spinners.
+        </p>
         <Slider className={cn(['slider', s.slider])}>
           <Slide tag="a" index={0}>
             <ImageWithZoom isResponsive src="./media/img01.jpeg" />
