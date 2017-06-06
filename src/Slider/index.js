@@ -4,11 +4,13 @@ import { WithStore } from '../';
 export default WithStore(Slider, state => ({
   currentSlide: state.currentSlide,
   hasMasterSpinner: state.hasMasterSpinner,
-  isTouchEnabled: state.isTouchEnabled,
   masterSpinnerErrorCount: state.masterSpinnerErrorCount,
-  masterSpinnerSuccessCount: state.masterSpinnerSuccessCount,
   masterSpinnerSubscriptionCount: state.masterSpinnerSubscriptionCount,
+  masterSpinnerSuccessCount: state.masterSpinnerSuccessCount,
+  orientation: state.orientation,
   slideTrayWidth: state.slideTrayWidth,
-  slideWidth: state.slideWidth,
+  slideSize: state.slideSize,
+  totalSlides: state.totalSlides,
+  touchEnabled: state.touchEnabled,
   visibleSlides: state.visibleSlides,
 }));

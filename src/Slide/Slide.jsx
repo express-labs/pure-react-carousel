@@ -14,7 +14,7 @@ const Slide = class Slide extends React.PureComponent {
     index: PropTypes.number.isRequired,
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
-    slideWidth: PropTypes.number.isRequired,
+    slideSize: PropTypes.number.isRequired,
     store: PropTypes.object,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
@@ -68,12 +68,12 @@ const Slide = class Slide extends React.PureComponent {
 
   render() {
     const {
-      children, className, currentSlide, index, slideWidth, store, style, tabIndex, tag: Tag,
+      children, className, currentSlide, index, slideSize, store, style, tabIndex, tag: Tag,
       visibleSlides, onFocus, onBlur, ...props
     } = this.props;
 
     const newStyle = Object.assign({
-      width: pct(this.props.slideWidth),
+      width: pct(this.props.slideSize),
     }, style);
 
     const newClassName = cn([
