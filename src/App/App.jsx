@@ -12,6 +12,7 @@ import { cn } from '../helpers';
 
 const DevelopmentApp = () => (
   <div>
+
     <section>
       <CarouselProvider
         visibleSlides={2}
@@ -48,6 +49,7 @@ const DevelopmentApp = () => (
         <DotGroup />
       </CarouselProvider>
     </section>
+
     <section>
       <CarouselProvider
         visibleSlides={2}
@@ -104,6 +106,51 @@ const DevelopmentApp = () => (
         <DotGroup />
       </CarouselProvider>
     </section>
+
+    <section>
+      <CarouselProvider
+        visibleSlides={1}
+        totalSlides={6}
+        orientation="vertical"
+        height={400}
+      >
+        <h1 className={cn(['headline', s.headline])}>Vertical Carousel (With Master Loading Spinner)</h1>
+        <p>
+          This is a vertical carousel. You must specify a height.  Therefore, vertical carousels are
+          not responsive by default. This spinner will go away after all the images have loaded.
+        </p>
+        <p>
+          TODO: make vertical carousels responsive based on image.  It can be done but it&apos;s not
+          part of the requirements for now.
+        </p>
+        <Slider className={cn(['verticalSlider', s.verticalSlider])}>
+          <Slide tag="a" index={0}>
+            <ImageWithZoom isResponsive src="./media/img01.jpeg" />
+          </Slide>
+          <Slide tag="a" index={1}>
+            <ImageWithZoom isResponsive src="./media/img02.jpeg" />
+          </Slide>
+          <Slide tag="a" index={2}>
+            <ImageWithZoom isResponsive src="./media/img03.jpeg" />
+          </Slide>
+          <Slide tag="a" index={3}>
+            <ImageWithZoom isResponsive src="./media/img04.jpeg" />
+          </Slide>
+          <Slide tag="a" index={4}>
+            <ImageWithZoom isResponsive src="./media/img05.jpeg" />
+          </Slide>
+          <Slide tag="a" index={5}>
+            <ImageWithZoom isResponsive src="./media/img06.jpeg" />
+          </Slide>
+        </Slider>
+        <ButtonFirst>First</ButtonFirst>
+        <ButtonBack>Back</ButtonBack>
+        <ButtonNext>Next</ButtonNext>
+        <ButtonLast>Last</ButtonLast>
+        <DotGroup />
+      </CarouselProvider>
+    </section>
+
   </div>
 );
 

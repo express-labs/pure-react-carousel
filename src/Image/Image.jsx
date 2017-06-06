@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cn, LOADING, SUCCESS, ERROR } from '../helpers';
+import { CarouselPropTypes, cn, LOADING, SUCCESS, ERROR } from '../helpers';
 import s from './Image.css';
 
 class Image extends React.Component {
   static propTypes = {
     alt: PropTypes.string,
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]),
+    children: CarouselPropTypes.children,
     className: PropTypes.string,
     hasMasterSpinner: PropTypes.bool.isRequired,
+    height: CarouselPropTypes.height,
     isBgImage: PropTypes.bool,
     isResponsive: PropTypes.bool,
     onError: PropTypes.func,
     onLoad: PropTypes.func,
+    orientation: CarouselPropTypes.orientation.isRequired,
     renderError: PropTypes.func,
     renderLoading: PropTypes.func,
     src: PropTypes.string.isRequired,
@@ -28,6 +27,7 @@ class Image extends React.Component {
     alt: '',
     children: null,
     className: null,
+    height: null,
     isBgImage: false,
     isResponsive: false,
     onError: null,
@@ -142,8 +142,8 @@ class Image extends React.Component {
 
   render() {
     const {
-      children, className, hasMasterSpinner, isBgImage,
-      isResponsive, onError, onLoad, renderError, renderLoading, store, tag,
+      children, className, hasMasterSpinner, height, isBgImage, isResponsive, onError, onLoad,
+      orientation, renderError, renderLoading, store, tag,
       ...props
     } = this.props;
 

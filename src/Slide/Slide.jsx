@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cn, pct } from '../helpers';
+import { CarouselPropTypes, cn, pct } from '../helpers';
 import s from './slide.css';
 
 const Slide = class Slide extends React.PureComponent {
   static propTypes = {
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]),
+    children: CarouselPropTypes.children,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     index: PropTypes.number.isRequired,
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
+    orientation: CarouselPropTypes.orientation.isRequired,
     slideSize: PropTypes.number.isRequired,
     store: PropTypes.object,
     style: PropTypes.object,
@@ -68,16 +66,19 @@ const Slide = class Slide extends React.PureComponent {
 
   render() {
     const {
-      children, className, currentSlide, index, slideSize, store, style, tabIndex, tag: Tag,
-      visibleSlides, onFocus, onBlur, ...props
+      children, className, currentSlide, index, orientation, slideSize, store, style,
+      tabIndex, tag: Tag, visibleSlides, onFocus, onBlur,
+      ...props
     } = this.props;
 
-    const newStyle = Object.assign({
-      width: pct(this.props.slideSize),
-    }, style);
+    const tempStyle = {};
+    tempStyle[orientation === 'vertical' ? 'height' : 'width'] = pct(this.props.slideSize);
+
+    const newStyle = Object.assign({}, tempStyle, style);
 
     const newClassName = cn([
       s.slide,
+      orientation === 'horizontal' && s.slideHorizontal,
       'carousel__slide',
       className,
     ]);

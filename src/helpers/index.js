@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export function cn(a) {
   return a.map((b) => {
     if (b === false) return null;
@@ -18,7 +20,7 @@ export function slideSize(totalSlides, visibleSlides) {
   return ((100 / totalSlides) * visibleSlides) / visibleSlides;
 }
 
-export function slideTrayWidth(totalSlides, visibleSlides) {
+export function slideTraySize(totalSlides, visibleSlides) {
   return (100 * totalSlides) / visibleSlides;
 }
 
@@ -29,3 +31,18 @@ export function pct(num) {
 export const LOADING = 'loading';
 export const SUCCESS = 'success';
 export const ERROR = 'error';
+
+export const CarouselPropTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  height: (props, propName) => {
+    const prop = props[propName];
+    if (props.orientation === 'vertical' && (prop === null || typeof prop !== 'number')) {
+      return new Error(`Missing required property '${propName}' when orientation is vertical.  You must supply a number representing the height in pixels`);
+    }
+    return null;
+  },
+  orientation: PropTypes.oneOf(['horizontal', 'vertical']),
+};

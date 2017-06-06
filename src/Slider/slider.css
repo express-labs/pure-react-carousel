@@ -1,4 +1,4 @@
-.slider {
+.horizontalSlider {
     overflow: hidden;
     position: relative;
 
@@ -6,6 +6,24 @@
       width: 100%;
       overflow: hidden;
     }
+}
+
+.verticalSlider {
+  overflow: hidden;
+  position: relative;
+
+  &Tray {
+    overflow: hidden;
+  }
+}
+
+.verticalTray {
+  float: left;
+}
+
+.sliderTray {
+  transition: transform 500ms;
+  transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1.000); /* easeInOutCubic */
 }
 
 .masterSpinnerContainer {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cn, pct } from '../helpers';
+import { CarouselPropTypes, cn, pct } from '../helpers';
 import s from './slider.css';
 
 const Slider = class Slider extends React.Component {
@@ -9,11 +9,12 @@ const Slider = class Slider extends React.Component {
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     hasMasterSpinner: PropTypes.bool.isRequired,
+    height: CarouselPropTypes.height,
     masterSpinnerErrorCount: PropTypes.number.isRequired,
     masterSpinnerSuccessCount: PropTypes.number.isRequired,
     masterSpinnerSubscriptionCount: PropTypes.number.isRequired,
-    orientation: PropTypes.oneOf(['horizontal', 'vertical']).isRequired,
-    slideTrayWidth: PropTypes.number.isRequired,
+    orientation: CarouselPropTypes.orientation.isRequired,
+    slideTraySize: PropTypes.number.isRequired,
     slideSize: PropTypes.number.isRequired,
     store: PropTypes.object.isRequired,
     style: PropTypes.object,
@@ -24,9 +25,11 @@ const Slider = class Slider extends React.Component {
 
   static defaultProps = {
     className: '',
+    height: null,
     style: {},
     visibleSlides: 1,
   }
+
 
   constructor() {
     super();
@@ -40,29 +43,36 @@ const Slider = class Slider extends React.Component {
       startX: 0,
       startY: 0,
       thresholdPixels: 0,
-      touching: false,
+      isMoving: false,
     };
+
+    this.originalOverflow = null;
   }
 
   handleOnTouchStart(ev) {
+    if (!this.props.touchEnabled) return;
+
     const touch = ev.targetTouches[0];
+    this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
     this.setState({
-      touching: true,
+      isMoving: true,
       startX: touch.screenX,
       startY: touch.screenY,
     });
   }
 
   handleOnTouchMove(ev) {
+    if (!this.props.touchEnabled) return;
+
     const touch = ev.targetTouches[0];
     this.setState({
-      touching: true,
       deltaX: touch.screenX - this.state.startX,
       deltaY: touch.screenY - this.state.startY,
     });
   }
 
-  handleOnTouchEnd(ev) {
+  computeCurrentSlide() {
     const slideSizeInPx = (
       this.props.orientation === 'horizontal' ?
       this.sliderTrayDiv.clientWidth :
@@ -86,14 +96,28 @@ const Slider = class Slider extends React.Component {
     this.props.store.setState({
       currentSlide: newCurrentSlide,
     });
+  }
+
+  handleOnTouchEnd(ev) {
+    if (!this.props.touchEnabled) return;
+
+    this.computeCurrentSlide();
+
+    document.documentElement.style.overflow = this.originalOverflow;
+    this.originalOverflow = null;
 
     if (ev.targetTouches.length === 0) {
       this.setState({
         deltaX: 0,
         deltaY: 0,
-        touching: false,
+        isMoving: false,
       });
     }
+  }
+
+  handleOnKeyPress(ev) {
+    ev.stopPropagation();
+    console.log(ev);
   }
 
   renderMasterSpinner() {
@@ -123,43 +147,59 @@ const Slider = class Slider extends React.Component {
 
   render() {
     const {
-      children, className, currentSlide, hasMasterSpinner, masterSpinnerErrorCount,
-      masterSpinnerSubscriptionCount, masterSpinnerSuccessCount, orientation, slideTrayWidth,
-      slideSize, store, totalSlides, touchEnabled, visibleSlides,
+      children, className, currentSlide, hasMasterSpinner, height, masterSpinnerErrorCount,
+      masterSpinnerSubscriptionCount, masterSpinnerSuccessCount, orientation, slideTraySize,
+      slideSize, store, style, totalSlides, touchEnabled, visibleSlides,
       ...props
     } = this.props;
 
-    const style = {
-      width: pct(slideTrayWidth),
-    };
+    const trayStyle = {};
 
-    if (this.state.touching) {
-      style.transition = 'none';
+    if (this.state.isMoving) {
+      trayStyle.transition = 'none';
     }
 
     if (orientation === 'vertical') {
-      style.transform = `translateY(${pct(slideSize * currentSlide * -1)}) translateY(${this.state.deltaY}px)`;
+      trayStyle.transform = `translateY(${pct(slideSize * currentSlide * -1)}) translateY(${this.state.deltaY}px)`;
+      trayStyle.height = pct(slideTraySize);
     } else {
-      style.transform = `translateX(${pct(slideSize * currentSlide * -1)}) translateX(${this.state.deltaX}px)`;
+      trayStyle.width = pct(slideTraySize);
+      trayStyle.transform = `translateX(${pct(slideSize * currentSlide * -1)}) translateX(${this.state.deltaX}px)`;
     }
 
+    const tempSliderStyle = {};
+
+    if (orientation === 'vertical') {
+      tempSliderStyle.height = `${height}px`;
+    }
+
+    const sliderStyle = Object.assign({}, style, tempSliderStyle);
+
     const sliderClasses = cn([
-      s.slider,
+      orientation === 'vertical' ? s.verticalSlider : s.horizontalSlider,
       'carousel__slide-show',
+      orientation === 'vertical' ? 'carousel__slide-show--vertical' : 'carousel__slide-show--horizontal',
       className,
     ]);
 
     const trayClasses = cn([
       s.sliderTray,
       'carousel__slide-tray',
+      orientation === 'vertical' ? s.verticalTray : s.horizontalTray,
+      orientation === 'vertical' ? 'carousel__slide-tray--vertical' : 'carousel__slide-tray--horizontal',
     ]);
 
     return (
-      <div className={sliderClasses} aria-live="polite" {...props}>
+      <div
+        className={sliderClasses}
+        aria-live="polite"
+        style={sliderStyle}
+        {...props}
+      >
         <div
           ref={(el) => { this.sliderTrayDiv = el; }}
           className={trayClasses}
-          style={style}
+          style={trayStyle}
           onTouchStart={this.handleOnTouchStart}
           onTouchMove={this.handleOnTouchMove}
           onTouchEnd={this.handleOnTouchEnd}

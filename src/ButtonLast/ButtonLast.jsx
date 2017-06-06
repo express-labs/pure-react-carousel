@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import s from './ButtonLast.css';
-import { cn } from '../helpers';
+import { CarouselPropTypes, cn } from '../helpers';
 
 const ButtonLast = class ButtonLast extends React.Component {
   static propTypes = {
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]).isRequired,
+    children: CarouselPropTypes.children.isRequired,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,

@@ -1,11 +1,14 @@
 .slide {
   display: block;
-  float: left;
   box-sizing: border-box;
   position: relative;
 
   &:focus {
     outline: none !important;
+  }
+
+  &Horizontal {
+    float: left;
   }
 }
 

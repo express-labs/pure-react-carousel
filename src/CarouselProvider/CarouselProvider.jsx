@@ -1,17 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Store } from '../';
-import { slideSize, slideTrayWidth } from '../helpers';
+import { CarouselPropTypes, slideSize, slideTraySize } from '../helpers';
 
 export default class CarouselProvider extends React.Component {
   static propTypes = {
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]).isRequired,
+    children: CarouselPropTypes.children.isRequired,
     currentSlide: PropTypes.number,
     hasMasterSpinner: PropTypes.bool,
-    orientation: PropTypes.oneOf(['horizontal', 'vertical']),
+    height: CarouselPropTypes.height,
+    orientation: CarouselPropTypes.orientation.isRequired,
     step: PropTypes.number,
     totalSlides: PropTypes.number,
     touchEnabled: PropTypes.bool,
@@ -26,6 +24,7 @@ export default class CarouselProvider extends React.Component {
     totalSlides: 1,
     touchEnabled: true,
     visibleSlides: 1,
+    height: null,
   }
 
   static childContextTypes = {
@@ -37,11 +36,12 @@ export default class CarouselProvider extends React.Component {
     const options = {
       currentSlide: props.currentSlide,
       hasMasterSpinner: props.hasMasterSpinner,
+      height: props.height,
       imageErrorCount: 0,
       imageSuccessCount: 0,
       masterSpinnerThreshold: 0,
       orientation: props.orientation,
-      slideTrayWidth: slideTrayWidth(props.totalSlides, props.visibleSlides),
+      slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
       slideSize: slideSize(props.totalSlides, props.visibleSlides),
       step: props.step,
       totalSlides: props.totalSlides,
