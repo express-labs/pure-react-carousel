@@ -84,8 +84,9 @@ class Image extends React.Component {
     const newClassName = cn([
       s.image,
       s.imageLoading,
-      this.props.isResponsive && s.responsive,
+      this.props.isResponsive && this.props.orientation === 'horizontal' ? s.responsive : s.responsiveVertical,
       'carousel__image',
+      this.props.isBgImage && 'carousel__image--with-background',
       'carousel__image--loading',
       this.props.className,
     ]);
@@ -101,8 +102,9 @@ class Image extends React.Component {
     const newClassName = cn([
       s.image,
       s.imageError,
-      this.props.isResponsive && s.responsive,
+      this.props.isResponsive && this.props.orientation === 'horizontal' ? s.responsive : s.responsiveVertical,
       'carousel__image',
+      this.props.isBgImage && 'carousel__image--with-background',
       'carousel__image--error',
       this.props.className,
     ]);
@@ -114,7 +116,7 @@ class Image extends React.Component {
     const { style, src, alt, tag: Tag } = this.props;
     const newClassName = cn([
       s.image,
-      this.props.isResponsive && s.responsive,
+      this.props.isResponsive && this.props.orientation === 'horizontal' ? s.responsive : s.responsiveVertical,
       'carousel__image',
       this.props.isBgImage && 'carousel__image--with-background',
       'carousel__image--success',

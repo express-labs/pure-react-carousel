@@ -1,5 +1,5 @@
 body {
-  background-color: floralwhite;
+  background-color: #5c8e6e;
 }
 
 .headline {
@@ -12,11 +12,7 @@ body {
   & :global {
     & .carousel__image--with-background {
       height: 0;
-      padding-bottom: calc(40000% / 300);
+      padding-bottom: calc(50000% / 400);
     }
   }
-}
-
-.verticalSlider {
-  max-height: 800px;
 }

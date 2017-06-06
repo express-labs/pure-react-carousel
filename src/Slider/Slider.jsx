@@ -115,11 +115,6 @@ const Slider = class Slider extends React.Component {
     }
   }
 
-  handleOnKeyPress(ev) {
-    ev.stopPropagation();
-    console.log(ev);
-  }
-
   renderMasterSpinner() {
     const {
       hasMasterSpinner, masterSpinnerErrorCount,
@@ -177,8 +172,8 @@ const Slider = class Slider extends React.Component {
 
     const sliderClasses = cn([
       orientation === 'vertical' ? s.verticalSlider : s.horizontalSlider,
-      'carousel__slide-show',
-      orientation === 'vertical' ? 'carousel__slide-show--vertical' : 'carousel__slide-show--horizontal',
+      'carousel__slide-tray',
+      orientation === 'vertical' ? 'carousel__slide-tray--vertical' : 'carousel__slide-tray--horizontal',
       className,
     ]);
 

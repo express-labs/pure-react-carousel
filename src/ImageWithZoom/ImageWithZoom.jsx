@@ -90,8 +90,10 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       <Tag className={s.container}>
         <Image
           className={imageClassName}
+          tag="div"
           src={src}
           isResponsive
+          isBgImage
           onLoad={this.handleImageComplete}
           onError={this.handleImageComplete}
         />
