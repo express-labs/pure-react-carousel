@@ -9,6 +9,10 @@ const Slide = class Slide extends React.PureComponent {
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     index: PropTypes.number.isRequired,
+    innerClassName: PropTypes.string,
+    innerTag: PropTypes.string,
+    naturalSlideHeight: PropTypes.number.isRequired,
+    naturalSlideWidth: PropTypes.number.isRequired,
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
@@ -17,12 +21,15 @@ const Slide = class Slide extends React.PureComponent {
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     tag: PropTypes.string,
+    totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
   }
 
   static defaultProps = {
     children: null,
     className: null,
+    innerClassName: null,
+    innerTag: 'div',
     onBlur: null,
     onFocus: null,
     store: null,
@@ -66,13 +73,21 @@ const Slide = class Slide extends React.PureComponent {
 
   render() {
     const {
-      children, className, currentSlide, index, orientation, slideSize, store, style,
-      tabIndex, tag: Tag, visibleSlides, onFocus, onBlur,
+      children, className, currentSlide, index, innerClassName, innerTag: InnerTag,
+      naturalSlideHeight, naturalSlideWidth, onBlur, onFocus, orientation, slideSize, store, style,
+      tabIndex, tag: Tag, totalSlides, visibleSlides,
       ...props
     } = this.props;
 
     const tempStyle = {};
-    tempStyle[orientation === 'vertical' ? 'height' : 'width'] = pct(this.props.slideSize);
+
+    if (orientation === 'horizontal') {
+      tempStyle.width = pct(slideSize);
+      tempStyle.paddingBottom = pct((naturalSlideHeight * 100) / (naturalSlideWidth * totalSlides));
+    } else {
+      tempStyle.width = pct(100);
+      tempStyle.paddingBottom = pct((naturalSlideHeight * 100) / naturalSlideWidth);
+    }
 
     const newStyle = Object.assign({}, tempStyle, style);
 
@@ -81,6 +96,12 @@ const Slide = class Slide extends React.PureComponent {
       orientation === 'horizontal' && s.slideHorizontal,
       'carousel__slide',
       className,
+    ]);
+
+    const newInnerClassName = cn([
+      s.slideInner,
+      'carousel__inner-slide',
+      innerClassName,
     ]);
 
     const defaultTabIndex = this.isVisible() ? 0 : -1;
@@ -96,8 +117,10 @@ const Slide = class Slide extends React.PureComponent {
         style={newStyle}
         {...props}
       >
-        {this.props.children}
-        {this.renderFocusRing()}
+        <InnerTag className={newInnerClassName}>
+          {this.props.children}
+          {this.renderFocusRing()}
+        </InnerTag>
       </Tag>
     );
   }

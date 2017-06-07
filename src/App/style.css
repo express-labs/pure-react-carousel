@@ -1,3 +1,7 @@
+/*
+  All of the CSS below is strictly for the demo.  none of the components rely on this for actual
+  functionality.
+*/
 body {
   background-color: #5c8e6e;
 }
@@ -8,11 +12,9 @@ body {
 
 .slider {
   max-width: 800px;
+}
 
-  & :global {
-    & .carousel__image--with-background {
-      height: 0;
-      padding-bottom: calc(50000% / 400);
-    }
-  }
+.verticalSlider {
+  width: 100%;
+  max-width: 300px;
 }

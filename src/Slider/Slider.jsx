@@ -10,10 +10,11 @@ const Slider = class Slider extends React.Component {
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     hasMasterSpinner: PropTypes.bool.isRequired,
-    height: CarouselPropTypes.height,
     masterSpinnerErrorCount: PropTypes.number.isRequired,
     masterSpinnerSuccessCount: PropTypes.number.isRequired,
     masterSpinnerSubscriptionCount: PropTypes.number.isRequired,
+    naturalSlideHeight: PropTypes.number.isRequired,
+    naturalSlideWidth: PropTypes.number.isRequired,
     onMasterSpinner: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
     slideTraySize: PropTypes.number.isRequired,
@@ -147,12 +148,28 @@ const Slider = class Slider extends React.Component {
 
   render() {
     const {
-      children, className, currentSlide, hasMasterSpinner, height, masterSpinnerErrorCount,
-      masterSpinnerSubscriptionCount, masterSpinnerSuccessCount, orientation, slideTraySize,
-      slideSize, store, style, totalSlides, touchEnabled, visibleSlides,
+      children, className, currentSlide, hasMasterSpinner, masterSpinnerErrorCount,
+      masterSpinnerSubscriptionCount, masterSpinnerSuccessCount, naturalSlideHeight,
+      naturalSlideWidth, onMasterSpinner, orientation, slideTraySize, slideSize, store, style,
+      totalSlides, touchEnabled, visibleSlides,
       ...props
     } = this.props;
 
+    const sliderStyle = Object.assign({}, style);
+
+    // slider tray wrap
+    const trayWrapStyle = {};
+
+    if (orientation === 'vertical') {
+      trayWrapStyle.height = 0;
+      trayWrapStyle.paddingBottom = pct(
+        (naturalSlideHeight * 100 * visibleSlides) / naturalSlideWidth,
+      );
+      trayWrapStyle.width = pct(100);
+    }
+
+
+    // slider tray
     const trayStyle = {};
 
     if (this.state.isMoving) {
@@ -161,19 +178,12 @@ const Slider = class Slider extends React.Component {
 
     if (orientation === 'vertical') {
       trayStyle.transform = `translateY(${pct(slideSize * currentSlide * -1)}) translateY(${this.state.deltaY}px)`;
-      trayStyle.height = pct(slideTraySize);
+      trayStyle.width = pct(100);
     } else {
       trayStyle.width = pct(slideTraySize);
       trayStyle.transform = `translateX(${pct(slideSize * currentSlide * -1)}) translateX(${this.state.deltaX}px)`;
     }
 
-    const tempSliderStyle = {};
-
-    if (orientation === 'vertical') {
-      tempSliderStyle.height = `${height}px`;
-    }
-
-    const sliderStyle = Object.assign({}, style, tempSliderStyle);
 
     const sliderClasses = cn([
       orientation === 'vertical' ? s.verticalSlider : s.horizontalSlider,
@@ -189,6 +199,13 @@ const Slider = class Slider extends React.Component {
       orientation === 'vertical' ? 'carousel__slide-tray--vertical' : 'carousel__slide-tray--horizontal',
     ]);
 
+    const trayWrapClasses = cn([
+      s.sliderTrayWrap,
+      'carousel__slide-tray-wrapper',
+      orientation === 'vertical' ? s.verticalSlideTrayWrap : s.horizontalTrayWrap,
+      orientation === 'vertical' ? 'carousel__slide-tray-wrap--vertical' : 'carousel__slide-tray-wrap--horizontal',
+    ]);
+
     return (
       <div
         className={sliderClasses}
@@ -196,17 +213,19 @@ const Slider = class Slider extends React.Component {
         style={sliderStyle}
         {...props}
       >
-        <div
-          ref={(el) => { this.sliderTrayDiv = el; }}
-          className={trayClasses}
-          style={trayStyle}
-          onTouchStart={this.handleOnTouchStart}
-          onTouchMove={this.handleOnTouchMove}
-          onTouchEnd={this.handleOnTouchEnd}
-        >
-          {children}
+        <div className={trayWrapClasses} style={trayWrapStyle}>
+          <div
+            ref={(el) => { this.sliderTrayDiv = el; }}
+            className={trayClasses}
+            style={trayStyle}
+            onTouchStart={this.handleOnTouchStart}
+            onTouchMove={this.handleOnTouchMove}
+            onTouchEnd={this.handleOnTouchEnd}
+          >
+            {children}
+          </div>
+          {this.renderMasterSpinner()}
         </div>
-        {this.renderMasterSpinner()}
       </div>
     );
   }

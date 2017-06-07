@@ -93,7 +93,6 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
           tag="div"
           src={src}
           isBgImage
-          isResponsive
           onLoad={this.handleImageComplete}
           onError={this.handleImageComplete}
         />
@@ -103,7 +102,6 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
           src={src}
           style={overlayStyle}
           isBgImage
-          isResponsive
           onMouseOver={this.handleOnMouseOver}
           onMouseOut={this.handleOnMouseOut}
           onMouseMove={this.handleOnMouseMove}

@@ -3,6 +3,7 @@ import { WithStore } from '../';
 
 export default WithStore(Image, state => ({
   hasMasterSpinner: state.hasMasterSpinner,
-  height: state.height,
+  naturalSlideHeight: state.naturalSlideHeight,
+  naturalSlideWidth: state.naturalSlideWidth,
   orientation: state.orientation,
 }));

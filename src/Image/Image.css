@@ -1,11 +1,5 @@
-.responsive {
+.image {
   display: block;
   width: 100%;
-  max-width: 100%;
-}
-
-.responsiveVertical {
-  display: block;
   height: 100%;
-  max-height: 100%;
 }

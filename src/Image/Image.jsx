@@ -9,9 +9,9 @@ class Image extends React.Component {
     children: CarouselPropTypes.children,
     className: PropTypes.string,
     hasMasterSpinner: PropTypes.bool.isRequired,
-    height: CarouselPropTypes.height,
     isBgImage: PropTypes.bool,
-    isResponsive: PropTypes.bool,
+    naturalSlideHeight: PropTypes.number.isRequired,
+    naturalSlideWidth: PropTypes.number.isRequired,
     onError: PropTypes.func,
     onLoad: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
@@ -29,7 +29,6 @@ class Image extends React.Component {
     className: null,
     height: null,
     isBgImage: false,
-    isResponsive: false,
     onError: null,
     onLoad: null,
     renderError: null,
@@ -84,7 +83,6 @@ class Image extends React.Component {
     const newClassName = cn([
       s.image,
       s.imageLoading,
-      this.props.isResponsive && this.props.orientation === 'horizontal' ? s.responsive : s.responsiveVertical,
       'carousel__image',
       this.props.isBgImage && 'carousel__image--with-background',
       'carousel__image--loading',
@@ -102,7 +100,6 @@ class Image extends React.Component {
     const newClassName = cn([
       s.image,
       s.imageError,
-      this.props.isResponsive && this.props.orientation === 'horizontal' ? s.responsive : s.responsiveVertical,
       'carousel__image',
       this.props.isBgImage && 'carousel__image--with-background',
       'carousel__image--error',
@@ -116,7 +113,6 @@ class Image extends React.Component {
     const { style, tag: Tag } = this.props;
     const newClassName = cn([
       s.image,
-      this.props.isResponsive && this.props.orientation === 'horizontal' ? s.responsive : s.responsiveVertical,
       'carousel__image',
       this.props.isBgImage && 'carousel__image--with-background',
       'carousel__image--success',
@@ -145,8 +141,8 @@ class Image extends React.Component {
 
   render() {
     const {
-      children, className, hasMasterSpinner, height, isBgImage, isResponsive, onError, onLoad,
-      orientation, renderError, renderLoading, store, style, tag,
+      children, className, hasMasterSpinner, isBgImage, naturalSlideHeight, naturalSlideWidth,
+      onError, onLoad, orientation, renderError, renderLoading, store, style, tag,
       ...filteredProps
     } = this.props;
 

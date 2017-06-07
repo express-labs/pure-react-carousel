@@ -8,7 +8,8 @@ export default class CarouselProvider extends React.Component {
     children: CarouselPropTypes.children.isRequired,
     currentSlide: PropTypes.number,
     hasMasterSpinner: PropTypes.bool,
-    height: CarouselPropTypes.height,
+    naturalSlideHeight: PropTypes.number,
+    naturalSlideWidth: PropTypes.number,
     orientation: CarouselPropTypes.orientation.isRequired,
     step: PropTypes.number,
     totalSlides: PropTypes.number,
@@ -24,7 +25,8 @@ export default class CarouselProvider extends React.Component {
     totalSlides: 1,
     touchEnabled: true,
     visibleSlides: 1,
-    height: null,
+    naturalSlideHeight: 400,
+    naturalSlideWidth: 300,
   }
 
   static childContextTypes = {
@@ -36,13 +38,14 @@ export default class CarouselProvider extends React.Component {
     const options = {
       currentSlide: props.currentSlide,
       hasMasterSpinner: props.hasMasterSpinner,
-      height: props.height,
       imageErrorCount: 0,
       imageSuccessCount: 0,
       masterSpinnerThreshold: 0,
+      naturalSlideHeight: props.naturalSlideHeight,
+      naturalSlideWidth: props.naturalSlideWidth,
       orientation: props.orientation,
-      slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
       slideSize: slideSize(props.totalSlides, props.visibleSlides),
+      slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
       step: props.step,
       totalSlides: props.totalSlides,
       touchEnabled: props.touchEnabled,
