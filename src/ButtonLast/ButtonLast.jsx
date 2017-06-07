@@ -39,7 +39,7 @@ const ButtonLast = class ButtonLast extends React.Component {
     } = this.props;
 
     const newClassName = cn([
-      s.buttonFirst,
+      s.buttonLast,
       'carousel__last-button',
       className,
     ]);

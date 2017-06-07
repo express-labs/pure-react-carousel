@@ -1,16 +1,16 @@
 .horizontalSlider {
-    overflow: hidden;
-    position: relative;
+  position: relative;
+  overflow: hidden;
 
-    &Tray {
-      width: 100%;
-      overflow: hidden;
-    }
+  &Tray {
+    overflow: hidden;
+    width: 100%;
+  }
 }
 
 .verticalSlider {
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
 
   &Tray {
     overflow: hidden;
@@ -27,39 +27,10 @@
 }
 
 .masterSpinnerContainer {
+  position: absolute;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
-  position: absolute;
+  left: 0;
   background-color: #f7f2e8;
-}
-
-.masterSpinner {
-  width: 30px;
-  height: 30px;
-  border-radius: 30px;
-  border-width: 4px;
-  border-style: solid;
-  border-top-color: black;
-  border-right-color: darkgrey;
-  border-bottom-color: darkgrey;
-  border-left-color: darkgrey;
-  top: calc(50% - 15px);
-  left: calc(50% - 15px);
-  position: absolute;
-  animation-duration: 1s;
-  animation-name: spin;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
 }
