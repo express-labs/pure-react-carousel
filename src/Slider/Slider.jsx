@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Spinner } from '../';
 import { CarouselPropTypes, cn, pct } from '../helpers';
 import s from './slider.css';
 
@@ -13,6 +14,7 @@ const Slider = class Slider extends React.Component {
     masterSpinnerErrorCount: PropTypes.number.isRequired,
     masterSpinnerSuccessCount: PropTypes.number.isRequired,
     masterSpinnerSubscriptionCount: PropTypes.number.isRequired,
+    onMasterSpinner: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
     slideTraySize: PropTypes.number.isRequired,
     slideSize: PropTypes.number.isRequired,
@@ -26,6 +28,7 @@ const Slider = class Slider extends React.Component {
   static defaultProps = {
     className: '',
     height: null,
+    onMasterSpinner: null,
     style: {},
     visibleSlides: 1,
   }
@@ -128,11 +131,13 @@ const Slider = class Slider extends React.Component {
     const testInitialLoad = masterSpinnerSubscriptionCount === 0;
 
     if (hasMasterSpinner && (!testImageCountReached || testInitialLoad)) {
+      if (typeof this.props.onMasterSpinner === 'function') this.props.onMasterSpinner();
+
       return (
         <div
           className={cn(['carousel__master-spinner-container', s.masterSpinnerContainer])}
         >
-          <div className={cn(['carousel__master-spinner', s.masterSpinner])} />
+          <Spinner />
         </div>
       );
     }
