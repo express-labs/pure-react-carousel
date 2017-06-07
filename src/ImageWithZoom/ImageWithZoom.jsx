@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Image } from '../';
+import { Image, Spinner } from '../';
 import { cn } from '../helpers';
 import s from './ImageWithZoom.css';
 
@@ -60,7 +60,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
         <div
           className={cn([s.imageLoadingSpinnerContainer, 'carousel__image-loading-spinner-container'])}
         >
-          <div className={cn([s.imageLoadingSpinner, 'carousel__image-loading-spinner'])} />
+          <Spinner />
         </div>
       );
     }
@@ -90,8 +90,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       <Tag className={s.container}>
         <Image
           className={imageClassName}
+          tag="div"
           src={src}
-          isResponsive
+          isBgImage
           onLoad={this.handleImageComplete}
           onError={this.handleImageComplete}
         />
@@ -101,7 +102,6 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
           src={src}
           style={overlayStyle}
           isBgImage
-          isResponsive
           onMouseOver={this.handleOnMouseOver}
           onMouseOut={this.handleOnMouseOut}
           onMouseMove={this.handleOnMouseMove}

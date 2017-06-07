@@ -2,7 +2,11 @@ import Slide from './Slide';
 import { WithStore } from '../';
 
 export default WithStore(Slide, state => ({
-  slideWidth: state.slideWidth,
-  visibleSlides: state.visibleSlides,
   currentSlide: state.currentSlide,
+  naturalSlideHeight: state.naturalSlideHeight,
+  naturalSlideWidth: state.naturalSlideWidth,
+  orientation: state.orientation,
+  slideSize: state.slideSize,
+  totalSlides: state.totalSlides,
+  visibleSlides: state.visibleSlides,
 }));

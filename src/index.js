@@ -9,5 +9,6 @@ export { default as Image } from './Image';
 export { default as ImageWithZoom } from './ImageWithZoom';
 export { default as Slide } from './Slide';
 export { default as Slider } from './Slider';
+export { default as Spinner } from './Spinner';
 export { default as Store } from './Store/Store';
 export { default as WithStore } from './Store/WithStore';

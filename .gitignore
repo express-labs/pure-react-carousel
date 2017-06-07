@@ -6,6 +6,10 @@ npm-debug.log*
 #babel cache
 .babel-cache
 
+# dev server
+/dev/script/*
+/dev/style.css
+
 #ignore webpack generated stats file
 stats.json
 
