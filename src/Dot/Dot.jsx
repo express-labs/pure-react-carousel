@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cn } from '../helpers';
+import { CarouselPropTypes, cn } from '../helpers';
 import s from './Dot.css';
 
 const Dot = class Dot extends React.Component {
   static propTypes = {
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]).isRequired,
+    children: CarouselPropTypes.children.isRequired,
     className: PropTypes.string,
     disabled: PropTypes.bool,
     selected: PropTypes.bool,

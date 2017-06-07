@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cn, LOADING, SUCCESS, ERROR } from '../helpers';
+import { CarouselPropTypes, cn, LOADING, SUCCESS, ERROR } from '../helpers';
 import s from './Image.css';
 
 class Image extends React.Component {
   static propTypes = {
     alt: PropTypes.string,
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]),
+    children: CarouselPropTypes.children,
     className: PropTypes.string,
     hasMasterSpinner: PropTypes.bool.isRequired,
     isBgImage: PropTypes.bool,
-    isResponsive: PropTypes.bool,
+    naturalSlideHeight: PropTypes.number.isRequired,
+    naturalSlideWidth: PropTypes.number.isRequired,
     onError: PropTypes.func,
     onLoad: PropTypes.func,
+    orientation: CarouselPropTypes.orientation.isRequired,
     renderError: PropTypes.func,
     renderLoading: PropTypes.func,
     src: PropTypes.string.isRequired,
@@ -28,8 +27,8 @@ class Image extends React.Component {
     alt: '',
     children: null,
     className: null,
+    height: null,
     isBgImage: false,
-    isResponsive: false,
     onError: null,
     onLoad: null,
     renderError: null,
@@ -78,22 +77,22 @@ class Image extends React.Component {
     return this.props.children;
   }
 
-  renderLoading(props) {
+  renderLoading(filteredProps) {
     const Tag = this.tempTag();
 
     const newClassName = cn([
       s.image,
       s.imageLoading,
-      this.props.isResponsive && s.responsive,
       'carousel__image',
+      this.props.isBgImage && 'carousel__image--with-background',
       'carousel__image--loading',
       this.props.className,
     ]);
 
-    return <Tag className={newClassName} {...props}>{this.customRender('renderLoading')}</Tag>;
+    return <Tag className={newClassName} {...filteredProps}>{this.customRender('renderLoading')}</Tag>;
   }
 
-  renderError(props) {
+  renderError(filteredProps) {
     if (this.props.renderError) return this.props.renderError();
 
     const Tag = this.tempTag();
@@ -101,20 +100,19 @@ class Image extends React.Component {
     const newClassName = cn([
       s.image,
       s.imageError,
-      this.props.isResponsive && s.responsive,
       'carousel__image',
+      this.props.isBgImage && 'carousel__image--with-background',
       'carousel__image--error',
       this.props.className,
     ]);
 
-    return <Tag className={newClassName} {...props}>{this.customRender('renderError')}</Tag>;
+    return <Tag className={newClassName} {...filteredProps}>{this.customRender('renderError')}</Tag>;
   }
 
-  renderSuccess(props) {
-    const { style, src, alt, tag: Tag } = this.props;
+  renderSuccess(filteredProps) {
+    const { style, tag: Tag } = this.props;
     const newClassName = cn([
       s.image,
-      this.props.isResponsive && s.responsive,
       'carousel__image',
       this.props.isBgImage && 'carousel__image--with-background',
       'carousel__image--success',
@@ -123,10 +121,11 @@ class Image extends React.Component {
 
     let newStyle = Object.assign({}, style);
 
-    let filterdProps = props;
+    let newFilteredProps = filteredProps;
 
     if (Tag !== 'img') {
-      filterdProps = { src, ...props };
+      const { src, alt, ...tempFilteredProps } = filteredProps;
+      newFilteredProps = tempFilteredProps;
       newStyle = Object.assign({}, style, {
         backgroundImage: `url("${src}")`,
         backgroundSize: 'cover',
@@ -134,7 +133,7 @@ class Image extends React.Component {
     }
 
     return (
-      <Tag {...filterdProps} className={newClassName} style={newStyle} alt={alt}>
+      <Tag className={newClassName} style={newStyle} {...newFilteredProps}>
         {this.props.children}
       </Tag>
     );
@@ -142,18 +141,18 @@ class Image extends React.Component {
 
   render() {
     const {
-      children, className, hasMasterSpinner, isBgImage,
-      isResponsive, onError, onLoad, renderError, renderLoading, store, tag,
-      ...props
+      children, className, hasMasterSpinner, isBgImage, naturalSlideHeight, naturalSlideWidth,
+      onError, onLoad, orientation, renderError, renderLoading, store, style, tag,
+      ...filteredProps
     } = this.props;
 
     switch (this.state.imageStatus) {
       case LOADING:
-        return this.renderLoading(props);
+        return this.renderLoading(filteredProps);
       case SUCCESS:
-        return this.renderSuccess(props);
+        return this.renderSuccess(filteredProps);
       case ERROR:
-        return this.renderError(props);
+        return this.renderError(filteredProps);
       default:
         throw new Error('unknown value for this.state.imageStatus');
     }

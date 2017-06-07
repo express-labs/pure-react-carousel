@@ -1,14 +1,13 @@
 import React from 'react';
 import equal from 'equals';
 import deepMerge from 'deepmerge';
+import propTypes from 'prop-types';
+import { CarouselPropTypes } from '../helpers';
 
 export default function WithStore(WrappedComponent, mapStateToProps = () => ({})) {
   class Wrapper extends React.Component {
     static propTypes = {
-      children: React.PropTypes.oneOfType([
-        React.PropTypes.arrayOf(React.PropTypes.node),
-        React.PropTypes.node,
-      ]),
+      children: CarouselPropTypes.children,
     }
 
     static defaultProps = {
@@ -16,7 +15,7 @@ export default function WithStore(WrappedComponent, mapStateToProps = () => ({})
     }
 
     static contextTypes = {
-      store: React.PropTypes.object,
+      store: propTypes.object,
     }
 
     constructor(props, context) {
