@@ -1,5 +1,5 @@
 import ButtonLast from './ButtonLast';
-import { WithStore } from '../';
+import WithStore from '../Store/WithStore';
 
 export default WithStore(ButtonLast, state => ({
   currentSlide: state.currentSlide,

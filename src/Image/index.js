@@ -1,5 +1,5 @@
 import Image from './Image';
-import { WithStore } from '../';
+import WithStore from '../Store/WithStore';
 
 export default WithStore(Image, state => ({
   hasMasterSpinner: state.hasMasterSpinner,

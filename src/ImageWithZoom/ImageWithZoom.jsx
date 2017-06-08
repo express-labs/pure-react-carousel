@@ -70,7 +70,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
 
   render() {
-    const { tag: Tag, src } = this.props;
+    const { tag: Tag, src, ...filteredProps } = this.props;
 
     const imageClassName = cn([
       s.image,
@@ -87,7 +87,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     overlayStyle.transformOrigin = `${this.state.x}% ${this.state.y}%`;
 
     return (
-      <Tag className={s.container}>
+      <Tag className={s.container} {...filteredProps}>
         <Image
           className={imageClassName}
           tag="div"

@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import omit from 'object.omit';
 import { Store } from '../';
-import { CarouselPropTypes, slideSize, slideTraySize } from '../helpers';
+import { CarouselPropTypes, slideSize, slideTraySize, cn } from '../helpers';
 
-export default class CarouselProvider extends React.Component {
+const CarouselProvider = class CarouselProvider extends React.Component {
   static propTypes = {
     children: CarouselPropTypes.children.isRequired,
+    className: PropTypes.string,
     currentSlide: PropTypes.number,
     hasMasterSpinner: PropTypes.bool,
     naturalSlideHeight: PropTypes.number,
@@ -18,6 +20,7 @@ export default class CarouselProvider extends React.Component {
   }
 
   static defaultProps = {
+    className: null,
     currentSlide: 0,
     hasMasterSpinner: false,
     orientation: 'horizontal',
@@ -54,11 +57,28 @@ export default class CarouselProvider extends React.Component {
     this.store = new Store(options);
   }
 
+  // Utility function for tests.
+  // in jest + enzyme tests you can do wrapper.instance().getStore()
+  // you can also just do...
+  // wrapper.instance().store
+  // I created this method to make it obvious that you have access to store.
+  getStore() {
+    return this.store;
+  }
+
   getChildContext() {
     return { store: this.store };
   }
 
   render() {
-    return <div className="carousel">{this.props.children}</div>;
+    const filteredProps = omit(this.props, Object.keys(CarouselProvider.propTypes));
+    const newClassName = cn([
+      'carousel',
+      this.props.className,
+    ]);
+
+    return <div className={newClassName} {...filteredProps}>{this.props.children}</div>;
   }
-}
+};
+
+export default CarouselProvider;

@@ -1,5 +1,5 @@
 import DotGroup from './DotGroup';
-import { WithStore } from '../';
+import WithStore from '../Store/WithStore';
 
 export default WithStore(DotGroup, state => ({
   currentSlide: state.currentSlide,
