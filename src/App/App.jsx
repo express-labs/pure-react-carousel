@@ -176,7 +176,7 @@ const DevelopmentApp = () => (
         </p>
         <Slider className={s.slider}>
           <Slide tag="a" index={0}>
-            <Image src="./media/img01.jpeg" />
+            <Image src="./media/img01.jpeg" renderLoading={() => <h1>LOADING.....</h1>} />
           </Slide>
           <Slide tag="a" index={1}>
             <Image src="./media/img02.jpeg" />

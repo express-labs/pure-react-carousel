@@ -9,7 +9,7 @@ class Image extends React.Component {
     children: CarouselPropTypes.children,
     className: PropTypes.string,
     hasMasterSpinner: PropTypes.bool.isRequired,
-    isBgImage: PropTypes.bool,
+    isBgImage: CarouselPropTypes.isBgImage,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
     onError: PropTypes.func,
@@ -39,12 +39,8 @@ class Image extends React.Component {
 
   constructor(props) {
     super(props);
-    this.mounted = false;
     this.state = { imageStatus: LOADING };
-    this.image = document.createElement('img');
-    this.handleImageLoad = this.handleImageLoad.bind(this);
-    this.handleImageError = this.handleImageError.bind(this);
-
+    this.initImage();
     if (props.hasMasterSpinner) {
       props.store.subscribeMasterSpinner();
     }
@@ -54,6 +50,12 @@ class Image extends React.Component {
     this.image.onload = this.handleImageLoad;
     this.image.onerror = this.handleImageError;
     this.image.src = this.props.src;
+  }
+
+  initImage() {
+    this.image = document.createElement('img');
+    this.handleImageLoad = this.handleImageLoad.bind(this);
+    this.handleImageError = this.handleImageError.bind(this);
   }
 
   handleImageLoad(ev) {
@@ -73,7 +75,7 @@ class Image extends React.Component {
   }
 
   customRender(propName) {
-    if (this.props[propName]) return this.props[propName]();
+    if (typeof this.props[propName] === 'function') return this.props[propName]();
     return this.props.children;
   }
 
@@ -93,8 +95,6 @@ class Image extends React.Component {
   }
 
   renderError(filteredProps) {
-    if (this.props.renderError) return this.props.renderError();
-
     const Tag = this.tempTag();
 
     const newClassName = cn([

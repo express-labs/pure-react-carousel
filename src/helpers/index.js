@@ -45,4 +45,11 @@ export const CarouselPropTypes = {
     return null;
   },
   orientation: PropTypes.oneOf(['horizontal', 'vertical']),
+  isBgImage: (props, propName) => {
+    const value = props[propName];
+    if (value === true && props.tag === 'img') {
+      return new Error(`HTML img elements should not have a backgroundImage.  Please use ${propName} for other block-level HTML tags, like div, a, section, etc...`);
+    }
+    return null;
+  },
 };

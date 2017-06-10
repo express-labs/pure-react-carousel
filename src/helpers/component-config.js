@@ -29,8 +29,12 @@ export default {
     props: {
       children: 'hello',
       currentSlide: 1,
-      store: new Store({}),
-      totalSlides: 3,
+      store: new Store({
+        currentSlide: 1,
+        totalSlides: 7,
+        visibleSlides: 1,
+      }),
+      totalSlides: 7,
     },
   },
   ButtonLast: {
@@ -38,9 +42,13 @@ export default {
     props: {
       children: 'hello',
       currentSlide: 1,
-      store: new Store({}),
-      totalSlides: 3,
-      visibleSlides: 2,
+      store: new Store({
+        currentSlide: 1,
+        totalSlides: 7,
+        visibleSlides: 1,
+      }),
+      totalSlides: 7,
+      visibleSlides: 1,
     },
   },
   ButtonNext: {
