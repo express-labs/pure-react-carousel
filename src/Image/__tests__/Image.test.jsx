@@ -1,12 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils'; // ES6
 import components from '../../helpers/component-config';
 import { ERROR } from '../../helpers/index';
 import Image from '../Image';
-import Store from '../../Store/Store';
-
-const util = require('util')
 
 const { props } = components.Image;
 
@@ -21,16 +17,34 @@ describe('<Image />', () => {
     shallow(<Image {...props} hasMasterSpinner />);
     expect(spy).toHaveBeenCalled();
   });
-  it('should call any passed in onLoad after the image loads', () => {
+  it('should call any passed-in onLoad after the image loads.', () => {
     const onLoad = jest.fn();
     expect(onLoad).not.toHaveBeenCalled();
     mount(<Image {...props} onLoad={onLoad} />);
     expect(onLoad).toHaveBeenCalled();
   });
-  it('should call any passed in onError after an image load error', () => {
+  it('should call any passed-in onError if an image load fails.', () => {
     const onError = jest.fn();
-    mount(<Image {...props} src="poo.bad" onError={onError} />);
+    const wrapper = mount(<Image {...props} src="crap.junk" onError={onError} />);
+    const instance = wrapper.instance();
+    // simulate a load error
+    instance.image.onerror();
     expect(onError).toHaveBeenCalled();
+  });
+  it('should call the default onError if an image load fails and there is no custom onError.', () => {
+    const wrapper = mount(<Image {...props} src="crap.junk" />);
+    const instance = wrapper.instance();
+    // simulate a load error
+    instance.image.onerror();
+    expect(wrapper.hasClass('imageError')).toBe(true);
+  });
+  it('should render the default error with the class "carousel__image--with-background" if isBgImage === true', () => {
+    const newProps = Object.assign({}, props, { tag: 'div' });
+    const wrapper = mount(<Image {...newProps} src="crap.junk" isBgImage />);
+    // simulate a load error
+    wrapper.setState({ imageStatus: 'error' });
+    wrapper.update();
+    expect(wrapper.hasClass('carousel__image--with-background')).toBe(true);
   });
   it('should render with class carousel__image--with-background when isBgImage prop is true', () => {
     const wrapper = mount(<Image {...props} tag="div" isBgImage />);
@@ -51,7 +65,7 @@ describe('<Image />', () => {
   it('should call a custom renderError method if supplied as a prop and image load fails', () => {
     const renderError = jest.fn(() => <span>Error</span>);
     const wrapper = mount(<Image {...props} renderError={renderError} />);
-    wrapper.setState({ imageStatus: 'error' });
+    wrapper.setState({ imageStatus: ERROR });
     expect(renderError).toHaveBeenCalledTimes(1);
   });
   it('should throw an error if state.imageStatus is not LOADING, SUCCESS, or ERROR', () => {
