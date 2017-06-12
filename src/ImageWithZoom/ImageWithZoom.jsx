@@ -7,8 +7,6 @@ import s from './ImageWithZoom.css';
 const ImageWithZoom = class ImageWithZoom extends React.Component {
   static propTypes = {
     // alt: PropTypes.string,
-    // onError: PropTypes.func,
-    // onLoad: PropTypes.func,
     src: PropTypes.string.isRequired,
     tag: PropTypes.string,
   }
@@ -81,6 +79,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       s.overlay,
       'carousel__zoom-image-overlay',
       this.state.hovering && s.hover,
+      'carousel__zoom-image-overlay--hovering',
     ]);
 
     const overlayStyle = {};
