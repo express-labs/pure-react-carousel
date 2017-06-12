@@ -7,7 +7,7 @@ import s from './DotGroup.css';
 const DotGroup = class DotGroup extends React.Component {
   static propTypes = {
     children: CarouselPropTypes.children,
-    className: PropTypes.number,
+    className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     store: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,

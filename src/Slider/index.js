@@ -1,5 +1,5 @@
 import Slider from './Slider';
-import { WithStore } from '../';
+import WithStore from '../Store/WithStore';
 
 export default WithStore(Slider, state => ({
   currentSlide: state.currentSlide,

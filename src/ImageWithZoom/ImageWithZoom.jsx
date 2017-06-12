@@ -7,8 +7,6 @@ import s from './ImageWithZoom.css';
 const ImageWithZoom = class ImageWithZoom extends React.Component {
   static propTypes = {
     // alt: PropTypes.string,
-    // onError: PropTypes.func,
-    // onLoad: PropTypes.func,
     src: PropTypes.string.isRequired,
     tag: PropTypes.string,
   }
@@ -23,6 +21,8 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       isImageLoading: true,
       hovering: false,
       style: {},
+      x: null,
+      y: null,
     };
     this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
     this.handleOnMouseOut = this.handleOnMouseOut.bind(this);
@@ -70,7 +70,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
 
   render() {
-    const { tag: Tag, src } = this.props;
+    const { tag: Tag, src, ...filteredProps } = this.props;
 
     const imageClassName = cn([
       s.image,
@@ -81,13 +81,14 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       s.overlay,
       'carousel__zoom-image-overlay',
       this.state.hovering && s.hover,
+      this.state.hovering && 'carousel__zoom-image-overlay--hovering',
     ]);
 
     const overlayStyle = {};
     overlayStyle.transformOrigin = `${this.state.x}% ${this.state.y}%`;
 
     return (
-      <Tag className={s.container}>
+      <Tag className={s.container} {...filteredProps}>
         <Image
           className={imageClassName}
           tag="div"

@@ -1,4 +1,4 @@
 import Dot from './Dot';
-import { WithStore } from '../';
+import WithStore from '../Store/WithStore';
 
 export default WithStore(Dot);
