@@ -46,7 +46,6 @@ const Slider = class Slider extends React.Component {
       deltaY: 0,
       startX: 0,
       startY: 0,
-      thresholdPixels: 0,
       isMoving: false,
     };
 
@@ -76,18 +75,28 @@ const Slider = class Slider extends React.Component {
     });
   }
 
-  computeCurrentSlide() {
-    const slideSizeInPx = (
-      this.props.orientation === 'horizontal' ?
-      this.sliderTrayDiv.clientWidth :
-      this.sliderTrayDiv.clientHeight
-    ) / this.props.totalSlides;
+  static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
+    return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
+  }
 
-    const slidesMoved = -Math.round((
-      this.props.orientation === 'horizontal' ?
-      this.state.deltaX :
-      this.state.deltaY
-    ) / slideSizeInPx);
+  static slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
+    return -Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx);
+  }
+
+  computeCurrentSlide() {
+    const slideSizeInPx = Slider.slideSizeInPx(
+      this.props.orientation,
+      this.sliderTrayDiv.clientWidth,
+      this.sliderTrayDiv.clientHeight,
+      this.props.totalSlides,
+    );
+
+    const slidesMoved = Slider.slidesMoved(
+      this.props.orientation,
+      this.state.deltaX,
+      this.state.deltaY,
+      slideSizeInPx,
+    );
 
     const maxSlide = this.props.totalSlides - Math.min(
       this.props.totalSlides, this.props.visibleSlides,
@@ -105,12 +114,10 @@ const Slider = class Slider extends React.Component {
   handleOnTouchEnd(ev) {
     if (!this.props.touchEnabled) return;
 
-    this.computeCurrentSlide();
-
-    document.documentElement.style.overflow = this.originalOverflow;
-    this.originalOverflow = null;
-
     if (ev.targetTouches.length === 0) {
+      this.computeCurrentSlide();
+      document.documentElement.style.overflow = this.originalOverflow;
+      this.originalOverflow = null;
       this.setState({
         deltaX: 0,
         deltaY: 0,
@@ -136,7 +143,10 @@ const Slider = class Slider extends React.Component {
 
       return (
         <div
-          className={cn(['carousel__master-spinner-container', s.masterSpinnerContainer])}
+          className={cn([
+            s.masterSpinnerContainer,
+            'carousel__master-spinner-container',
+          ])}
         >
           <Spinner />
         </div>
@@ -187,23 +197,23 @@ const Slider = class Slider extends React.Component {
 
     const sliderClasses = cn([
       orientation === 'vertical' ? s.verticalSlider : s.horizontalSlider,
-      'carousel__slide-tray',
-      orientation === 'vertical' ? 'carousel__slide-tray--vertical' : 'carousel__slide-tray--horizontal',
+      'carousel__slider',
+      orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal',
       className,
     ]);
 
     const trayClasses = cn([
       s.sliderTray,
-      'carousel__slide-tray',
+      'carousel__slider-tray',
       orientation === 'vertical' ? s.verticalTray : s.horizontalTray,
-      orientation === 'vertical' ? 'carousel__slide-tray--vertical' : 'carousel__slide-tray--horizontal',
+      orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal',
     ]);
 
     const trayWrapClasses = cn([
       s.sliderTrayWrap,
-      'carousel__slide-tray-wrapper',
+      'carousel__slider-tray-wrapper',
       orientation === 'vertical' ? s.verticalSlideTrayWrap : s.horizontalTrayWrap,
-      orientation === 'vertical' ? 'carousel__slide-tray-wrap--vertical' : 'carousel__slide-tray-wrap--horizontal',
+      orientation === 'vertical' ? 'carousel__slider-tray-wrap--vertical' : 'carousel__slider-tray-wrap--horizontal',
     ]);
 
     return (

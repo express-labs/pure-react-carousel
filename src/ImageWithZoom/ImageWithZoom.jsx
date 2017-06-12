@@ -21,6 +21,8 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       isImageLoading: true,
       hovering: false,
       style: {},
+      x: null,
+      y: null,
     };
     this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
     this.handleOnMouseOut = this.handleOnMouseOut.bind(this);
@@ -79,7 +81,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       s.overlay,
       'carousel__zoom-image-overlay',
       this.state.hovering && s.hover,
-      'carousel__zoom-image-overlay--hovering',
+      this.state.hovering && 'carousel__zoom-image-overlay--hovering',
     ]);
 
     const overlayStyle = {};
