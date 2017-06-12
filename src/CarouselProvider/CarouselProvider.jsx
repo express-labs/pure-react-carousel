@@ -10,8 +10,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     className: PropTypes.string,
     currentSlide: PropTypes.number,
     hasMasterSpinner: PropTypes.bool,
-    naturalSlideHeight: PropTypes.number,
-    naturalSlideWidth: PropTypes.number,
+    naturalSlideHeight: PropTypes.number.isRequired,
+    naturalSlideWidth: PropTypes.number.isRequired,
     orientation: CarouselPropTypes.orientation.isRequired,
     step: PropTypes.number,
     totalSlides: PropTypes.number,
@@ -28,8 +28,6 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     totalSlides: 1,
     touchEnabled: true,
     visibleSlides: 1,
-    naturalSlideHeight: 400,
-    naturalSlideWidth: 300,
   }
 
   static childContextTypes = {
