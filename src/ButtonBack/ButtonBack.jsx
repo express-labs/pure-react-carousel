@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { CarouselPropTypes, cn } from '../helpers';
 import s from './ButtonBack.css';
 
-const ButtonBack = class ButtonBack extends React.Component {
+export default class ButtonBack extends React.Component {
   static propTypes = {
     children: CarouselPropTypes.children.isRequired,
     className: PropTypes.string,
@@ -70,6 +70,4 @@ const ButtonBack = class ButtonBack extends React.Component {
       >{this.props.children}</button>
     );
   }
-};
-
-export default ButtonBack;
+}

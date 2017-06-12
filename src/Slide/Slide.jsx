@@ -105,7 +105,7 @@ const Slide = class Slide extends React.PureComponent {
     ]);
 
     const defaultTabIndex = this.isVisible() ? 0 : -1;
-    const newTabIndex = typeof tabIndex === 'boolean' ? tabIndex : defaultTabIndex;
+    const newTabIndex = typeof tabIndex === 'number' ? tabIndex : defaultTabIndex;
 
     return (
       <Tag

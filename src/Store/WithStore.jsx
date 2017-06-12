@@ -4,7 +4,9 @@ import deepMerge from 'deepmerge';
 import propTypes from 'prop-types';
 import { CarouselPropTypes } from '../helpers';
 
-export default function WithStore(WrappedComponent, mapStateToProps = () => ({})) {
+export default function WithStore(
+  WrappedComponent, /* istanbul ignore next */ mapStateToProps = () => ({})
+) {
   class Wrapper extends React.Component {
     static propTypes = {
       children: CarouselPropTypes.children,

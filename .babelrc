@@ -1,18 +1,34 @@
 {
-  "presets": ["es2015-rollup", "react"],
-  "plugins": [
-    "transform-class-properties",
-    "transform-object-rest-spread"
-  ],
-  "env": {
-    "test": {
-      "presets": [
-    		["es2015", { "modules": false }],
-    		"react"
-    	],
-			"plugins": [
-				"transform-es2015-modules-commonjs"
-			]
-    }
-  }
+   "presets":[
+      "es2015-rollup",
+      "react"
+   ],
+   "plugins":[
+      "transform-class-properties",
+      "transform-object-rest-spread"
+   ],
+   "env":{
+      "test":{
+         "presets":[
+            [
+               "es2015",
+               {
+                  "modules":false
+               }
+            ],
+            "react"
+         ],
+         "plugins":[
+            "transform-class-properties",
+            "transform-object-rest-spread",
+            [
+               "transform-runtime",
+               {
+                  "runtimeHelpers":true
+               }
+            ],
+            "transform-es2015-modules-commonjs"
+         ]
+      }
+   }
 }

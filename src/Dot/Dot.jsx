@@ -8,8 +8,8 @@ const Dot = class Dot extends React.Component {
     children: CarouselPropTypes.children.isRequired,
     className: PropTypes.string,
     disabled: PropTypes.bool,
-    selected: PropTypes.bool,
     onClick: PropTypes.func,
+    selected: PropTypes.bool,
     slide: PropTypes.number.isRequired,
     store: PropTypes.object.isRequired,
   }
