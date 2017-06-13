@@ -32,7 +32,7 @@ export default {
   plugins: [
     postcss({
       sourceMap: true,
-      extract: 'dist/react-carousel.css',
+      extract: 'dist/react-carousel.cjs.css',
       extensions: ['.css'],
       plugins: [
         postcssImport(),

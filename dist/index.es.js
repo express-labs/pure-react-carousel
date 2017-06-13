@@ -1265,7 +1265,7 @@ var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
           React.createElement(
             'span',
             { className: cn['carousel__dot-group-dot'] },
-            i + 1
+            this.props.dotNumbers && i + 1
           )
         ));
       }
@@ -1299,10 +1299,12 @@ var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
   currentSlide: index$1.number.isRequired,
   store: index$1.object.isRequired,
   totalSlides: index$1.number.isRequired,
-  visibleSlides: index$1.number.isRequired
+  visibleSlides: index$1.number.isRequired,
+  dotNumbers: index$1.boolean
 }, _class$5.defaultProps = {
   children: null,
-  className: null
+  className: null,
+  dotNumbers: false
 }, _temp$5);
 
 var index$16 = WithStore(DotGroup$$1, function (state) {
