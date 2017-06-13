@@ -82,6 +82,8 @@ describe('<ButtonNext />', () => {
       totalSlides: 7,
       visibleSlides: 2,
       step: 4,
+      naturalSlideWidth: 100,
+      naturalSlideHeight: 125,
     };
 
     const wrapper = mount((

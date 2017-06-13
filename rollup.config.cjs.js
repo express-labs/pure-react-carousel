@@ -23,7 +23,7 @@ export default {
   entry: 'src/index.js',
   cache: cache,
   format: 'cjs',
-  moduleName: 'reactCarousel',
+  moduleName: 'pureReactCarousel',
   dest: 'dist/index.cjs.js',
   sourceMap: true,
   sourceMapFile: path.resolve('dist/main.cjs.js'),

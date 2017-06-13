@@ -25,7 +25,7 @@ export default {
   entry: 'src/app.js',
   cache: cache,
   format: 'umd',
-  moduleName: 'reactCarousel',
+  moduleName: 'pureReactCarousel',
   dest: 'dev/script/index.umd.js',
   sourceMap: true,
   sourceMapFile: path.resolve('dev/main.umd.js'),

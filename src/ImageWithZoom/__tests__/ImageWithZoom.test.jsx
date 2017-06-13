@@ -14,7 +14,11 @@ describe('<ImageWithZoom />', () => {
 
   beforeEach(() => {
     wrapper = mount((
-      <CarouselProvider>
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={1}
+      >
         <ImageWithZoom {...props} />
       </CarouselProvider>
     ));

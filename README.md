@@ -1,4 +1,4 @@
-# react-carousel
+# pure-react-carousel
 A highly impartial suite of React components that can be assembled by the consumer to create a carousel with almost no limits on DOM structure or CSS styles.
 
 My goal was to create a 100% ReactJS carousel that doesn't try to impose structure or styles that need to be defeated in order to match your site's design standards. Are you tired of fighting some other developer's CSS or DOM structure?  If so, this carousel is for you.
@@ -22,14 +22,14 @@ Let's make a simple carousel with three slides, a next button, and a back button
 
 ```javascript
 import React from 'react';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'react-carousel';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 ```  
 
 2. Put a CarouselProvider component in your code.  This allows the other carousel components to communicate with each other.  The only required properties are the orientation, naturalSlideWidth, and naturalSlideHeight.  And it must have children, of course.  We'll add children in the next step.
 
 ```javascript
 import React from 'react';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'react-carousel';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 
 export default class extends React.Component {
   render() {
@@ -45,7 +45,7 @@ Slides require an index.  Chances are, a lot of the time, you're going to be pop
 
 ```javascript
 import React from 'react';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'react-carousel';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 
 export default class extends React.Component {
   render() {
@@ -66,7 +66,7 @@ export default class extends React.Component {
 
 ```javascript
 import React from 'react';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'react-carousel';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 
 export default class extends React.Component {
   render() {
@@ -89,7 +89,7 @@ export default class extends React.Component {
 
 ```javascript
 import React from 'react';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'react-carousel';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 
 export default class extends React.Component {
   render() {
@@ -119,6 +119,8 @@ There are other components you can add, like ButtonFirst, ButtonLast, an Image c
 Obviously, you can customize the heck out of the layout.  If you need to bury your Slider component in 18 parent divs, go for it.  It will still do it's job.  Feel free to add the className property to any of the Components to further customize your carousel.  Or, hook into the many BEM named default CSS class names built into the carousel components.
 
 ## Docs
+
+**A general note:**  You can append your own className to every single component in this library.  Also, any props not consumed by a component are passed through to the root element of each component. This makes all the components in this library HIGHLY configurable.  You can, for example, add your one event handlers, or change aria tags, etc.
 
 ### \<CarouselProvider />
 | property | type | default | required | purpose |
@@ -179,7 +181,9 @@ The Slide component creates the following pseudo HTML by default.
 | onBlur | [ function \| null ] | null | No | Optional callback function that is called after the internal onBlur function is called. It is passed the React synthetic event |
 | onFocus | [ function \| null ] | null | No | Optional callback function that is called after the internal onFocus function is called. It is passed the React synthetic event |
 | tabIndex | [ number \| null ] | null | No | When null, the Carousel will set this automatically.  99.9% of the time, you're going to want to leave this alone and let the carousel handle tabIndex automatically. |
-| tag | string | 'div' | No | The inner HTML element for each Slide. |
+| tag** | string | 'div' | No | The inner HTML element for each Slide. |
+
+**Note about the tag property**  If clicking on a carousel slide should do something like, oh, open a shadow box, or navigate to a page, You might want to set this to some other element, like an 'a' tag or even 'button'.  Obviously, if you do this, you're going to have to add some more CSS styles.  Look at the demo app (npm run dev) to see what CSS classes you can hook into.  There are a lot.  Don't forget, You can also supply your own className to append.
 
 
 ## More Documentation to Come

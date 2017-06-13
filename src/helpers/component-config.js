@@ -66,6 +66,9 @@ export default {
     component: CarouselProvider,
     props: {
       children: 'hello',
+      naturalSlideWidth: 100,
+      naturalSlideHeight: 125,
+      totalSlides: 1,
     },
   },
   Dot: {

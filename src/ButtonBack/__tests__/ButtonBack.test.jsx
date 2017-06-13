@@ -69,6 +69,8 @@ describe('<ButtonBack />', () => {
   it('should disable the button and change the slide to 0 if currentSlide - step <= 0', () => {
     const wrapper = mount(
       <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
         totalSlides={3}
         currentSlide={1}
         step={3}
