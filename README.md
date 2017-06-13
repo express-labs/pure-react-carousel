@@ -85,7 +85,7 @@ export default class extends React.Component {
 }
 ```
 
-4. Make sure to set the required properties for the \<CarouselProvider> component.
+5. Make sure to set the required properties for the \<CarouselProvider> component.
 
 ```javascript
 import React from 'react';
@@ -181,7 +181,7 @@ The Slide component creates the following pseudo HTML by default.
 | onBlur | [ function \| null ] | null | No | Optional callback function that is called after the internal onBlur function is called. It is passed the React synthetic event |
 | onFocus | [ function \| null ] | null | No | Optional callback function that is called after the internal onFocus function is called. It is passed the React synthetic event |
 | tabIndex | [ number \| null ] | null | No | When null, the Carousel will set this automatically.  99.9% of the time, you're going to want to leave this alone and let the carousel handle tabIndex automatically. |
-| tag** | string | 'div' | No | The inner HTML element for each Slide. |
+| tag** | string | 'div' | No | The root HTML element for each Slide. |
 
 **Note about the tag property**  If clicking on a carousel slide should do something like, oh, open a shadow box, or navigate to a page, You might want to set this to some other element, like an 'a' tag or even 'button'.  Obviously, if you do this, you're going to have to add some more CSS styles.  Look at the demo app (npm run dev) to see what CSS classes you can hook into.  There are a lot.  Don't forget, You can also supply your own className to append.
 
