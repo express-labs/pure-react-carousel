@@ -12,9 +12,9 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     hasMasterSpinner: PropTypes.bool,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
-    orientation: CarouselPropTypes.orientation.isRequired,
+    orientation: CarouselPropTypes.orientation,
     step: PropTypes.number,
-    totalSlides: PropTypes.number,
+    totalSlides: PropTypes.number.isRequired,
     touchEnabled: PropTypes.bool,
     visibleSlides: PropTypes.number,
   }
@@ -25,7 +25,6 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     hasMasterSpinner: false,
     orientation: 'horizontal',
     step: 1,
-    totalSlides: 1,
     touchEnabled: true,
     visibleSlides: 1,
   }

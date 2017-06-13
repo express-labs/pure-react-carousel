@@ -35,7 +35,7 @@ const Slide = class Slide extends React.PureComponent {
     store: null,
     style: {},
     tabIndex: null,
-    tag: 'li',
+    tag: 'div',
   }
 
   constructor() {
