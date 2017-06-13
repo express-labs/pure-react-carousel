@@ -12,7 +12,7 @@ const DotGroup = class DotGroup extends React.Component {
     store: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
-    dotNumbers: PropTypes.boolean,
+    dotNumbers: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -35,7 +35,9 @@ const DotGroup = class DotGroup extends React.Component {
   }
 
   render() {
-    const { className, currentSlide, store, totalSlides, visibleSlides, ...props } = this.props;
+    const {
+      className, currentSlide, store, totalSlides, visibleSlides, dotNumbers, ...props
+    } = this.props;
 
     const newClassName = cn([
       s.DotGroup,
