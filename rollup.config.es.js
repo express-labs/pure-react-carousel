@@ -5,8 +5,8 @@ import path from 'path';
 import postcss from 'rollup-plugin-postcss';
 import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
-import uglify from 'rollup-plugin-uglify';
-import { minify } from 'uglify-es'; // ES6 minification is experimental as of 5/16/17
+// import uglify from 'rollup-plugin-uglify';
+// import { minify } from 'uglify-es'; // ES6 minification is experimental as of 5/16/17
 
 // postcss plugins
 import simplevars from 'postcss-simple-vars';
@@ -78,6 +78,6 @@ export default {
       include: 'src/**',
       ENV: JSON.stringify(process.env.NODE_ENV || 'production')
     }),
-    (process.env.NODE_ENV === 'production' && uglify({}, minify))
+    // (process.env.NODE_ENV === 'production' && uglify({}, minify))
   ],
 }

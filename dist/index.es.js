@@ -1,2 +1,2166 @@
-function createCommonjsModule(e,t){return t={exports:{}},e(t,t.exports),t.exports}function makeEmptyFunction(e){return function(){return e}}function invariant(e,t,n,r,i,s,a,o){if(validateFormat(t),!e){var l;if(void 0===t)l=new Error("Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings.");else{var u=[n,r,i,s,a,o],c=0;(l=new Error(t.replace(/%s/g,function(){return u[c++]}))).name="Invariant Violation"}throw l.framesToPop=1,l}}function cn(e){return e.map(function(e){return!1===e?null:e}).join(" ").replace(/\s+/g," ").trim()}function slideSize(e,t){return 100/e*t/t}function slideTraySize(e,t){return 100*e/t}function pct(e){return e+"%"}function equal(e,t,n){if(e===t)return!0;var r=types[index$3(e)],i=types[index$3(t)];return!(!r||r!==i)&&r(e,t,n)}function memoGaurd(e){return function(t,n,r){if(!r)return e(t,n,[]);for(var i,s=r.length;i=r[--s];)if(i[0]===t&&i[1]===n)return!0;return e(t,n,r)}}function arrayEqual(e,t,n){var r=e.length;if(r!==t.length)return!1;for(n.push([e,t]);r--;)if(!equal(e[r],t[r],n))return!1;return!0}function objectEqual(e,t,n){if("function"==typeof e.equal)return n.push([e,t]),e.equal(t,n);var r=getEnumerableProperties(e),i=getEnumerableProperties(t),s=r.length;if(s!==i.length)return!1;for(r.sort(),i.sort();s--;)if(r[s]!==i[s])return!1;for(n.push([e,t]),s=r.length;s--;){var a=r[s];if(!equal(e[a],t[a],n))return!1}return!0}function getEnumerableProperties(e){var t=[];for(var n in e)"constructor"!==n&&t.push(n);return t}function WithStore(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:function(){return{}},n=function(n){function r(e,n){classCallCheck(this,r);var i=possibleConstructorReturn(this,(r.__proto__||Object.getPrototypeOf(r)).call(this,e,n));return i.state={stateProps:t(n.store.getState())},i}return inherits(r,n),createClass(r,[{key:"componentDidMount",value:function(){var e=this;this.context.store.subscribe(function(){return e.updateStateProps()})}},{key:"shouldComponentUpdate",value:function(e,t){return!index$2(t,this.state)||!index$2(e,this.props)}},{key:"updateStateProps",value:function(){this.setState({stateProps:t(this.context.store.getState())})}},{key:"render",value:function(){var t=index$5(this.state.stateProps,this.props);return React.createElement(e,_extends({},t,{store:{setState:this.context.store.setState,subscribeMasterSpinner:this.context.store.subscribeMasterSpinner,masterSpinnerSuccess:this.context.store.masterSpinnerSuccess,masterSpinnerError:this.context.store.masterSpinnerError}}),this.props.children)}}]),r}(React.Component);return n.propTypes={children:CarouselPropTypes.children},n.defaultProps={children:null},n.contextTypes={store:index$1.object},n}import React from"react";var commonjsGlobal="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},emptyFunction=function(){};emptyFunction.thatReturns=makeEmptyFunction,emptyFunction.thatReturnsFalse=makeEmptyFunction(!1),emptyFunction.thatReturnsTrue=makeEmptyFunction(!0),emptyFunction.thatReturnsNull=makeEmptyFunction(null),emptyFunction.thatReturnsThis=function(){return this},emptyFunction.thatReturnsArgument=function(e){return e};var emptyFunction_1=emptyFunction,validateFormat=function(e){},invariant_1=invariant,ReactPropTypesSecret="SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED",ReactPropTypesSecret_1=ReactPropTypesSecret,factoryWithThrowingShims=function(){function e(e,t,n,r,i,s){s!==ReactPropTypesSecret_1&&invariant_1(!1,"Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types")}function t(){return e}e.isRequired=e;var n={array:e,bool:e,func:e,number:e,object:e,string:e,symbol:e,any:e,arrayOf:t,element:e,instanceOf:t,node:e,objectOf:t,oneOf:t,oneOfType:t,shape:t};return n.checkPropTypes=emptyFunction_1,n.PropTypes=n,n},index$1=createCommonjsModule(function(e){e.exports=factoryWithThrowingShims()}),LOADING="loading",SUCCESS="success",ERROR="error",CarouselPropTypes={children:index$1.oneOfType([index$1.arrayOf(index$1.node),index$1.node]),height:function(e,t){var n=e[t];return"vertical"!==e.orientation||null!==n&&"number"==typeof n?null:new Error("Missing required property '"+t+"' when orientation is vertical.  You must supply a number representing the height in pixels")},orientation:index$1.oneOf(["horizontal","vertical"]),isBgImage:function(e,t){return!0===e[t]&&"img"===e.tag?new Error("HTML img elements should not have a backgroundImage.  Please use "+t+" for other block-level HTML tags, like div, a, section, etc..."):null}},s={buttonBack:"_buttonBack_113ph_1"},classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")},createClass=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),_extends=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)},objectWithoutProperties=function(e,t){var n={};for(var r in e)t.indexOf(r)>=0||Object.prototype.hasOwnProperty.call(e,r)&&(n[r]=e[r]);return n},possibleConstructorReturn=function(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t},ButtonBack=function(e){function t(e){classCallCheck(this,t);var n=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.handleOnClick=n.handleOnClick.bind(n),n.state={disabled:t.setDisabled(e.disabled,e.currentSlide)},n}return inherits(t,e),createClass(t,null,[{key:"setDisabled",value:function(e,t){return null!==e?e:0===t}}]),createClass(t,[{key:"componentWillReceiveProps",value:function(e){this.setState({disabled:t.setDisabled(e.disabled,e.currentSlide)})}},{key:"handleOnClick",value:function(e){var t=this.props,n=t.currentSlide,r=t.onClick,i=t.step,s=t.store,a=Math.max(n-i,0);s.setState({currentSlide:a},null!==r&&r.call(this,e))}},{key:"render",value:function(){var e=this.props,t=e.className,n=(e.currentSlide,e.disabled,e.onClick,e.step,e.store,objectWithoutProperties(e,["className","currentSlide","disabled","onClick","step","store"])),r=cn([s.buttonBack,"carousel__back-button",t]);return React.createElement("button",_extends({"aria-label":"previous",className:r,onClick:this.handleOnClick,disabled:this.state.disabled},n),this.props.children)}}]),t}(React.Component);ButtonBack.propTypes={children:CarouselPropTypes.children.isRequired,className:index$1.string,currentSlide:index$1.number.isRequired,disabled:index$1.bool,onClick:index$1.func,step:index$1.number.isRequired,store:index$1.object.isRequired},ButtonBack.defaultProps={disabled:null,onClick:null,className:null};var index$3=createCommonjsModule(function(e,t){var n={}.toString,r="undefined"!=typeof window?window.Node:Function;e.exports=t=function(e){var t=typeof e;if("object"!=t)return t;if(t=i[n.call(e)],"object"==t)return e instanceof Map?"map":e instanceof Set?"set":"object";if(t)return t;if(e instanceof r)switch(e.nodeType){case 1:return"element";case 3:return"text-node";case 9:return"document";case 11:return"document-fragment";default:return"dom-node"}};var i=t.types={"[object Function]":"function","[object Date]":"date","[object RegExp]":"regexp","[object Arguments]":"arguments","[object Array]":"array","[object Set]":"set","[object String]":"string","[object Null]":"null","[object Undefined]":"undefined","[object Number]":"number","[object Boolean]":"boolean","[object Object]":"object","[object Map]":"map","[object Text]":"text-node","[object Uint8Array]":"bit-array","[object Uint16Array]":"bit-array","[object Uint32Array]":"bit-array","[object Uint8ClampedArray]":"bit-array","[object Error]":"error","[object FormData]":"form-data","[object File]":"file","[object Blob]":"blob"}}),types={};types.number=function(e,t){return e!==e&&t!==t},types.function=function(e,t,n){return e.toString()===t.toString()&&types.object(e,t,n)&&equal(e.prototype,t.prototype)},types.date=function(e,t){return+e==+t},types.regexp=function(e,t){return e.toString()===t.toString()},types.element=function(e,t){return e.outerHTML===t.outerHTML},types.textnode=function(e,t){return e.textContent===t.textContent},types.arguments=types["bit-array"]=types.array=memoGaurd(arrayEqual),types.object=memoGaurd(objectEqual);var index$2=equal,index$5=createCommonjsModule(function(e,t){!function(t,n){e.exports=n()}(0,function(){function e(e){return e&&"object"==typeof e&&"[object RegExp]"!==Object.prototype.toString.call(e)&&"[object Date]"!==Object.prototype.toString.call(e)}function t(e){return Array.isArray(e)?[]:{}}function n(n,r){return r&&!0===r.clone&&e(n)?s(t(n),n,r):n}function r(t,r,i){var a=t.slice();return r.forEach(function(r,o){void 0===a[o]?a[o]=n(r,i):e(r)?a[o]=s(t[o],r,i):-1===t.indexOf(r)&&a.push(n(r,i))}),a}function i(t,r,i){var a={};return e(t)&&Object.keys(t).forEach(function(e){a[e]=n(t[e],i)}),Object.keys(r).forEach(function(o){e(r[o])&&t[o]?a[o]=s(t[o],r[o],i):a[o]=n(r[o],i)}),a}function s(e,t,s){var a=Array.isArray(t),o=(s||{arrayMerge:r}).arrayMerge||r;return a?Array.isArray(e)?o(e,t,s):n(t,s):i(e,t,s)}return s.all=function(e,t){if(!Array.isArray(e)||e.length<2)throw new Error("first argument should be an array with at least two elements");return e.reduce(function(e,n){return s(e,n,t)})},s})}),index=WithStore(ButtonBack,function(e){return{currentSlide:e.currentSlide,step:e.step}}),s$1={buttonFirst:"_buttonFirst_y31jn_1"},_class,_temp,ButtonFirst=(_temp=_class=function(e){function t(){classCallCheck(this,t);var e=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this));return e.handleOnClick=e.handleOnClick.bind(e),e}return inherits(t,e),createClass(t,[{key:"handleOnClick",value:function(e){var t=this.props,n=t.store,r=t.onClick;n.setState({currentSlide:0},null!==r&&r.call(this,e))}},{key:"render",value:function(){var e=this.props,t=e.className,n=e.currentSlide,r=e.disabled,i=(e.onClick,e.store,e.totalSlides,objectWithoutProperties(e,["className","currentSlide","disabled","onClick","store","totalSlides"])),s=cn([s$1.buttonFirst,"carousel__first-button",t]),a=null!==r?r:0===n;return React.createElement("button",_extends({"aria-label":"first",className:s,onClick:this.handleOnClick,disabled:a},i),this.props.children)}}]),t}(React.Component),_class.propTypes={children:CarouselPropTypes.children.isRequired,className:index$1.string,currentSlide:index$1.number.isRequired,disabled:index$1.bool,onClick:index$1.func,store:index$1.object.isRequired,totalSlides:index$1.number.isRequired},_class.defaultProps={className:null,disabled:null,onClick:null},_temp),index$6=WithStore(ButtonFirst,function(e){return{currentSlide:e.currentSlide,totalSlides:e.totalSlides}}),s$2={buttonNext:"_buttonNext_p1bs6_1"},_class$1,_temp$1,ButtonNext=(_temp$1=_class$1=function(e){function t(e){classCallCheck(this,t);var n=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.handleOnClick=n.handleOnClick.bind(n),n.state={disabled:t.setDisabled(e.disabled,e.currentSlide,e.visibleSlides,e.totalSlides)},n}return inherits(t,e),createClass(t,null,[{key:"setDisabled",value:function(e,t,n,r){return null!==e?e:t>=r-n}}]),createClass(t,[{key:"componentWillReceiveProps",value:function(e){this.setState({disabled:t.setDisabled(e.disabled,e.currentSlide,e.visibleSlides,e.totalSlides)})}},{key:"handleOnClick",value:function(e){var t=this.props,n=t.currentSlide,r=t.onClick,i=t.step,s=t.store,a=this.props.totalSlides-this.props.visibleSlides,o=Math.min(n+i,a);s.setState({currentSlide:o},null!==r&&r.call(this,e))}},{key:"render",value:function(){var e=this.props,t=e.className,n=(e.currentSlide,e.disabled,e.onClick,e.step,e.store,e.totalSlides,e.visibleSlides,objectWithoutProperties(e,["className","currentSlide","disabled","onClick","step","store","totalSlides","visibleSlides"])),r=cn([s$2.buttonNext,"carousel__next-button",t]);return React.createElement("button",_extends({"aria-label":"next",className:r,onClick:this.handleOnClick,disabled:this.state.disabled},n),this.props.children)}}]),t}(React.PureComponent),_class$1.propTypes={children:CarouselPropTypes.children.isRequired,className:index$1.string,currentSlide:index$1.number.isRequired,disabled:index$1.bool,onClick:index$1.func,step:index$1.number.isRequired,store:index$1.object.isRequired,totalSlides:index$1.number.isRequired,visibleSlides:index$1.number.isRequired},_class$1.defaultProps={disabled:null,className:null,onClick:null},_temp$1),index$7=WithStore(ButtonNext,function(e){return{currentSlide:e.currentSlide,step:e.step,totalSlides:e.totalSlides,visibleSlides:e.visibleSlides}}),s$3={buttonLast:"_buttonLast_x8dvv_1"},_class$2,_temp$2,ButtonLast=(_temp$2=_class$2=function(e){function t(){classCallCheck(this,t);var e=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this));return e.handleOnClick=e.handleOnClick.bind(e),e}return inherits(t,e),createClass(t,[{key:"handleOnClick",value:function(e){var t=this.props,n=t.store,r=t.onClick,i=t.totalSlides,s=t.visibleSlides;n.setState({currentSlide:i-s},null!==r&&r.call(this,e))}},{key:"render",value:function(){var e=this.props,t=e.className,n=e.currentSlide,r=e.disabled,i=(e.onClick,e.store,e.totalSlides),s=e.visibleSlides,a=objectWithoutProperties(e,["className","currentSlide","disabled","onClick","store","totalSlides","visibleSlides"]),o=cn([s$3.buttonLast,"carousel__last-button",t]),l=null!==r?r:n>=i-s;return React.createElement("button",_extends({"aria-label":"last",className:o,onClick:this.handleOnClick,disabled:l},a),this.props.children)}}]),t}(React.Component),_class$2.propTypes={children:CarouselPropTypes.children.isRequired,className:index$1.string,currentSlide:index$1.number.isRequired,disabled:index$1.bool,onClick:index$1.func,store:index$1.object.isRequired,totalSlides:index$1.number.isRequired,visibleSlides:index$1.number.isRequired},_class$2.defaultProps={className:null,disabled:null,onClick:null},_temp$2),index$8=WithStore(ButtonLast,function(e){return{currentSlide:e.currentSlide,totalSlides:e.totalSlides,visibleSlides:e.visibleSlides}}),index$10=function(e){return void 0!==e&&null!==e&&("object"==typeof e||"function"==typeof e)},index$14=function(e,t,n){for(var r in e)if(!1===t.call(n,e[r],r,e))break},hasOwn=Object.prototype.hasOwnProperty,index$12=function(e,t,n){index$14(e,function(r,i){if(hasOwn.call(e,i))return t.call(n,e[i],i,e)})},index$9=function(e,t){if(!index$10(e))return{};var n,r={};"function"==typeof(t=[].concat.apply([],[].slice.call(arguments,1)))[t.length-1]&&(n=t.pop());var i="function"==typeof n;return t.length||i?(index$12(e,function(s,a){-1===t.indexOf(a)&&(i?n(s,a,e)&&(r[a]=s):r[a]=s)}),r):e},_class$3,_temp$3,CarouselProvider$1=(_temp$3=_class$3=function(e){function t(e,n){classCallCheck(this,t);var r=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e,n)),i={currentSlide:e.currentSlide,hasMasterSpinner:e.hasMasterSpinner,imageErrorCount:0,imageSuccessCount:0,masterSpinnerThreshold:0,naturalSlideHeight:e.naturalSlideHeight,naturalSlideWidth:e.naturalSlideWidth,orientation:e.orientation,slideSize:slideSize(e.totalSlides,e.visibleSlides),slideTraySize:slideTraySize(e.totalSlides,e.visibleSlides),step:e.step,totalSlides:e.totalSlides,touchEnabled:e.touchEnabled,visibleSlides:e.visibleSlides};return r.store=new Store(i),r}return inherits(t,e),createClass(t,[{key:"getStore",value:function(){return this.store}},{key:"getChildContext",value:function(){return{store:this.store}}},{key:"render",value:function(){var e=index$9(this.props,Object.keys(t.propTypes)),n=cn(["carousel",this.props.className]);return React.createElement("div",_extends({className:n},e),this.props.children)}}]),t}(React.Component),_class$3.propTypes={children:CarouselPropTypes.children.isRequired,className:index$1.string,currentSlide:index$1.number,hasMasterSpinner:index$1.bool,naturalSlideHeight:index$1.number.isRequired,naturalSlideWidth:index$1.number.isRequired,orientation:CarouselPropTypes.orientation,step:index$1.number,totalSlides:index$1.number.isRequired,touchEnabled:index$1.bool,visibleSlides:index$1.number},_class$3.defaultProps={className:null,currentSlide:0,hasMasterSpinner:!1,orientation:"horizontal",step:1,touchEnabled:!0,visibleSlides:1},_class$3.childContextTypes={store:index$1.object},_temp$3),s$4={dot:"_dot_27k82_1"},_class$4,_temp$4,Dot$1=(_temp$4=_class$4=function(e){function t(e){classCallCheck(this,t);var n=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.handleOnClick=n.handleOnClick.bind(n),n}return inherits(t,e),createClass(t,[{key:"handleOnClick",value:function(e){var t=this.props,n=t.slide,r=t.store,i=t.onClick;r.setState({currentSlide:n},null!==i&&i.call(this,e))}},{key:"render",value:function(){var e=this.props,t=(e.children,e.className),n=(e.onClick,e.slide),r=(e.store,objectWithoutProperties(e,["children","className","onClick","slide","store"])),i=cn([s$4.dot,this.props.selected&&s$4.dotSelected,"carousel__dot","carousel__dot--"+n,this.props.selected&&"carousel__dot--selected",t]);return React.createElement("button",_extends({onClick:this.handleOnClick,className:i},r),this.props.children)}}]),t}(React.Component),_class$4.propTypes={children:CarouselPropTypes.children.isRequired,className:index$1.string,disabled:index$1.bool,onClick:index$1.func,selected:index$1.bool,slide:index$1.number.isRequired,store:index$1.object.isRequired},_class$4.defaultProps={className:null,disabled:!1,onClick:null,selected:!1},_temp$4),Dot=WithStore(Dot$1),s$5={},_class$5,_temp$5,DotGroup$$1=(_temp$5=_class$5=function(e){function t(){return classCallCheck(this,t),possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return inherits(t,e),createClass(t,[{key:"renderDots",value:function(){for(var e=this.props,t=e.currentSlide,n=e.totalSlides,r=e.visibleSlides,i=[],s=0;s<n;s+=1){var a=s>=t&&s<t+r,o=s>=n-r?n-r:s;i.push(React.createElement(Dot,{key:s,slide:o,selected:a,disabled:a},React.createElement("span",{className:cn["carousel__dot-group-dot"]},s+1)))}return i}},{key:"render",value:function(){var e=this.props,t=e.className,n=(e.currentSlide,e.store,e.totalSlides,e.visibleSlides,objectWithoutProperties(e,["className","currentSlide","store","totalSlides","visibleSlides"])),r=cn([s$5.DotGroup,"carousel__dot-group",t]);return React.createElement("div",_extends({className:r},n),this.renderDots())}}]),t}(React.Component),_class$5.propTypes={children:CarouselPropTypes.children,className:index$1.string,currentSlide:index$1.number.isRequired,store:index$1.object.isRequired,totalSlides:index$1.number.isRequired,visibleSlides:index$1.number.isRequired},_class$5.defaultProps={children:null,className:null},_temp$5),index$16=WithStore(DotGroup$$1,function(e){return{currentSlide:e.currentSlide,totalSlides:e.totalSlides,visibleSlides:e.visibleSlides}}),s$6={image:"_image_u458c_1"},Image$1=function(e){function t(e){classCallCheck(this,t);var n=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.state={imageStatus:LOADING},n.initImage(),e.hasMasterSpinner&&e.store.subscribeMasterSpinner(),n}return inherits(t,e),createClass(t,[{key:"componentDidMount",value:function(){this.image.onload=this.handleImageLoad,this.image.onerror=this.handleImageError,this.image.src=this.props.src}},{key:"initImage",value:function(){this.image=document.createElement("img"),this.handleImageLoad=this.handleImageLoad.bind(this),this.handleImageError=this.handleImageError.bind(this)}},{key:"handleImageLoad",value:function(e){this.setState({imageStatus:SUCCESS}),this.props.store.masterSpinnerSuccess(),this.props.onLoad&&this.props.onLoad(e)}},{key:"handleImageError",value:function(e){this.setState({imageStatus:ERROR}),this.props.store.masterSpinnerError(),this.props.onError&&this.props.onError(e)}},{key:"tempTag",value:function(){return"img"===this.props.tag?"div":this.props.tag}},{key:"customRender",value:function(e){return"function"==typeof this.props[e]?this.props[e]():this.props.children}},{key:"renderLoading",value:function(e){var t=this.tempTag(),n=cn([s$6.image,s$6.imageLoading,"carousel__image",this.props.isBgImage&&"carousel__image--with-background","carousel__image--loading",this.props.className]);return React.createElement(t,_extends({className:n},e),this.customRender("renderLoading"))}},{key:"renderError",value:function(e){var t=this.tempTag(),n=cn([s$6.image,s$6.imageError,"carousel__image",this.props.isBgImage&&"carousel__image--with-background","carousel__image--error",this.props.className]);return React.createElement(t,_extends({className:n},e),this.customRender("renderError"))}},{key:"renderSuccess",value:function(e){var t=this.props,n=t.style,r=t.tag,i=cn([s$6.image,"carousel__image",this.props.isBgImage&&"carousel__image--with-background","carousel__image--success",this.props.className]),s=Object.assign({},n),a=e;if("img"!==r){var o=e.src;e.alt;a=objectWithoutProperties(e,["src","alt"]),s=Object.assign({},n,{backgroundImage:'url("'+o+'")',backgroundSize:"cover"})}return React.createElement(r,_extends({className:i,style:s},a),this.props.children)}},{key:"render",value:function(){var e=this.props,t=(e.children,e.className,e.hasMasterSpinner,e.isBgImage,e.naturalSlideHeight,e.naturalSlideWidth,e.onError,e.onLoad,e.orientation,e.renderError,e.renderLoading,e.store,e.style,e.tag,objectWithoutProperties(e,["children","className","hasMasterSpinner","isBgImage","naturalSlideHeight","naturalSlideWidth","onError","onLoad","orientation","renderError","renderLoading","store","style","tag"]));switch(this.state.imageStatus){case LOADING:return this.renderLoading(t);case SUCCESS:return this.renderSuccess(t);case ERROR:return this.renderError(t);default:throw new Error("unknown value for this.state.imageStatus")}}}]),t}(React.Component);Image$1.propTypes={alt:index$1.string,children:CarouselPropTypes.children,className:index$1.string,hasMasterSpinner:index$1.bool.isRequired,isBgImage:CarouselPropTypes.isBgImage,naturalSlideHeight:index$1.number.isRequired,naturalSlideWidth:index$1.number.isRequired,onError:index$1.func,onLoad:index$1.func,orientation:CarouselPropTypes.orientation.isRequired,renderError:index$1.func,renderLoading:index$1.func,src:index$1.string.isRequired,store:index$1.object.isRequired,style:index$1.object,tag:index$1.string},Image$1.defaultProps={alt:"",children:null,className:null,height:null,isBgImage:!1,onError:null,onLoad:null,renderError:null,renderLoading:null,tag:"img",style:null};var Image=WithStore(Image$1,function(e){return{hasMasterSpinner:e.hasMasterSpinner,naturalSlideHeight:e.naturalSlideHeight,naturalSlideWidth:e.naturalSlideWidth,orientation:e.orientation}}),s$7={container:"_container_11gb8_1",overlay:"_overlay_11gb8_8",hover:"_hover_11gb8_19",loading:"_loading_11gb8_24",imageLoadingSpinnerContainer:"_imageLoadingSpinnerContainer_11gb8_28"},_class$6,_temp$6,ImageWithZoom$1=(_temp$6=_class$6=function(e){function t(){classCallCheck(this,t);var e=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this));return e.state={isImageLoading:!0,hovering:!1,style:{},x:null,y:null},e.handleOnMouseOver=e.handleOnMouseOver.bind(e),e.handleOnMouseOut=e.handleOnMouseOut.bind(e),e.handleOnMouseMove=e.handleOnMouseMove.bind(e),e.handleImageComplete=e.handleImageComplete.bind(e),e}return inherits(t,e),createClass(t,[{key:"handleImageComplete",value:function(){this.setState({isImageLoading:!1})}},{key:"handleOnMouseOver",value:function(){this.setState({hovering:!0})}},{key:"handleOnMouseOut",value:function(){this.setState({hovering:!1})}},{key:"handleOnMouseMove",value:function(e){var t=e.nativeEvent.offsetX/e.target.offsetWidth*100,n=e.nativeEvent.offsetY/e.target.offsetHeight*100;this.setState({x:t,y:n})}},{key:"renderLoading",value:function(){return this.state.isImageLoading?React.createElement("div",{className:cn([s$7.imageLoadingSpinnerContainer,"carousel__image-loading-spinner-container"])},React.createElement(Spinner$1,null)):null}},{key:"render",value:function(){var e=this.props,t=e.tag,n=e.src,r=objectWithoutProperties(e,["tag","src"]),i=cn([s$7.image,"carousel__zoom-image"]),s=cn([s$7.overlay,"carousel__zoom-image-overlay",this.state.hovering&&s$7.hover,this.state.hovering&&"carousel__zoom-image-overlay--hovering"]),a={};return a.transformOrigin=this.state.x+"% "+this.state.y+"%",React.createElement(t,_extends({className:s$7.container},r),React.createElement(Image,{className:i,tag:"div",src:n,isBgImage:!0,onLoad:this.handleImageComplete,onError:this.handleImageComplete}),React.createElement(Image,{className:s,tag:"div",src:n,style:a,isBgImage:!0,onMouseOver:this.handleOnMouseOver,onMouseOut:this.handleOnMouseOut,onMouseMove:this.handleOnMouseMove}),this.renderLoading())}}]),t}(React.Component),_class$6.propTypes={src:index$1.string.isRequired,tag:index$1.string},_class$6.defaultProps={tag:"div"},_temp$6),s$8={slideInner:"_slideInner_yg1z4_1",slideHorizontal:"_slideHorizontal_yg1z4_1",slide:"_slide_yg1z4_1",focusRing:"_focusRing_yg1z4_24"},_class$7,_temp$7,Slide=(_temp$7=_class$7=function(e){function t(){classCallCheck(this,t);var e=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this));return e.handleOnFocus=e.handleOnFocus.bind(e),e.handleOnBlur=e.handleOnBlur.bind(e),e.state={focused:!1},e}return inherits(t,e),createClass(t,[{key:"isVisible",value:function(){var e=this.props,t=e.currentSlide,n=e.index,r=e.visibleSlides;return n>=t&&n<t+r}},{key:"handleOnFocus",value:function(e){var t=this.props.onFocus;this.setState({focused:!0},null!==t&&t.call(this,e))}},{key:"handleOnBlur",value:function(e){var t=this.props.onBlur;this.setState({focused:!1},null!==t&&t.call(this,e))}},{key:"renderFocusRing",value:function(){return this.state.focused?React.createElement("div",{className:s$8.focusRing}):null}},{key:"render",value:function(){var e=this.props,t=(e.children,e.className),n=(e.currentSlide,e.index,e.innerClassName),r=e.innerTag,i=e.naturalSlideHeight,s=e.naturalSlideWidth,a=(e.onBlur,e.onFocus,e.orientation),o=e.slideSize,l=(e.store,e.style),u=e.tabIndex,c=e.tag,d=e.totalSlides,p=(e.visibleSlides,objectWithoutProperties(e,["children","className","currentSlide","index","innerClassName","innerTag","naturalSlideHeight","naturalSlideWidth","onBlur","onFocus","orientation","slideSize","store","style","tabIndex","tag","totalSlides","visibleSlides"])),h={};"horizontal"===a?(h.width=pct(o),h.paddingBottom=pct(100*i/(s*d))):(h.width=pct(100),h.paddingBottom=pct(100*i/s));var m=Object.assign({},h,l),S=cn([s$8.slide,"horizontal"===a&&s$8.slideHorizontal,"carousel__slide",t]),b=cn([s$8.slideInner,"carousel__inner-slide",n]),f=this.isVisible()?0:-1,y="number"==typeof u?u:f;return React.createElement(c,_extends({tabIndex:y,"aria-hidden":!this.isVisible(),onFocus:this.handleOnFocus,onBlur:this.handleOnBlur,className:S,style:m},p),React.createElement(r,{className:b},this.props.children,this.renderFocusRing()))}}]),t}(React.PureComponent),_class$7.propTypes={children:CarouselPropTypes.children,className:index$1.string,currentSlide:index$1.number.isRequired,index:index$1.number.isRequired,innerClassName:index$1.string,innerTag:index$1.string,naturalSlideHeight:index$1.number.isRequired,naturalSlideWidth:index$1.number.isRequired,onBlur:index$1.func,onFocus:index$1.func,orientation:CarouselPropTypes.orientation.isRequired,slideSize:index$1.number.isRequired,store:index$1.object,style:index$1.object,tabIndex:index$1.number,tag:index$1.string,totalSlides:index$1.number.isRequired,visibleSlides:index$1.number.isRequired},_class$7.defaultProps={children:null,className:null,innerClassName:null,innerTag:"div",onBlur:null,onFocus:null,store:null,style:{},tabIndex:null,tag:"div"},_temp$7),index$17=WithStore(Slide,function(e){return{currentSlide:e.currentSlide,naturalSlideHeight:e.naturalSlideHeight,naturalSlideWidth:e.naturalSlideWidth,orientation:e.orientation,slideSize:e.slideSize,totalSlides:e.totalSlides,visibleSlides:e.visibleSlides}}),s$9={horizontalSlider:"_horizontalSlider_qbymx_1",horizontalSliderTray:"_horizontalSliderTray_qbymx_1",verticalSlider:"_verticalSlider_qbymx_11",verticalSliderTray:"_verticalSliderTray_qbymx_1",verticalTray:"_verticalTray_qbymx_20",verticalSlideTrayWrap:"_verticalSlideTrayWrap_qbymx_24",sliderTray:"_sliderTray_qbymx_28",masterSpinnerContainer:"_masterSpinnerContainer_qbymx_33"},_class$8,_temp$8,Slider$$1=(_temp$8=_class$8=function(e){function t(){classCallCheck(this,t);var e=possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).call(this));return e.handleOnTouchStart=e.handleOnTouchStart.bind(e),e.handleOnTouchMove=e.handleOnTouchMove.bind(e),e.handleOnTouchEnd=e.handleOnTouchEnd.bind(e),e.state={deltaX:0,deltaY:0,startX:0,startY:0,isMoving:!1},e.originalOverflow=null,e}return inherits(t,e),createClass(t,[{key:"handleOnTouchStart",value:function(e){if(this.props.touchEnabled){var t=e.targetTouches[0];this.originalOverflow=this.originalOverflow||document.documentElement.style.overflow,document.documentElement.style.overflow="hidden",this.setState({isMoving:!0,startX:t.screenX,startY:t.screenY})}}},{key:"handleOnTouchMove",value:function(e){if(this.props.touchEnabled){var t=e.targetTouches[0];this.setState({deltaX:t.screenX-this.state.startX,deltaY:t.screenY-this.state.startY})}}},{key:"computeCurrentSlide",value:function(){var e=t.slideSizeInPx(this.props.orientation,this.sliderTrayDiv.clientWidth,this.sliderTrayDiv.clientHeight,this.props.totalSlides),n=t.slidesMoved(this.props.orientation,this.state.deltaX,this.state.deltaY,e),r=this.props.totalSlides-Math.min(this.props.totalSlides,this.props.visibleSlides),i=this.props.currentSlide+n;i=Math.max(0,i),i=Math.min(r,i),this.props.store.setState({currentSlide:i})}},{key:"handleOnTouchEnd",value:function(e){this.props.touchEnabled&&0===e.targetTouches.length&&(this.computeCurrentSlide(),document.documentElement.style.overflow=this.originalOverflow,this.originalOverflow=null,this.setState({deltaX:0,deltaY:0,isMoving:!1}))}},{key:"renderMasterSpinner",value:function(){var e=this.props,t=e.hasMasterSpinner,n=e.masterSpinnerErrorCount,r=e.masterSpinnerSuccessCount,i=e.masterSpinnerSubscriptionCount,s=n+r===i,a=0===i;return!t||s&&!a?null:("function"==typeof this.props.onMasterSpinner&&this.props.onMasterSpinner(),React.createElement("div",{className:cn([s$9.masterSpinnerContainer,"carousel__master-spinner-container"])},React.createElement(Spinner$1,null)))}},{key:"render",value:function(){var e=this,t=this.props,n=t.children,r=t.className,i=t.currentSlide,s=(t.hasMasterSpinner,t.masterSpinnerErrorCount,t.masterSpinnerSubscriptionCount,t.masterSpinnerSuccessCount,t.naturalSlideHeight),a=t.naturalSlideWidth,o=(t.onMasterSpinner,t.orientation),l=t.slideTraySize,u=t.slideSize,c=(t.store,t.style),d=(t.totalSlides,t.touchEnabled,t.visibleSlides),p=objectWithoutProperties(t,["children","className","currentSlide","hasMasterSpinner","masterSpinnerErrorCount","masterSpinnerSubscriptionCount","masterSpinnerSuccessCount","naturalSlideHeight","naturalSlideWidth","onMasterSpinner","orientation","slideTraySize","slideSize","store","style","totalSlides","touchEnabled","visibleSlides"]),h=Object.assign({},c),m={};"vertical"===o&&(m.height=0,m.paddingBottom=pct(100*s*d/a),m.width=pct(100));var S={};this.state.isMoving&&(S.transition="none"),"vertical"===o?(S.transform="translateY("+pct(u*i*-1)+") translateY("+this.state.deltaY+"px)",S.width=pct(100)):(S.width=pct(l),S.transform="translateX("+pct(u*i*-1)+") translateX("+this.state.deltaX+"px)");var b=cn(["vertical"===o?s$9.verticalSlider:s$9.horizontalSlider,"carousel__slider","vertical"===o?"carousel__slider--vertical":"carousel__slider--horizontal",r]),f=cn([s$9.sliderTray,"carousel__slider-tray","vertical"===o?s$9.verticalTray:s$9.horizontalTray,"vertical"===o?"carousel__slider-tray--vertical":"carousel__slider-tray--horizontal"]),y=cn([s$9.sliderTrayWrap,"carousel__slider-tray-wrapper","vertical"===o?s$9.verticalSlideTrayWrap:s$9.horizontalTrayWrap,"vertical"===o?"carousel__slider-tray-wrap--vertical":"carousel__slider-tray-wrap--horizontal"]);return React.createElement("div",_extends({className:b,"aria-live":"polite",style:h},p),React.createElement("div",{className:y,style:m},React.createElement("div",{ref:function(t){e.sliderTrayDiv=t},className:f,style:S,onTouchStart:this.handleOnTouchStart,onTouchMove:this.handleOnTouchMove,onTouchEnd:this.handleOnTouchEnd},n),this.renderMasterSpinner()))}}],[{key:"slideSizeInPx",value:function(e,t,n,r){return("horizontal"===e?t:n)/r}},{key:"slidesMoved",value:function(e,t,n,r){return-Math.round(("horizontal"===e?t:n)/r)}}]),t}(React.Component),_class$8.propTypes={children:index$1.node.isRequired,className:index$1.string,currentSlide:index$1.number.isRequired,hasMasterSpinner:index$1.bool.isRequired,masterSpinnerErrorCount:index$1.number.isRequired,masterSpinnerSuccessCount:index$1.number.isRequired,masterSpinnerSubscriptionCount:index$1.number.isRequired,naturalSlideHeight:index$1.number.isRequired,naturalSlideWidth:index$1.number.isRequired,onMasterSpinner:index$1.func,orientation:CarouselPropTypes.orientation.isRequired,slideTraySize:index$1.number.isRequired,slideSize:index$1.number.isRequired,store:index$1.object.isRequired,style:index$1.object,totalSlides:index$1.number.isRequired,touchEnabled:index$1.bool.isRequired,visibleSlides:index$1.number},_class$8.defaultProps={className:"",height:null,onMasterSpinner:null,style:{},visibleSlides:1},_temp$8),index$18=WithStore(Slider$$1,function(e){return{currentSlide:e.currentSlide,hasMasterSpinner:e.hasMasterSpinner,masterSpinnerErrorCount:e.masterSpinnerErrorCount,masterSpinnerSubscriptionCount:e.masterSpinnerSubscriptionCount,masterSpinnerSuccessCount:e.masterSpinnerSuccessCount,naturalSlideHeight:e.naturalSlideHeight,naturalSlideWidth:e.naturalSlideWidth,orientation:e.orientation,slideSize:e.slideSize,slideTraySize:e.slideTraySize,totalSlides:e.totalSlides,touchEnabled:e.touchEnabled,visibleSlides:e.visibleSlides}}),s$10={spinner:"_spinner_1dguc_1",spin:"_spin_1dguc_1"},_class$9,_temp$9,Spinner$1=(_temp$9=_class$9=function(e){function t(){return classCallCheck(this,t),possibleConstructorReturn(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return inherits(t,e),createClass(t,[{key:"render",value:function(){var e=this.props,t=e.className,n=objectWithoutProperties(e,["className"]),r=cn([s$10.spinner,t]);return React.createElement("div",_extends({className:r},n))}}]),t}(React.PureComponent),_class$9.propTypes={className:index$1.string},_class$9.defaultProps={className:null},_temp$9),index$19=function e(t){return Object.freeze(t),Object.getOwnPropertyNames(t).forEach(function(n){!t.hasOwnProperty(n)||null===t[n]||"object"!=typeof t[n]&&"function"!=typeof t[n]||Object.isFrozen(t[n])||e(t[n])}),t},DEFAULT_STATE={masterSpinnerSubscriptionCount:0,masterSpinnerErrorCount:0,masterSpinnerSuccessCount:0},Store=function(){function e(t){classCallCheck(this,e),this.state=index$19(index$5(DEFAULT_STATE,t)),this.subscriptions=[],this.setState=this.setState.bind(this),this.getState=this.getState.bind(this),this.subscribe=this.subscribe.bind(this),this.updateSubscribers=this.updateSubscribers.bind(this),this.subscribeMasterSpinner=this.subscribeMasterSpinner.bind(this),this.masterSpinnerSuccess=this.masterSpinnerSuccess.bind(this),this.masterSpinnerError=this.masterSpinnerError.bind(this)}return createClass(e,[{key:"setState",value:function(e,t){this.state=index$19(index$5(this.state,e)),this.updateSubscribers(t)}},{key:"getState",value:function(){return index$5({},this.state)}},{key:"subscribe",value:function(e){this.subscriptions.push(e)}},{key:"updateSubscribers",value:function(e){this.subscriptions.forEach(function(e){return e()}),"function"==typeof e&&e(this.getState())}},{key:"subscribeMasterSpinner",value:function(){this.setState({masterSpinnerSubscriptionCount:this.state.masterSpinnerSubscriptionCount+1})}},{key:"masterSpinnerSuccess",value:function(){this.setState({masterSpinnerSuccessCount:this.state.masterSpinnerSuccessCount+1})}},{key:"masterSpinnerError",value:function(){this.setState({masterSpinnerErrorCount:this.state.masterSpinnerErrorCount+1})}}]),e}();export{index as ButtonBack,index$6 as ButtonFirst,index$7 as ButtonNext,index$8 as ButtonLast,CarouselProvider$1 as CarouselProvider,Dot,index$16 as DotGroup,Image,ImageWithZoom$1 as ImageWithZoom,index$17 as Slide,index$18 as Slider,Spinner$1 as Spinner,Store};
+import React from 'react';
+
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+
+
+
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * 
+ */
+
+function makeEmptyFunction(arg) {
+  return function () {
+    return arg;
+  };
+}
+
+/**
+ * This function accepts and discards inputs; it has no side effects. This is
+ * primarily useful idiomatically for overridable function endpoints which
+ * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+ */
+var emptyFunction = function emptyFunction() {};
+
+emptyFunction.thatReturns = makeEmptyFunction;
+emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+emptyFunction.thatReturnsThis = function () {
+  return this;
+};
+emptyFunction.thatReturnsArgument = function (arg) {
+  return arg;
+};
+
+var emptyFunction_1 = emptyFunction;
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var validateFormat = function validateFormat(format) {};
+
+function invariant(condition, format, a, b, c, d, e, f) {
+  validateFormat(format);
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(format.replace(/%s/g, function () {
+        return args[argIndex++];
+      }));
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+}
+
+var invariant_1 = invariant;
+
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+var ReactPropTypesSecret_1 = ReactPropTypesSecret;
+
+var factoryWithThrowingShims = function() {
+  function shim(props, propName, componentName, location, propFullName, secret) {
+    if (secret === ReactPropTypesSecret_1) {
+      // It is still safe when called from React.
+      return;
+    }
+    invariant_1(
+      false,
+      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+      'Use PropTypes.checkPropTypes() to call them. ' +
+      'Read more at http://fb.me/use-check-prop-types'
+    );
+  }
+  shim.isRequired = shim;
+  function getShim() {
+    return shim;
+  }
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+  var ReactPropTypes = {
+    array: shim,
+    bool: shim,
+    func: shim,
+    number: shim,
+    object: shim,
+    string: shim,
+    symbol: shim,
+
+    any: shim,
+    arrayOf: getShim,
+    element: shim,
+    instanceOf: getShim,
+    node: shim,
+    objectOf: getShim,
+    oneOf: getShim,
+    oneOfType: getShim,
+    shape: getShim
+  };
+
+  ReactPropTypes.checkPropTypes = emptyFunction_1;
+  ReactPropTypes.PropTypes = ReactPropTypes;
+
+  return ReactPropTypes;
+};
+
+var index$1 = createCommonjsModule(function (module) {
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+{
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = factoryWithThrowingShims();
+}
+});
+
+function cn(a) {
+  return a.map(function (b) {
+    if (b === false) return null;
+    return b;
+  }).join(' ').replace(/\s+/g, ' ').trim();
+}
+
+
+
+
+
+function slideSize(totalSlides, visibleSlides) {
+  return 100 / totalSlides * visibleSlides / visibleSlides;
+}
+
+function slideTraySize(totalSlides, visibleSlides) {
+  return 100 * totalSlides / visibleSlides;
+}
+
+function pct(num) {
+  return num + '%';
+}
+
+var LOADING = 'loading';
+var SUCCESS = 'success';
+var ERROR = 'error';
+
+var CarouselPropTypes = {
+  children: index$1.oneOfType([index$1.arrayOf(index$1.node), index$1.node]),
+  height: function height(props, propName) {
+    var prop = props[propName];
+    if (props.orientation === 'vertical' && (prop === null || typeof prop !== 'number')) {
+      return new Error('Missing required property \'' + propName + '\' when orientation is vertical.  You must supply a number representing the height in pixels');
+    }
+    return null;
+  },
+  orientation: index$1.oneOf(['horizontal', 'vertical']),
+  isBgImage: function isBgImage(props, propName) {
+    var value = props[propName];
+    if (value === true && props.tag === 'img') {
+      return new Error('HTML img elements should not have a backgroundImage.  Please use ' + propName + ' for other block-level HTML tags, like div, a, section, etc...');
+    }
+    return null;
+  }
+};
+
+var s = { "buttonBack": "_buttonBack_113ph_1" };
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+
+
+
+
+
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+
+
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+
+
+
+
+
+
+
+
+var objectWithoutProperties = function (obj, keys) {
+  var target = {};
+
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+};
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
+var ButtonBack = function (_React$Component) {
+  inherits(ButtonBack, _React$Component);
+  createClass(ButtonBack, null, [{
+    key: 'setDisabled',
+    value: function setDisabled(disabled, currentSlide) {
+      if (disabled !== null) return disabled;
+      if (currentSlide === 0) return true;
+      return false;
+    }
+  }]);
+
+  function ButtonBack(props) {
+    classCallCheck(this, ButtonBack);
+
+    var _this = possibleConstructorReturn(this, (ButtonBack.__proto__ || Object.getPrototypeOf(ButtonBack)).call(this, props));
+
+    _this.handleOnClick = _this.handleOnClick.bind(_this);
+    _this.state = {
+      disabled: ButtonBack.setDisabled(props.disabled, props.currentSlide)
+    };
+    return _this;
+  }
+
+  createClass(ButtonBack, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState({
+        disabled: ButtonBack.setDisabled(nextProps.disabled, nextProps.currentSlide)
+      });
+    }
+  }, {
+    key: 'handleOnClick',
+    value: function handleOnClick(ev) {
+      var _props = this.props,
+          currentSlide = _props.currentSlide,
+          onClick = _props.onClick,
+          step = _props.step,
+          store = _props.store;
+
+      var newCurrentSlide = Math.max(currentSlide - step, 0);
+      store.setState({
+        currentSlide: newCurrentSlide
+      }, onClick !== null && onClick.call(this, ev));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          disabled = _props2.disabled,
+          onClick = _props2.onClick,
+          step = _props2.step,
+          store = _props2.store,
+          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'disabled', 'onClick', 'step', 'store']);
+
+
+      var newClassName = cn([s.buttonBack, 'carousel__back-button', className]);
+
+      return React.createElement(
+        'button',
+        _extends({
+          'aria-label': 'previous',
+          className: newClassName,
+          onClick: this.handleOnClick,
+          disabled: this.state.disabled
+        }, props),
+        this.props.children
+      );
+    }
+  }]);
+  return ButtonBack;
+}(React.Component);
+
+ButtonBack.propTypes = {
+  children: CarouselPropTypes.children.isRequired,
+  className: index$1.string,
+  currentSlide: index$1.number.isRequired,
+  disabled: index$1.bool,
+  onClick: index$1.func,
+  step: index$1.number.isRequired,
+  store: index$1.object.isRequired
+};
+ButtonBack.defaultProps = {
+  disabled: null,
+  onClick: null,
+  className: null
+};
+
+var index$3 = createCommonjsModule(function (module, exports) {
+var toString = {}.toString;
+var DomNode = typeof window != 'undefined'
+  ? window.Node
+  : Function; // could be any function
+
+/**
+ * Return the type of `val`.
+ *
+ * @param {Mixed} val
+ * @return {String}
+ * @api public
+ */
+
+module.exports = exports = function type(x){
+  var type = typeof x;
+  if (type != 'object') return type
+  type = types[toString.call(x)];
+  if (type == 'object') {
+    // in case they have been polyfilled
+    if (x instanceof Map) return 'map'
+    if (x instanceof Set) return 'set'
+    return 'object'
+  }
+  if (type) return type
+  if (x instanceof DomNode) switch (x.nodeType) {
+    case 1:  return 'element'
+    case 3:  return 'text-node'
+    case 9:  return 'document'
+    case 11: return 'document-fragment'
+    default: return 'dom-node'
+  }
+};
+
+var types = exports.types = {
+  '[object Function]': 'function',
+  '[object Date]': 'date',
+  '[object RegExp]': 'regexp',
+  '[object Arguments]': 'arguments',
+  '[object Array]': 'array',
+  '[object Set]': 'set',
+  '[object String]': 'string',
+  '[object Null]': 'null',
+  '[object Undefined]': 'undefined',
+  '[object Number]': 'number',
+  '[object Boolean]': 'boolean',
+  '[object Object]': 'object',
+  '[object Map]': 'map',
+  '[object Text]': 'text-node',
+  '[object Uint8Array]': 'bit-array',
+  '[object Uint16Array]': 'bit-array',
+  '[object Uint32Array]': 'bit-array',
+  '[object Uint8ClampedArray]': 'bit-array',
+  '[object Error]': 'error',
+  '[object FormData]': 'form-data',
+  '[object File]': 'file',
+  '[object Blob]': 'blob'
+};
+});
+
+// (any, any, [array]) -> boolean
+function equal(a, b, memos){
+  // All identical values are equivalent
+  if (a === b) return true
+  var fnA = types[index$3(a)];
+  var fnB = types[index$3(b)];
+  return fnA && fnA === fnB
+    ? fnA(a, b, memos)
+    : false
+}
+
+var types = {};
+
+// (Number) -> boolean
+types.number = function(a, b){
+  return a !== a && b !== b/*Nan check*/
+};
+
+// (function, function, array) -> boolean
+types['function'] = function(a, b, memos){
+  return a.toString() === b.toString()
+    // Functions can act as objects
+    && types.object(a, b, memos)
+    && equal(a.prototype, b.prototype)
+};
+
+// (date, date) -> boolean
+types.date = function(a, b){
+  return +a === +b
+};
+
+// (regexp, regexp) -> boolean
+types.regexp = function(a, b){
+  return a.toString() === b.toString()
+};
+
+// (DOMElement, DOMElement) -> boolean
+types.element = function(a, b){
+  return a.outerHTML === b.outerHTML
+};
+
+// (textnode, textnode) -> boolean
+types.textnode = function(a, b){
+  return a.textContent === b.textContent
+};
+
+// decorate `fn` to prevent it re-checking objects
+// (function) -> function
+function memoGaurd(fn){
+  return function(a, b, memos){
+    if (!memos) return fn(a, b, [])
+    var i = memos.length, memo;
+    while (memo = memos[--i]) {
+      if (memo[0] === a && memo[1] === b) return true
+    }
+    return fn(a, b, memos)
+  }
+}
+
+types['arguments'] =
+types['bit-array'] =
+types.array = memoGaurd(arrayEqual);
+
+// (array, array, array) -> boolean
+function arrayEqual(a, b, memos){
+  var i = a.length;
+  if (i !== b.length) return false
+  memos.push([a, b]);
+  while (i--) {
+    if (!equal(a[i], b[i], memos)) return false
+  }
+  return true
+}
+
+types.object = memoGaurd(objectEqual);
+
+// (object, object, array) -> boolean
+function objectEqual(a, b, memos) {
+  if (typeof a.equal == 'function') {
+    memos.push([a, b]);
+    return a.equal(b, memos)
+  }
+  var ka = getEnumerableProperties(a);
+  var kb = getEnumerableProperties(b);
+  var i = ka.length;
+
+  // same number of properties
+  if (i !== kb.length) return false
+
+  // although not necessarily the same order
+  ka.sort();
+  kb.sort();
+
+  // cheap key test
+  while (i--) if (ka[i] !== kb[i]) return false
+
+  // remember
+  memos.push([a, b]);
+
+  // iterate again this time doing a thorough check
+  i = ka.length;
+  while (i--) {
+    var key = ka[i];
+    if (!equal(a[key], b[key], memos)) return false
+  }
+
+  return true
+}
+
+// (object) -> array
+function getEnumerableProperties (object) {
+  var result = [];
+  for (var k in object) if (k !== 'constructor') {
+    result.push(k);
+  }
+  return result
+}
+
+var index$2 = equal;
+
+var index$5 = createCommonjsModule(function (module, exports) {
+(function (root, factory) {
+    if (typeof undefined === 'function' && undefined.amd) {
+        undefined(factory);
+    } else {
+        module.exports = factory();
+    }
+}(commonjsGlobal, function () {
+
+function isMergeableObject(val) {
+    var nonNullObject = val && typeof val === 'object';
+
+    return nonNullObject
+        && Object.prototype.toString.call(val) !== '[object RegExp]'
+        && Object.prototype.toString.call(val) !== '[object Date]'
+}
+
+function emptyTarget(val) {
+    return Array.isArray(val) ? [] : {}
+}
+
+function cloneIfNecessary(value, optionsArgument) {
+    var clone = optionsArgument && optionsArgument.clone === true;
+    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+    var destination = target.slice();
+    source.forEach(function(e, i) {
+        if (typeof destination[i] === 'undefined') {
+            destination[i] = cloneIfNecessary(e, optionsArgument);
+        } else if (isMergeableObject(e)) {
+            destination[i] = deepmerge(target[i], e, optionsArgument);
+        } else if (target.indexOf(e) === -1) {
+            destination.push(cloneIfNecessary(e, optionsArgument));
+        }
+    });
+    return destination
+}
+
+function mergeObject(target, source, optionsArgument) {
+    var destination = {};
+    if (isMergeableObject(target)) {
+        Object.keys(target).forEach(function (key) {
+            destination[key] = cloneIfNecessary(target[key], optionsArgument);
+        });
+    }
+    Object.keys(source).forEach(function (key) {
+        if (!isMergeableObject(source[key]) || !target[key]) {
+            destination[key] = cloneIfNecessary(source[key], optionsArgument);
+        } else {
+            destination[key] = deepmerge(target[key], source[key], optionsArgument);
+        }
+    });
+    return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+    var array = Array.isArray(source);
+    var options = optionsArgument || { arrayMerge: defaultArrayMerge };
+    var arrayMerge = options.arrayMerge || defaultArrayMerge;
+
+    if (array) {
+        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
+    } else {
+        return mergeObject(target, source, optionsArgument)
+    }
+}
+
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+    if (!Array.isArray(array) || array.length < 2) {
+        throw new Error('first argument should be an array with at least two elements')
+    }
+
+    // we are sure there are at least 2 values, so it is safe to have no initial value
+    return array.reduce(function(prev, next) {
+        return deepmerge(prev, next, optionsArgument)
+    })
+};
+
+return deepmerge
+
+}));
+});
+
+function WithStore(WrappedComponent) {
+  var mapStateToProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {
+    return {};
+  };
+
+  var Wrapper = function (_React$Component) {
+    inherits(Wrapper, _React$Component);
+
+    function Wrapper(props, context) {
+      classCallCheck(this, Wrapper);
+
+      var _this = possibleConstructorReturn(this, (Wrapper.__proto__ || Object.getPrototypeOf(Wrapper)).call(this, props, context));
+
+      _this.state = {
+        stateProps: mapStateToProps(context.store.getState())
+      };
+      return _this;
+    }
+
+    createClass(Wrapper, [{
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        var _this2 = this;
+
+        this.context.store.subscribe(function () {
+          return _this2.updateStateProps();
+        });
+      }
+    }, {
+      key: 'shouldComponentUpdate',
+      value: function shouldComponentUpdate(nextProps, nextState) {
+        return !index$2(nextState, this.state) || !index$2(nextProps, this.props);
+      }
+    }, {
+      key: 'updateStateProps',
+      value: function updateStateProps() {
+        this.setState({
+          stateProps: mapStateToProps(this.context.store.getState())
+        });
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var props = index$5(this.state.stateProps, this.props);
+
+        return React.createElement(
+          WrappedComponent,
+          _extends({}, props, {
+            store: {
+              setState: this.context.store.setState,
+              subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
+              masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
+              masterSpinnerError: this.context.store.masterSpinnerError
+            }
+          }),
+          this.props.children
+        );
+      }
+    }]);
+    return Wrapper;
+  }(React.Component);
+
+  Wrapper.propTypes = {
+    children: CarouselPropTypes.children
+  };
+  Wrapper.defaultProps = {
+    children: null
+  };
+  Wrapper.contextTypes = {
+    store: index$1.object
+  };
+
+
+  return Wrapper;
+}
+
+var index = WithStore(ButtonBack, function (state) {
+  return {
+    currentSlide: state.currentSlide,
+    step: state.step
+  };
+});
+
+var s$1 = { "buttonFirst": "_buttonFirst_y31jn_1" };
+
+var _class;
+var _temp;
+
+var ButtonFirst = (_temp = _class = function (_React$Component) {
+  inherits(ButtonFirst, _React$Component);
+
+  function ButtonFirst() {
+    classCallCheck(this, ButtonFirst);
+
+    var _this = possibleConstructorReturn(this, (ButtonFirst.__proto__ || Object.getPrototypeOf(ButtonFirst)).call(this));
+
+    _this.handleOnClick = _this.handleOnClick.bind(_this);
+    return _this;
+  }
+
+  createClass(ButtonFirst, [{
+    key: 'handleOnClick',
+    value: function handleOnClick(ev) {
+      var _props = this.props,
+          store = _props.store,
+          onClick = _props.onClick;
+
+      store.setState({
+        currentSlide: 0
+      }, onClick !== null && onClick.call(this, ev));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          disabled = _props2.disabled,
+          onClick = _props2.onClick,
+          store = _props2.store,
+          totalSlides = _props2.totalSlides,
+          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'disabled', 'onClick', 'store', 'totalSlides']);
+
+
+      var newClassName = cn([s$1.buttonFirst, 'carousel__first-button', className]);
+
+      var newDisabled = disabled !== null ? disabled : currentSlide === 0;
+
+      return React.createElement(
+        'button',
+        _extends({
+          'aria-label': 'first',
+          className: newClassName,
+          onClick: this.handleOnClick,
+          disabled: newDisabled
+        }, props),
+        this.props.children
+      );
+    }
+  }]);
+  return ButtonFirst;
+}(React.Component), _class.propTypes = {
+  children: CarouselPropTypes.children.isRequired,
+  className: index$1.string,
+  currentSlide: index$1.number.isRequired,
+  disabled: index$1.bool,
+  onClick: index$1.func,
+  store: index$1.object.isRequired,
+  totalSlides: index$1.number.isRequired
+}, _class.defaultProps = {
+  className: null,
+  disabled: null,
+  onClick: null
+}, _temp);
+
+var index$6 = WithStore(ButtonFirst, function (state) {
+  return {
+    currentSlide: state.currentSlide,
+    totalSlides: state.totalSlides
+  };
+});
+
+var s$2 = { "buttonNext": "_buttonNext_p1bs6_1" };
+
+var _class$1;
+var _temp$1;
+
+var ButtonNext = (_temp$1 = _class$1 = function (_React$PureComponent) {
+  inherits(ButtonNext, _React$PureComponent);
+  createClass(ButtonNext, null, [{
+    key: 'setDisabled',
+    value: function setDisabled(disabled, currentSlide, visibleSlides, totalSlides) {
+      if (disabled !== null) return disabled;
+      if (currentSlide >= totalSlides - visibleSlides) return true;
+      return false;
+    }
+  }]);
+
+  function ButtonNext(props) {
+    classCallCheck(this, ButtonNext);
+
+    var _this = possibleConstructorReturn(this, (ButtonNext.__proto__ || Object.getPrototypeOf(ButtonNext)).call(this, props));
+
+    _this.handleOnClick = _this.handleOnClick.bind(_this);
+    _this.state = {
+      disabled: ButtonNext.setDisabled(props.disabled, props.currentSlide, props.visibleSlides, props.totalSlides)
+    };
+    return _this;
+  }
+
+  createClass(ButtonNext, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState({
+        disabled: ButtonNext.setDisabled(nextProps.disabled, nextProps.currentSlide, nextProps.visibleSlides, nextProps.totalSlides)
+      });
+    }
+  }, {
+    key: 'handleOnClick',
+    value: function handleOnClick(ev) {
+      var _props = this.props,
+          currentSlide = _props.currentSlide,
+          onClick = _props.onClick,
+          step = _props.step,
+          store = _props.store;
+
+      var maxSlide = this.props.totalSlides - this.props.visibleSlides;
+      var newCurrentSlide = Math.min(currentSlide + step, maxSlide);
+      store.setState({
+        currentSlide: newCurrentSlide
+      }, onClick !== null && onClick.call(this, ev));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          disabled = _props2.disabled,
+          onClick = _props2.onClick,
+          step = _props2.step,
+          store = _props2.store,
+          totalSlides = _props2.totalSlides,
+          visibleSlides = _props2.visibleSlides,
+          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'disabled', 'onClick', 'step', 'store', 'totalSlides', 'visibleSlides']);
+
+
+      var newClassName = cn([s$2.buttonNext, 'carousel__next-button', className]);
+
+      return React.createElement(
+        'button',
+        _extends({
+          'aria-label': 'next',
+          className: newClassName,
+          onClick: this.handleOnClick,
+          disabled: this.state.disabled
+        }, props),
+        this.props.children
+      );
+    }
+  }]);
+  return ButtonNext;
+}(React.PureComponent), _class$1.propTypes = {
+  children: CarouselPropTypes.children.isRequired,
+  className: index$1.string,
+  currentSlide: index$1.number.isRequired,
+  disabled: index$1.bool,
+  onClick: index$1.func,
+  step: index$1.number.isRequired,
+  store: index$1.object.isRequired,
+  totalSlides: index$1.number.isRequired,
+  visibleSlides: index$1.number.isRequired
+}, _class$1.defaultProps = {
+  disabled: null,
+  className: null,
+  onClick: null
+}, _temp$1);
+
+var index$7 = WithStore(ButtonNext, function (state) {
+  return {
+    currentSlide: state.currentSlide,
+    step: state.step,
+    totalSlides: state.totalSlides,
+    visibleSlides: state.visibleSlides
+  };
+});
+
+var s$3 = { "buttonLast": "_buttonLast_x8dvv_1" };
+
+var _class$2;
+var _temp$2;
+
+var ButtonLast = (_temp$2 = _class$2 = function (_React$Component) {
+  inherits(ButtonLast, _React$Component);
+
+  function ButtonLast() {
+    classCallCheck(this, ButtonLast);
+
+    var _this = possibleConstructorReturn(this, (ButtonLast.__proto__ || Object.getPrototypeOf(ButtonLast)).call(this));
+
+    _this.handleOnClick = _this.handleOnClick.bind(_this);
+    return _this;
+  }
+
+  createClass(ButtonLast, [{
+    key: 'handleOnClick',
+    value: function handleOnClick(ev) {
+      var _props = this.props,
+          store = _props.store,
+          onClick = _props.onClick,
+          totalSlides = _props.totalSlides,
+          visibleSlides = _props.visibleSlides;
+
+      store.setState({
+        currentSlide: totalSlides - visibleSlides
+      }, onClick !== null && onClick.call(this, ev));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          disabled = _props2.disabled,
+          onClick = _props2.onClick,
+          store = _props2.store,
+          totalSlides = _props2.totalSlides,
+          visibleSlides = _props2.visibleSlides,
+          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'disabled', 'onClick', 'store', 'totalSlides', 'visibleSlides']);
+
+
+      var newClassName = cn([s$3.buttonLast, 'carousel__last-button', className]);
+
+      var newDisabled = disabled !== null ? disabled : currentSlide >= totalSlides - visibleSlides;
+
+      return React.createElement(
+        'button',
+        _extends({
+          'aria-label': 'last',
+          className: newClassName,
+          onClick: this.handleOnClick,
+          disabled: newDisabled
+        }, props),
+        this.props.children
+      );
+    }
+  }]);
+  return ButtonLast;
+}(React.Component), _class$2.propTypes = {
+  children: CarouselPropTypes.children.isRequired,
+  className: index$1.string,
+  currentSlide: index$1.number.isRequired,
+  disabled: index$1.bool,
+  onClick: index$1.func,
+  store: index$1.object.isRequired,
+  totalSlides: index$1.number.isRequired,
+  visibleSlides: index$1.number.isRequired
+}, _class$2.defaultProps = {
+  className: null,
+  disabled: null,
+  onClick: null
+}, _temp$2);
+
+var index$8 = WithStore(ButtonLast, function (state) {
+  return {
+    currentSlide: state.currentSlide,
+    totalSlides: state.totalSlides,
+    visibleSlides: state.visibleSlides
+  };
+});
+
+/*!
+ * is-extendable <https://github.com/jonschlinkert/is-extendable>
+ *
+ * Copyright (c) 2015, Jon Schlinkert.
+ * Licensed under the MIT License.
+ */
+
+var index$10 = function isExtendable(val) {
+  return typeof val !== 'undefined' && val !== null
+    && (typeof val === 'object' || typeof val === 'function');
+};
+
+/*!
+ * for-in <https://github.com/jonschlinkert/for-in>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+
+var index$14 = function forIn(obj, fn, thisArg) {
+  for (var key in obj) {
+    if (fn.call(thisArg, obj[key], key, obj) === false) {
+      break;
+    }
+  }
+};
+
+var hasOwn = Object.prototype.hasOwnProperty;
+
+var index$12 = function forOwn(obj, fn, thisArg) {
+  index$14(obj, function(val, key) {
+    if (hasOwn.call(obj, key)) {
+      return fn.call(thisArg, obj[key], key, obj);
+    }
+  });
+};
+
+var index$9 = function omit(obj, keys) {
+  if (!index$10(obj)) return {};
+
+  keys = [].concat.apply([], [].slice.call(arguments, 1));
+  var last = keys[keys.length - 1];
+  var res = {}, fn;
+
+  if (typeof last === 'function') {
+    fn = keys.pop();
+  }
+
+  var isFunction = typeof fn === 'function';
+  if (!keys.length && !isFunction) {
+    return obj;
+  }
+
+  index$12(obj, function(value, key) {
+    if (keys.indexOf(key) === -1) {
+
+      if (!isFunction) {
+        res[key] = value;
+      } else if (fn(value, key, obj)) {
+        res[key] = value;
+      }
+    }
+  });
+  return res;
+};
+
+var _class$3;
+var _temp$3;
+
+var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
+  inherits(CarouselProvider$$1, _React$Component);
+
+  function CarouselProvider$$1(props, context) {
+    classCallCheck(this, CarouselProvider$$1);
+
+    var _this = possibleConstructorReturn(this, (CarouselProvider$$1.__proto__ || Object.getPrototypeOf(CarouselProvider$$1)).call(this, props, context));
+
+    var options = {
+      currentSlide: props.currentSlide,
+      hasMasterSpinner: props.hasMasterSpinner,
+      imageErrorCount: 0,
+      imageSuccessCount: 0,
+      masterSpinnerThreshold: 0,
+      naturalSlideHeight: props.naturalSlideHeight,
+      naturalSlideWidth: props.naturalSlideWidth,
+      orientation: props.orientation,
+      slideSize: slideSize(props.totalSlides, props.visibleSlides),
+      slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
+      step: props.step,
+      totalSlides: props.totalSlides,
+      touchEnabled: props.touchEnabled,
+      visibleSlides: props.visibleSlides
+    };
+    _this.store = new Store(options);
+    return _this;
+  }
+
+  // Utility function for tests.
+  // in jest + enzyme tests you can do wrapper.instance().getStore()
+  // you can also just do...
+  // wrapper.instance().store
+  // I created this method to make it obvious that you have access to store.
+
+
+  createClass(CarouselProvider$$1, [{
+    key: 'getStore',
+    value: function getStore() {
+      return this.store;
+    }
+  }, {
+    key: 'getChildContext',
+    value: function getChildContext() {
+      return { store: this.store };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var filteredProps = index$9(this.props, Object.keys(CarouselProvider$$1.propTypes));
+      var newClassName = cn(['carousel', this.props.className]);
+
+      return React.createElement(
+        'div',
+        _extends({ className: newClassName }, filteredProps),
+        this.props.children
+      );
+    }
+  }]);
+  return CarouselProvider$$1;
+}(React.Component), _class$3.propTypes = {
+  children: CarouselPropTypes.children.isRequired,
+  className: index$1.string,
+  currentSlide: index$1.number,
+  hasMasterSpinner: index$1.bool,
+  naturalSlideHeight: index$1.number.isRequired,
+  naturalSlideWidth: index$1.number.isRequired,
+  orientation: CarouselPropTypes.orientation,
+  step: index$1.number,
+  totalSlides: index$1.number.isRequired,
+  touchEnabled: index$1.bool,
+  visibleSlides: index$1.number
+}, _class$3.defaultProps = {
+  className: null,
+  currentSlide: 0,
+  hasMasterSpinner: false,
+  orientation: 'horizontal',
+  step: 1,
+  touchEnabled: true,
+  visibleSlides: 1
+}, _class$3.childContextTypes = {
+  store: index$1.object
+}, _temp$3);
+
+var s$4 = { "dot": "_dot_27k82_1" };
+
+var _class$4;
+var _temp$4;
+
+var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
+  inherits(Dot, _React$Component);
+
+  function Dot(props) {
+    classCallCheck(this, Dot);
+
+    var _this = possibleConstructorReturn(this, (Dot.__proto__ || Object.getPrototypeOf(Dot)).call(this, props));
+
+    _this.handleOnClick = _this.handleOnClick.bind(_this);
+    return _this;
+  }
+
+  createClass(Dot, [{
+    key: 'handleOnClick',
+    value: function handleOnClick(ev) {
+      var _props = this.props,
+          slide = _props.slide,
+          store = _props.store,
+          onClick = _props.onClick;
+
+      store.setState({
+        currentSlide: slide
+      }, onClick !== null && onClick.call(this, ev));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          children = _props2.children,
+          className = _props2.className,
+          onClick = _props2.onClick,
+          slide = _props2.slide,
+          store = _props2.store,
+          props = objectWithoutProperties(_props2, ['children', 'className', 'onClick', 'slide', 'store']);
+
+
+      var newClassName = cn([s$4.dot, this.props.selected && s$4.dotSelected, 'carousel__dot', 'carousel__dot--' + slide, this.props.selected && 'carousel__dot--selected', className]);
+
+      return React.createElement(
+        'button',
+        _extends({
+          onClick: this.handleOnClick,
+          className: newClassName
+        }, props),
+        this.props.children
+      );
+    }
+  }]);
+  return Dot;
+}(React.Component), _class$4.propTypes = {
+  children: CarouselPropTypes.children.isRequired,
+  className: index$1.string,
+  disabled: index$1.bool,
+  onClick: index$1.func,
+  selected: index$1.bool,
+  slide: index$1.number.isRequired,
+  store: index$1.object.isRequired
+}, _class$4.defaultProps = {
+  className: null,
+  disabled: false,
+  onClick: null,
+  selected: false
+}, _temp$4);
+
+var Dot = WithStore(Dot$1);
+
+var s$5 = {};
+
+var _class$5;
+var _temp$5;
+
+var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
+  inherits(DotGroup$$1, _React$Component);
+
+  function DotGroup$$1() {
+    classCallCheck(this, DotGroup$$1);
+    return possibleConstructorReturn(this, (DotGroup$$1.__proto__ || Object.getPrototypeOf(DotGroup$$1)).apply(this, arguments));
+  }
+
+  createClass(DotGroup$$1, [{
+    key: 'renderDots',
+    value: function renderDots() {
+      var _props = this.props,
+          currentSlide = _props.currentSlide,
+          totalSlides = _props.totalSlides,
+          visibleSlides = _props.visibleSlides;
+
+      var dots = [];
+      for (var i = 0; i < totalSlides; i += 1) {
+        var selected = i >= currentSlide && i < currentSlide + visibleSlides;
+        var slide = i >= totalSlides - visibleSlides ? totalSlides - visibleSlides : i;
+        dots.push(React.createElement(
+          Dot,
+          { key: i, slide: slide, selected: selected, disabled: selected },
+          React.createElement(
+            'span',
+            { className: cn['carousel__dot-group-dot'] },
+            i + 1
+          )
+        ));
+      }
+      return dots;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          store = _props2.store,
+          totalSlides = _props2.totalSlides,
+          visibleSlides = _props2.visibleSlides,
+          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'store', 'totalSlides', 'visibleSlides']);
+
+
+      var newClassName = cn([s$5.DotGroup, 'carousel__dot-group', className]);
+
+      return React.createElement(
+        'div',
+        _extends({ className: newClassName }, props),
+        this.renderDots()
+      );
+    }
+  }]);
+  return DotGroup$$1;
+}(React.Component), _class$5.propTypes = {
+  children: CarouselPropTypes.children,
+  className: index$1.string,
+  currentSlide: index$1.number.isRequired,
+  store: index$1.object.isRequired,
+  totalSlides: index$1.number.isRequired,
+  visibleSlides: index$1.number.isRequired
+}, _class$5.defaultProps = {
+  children: null,
+  className: null
+}, _temp$5);
+
+var index$16 = WithStore(DotGroup$$1, function (state) {
+  return {
+    currentSlide: state.currentSlide,
+    totalSlides: state.totalSlides,
+    visibleSlides: state.visibleSlides
+  };
+});
+
+var s$6 = { "image": "_image_u458c_1" };
+
+var Image$1 = function (_React$Component) {
+  inherits(Image, _React$Component);
+
+  function Image(props) {
+    classCallCheck(this, Image);
+
+    var _this = possibleConstructorReturn(this, (Image.__proto__ || Object.getPrototypeOf(Image)).call(this, props));
+
+    _this.state = { imageStatus: LOADING };
+    _this.initImage();
+    if (props.hasMasterSpinner) {
+      props.store.subscribeMasterSpinner();
+    }
+    return _this;
+  }
+
+  createClass(Image, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.image.onload = this.handleImageLoad;
+      this.image.onerror = this.handleImageError;
+      this.image.src = this.props.src;
+    }
+  }, {
+    key: 'initImage',
+    value: function initImage() {
+      this.image = document.createElement('img');
+      this.handleImageLoad = this.handleImageLoad.bind(this);
+      this.handleImageError = this.handleImageError.bind(this);
+    }
+  }, {
+    key: 'handleImageLoad',
+    value: function handleImageLoad(ev) {
+      this.setState({ imageStatus: SUCCESS });
+      this.props.store.masterSpinnerSuccess();
+      if (this.props.onLoad) this.props.onLoad(ev);
+    }
+  }, {
+    key: 'handleImageError',
+    value: function handleImageError(ev) {
+      this.setState({ imageStatus: ERROR });
+      this.props.store.masterSpinnerError();
+      if (this.props.onError) this.props.onError(ev);
+    }
+  }, {
+    key: 'tempTag',
+    value: function tempTag() {
+      return this.props.tag === 'img' ? 'div' : this.props.tag;
+    }
+  }, {
+    key: 'customRender',
+    value: function customRender(propName) {
+      if (typeof this.props[propName] === 'function') return this.props[propName]();
+      return this.props.children;
+    }
+  }, {
+    key: 'renderLoading',
+    value: function renderLoading(filteredProps) {
+      var Tag = this.tempTag();
+
+      var newClassName = cn([s$6.image, s$6.imageLoading, 'carousel__image', this.props.isBgImage && 'carousel__image--with-background', 'carousel__image--loading', this.props.className]);
+
+      return React.createElement(
+        Tag,
+        _extends({ className: newClassName }, filteredProps),
+        this.customRender('renderLoading')
+      );
+    }
+  }, {
+    key: 'renderError',
+    value: function renderError(filteredProps) {
+      var Tag = this.tempTag();
+
+      var newClassName = cn([s$6.image, s$6.imageError, 'carousel__image', this.props.isBgImage && 'carousel__image--with-background', 'carousel__image--error', this.props.className]);
+
+      return React.createElement(
+        Tag,
+        _extends({ className: newClassName }, filteredProps),
+        this.customRender('renderError')
+      );
+    }
+  }, {
+    key: 'renderSuccess',
+    value: function renderSuccess(filteredProps) {
+      var _props = this.props,
+          style = _props.style,
+          Tag = _props.tag;
+
+      var newClassName = cn([s$6.image, 'carousel__image', this.props.isBgImage && 'carousel__image--with-background', 'carousel__image--success', this.props.className]);
+
+      var newStyle = Object.assign({}, style);
+
+      var newFilteredProps = filteredProps;
+
+      if (Tag !== 'img') {
+        var src = filteredProps.src,
+            alt = filteredProps.alt,
+            tempFilteredProps = objectWithoutProperties(filteredProps, ['src', 'alt']);
+
+        newFilteredProps = tempFilteredProps;
+        newStyle = Object.assign({}, style, {
+          backgroundImage: 'url("' + src + '")',
+          backgroundSize: 'cover'
+        });
+      }
+
+      return React.createElement(
+        Tag,
+        _extends({ className: newClassName, style: newStyle }, newFilteredProps),
+        this.props.children
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          children = _props2.children,
+          className = _props2.className,
+          hasMasterSpinner = _props2.hasMasterSpinner,
+          isBgImage = _props2.isBgImage,
+          naturalSlideHeight = _props2.naturalSlideHeight,
+          naturalSlideWidth = _props2.naturalSlideWidth,
+          onError = _props2.onError,
+          onLoad = _props2.onLoad,
+          orientation = _props2.orientation,
+          renderError = _props2.renderError,
+          renderLoading = _props2.renderLoading,
+          store = _props2.store,
+          style = _props2.style,
+          tag = _props2.tag,
+          filteredProps = objectWithoutProperties(_props2, ['children', 'className', 'hasMasterSpinner', 'isBgImage', 'naturalSlideHeight', 'naturalSlideWidth', 'onError', 'onLoad', 'orientation', 'renderError', 'renderLoading', 'store', 'style', 'tag']);
+
+
+      switch (this.state.imageStatus) {
+        case LOADING:
+          return this.renderLoading(filteredProps);
+        case SUCCESS:
+          return this.renderSuccess(filteredProps);
+        case ERROR:
+          return this.renderError(filteredProps);
+        default:
+          throw new Error('unknown value for this.state.imageStatus');
+      }
+    }
+  }]);
+  return Image;
+}(React.Component);
+
+Image$1.propTypes = {
+  alt: index$1.string,
+  children: CarouselPropTypes.children,
+  className: index$1.string,
+  hasMasterSpinner: index$1.bool.isRequired,
+  isBgImage: CarouselPropTypes.isBgImage,
+  naturalSlideHeight: index$1.number.isRequired,
+  naturalSlideWidth: index$1.number.isRequired,
+  onError: index$1.func,
+  onLoad: index$1.func,
+  orientation: CarouselPropTypes.orientation.isRequired,
+  renderError: index$1.func,
+  renderLoading: index$1.func,
+  src: index$1.string.isRequired,
+  store: index$1.object.isRequired,
+  style: index$1.object,
+  tag: index$1.string
+};
+Image$1.defaultProps = {
+  alt: '',
+  children: null,
+  className: null,
+  height: null,
+  isBgImage: false,
+  onError: null,
+  onLoad: null,
+  renderError: null,
+  renderLoading: null,
+  tag: 'img',
+  style: null
+};
+
+var Image = WithStore(Image$1, function (state) {
+  return {
+    hasMasterSpinner: state.hasMasterSpinner,
+    naturalSlideHeight: state.naturalSlideHeight,
+    naturalSlideWidth: state.naturalSlideWidth,
+    orientation: state.orientation
+  };
+});
+
+var s$7 = { "container": "_container_11gb8_1", "overlay": "_overlay_11gb8_8", "hover": "_hover_11gb8_19", "loading": "_loading_11gb8_24", "imageLoadingSpinnerContainer": "_imageLoadingSpinnerContainer_11gb8_28" };
+
+var _class$6;
+var _temp$6;
+
+var ImageWithZoom$1 = (_temp$6 = _class$6 = function (_React$Component) {
+  inherits(ImageWithZoom$$1, _React$Component);
+
+  function ImageWithZoom$$1() {
+    classCallCheck(this, ImageWithZoom$$1);
+
+    var _this = possibleConstructorReturn(this, (ImageWithZoom$$1.__proto__ || Object.getPrototypeOf(ImageWithZoom$$1)).call(this));
+
+    _this.state = {
+      isImageLoading: true,
+      hovering: false,
+      style: {},
+      x: null,
+      y: null
+    };
+    _this.handleOnMouseOver = _this.handleOnMouseOver.bind(_this);
+    _this.handleOnMouseOut = _this.handleOnMouseOut.bind(_this);
+    _this.handleOnMouseMove = _this.handleOnMouseMove.bind(_this);
+    _this.handleImageComplete = _this.handleImageComplete.bind(_this);
+    return _this;
+  }
+
+  createClass(ImageWithZoom$$1, [{
+    key: 'handleImageComplete',
+    value: function handleImageComplete() {
+      this.setState({
+        isImageLoading: false
+      });
+    }
+  }, {
+    key: 'handleOnMouseOver',
+    value: function handleOnMouseOver() {
+      this.setState({
+        hovering: true
+      });
+    }
+  }, {
+    key: 'handleOnMouseOut',
+    value: function handleOnMouseOut() {
+      this.setState({
+        hovering: false
+      });
+    }
+  }, {
+    key: 'handleOnMouseMove',
+    value: function handleOnMouseMove(ev) {
+      var x = ev.nativeEvent.offsetX / ev.target.offsetWidth * 100;
+      var y = ev.nativeEvent.offsetY / ev.target.offsetHeight * 100;
+      this.setState({ x: x, y: y });
+    }
+  }, {
+    key: 'renderLoading',
+    value: function renderLoading() {
+      if (this.state.isImageLoading) {
+        return React.createElement(
+          'div',
+          {
+            className: cn([s$7.imageLoadingSpinnerContainer, 'carousel__image-loading-spinner-container'])
+          },
+          React.createElement(Spinner$1, null)
+        );
+      }
+
+      return null;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          Tag = _props.tag,
+          src = _props.src,
+          filteredProps = objectWithoutProperties(_props, ['tag', 'src']);
+
+
+      var imageClassName = cn([s$7.image, 'carousel__zoom-image']);
+
+      var overlayClassName = cn([s$7.overlay, 'carousel__zoom-image-overlay', this.state.hovering && s$7.hover, this.state.hovering && 'carousel__zoom-image-overlay--hovering']);
+
+      var overlayStyle = {};
+      overlayStyle.transformOrigin = this.state.x + '% ' + this.state.y + '%';
+
+      return React.createElement(
+        Tag,
+        _extends({ className: s$7.container }, filteredProps),
+        React.createElement(Image, {
+          className: imageClassName,
+          tag: 'div',
+          src: src,
+          isBgImage: true,
+          onLoad: this.handleImageComplete,
+          onError: this.handleImageComplete
+        }),
+        React.createElement(Image, {
+          className: overlayClassName,
+          tag: 'div',
+          src: src,
+          style: overlayStyle,
+          isBgImage: true,
+          onMouseOver: this.handleOnMouseOver,
+          onMouseOut: this.handleOnMouseOut,
+          onMouseMove: this.handleOnMouseMove
+        }),
+        this.renderLoading()
+      );
+    }
+  }]);
+  return ImageWithZoom$$1;
+}(React.Component), _class$6.propTypes = {
+  // alt: PropTypes.string,
+  src: index$1.string.isRequired,
+  tag: index$1.string
+}, _class$6.defaultProps = {
+  tag: 'div'
+}, _temp$6);
+
+var s$8 = { "slideInner": "_slideInner_yg1z4_1", "slideHorizontal": "_slideHorizontal_yg1z4_1", "slide": "_slide_yg1z4_1", "focusRing": "_focusRing_yg1z4_24" };
+
+var _class$7;
+var _temp$7;
+
+var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
+  inherits(Slide, _React$PureComponent);
+
+  function Slide() {
+    classCallCheck(this, Slide);
+
+    var _this = possibleConstructorReturn(this, (Slide.__proto__ || Object.getPrototypeOf(Slide)).call(this));
+
+    _this.handleOnFocus = _this.handleOnFocus.bind(_this);
+    _this.handleOnBlur = _this.handleOnBlur.bind(_this);
+    _this.state = {
+      focused: false
+    };
+    return _this;
+  }
+
+  createClass(Slide, [{
+    key: 'isVisible',
+    value: function isVisible() {
+      var _props = this.props,
+          currentSlide = _props.currentSlide,
+          index = _props.index,
+          visibleSlides = _props.visibleSlides;
+
+      return index >= currentSlide && index < currentSlide + visibleSlides;
+    }
+  }, {
+    key: 'handleOnFocus',
+    value: function handleOnFocus(ev) {
+      var onFocus = this.props.onFocus;
+
+      this.setState({
+        focused: true
+      }, onFocus !== null && onFocus.call(this, ev));
+    }
+  }, {
+    key: 'handleOnBlur',
+    value: function handleOnBlur(ev) {
+      var onBlur = this.props.onBlur;
+
+      this.setState({
+        focused: false
+      }, onBlur !== null && onBlur.call(this, ev));
+    }
+  }, {
+    key: 'renderFocusRing',
+    value: function renderFocusRing() {
+      if (this.state.focused) return React.createElement('div', { className: s$8.focusRing });
+      return null;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          children = _props2.children,
+          className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          index = _props2.index,
+          innerClassName = _props2.innerClassName,
+          InnerTag = _props2.innerTag,
+          naturalSlideHeight = _props2.naturalSlideHeight,
+          naturalSlideWidth = _props2.naturalSlideWidth,
+          onBlur = _props2.onBlur,
+          onFocus = _props2.onFocus,
+          orientation = _props2.orientation,
+          slideSize$$1 = _props2.slideSize,
+          store = _props2.store,
+          style = _props2.style,
+          tabIndex = _props2.tabIndex,
+          Tag = _props2.tag,
+          totalSlides = _props2.totalSlides,
+          visibleSlides = _props2.visibleSlides,
+          props = objectWithoutProperties(_props2, ['children', 'className', 'currentSlide', 'index', 'innerClassName', 'innerTag', 'naturalSlideHeight', 'naturalSlideWidth', 'onBlur', 'onFocus', 'orientation', 'slideSize', 'store', 'style', 'tabIndex', 'tag', 'totalSlides', 'visibleSlides']);
+
+
+      var tempStyle = {};
+
+      if (orientation === 'horizontal') {
+        tempStyle.width = pct(slideSize$$1);
+        tempStyle.paddingBottom = pct(naturalSlideHeight * 100 / (naturalSlideWidth * totalSlides));
+      } else {
+        tempStyle.width = pct(100);
+        tempStyle.paddingBottom = pct(naturalSlideHeight * 100 / naturalSlideWidth);
+      }
+
+      var newStyle = Object.assign({}, tempStyle, style);
+
+      var newClassName = cn([s$8.slide, orientation === 'horizontal' && s$8.slideHorizontal, 'carousel__slide', className]);
+
+      var newInnerClassName = cn([s$8.slideInner, 'carousel__inner-slide', innerClassName]);
+
+      var defaultTabIndex = this.isVisible() ? 0 : -1;
+      var newTabIndex = typeof tabIndex === 'number' ? tabIndex : defaultTabIndex;
+
+      return React.createElement(
+        Tag,
+        _extends({
+          tabIndex: newTabIndex,
+          'aria-hidden': !this.isVisible(),
+          onFocus: this.handleOnFocus,
+          onBlur: this.handleOnBlur,
+          className: newClassName,
+          style: newStyle
+        }, props),
+        React.createElement(
+          InnerTag,
+          { className: newInnerClassName },
+          this.props.children,
+          this.renderFocusRing()
+        )
+      );
+    }
+  }]);
+  return Slide;
+}(React.PureComponent), _class$7.propTypes = {
+  children: CarouselPropTypes.children,
+  className: index$1.string,
+  currentSlide: index$1.number.isRequired,
+  index: index$1.number.isRequired,
+  innerClassName: index$1.string,
+  innerTag: index$1.string,
+  naturalSlideHeight: index$1.number.isRequired,
+  naturalSlideWidth: index$1.number.isRequired,
+  onBlur: index$1.func,
+  onFocus: index$1.func,
+  orientation: CarouselPropTypes.orientation.isRequired,
+  slideSize: index$1.number.isRequired,
+  store: index$1.object,
+  style: index$1.object,
+  tabIndex: index$1.number,
+  tag: index$1.string,
+  totalSlides: index$1.number.isRequired,
+  visibleSlides: index$1.number.isRequired
+}, _class$7.defaultProps = {
+  children: null,
+  className: null,
+  innerClassName: null,
+  innerTag: 'div',
+  onBlur: null,
+  onFocus: null,
+  store: null,
+  style: {},
+  tabIndex: null,
+  tag: 'div'
+}, _temp$7);
+
+var index$17 = WithStore(Slide, function (state) {
+  return {
+    currentSlide: state.currentSlide,
+    naturalSlideHeight: state.naturalSlideHeight,
+    naturalSlideWidth: state.naturalSlideWidth,
+    orientation: state.orientation,
+    slideSize: state.slideSize,
+    totalSlides: state.totalSlides,
+    visibleSlides: state.visibleSlides
+  };
+});
+
+var s$9 = { "horizontalSlider": "_horizontalSlider_qbymx_1", "horizontalSliderTray": "_horizontalSliderTray_qbymx_1", "verticalSlider": "_verticalSlider_qbymx_11", "verticalSliderTray": "_verticalSliderTray_qbymx_1", "verticalTray": "_verticalTray_qbymx_20", "verticalSlideTrayWrap": "_verticalSlideTrayWrap_qbymx_24", "sliderTray": "_sliderTray_qbymx_28", "masterSpinnerContainer": "_masterSpinnerContainer_qbymx_33" };
+
+var _class$8;
+var _temp$8;
+
+var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
+  inherits(Slider$$1, _React$Component);
+
+  function Slider$$1() {
+    classCallCheck(this, Slider$$1);
+
+    var _this = possibleConstructorReturn(this, (Slider$$1.__proto__ || Object.getPrototypeOf(Slider$$1)).call(this));
+
+    _this.handleOnTouchStart = _this.handleOnTouchStart.bind(_this);
+    _this.handleOnTouchMove = _this.handleOnTouchMove.bind(_this);
+    _this.handleOnTouchEnd = _this.handleOnTouchEnd.bind(_this);
+
+    _this.state = {
+      deltaX: 0,
+      deltaY: 0,
+      startX: 0,
+      startY: 0,
+      isMoving: false
+    };
+
+    _this.originalOverflow = null;
+    return _this;
+  }
+
+  createClass(Slider$$1, [{
+    key: 'handleOnTouchStart',
+    value: function handleOnTouchStart(ev) {
+      if (!this.props.touchEnabled) return;
+
+      var touch = ev.targetTouches[0];
+      this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
+      document.documentElement.style.overflow = 'hidden';
+      this.setState({
+        isMoving: true,
+        startX: touch.screenX,
+        startY: touch.screenY
+      });
+    }
+  }, {
+    key: 'handleOnTouchMove',
+    value: function handleOnTouchMove(ev) {
+      if (!this.props.touchEnabled) return;
+
+      var touch = ev.targetTouches[0];
+      this.setState({
+        deltaX: touch.screenX - this.state.startX,
+        deltaY: touch.screenY - this.state.startY
+      });
+    }
+  }, {
+    key: 'computeCurrentSlide',
+    value: function computeCurrentSlide() {
+      var slideSizeInPx = Slider$$1.slideSizeInPx(this.props.orientation, this.sliderTrayDiv.clientWidth, this.sliderTrayDiv.clientHeight, this.props.totalSlides);
+
+      var slidesMoved = Slider$$1.slidesMoved(this.props.orientation, this.state.deltaX, this.state.deltaY, slideSizeInPx);
+
+      var maxSlide = this.props.totalSlides - Math.min(this.props.totalSlides, this.props.visibleSlides);
+
+      var newCurrentSlide = this.props.currentSlide + slidesMoved;
+      newCurrentSlide = Math.max(0, newCurrentSlide);
+      newCurrentSlide = Math.min(maxSlide, newCurrentSlide);
+
+      this.props.store.setState({
+        currentSlide: newCurrentSlide
+      });
+    }
+  }, {
+    key: 'handleOnTouchEnd',
+    value: function handleOnTouchEnd(ev) {
+      if (!this.props.touchEnabled) return;
+
+      if (ev.targetTouches.length === 0) {
+        this.computeCurrentSlide();
+        document.documentElement.style.overflow = this.originalOverflow;
+        this.originalOverflow = null;
+        this.setState({
+          deltaX: 0,
+          deltaY: 0,
+          isMoving: false
+        });
+      }
+    }
+  }, {
+    key: 'renderMasterSpinner',
+    value: function renderMasterSpinner() {
+      var _props = this.props,
+          hasMasterSpinner = _props.hasMasterSpinner,
+          masterSpinnerErrorCount = _props.masterSpinnerErrorCount,
+          masterSpinnerSuccessCount = _props.masterSpinnerSuccessCount,
+          masterSpinnerSubscriptionCount = _props.masterSpinnerSubscriptionCount;
+
+
+      var testImageCountReached = masterSpinnerErrorCount + masterSpinnerSuccessCount === masterSpinnerSubscriptionCount;
+
+      var testInitialLoad = masterSpinnerSubscriptionCount === 0;
+
+      if (hasMasterSpinner && (!testImageCountReached || testInitialLoad)) {
+        if (typeof this.props.onMasterSpinner === 'function') this.props.onMasterSpinner();
+
+        return React.createElement(
+          'div',
+          {
+            className: cn([s$9.masterSpinnerContainer, 'carousel__master-spinner-container'])
+          },
+          React.createElement(Spinner$1, null)
+        );
+      }
+
+      return null;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props2 = this.props,
+          children = _props2.children,
+          className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          hasMasterSpinner = _props2.hasMasterSpinner,
+          masterSpinnerErrorCount = _props2.masterSpinnerErrorCount,
+          masterSpinnerSubscriptionCount = _props2.masterSpinnerSubscriptionCount,
+          masterSpinnerSuccessCount = _props2.masterSpinnerSuccessCount,
+          naturalSlideHeight = _props2.naturalSlideHeight,
+          naturalSlideWidth = _props2.naturalSlideWidth,
+          onMasterSpinner = _props2.onMasterSpinner,
+          orientation = _props2.orientation,
+          slideTraySize$$1 = _props2.slideTraySize,
+          slideSize$$1 = _props2.slideSize,
+          store = _props2.store,
+          style = _props2.style,
+          totalSlides = _props2.totalSlides,
+          touchEnabled = _props2.touchEnabled,
+          visibleSlides = _props2.visibleSlides,
+          props = objectWithoutProperties(_props2, ['children', 'className', 'currentSlide', 'hasMasterSpinner', 'masterSpinnerErrorCount', 'masterSpinnerSubscriptionCount', 'masterSpinnerSuccessCount', 'naturalSlideHeight', 'naturalSlideWidth', 'onMasterSpinner', 'orientation', 'slideTraySize', 'slideSize', 'store', 'style', 'totalSlides', 'touchEnabled', 'visibleSlides']);
+
+
+      var sliderStyle = Object.assign({}, style);
+
+      // slider tray wrap
+      var trayWrapStyle = {};
+
+      if (orientation === 'vertical') {
+        trayWrapStyle.height = 0;
+        trayWrapStyle.paddingBottom = pct(naturalSlideHeight * 100 * visibleSlides / naturalSlideWidth);
+        trayWrapStyle.width = pct(100);
+      }
+
+      // slider tray
+      var trayStyle = {};
+
+      if (this.state.isMoving) {
+        trayStyle.transition = 'none';
+      }
+
+      if (orientation === 'vertical') {
+        trayStyle.transform = 'translateY(' + pct(slideSize$$1 * currentSlide * -1) + ') translateY(' + this.state.deltaY + 'px)';
+        trayStyle.width = pct(100);
+      } else {
+        trayStyle.width = pct(slideTraySize$$1);
+        trayStyle.transform = 'translateX(' + pct(slideSize$$1 * currentSlide * -1) + ') translateX(' + this.state.deltaX + 'px)';
+      }
+
+      var sliderClasses = cn([orientation === 'vertical' ? s$9.verticalSlider : s$9.horizontalSlider, 'carousel__slider', orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal', className]);
+
+      var trayClasses = cn([s$9.sliderTray, 'carousel__slider-tray', orientation === 'vertical' ? s$9.verticalTray : s$9.horizontalTray, orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal']);
+
+      var trayWrapClasses = cn([s$9.sliderTrayWrap, 'carousel__slider-tray-wrapper', orientation === 'vertical' ? s$9.verticalSlideTrayWrap : s$9.horizontalTrayWrap, orientation === 'vertical' ? 'carousel__slider-tray-wrap--vertical' : 'carousel__slider-tray-wrap--horizontal']);
+
+      return React.createElement(
+        'div',
+        _extends({
+          className: sliderClasses,
+          'aria-live': 'polite',
+          style: sliderStyle
+        }, props),
+        React.createElement(
+          'div',
+          { className: trayWrapClasses, style: trayWrapStyle },
+          React.createElement(
+            'div',
+            {
+              ref: function ref(el) {
+                _this2.sliderTrayDiv = el;
+              },
+              className: trayClasses,
+              style: trayStyle,
+              onTouchStart: this.handleOnTouchStart,
+              onTouchMove: this.handleOnTouchMove,
+              onTouchEnd: this.handleOnTouchEnd
+            },
+            children
+          ),
+          this.renderMasterSpinner()
+        )
+      );
+    }
+  }], [{
+    key: 'slideSizeInPx',
+    value: function slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
+      return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
+    }
+  }, {
+    key: 'slidesMoved',
+    value: function slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
+      return -Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx);
+    }
+  }]);
+  return Slider$$1;
+}(React.Component), _class$8.propTypes = {
+  children: index$1.node.isRequired,
+  className: index$1.string,
+  currentSlide: index$1.number.isRequired,
+  hasMasterSpinner: index$1.bool.isRequired,
+  masterSpinnerErrorCount: index$1.number.isRequired,
+  masterSpinnerSuccessCount: index$1.number.isRequired,
+  masterSpinnerSubscriptionCount: index$1.number.isRequired,
+  naturalSlideHeight: index$1.number.isRequired,
+  naturalSlideWidth: index$1.number.isRequired,
+  onMasterSpinner: index$1.func,
+  orientation: CarouselPropTypes.orientation.isRequired,
+  slideTraySize: index$1.number.isRequired,
+  slideSize: index$1.number.isRequired,
+  store: index$1.object.isRequired,
+  style: index$1.object,
+  totalSlides: index$1.number.isRequired,
+  touchEnabled: index$1.bool.isRequired,
+  visibleSlides: index$1.number
+}, _class$8.defaultProps = {
+  className: '',
+  height: null,
+  onMasterSpinner: null,
+  style: {},
+  visibleSlides: 1
+}, _temp$8);
+
+var index$18 = WithStore(Slider$$1, function (state) {
+  return {
+    currentSlide: state.currentSlide,
+    hasMasterSpinner: state.hasMasterSpinner,
+    masterSpinnerErrorCount: state.masterSpinnerErrorCount,
+    masterSpinnerSubscriptionCount: state.masterSpinnerSubscriptionCount,
+    masterSpinnerSuccessCount: state.masterSpinnerSuccessCount,
+    naturalSlideHeight: state.naturalSlideHeight,
+    naturalSlideWidth: state.naturalSlideWidth,
+    orientation: state.orientation,
+    slideSize: state.slideSize,
+    slideTraySize: state.slideTraySize,
+    totalSlides: state.totalSlides,
+    touchEnabled: state.touchEnabled,
+    visibleSlides: state.visibleSlides
+  };
+});
+
+var s$10 = { "spinner": "_spinner_1dguc_1", "spin": "_spin_1dguc_1" };
+
+var _class$9;
+var _temp$9;
+
+var Spinner$1 = (_temp$9 = _class$9 = function (_React$PureComponent) {
+  inherits(Spinner, _React$PureComponent);
+
+  function Spinner() {
+    classCallCheck(this, Spinner);
+    return possibleConstructorReturn(this, (Spinner.__proto__ || Object.getPrototypeOf(Spinner)).apply(this, arguments));
+  }
+
+  createClass(Spinner, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          className = _props.className,
+          filteredProps = objectWithoutProperties(_props, ['className']);
+
+      var newClassName = cn([s$10.spinner, className]);
+      return React.createElement('div', _extends({ className: newClassName }, filteredProps));
+    }
+  }]);
+  return Spinner;
+}(React.PureComponent), _class$9.propTypes = {
+  className: index$1.string
+}, _class$9.defaultProps = {
+  className: null
+}, _temp$9);
+
+var index$19 = function deepFreeze (o) {
+  Object.freeze(o);
+
+  Object.getOwnPropertyNames(o).forEach(function (prop) {
+    if (o.hasOwnProperty(prop)
+    && o[prop] !== null
+    && (typeof o[prop] === "object" || typeof o[prop] === "function")
+    && !Object.isFrozen(o[prop])) {
+      deepFreeze(o[prop]);
+    }
+  });
+  
+  return o;
+};
+
+var DEFAULT_STATE = {
+  masterSpinnerSubscriptionCount: 0,
+  masterSpinnerErrorCount: 0,
+  masterSpinnerSuccessCount: 0
+};
+
+var Store = function () {
+  function Store(initialState) {
+    classCallCheck(this, Store);
+
+    this.state = index$19(index$5(DEFAULT_STATE, initialState));
+    this.subscriptions = [];
+    this.setState = this.setState.bind(this);
+    this.getState = this.getState.bind(this);
+    this.subscribe = this.subscribe.bind(this);
+    this.updateSubscribers = this.updateSubscribers.bind(this);
+    this.subscribeMasterSpinner = this.subscribeMasterSpinner.bind(this);
+    this.masterSpinnerSuccess = this.masterSpinnerSuccess.bind(this);
+    this.masterSpinnerError = this.masterSpinnerError.bind(this);
+  }
+
+  createClass(Store, [{
+    key: 'setState',
+    value: function setState(newState, cb) {
+      this.state = index$19(index$5(this.state, newState));
+      this.updateSubscribers(cb);
+    }
+  }, {
+    key: 'getState',
+    value: function getState() {
+      return index$5({}, this.state);
+    }
+  }, {
+    key: 'subscribe',
+    value: function subscribe(func) {
+      this.subscriptions.push(func);
+    }
+  }, {
+    key: 'updateSubscribers',
+    value: function updateSubscribers(cb) {
+      this.subscriptions.forEach(function (func) {
+        return func();
+      });
+      if (typeof cb === 'function') cb(this.getState());
+    }
+  }, {
+    key: 'subscribeMasterSpinner',
+    value: function subscribeMasterSpinner() {
+      this.setState({
+        masterSpinnerSubscriptionCount: this.state.masterSpinnerSubscriptionCount + 1
+      });
+    }
+  }, {
+    key: 'masterSpinnerSuccess',
+    value: function masterSpinnerSuccess() {
+      this.setState({
+        masterSpinnerSuccessCount: this.state.masterSpinnerSuccessCount + 1
+      });
+    }
+  }, {
+    key: 'masterSpinnerError',
+    value: function masterSpinnerError() {
+      this.setState({
+        masterSpinnerErrorCount: this.state.masterSpinnerErrorCount + 1
+      });
+    }
+  }]);
+  return Store;
+}();
+
+export { index as ButtonBack, index$6 as ButtonFirst, index$7 as ButtonNext, index$8 as ButtonLast, CarouselProvider$1 as CarouselProvider, Dot, index$16 as DotGroup, Image, ImageWithZoom$1 as ImageWithZoom, index$17 as Slide, index$18 as Slider, Spinner$1 as Spinner, Store };
 //# sourceMappingURL=index.es.js.map
