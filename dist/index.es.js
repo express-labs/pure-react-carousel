@@ -1280,7 +1280,8 @@ var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
           store = _props2.store,
           totalSlides = _props2.totalSlides,
           visibleSlides = _props2.visibleSlides,
-          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'store', 'totalSlides', 'visibleSlides']);
+          dotNumbers = _props2.dotNumbers,
+          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'store', 'totalSlides', 'visibleSlides', 'dotNumbers']);
 
 
       var newClassName = cn([s$5.DotGroup, 'carousel__dot-group', className]);
@@ -1300,7 +1301,7 @@ var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
   store: index$1.object.isRequired,
   totalSlides: index$1.number.isRequired,
   visibleSlides: index$1.number.isRequired,
-  dotNumbers: index$1.boolean
+  dotNumbers: index$1.bool
 }, _class$5.defaultProps = {
   children: null,
   className: null,
