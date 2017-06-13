@@ -119,7 +119,8 @@ There are other components you can add, like ButtonFirst, ButtonLast, an Image c
 Obviously, you can customize the heck out of the layout.  If you need to bury your Slider component in 18 parent divs, go for it.  It will still do it's job.  Feel free to add the className property to any of the Components to further customize your carousel.  Or, hook into the many BEM named default CSS class names built into the carousel components.
 
 ## Docs
-###\<CarouselProvider />
+
+### \<CarouselProvider />
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | **children** | [string \| node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other Carousel components and HTML |
@@ -138,7 +139,7 @@ Obviously, you can customize the heck out of the layout.  If you need to bury yo
 **__More about naturalSlideWidth and naturalSlideHeight__
 The carousel is responsive and by default will flex to the full width of the <Slider \> parent container.  It's up to you to contain the carousel width via css.  Each slide will be the same height to width ratio ([intrinsic ratio](https://alistapart.com/d/creating-intrinsic-ratios-for-video/example2.html)). CarouselProvider needs to know the default size of each \<Slide />.  Note: you can make the carousel non-responsive by setting the width of <Slider \>to a fixed css unit, like pixels. There are many other ways to make the carousel non-responsive.
 
-###\<Slider />
+### \<Slider />
 The Slide component creates the following pseudo HTML by default.
 ```HTML
 <div class="X" aria-live="polite" style="X" ...props>
@@ -150,6 +151,7 @@ The Slide component creates the following pseudo HTML by default.
   </div>
 </div>
 ```
+
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | **children** | [string \| node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or HTML |
@@ -157,7 +159,7 @@ The Slide component creates the following pseudo HTML by default.
 | style | object | {} | No | Optional css styles to add to the Slider.  Note: internal css properties take precedence over any styles specified in the styles object |
 | onMasterSpinner | [function \| null] | null | No | Optional callback function that is called when the Master Spinner is visible.  Requires that \<CarouselProvider /> set hasMasterSpinner to true |
 
-###\<Slide />
+### \<Slide />
 The Slide component creates the following pseudo HTML by default.
 ```HTML
 <div tabIndex="X" aria-hidden="X" onFocus="X" onBlur="X" class="X" style="X" ...props>
@@ -167,6 +169,7 @@ The Slide component creates the following pseudo HTML by default.
   </div>
 </div>
 ```
+
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | className | string | null | No | Optional className string that will be appended to the component's className string. |
