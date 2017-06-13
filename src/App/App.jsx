@@ -67,6 +67,9 @@ const DevelopmentApp = () => (
           Each ImageWithZoom component has it&apos;s own spinner. You might want to use Chrome
           dev tools to throttle the network connection so you can see the spinners.
         </p>
+        <p>
+          Also, we added the boolean prop dotNumbers to the DotGroup for displaying slide numbers.
+        </p>
         <Slider className={s.slider}>
           <Slide tag="a" index={0}>
             <ImageWithZoom src="./media/img01.jpeg" />
@@ -91,7 +94,7 @@ const DevelopmentApp = () => (
         <ButtonBack>Back</ButtonBack>
         <ButtonNext>Next</ButtonNext>
         <ButtonLast>Last</ButtonLast>
-        <DotGroup />
+        <DotGroup dotNumbers />
       </CarouselProvider>
     </section>
 
@@ -172,7 +175,7 @@ const DevelopmentApp = () => (
       >
         <h1 className={s.headline}>Horizontal Carousel (With Master Loading Spinner)</h1>
         <p>
-          Horizontal Carouisel with regular, non-zooming images.
+          Horizontal Carouisel with regular, non-zooming images and dotNumbers on the Dot Group.
         </p>
         <Slider className={s.slider}>
           <Slide tag="a" index={0}>
@@ -198,7 +201,7 @@ const DevelopmentApp = () => (
         <ButtonBack>Back</ButtonBack>
         <ButtonNext>Next</ButtonNext>
         <ButtonLast>Last</ButtonLast>
-        <DotGroup />
+        <DotGroup dotNumbers />
       </CarouselProvider>
     </section>
 

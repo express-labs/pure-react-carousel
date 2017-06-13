@@ -12,11 +12,13 @@ const DotGroup = class DotGroup extends React.Component {
     store: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
+    dotNumbers: PropTypes.boolean,
   }
 
   static defaultProps = {
     children: null,
     className: null,
+    dotNumbers: false,
   }
 
   renderDots() {
@@ -26,7 +28,7 @@ const DotGroup = class DotGroup extends React.Component {
       const selected = i >= currentSlide && i < (currentSlide + visibleSlides);
       const slide = i >= totalSlides - visibleSlides ? totalSlides - visibleSlides : i;
       dots.push(<Dot key={i} slide={slide} selected={selected} disabled={selected}>
-        <span className={cn['carousel__dot-group-dot']}>{i + 1}</span>
+        <span className={cn['carousel__dot-group-dot']}>{this.props.dotNumbers && i + 1}</span>
       </Dot>);
     }
     return dots;
