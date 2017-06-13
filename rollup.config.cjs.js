@@ -7,20 +7,49 @@ import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import uglify from 'rollup-plugin-uglify';
 
+// postcss plugins
+import simplevars from 'postcss-simple-vars';
+import cssnext from 'postcss-cssnext';
+import cssnano from 'cssnano';
+import postcssImport from 'postcss-import';
+import postcssModules from 'postcss-modules';
+
 var pkg = require('./package.json');
 var cache;
+
+const cssExportMap = {};
 
 export default {
   entry: 'src/index.js',
   cache: cache,
   format: 'cjs',
+  moduleName: 'reactCarousel',
   dest: 'dist/index.cjs.js',
   sourceMap: true,
   sourceMapFile: path.resolve('dist/main.cjs.js'),
-  external: Object.keys(pkg.peerDependencies), // exclude peerDependencies from our bundle
+  // exclude peerDependencies from our bundle
+  external: Object.keys(pkg.peerDependencies),
   plugins: [
     postcss({
-      extensions: ['.css']
+      sourceMap: true,
+      extract: 'dist/react-carousel.css',
+      extensions: ['.css'],
+      plugins: [
+        postcssImport(),
+        simplevars(),
+        cssnext({
+          warnForDuplicates: false,
+        }),
+        postcssModules({
+          getJSON (id, exportTokens) {
+            cssExportMap[id] = exportTokens;
+          }
+        }),
+        cssnano(),
+      ],
+      getExport (id) {
+        return cssExportMap[id];
+      },
     }),
     resolve({
       module: true,
@@ -32,18 +61,22 @@ export default {
         moduleDirectory: 'node_modules'
       }
     }),
+    replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
     commonjs(),
     eslint({
       exclude: [
-        'src/styles/**'
+        '**/*.css',
+        'node_modules/**'
       ]
     }),
     babel({
-      exclude: 'node_modules/**',
+      exclude: [
+        'node_modules/**'
+      ],
     }),
     replace({
       include: 'src/**',
-      ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+      ENV: JSON.stringify(process.env.NODE_ENV || 'production')
     }),
     (process.env.NODE_ENV === 'production' && uglify())
   ],

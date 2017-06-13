@@ -6,7 +6,7 @@ import postcss from 'rollup-plugin-postcss';
 import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import uglify from 'rollup-plugin-uglify';
-import { minify } from 'uglify-js-harmony'; // ES6 minification is experimental as of 5/16/17
+import { minify } from 'uglify-es'; // ES6 minification is experimental as of 5/16/17
 
 // postcss plugins
 import simplevars from 'postcss-simple-vars';
@@ -27,15 +27,19 @@ export default {
   dest: 'dist/index.es.js',
   sourceMap: true,
   sourceMapFile: path.resolve('dist/main.es.js'),
-  external: Object.keys(pkg.peerDependencies), // exclude peerDependencies from our bundle
+  // exclude peerDependencies from our bundle
+  external: Object.keys(pkg.peerDependencies),
   plugins: [
     postcss({
-      extensions: ['.css'],
+      sourceMap: true,
       extract: 'dist/react-carousel.css',
+      extensions: ['.css'],
       plugins: [
         postcssImport(),
         simplevars(),
-        cssnext(),
+        cssnext({
+          warnForDuplicates: false,
+        }),
         postcssModules({
           getJSON (id, exportTokens) {
             cssExportMap[id] = exportTokens;
@@ -67,12 +71,12 @@ export default {
     }),
     babel({
       exclude: [
-        'node_modules/**',
+        'node_modules/**'
       ],
     }),
     replace({
       include: 'src/**',
-      ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+      ENV: JSON.stringify(process.env.NODE_ENV || 'production')
     }),
     (process.env.NODE_ENV === 'production' && uglify({}, minify))
   ],

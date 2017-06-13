@@ -61,7 +61,7 @@
     "rollup-plugin-serve": "^0.3.0",
     "rollup-plugin-uglify": "^2.0.1",
     "rollup-watch": "^3.2.2",
-    "uglify-js-harmony": "^2.7.7"
+    "uglify-es": "^3.0.15"
   },
   "peerDependencies": {
     "react": "15.x",

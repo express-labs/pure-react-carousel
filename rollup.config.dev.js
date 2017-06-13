@@ -74,6 +74,7 @@ export default {
     babel({
       exclude: [
         'node_modules/**',
+        '__tests__/**',
       ],
     }),
     serve({

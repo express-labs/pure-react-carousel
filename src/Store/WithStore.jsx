@@ -5,7 +5,8 @@ import propTypes from 'prop-types';
 import { CarouselPropTypes } from '../helpers';
 
 export default function WithStore(
-  WrappedComponent, /* istanbul ignore next */ mapStateToProps = () => ({})
+  WrappedComponent,
+  /* istanbul ignore next */ mapStateToProps = () => ({}),
 ) {
   class Wrapper extends React.Component {
     static propTypes = {
