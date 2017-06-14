@@ -1184,12 +1184,16 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
     key: 'handleOnClick',
     value: function handleOnClick(ev) {
       var _props = this.props,
+          onClick = _props.onClick,
           slide = _props.slide,
           store = _props.store,
-          onClick = _props.onClick;
+          totalSlides = _props.totalSlides,
+          visibleSlides = _props.visibleSlides;
+
+      var newSlide = slide >= totalSlides - visibleSlides ? totalSlides - visibleSlides : slide;
 
       store.setState({
-        currentSlide: slide
+        currentSlide: newSlide
       }, onClick !== null && onClick.call(this, ev));
     }
   }, {
@@ -1198,19 +1202,29 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
       var _props2 = this.props,
           children = _props2.children,
           className = _props2.className,
+          currentSlide = _props2.currentSlide,
+          disabled = _props2.disabled,
           onClick = _props2.onClick,
+          selected = _props2.selected,
           slide = _props2.slide,
           store = _props2.store,
-          props = objectWithoutProperties(_props2, ['children', 'className', 'onClick', 'slide', 'store']);
+          totalSlides = _props2.totalSlides,
+          visibleSlides = _props2.visibleSlides,
+          props = objectWithoutProperties(_props2, ['children', 'className', 'currentSlide', 'disabled', 'onClick', 'selected', 'slide', 'store', 'totalSlides', 'visibleSlides']);
 
+      var defaultSelected = slide >= currentSlide && slide < currentSlide + visibleSlides;
+      var newSelected = typeof selected === 'boolean' ? selected : defaultSelected;
+      var defaultDisabled = defaultSelected === true;
+      var newDisabled = typeof disabled === 'boolean' ? disabled : defaultDisabled;
 
-      var newClassName = cn([s$4.dot, this.props.selected && s$4.dotSelected, 'carousel__dot', 'carousel__dot--' + slide, this.props.selected && 'carousel__dot--selected', className]);
+      var newClassName = cn([s$4.dot, newSelected && s$4.dotSelected, 'carousel__dot', 'carousel__dot--' + slide, newSelected && 'carousel__dot--selected', className]);
 
       return React.createElement(
         'button',
         _extends({
           onClick: this.handleOnClick,
-          className: newClassName
+          className: newClassName,
+          disabled: newDisabled
         }, props),
         this.props.children
       );
@@ -1220,19 +1234,28 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
 }(React.Component), _class$4.propTypes = {
   children: CarouselPropTypes.children.isRequired,
   className: index$1.string,
+  currentSlide: index$1.number.isRequired,
   disabled: index$1.bool,
   onClick: index$1.func,
   selected: index$1.bool,
   slide: index$1.number.isRequired,
-  store: index$1.object.isRequired
+  store: index$1.object.isRequired,
+  totalSlides: index$1.number.isRequired,
+  visibleSlides: index$1.number.isRequired
 }, _class$4.defaultProps = {
   className: null,
-  disabled: false,
+  disabled: null,
   onClick: null,
-  selected: false
+  selected: null
 }, _temp$4);
 
-var Dot = WithStore(Dot$1);
+var Dot = WithStore(Dot$1, function (state) {
+  return {
+    currentSlide: state.currentSlide,
+    totalSlides: state.totalSlides,
+    visibleSlides: state.visibleSlides
+  };
+});
 
 var s$5 = {};
 
