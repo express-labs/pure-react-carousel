@@ -1,18 +1,19 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import components from '../../helpers/component-config';
+import clone from 'clone';
 import { ERROR } from '../../helpers/index';
 import ImageWithZoom from '../ImageWithZoom';
 import CarouselProvider from '../../CarouselProvider/CarouselProvider';
 import Store from '../../Store/Store';
 
-const { props } = components.ImageWithZoom;
-
 describe('<ImageWithZoom />', () => {
   let wrapper;
   let imageWithZoom;
+  let props;
 
   beforeEach(() => {
+    props = clone(components.ImageWithZoom.props);
     wrapper = mount((
       <CarouselProvider
         naturalSlideWidth={100}
@@ -22,7 +23,6 @@ describe('<ImageWithZoom />', () => {
         <ImageWithZoom {...props} />
       </CarouselProvider>
     ));
-
     imageWithZoom = wrapper.find(ImageWithZoom);
   });
   it('should render', () => {

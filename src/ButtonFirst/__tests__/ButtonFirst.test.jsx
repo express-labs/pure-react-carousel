@@ -1,11 +1,15 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import clone from 'clone';
 import ButtonFirst from '../ButtonFirst';
 import components from '../../helpers/component-config';
 
-const { props } = components.ButtonFirst;
+let props;
 
 describe('<ButtonFirst />', () => {
+  beforeEach(() => {
+    props = clone(components.ButtonFirst.props);
+  });
   it('should render', () => {
     const wrapper = shallow(<ButtonFirst {...props} />);
     expect(wrapper.exists()).toBe(true);

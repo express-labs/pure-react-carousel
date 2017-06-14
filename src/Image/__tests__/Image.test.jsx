@@ -1,12 +1,16 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import clone from 'clone';
 import components from '../../helpers/component-config';
 import { ERROR } from '../../helpers/index';
 import Image from '../Image';
 
-const { props } = components.Image;
+let props;
 
 describe('<Image />', () => {
+  beforeEach(() => {
+    props = clone(components.Image.props);
+  });
   it('should render', () => {
     const wrapper = mount(<Image {...props} />);
     expect(wrapper.exists()).toBe(true);

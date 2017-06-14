@@ -1,9 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import clone from 'clone';
 import components from '../../helpers/component-config';
 import Slider from '../Slider';
-
-const { props } = components.Slider;
 
 const touch100 = {
   targetTouches: [
@@ -15,6 +14,10 @@ const touch100 = {
 };
 
 describe('<Slider />', () => {
+  let props;
+  beforeEach(() => {
+    props = clone(components.Slider.props);
+  });
   it('should render', () => {
     const wrapper = shallow(<Slider {...props} />);
     expect(wrapper.exists()).toBe(true);

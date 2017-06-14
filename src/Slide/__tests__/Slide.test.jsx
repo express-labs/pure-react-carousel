@@ -1,11 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import clone from 'clone';
 import components from '../../helpers/component-config';
 import Slide from '../Slide';
 
-const { props } = components.Slide;
-
 describe('<Slide />', () => {
+  let props;
+
+  beforeEach(() => {
+    props = clone(components.Slide.props);
+  });
   it('should render', () => {
     const wrapper = shallow(<Slide {...props} />);
     expect(wrapper.exists()).toBe(true);

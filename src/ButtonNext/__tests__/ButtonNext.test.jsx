@@ -1,14 +1,18 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import clone from 'clone';
 import components from '../../helpers/component-config';
 import ButtonNext from '../ButtonNext';
 import Store from '../../Store/Store';
 import CarouselProvider from '../../CarouselProvider/CarouselProvider';
 import ButtonNextWithStore from '../';
 
-const { props } = components.ButtonNext;
+let props;
 
 describe('<ButtonNext />', () => {
+  beforeEach(() => {
+    props = clone(components.ButtonNext.props);
+  });
   it('should render', () => {
     const wrapper = shallow(<ButtonNext {...props} />);
     expect(wrapper.exists()).toBe(true);

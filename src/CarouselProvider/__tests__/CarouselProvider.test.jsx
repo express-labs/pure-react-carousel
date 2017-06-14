@@ -1,11 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import clone from 'clone';
 import CarouselProvider from '../';
 import components from '../../helpers/component-config';
 
-const { props } = components.CarouselProvider;
+let props;
 
 describe('<CarouselProvider />', () => {
+  beforeEach(() => {
+    props = clone(components.CarouselProvider.props);
+  });
   it('should render', () => {
     const wrapper = shallow((
       <CarouselProvider
