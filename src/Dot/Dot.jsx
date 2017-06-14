@@ -7,18 +7,21 @@ const Dot = class Dot extends React.Component {
   static propTypes = {
     children: CarouselPropTypes.children.isRequired,
     className: PropTypes.string,
+    currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     selected: PropTypes.bool,
     slide: PropTypes.number.isRequired,
     store: PropTypes.object.isRequired,
+    totalSlides: PropTypes.number.isRequired,
+    visibleSlides: PropTypes.number.isRequired,
   }
 
   static defaultProps = {
     className: null,
-    disabled: false,
+    disabled: null,
     onClick: null,
-    selected: false,
+    selected: null,
   }
 
   constructor(props) {
@@ -27,21 +30,30 @@ const Dot = class Dot extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { slide, store, onClick } = this.props;
+    const { onClick, slide, store, totalSlides, visibleSlides } = this.props;
+    const newSlide = slide >= totalSlides - visibleSlides ? totalSlides - visibleSlides : slide;
+
     store.setState({
-      currentSlide: slide,
+      currentSlide: newSlide,
     }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
-    const { children, className, onClick, slide, store, ...props } = this.props;
+    const {
+      children, className, currentSlide, disabled, onClick, selected, slide, store, totalSlides,
+      visibleSlides, ...props
+    } = this.props;
+    const defaultSelected = slide >= currentSlide && slide < (currentSlide + visibleSlides);
+    const newSelected = typeof selected === 'boolean' ? selected : defaultSelected;
+    const defaultDisabled = defaultSelected === true;
+    const newDisabled = typeof disabled === 'boolean' ? disabled : defaultDisabled;
 
     const newClassName = cn([
       s.dot,
-      this.props.selected && s.dotSelected,
+      newSelected && s.dotSelected,
       'carousel__dot',
       `carousel__dot--${slide}`,
-      this.props.selected && 'carousel__dot--selected',
+      newSelected && 'carousel__dot--selected',
       className,
     ]);
 
@@ -49,6 +61,7 @@ const Dot = class Dot extends React.Component {
       <button
         onClick={this.handleOnClick}
         className={newClassName}
+        disabled={newDisabled}
         {...props}
       >{this.props.children}</button>
     );

@@ -1,12 +1,16 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import clone from 'clone';
 import components from '../../helpers/component-config';
 import Dot from '../Dot';
 import Store from '../../Store/Store';
 
-const { props } = components.Dot;
+let props;
 
 describe('<Dot />', () => {
+  beforeEach(() => {
+    props = clone(components.Dot.props);
+  });
   it('should render', () => {
     const wrapper = shallow(<Dot {...props} />);
     expect(wrapper.exists()).toBe(true);
@@ -36,6 +40,19 @@ describe('<Dot />', () => {
     const wrapper = mount(<Dot {...newProps} />);
     expect(store.state.currentSlide).toBe(0);
     wrapper.find('button').simulate('click');
-    expect(store.state.currentSlide).toBe(props.slide);
+    expect(store.state.currentSlide).toEqual(props.slide);
+  });
+  it('should keep the last slide pegged to the right of the viewport if visibleSlides > 1', () => {
+    const wrapper = mount(<Dot {...props} slide={10} />);
+    wrapper.find('button').simulate('click');
+    expect(props.store.getState().currentSlide).toBe(8);
+  });
+  it('should not override disabled if disabled prop is set to false manually', () => {
+    const wrapper = mount(<Dot {...props} slide={10} disabled={false} />);
+    expect(wrapper.find('button').prop('disabled')).toBe(false);
+  });
+  it('should not override disabled if disabled prop is set to true manually', () => {
+    const wrapper = mount(<Dot {...props} slide={0} disabled />);
+    expect(wrapper.find('button').prop('disabled')).toBe(true);
   });
 });

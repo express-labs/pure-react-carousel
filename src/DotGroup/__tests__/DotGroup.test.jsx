@@ -1,0 +1,29 @@
+import React from 'react';
+import { shallow, mount } from 'enzyme';
+import clone from 'clone';
+import components from '../../helpers/component-config';
+import DotGroup from '../DotGroup';
+
+let props;
+
+describe('<DotGroup />', () => {
+  beforeEach(() => {
+    props = clone(components.DotGroup.props);
+  });
+  it('should render', () => {
+    const wrapper = shallow(<DotGroup {...props} />);
+    expect(wrapper.exists()).toBe(true);
+  });
+  it('should render dots with numbers if dotNumbers prop is true', () => {
+    const wrapper = shallow(<DotGroup {...props} dotNumbers />);
+    expect(wrapper.find('span').at(0).text()).toEqual('1');
+    expect(wrapper.find('span').at(1).text()).toEqual('2');
+    expect(wrapper.find('span').at(2).text()).toEqual('3');
+  });
+  it('should NOT render dots with numbers if dotNumbers prop is not set', () => {
+    const wrapper = shallow(<DotGroup {...props} />);
+    expect(wrapper.find('span').at(0).text()).toEqual('');
+    expect(wrapper.find('span').at(1).text()).toEqual('');
+    expect(wrapper.find('span').at(2).text()).toEqual('');
+  });
+});

@@ -66,8 +66,8 @@ export default {
     component: CarouselProvider,
     props: {
       children: 'hello',
-      naturalSlideWidth: 100,
       naturalSlideHeight: 125,
+      naturalSlideWidth: 100,
       totalSlides: 1,
     },
   },
@@ -75,8 +75,15 @@ export default {
     component: Dot,
     props: {
       children: 'hello',
-      slide: 1,
-      store: new Store({}),
+      currentSlide: 0,
+      slide: 2,
+      store: new Store({
+        currentSlide: 0,
+        totalSlides: 10,
+        visibleSlides: 2,
+      }),
+      totalSlides: 10,
+      visibleSlides: 2,
     },
   },
   DotGroup: {
