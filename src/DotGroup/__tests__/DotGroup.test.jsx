@@ -14,6 +14,10 @@ describe('<DotGroup />', () => {
     const wrapper = shallow(<DotGroup {...props} />);
     expect(wrapper.exists()).toBe(true);
   });
+  it('should render any children', () => {
+    const wrapper = shallow(<DotGroup {...props}><h1>Hello There</h1></DotGroup>);
+    expect(wrapper.find('h1').text()).toBe('Hello There');
+  });
   it('should render dots with numbers if dotNumbers prop is true', () => {
     const wrapper = shallow(<DotGroup {...props} dotNumbers />);
     expect(wrapper.find('span').at(0).text()).toEqual('1');
