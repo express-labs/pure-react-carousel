@@ -8,7 +8,9 @@
   "scripts": {
     "test": "BABEL_ENV=test jest --no-cache",
     "dev": "NODE_ENV=development rollup -w -c rollup.config.dev.js",
-    "build": "NODE_ENV=production rollup -c rollup.config.cjs.js && NODE_ENV=production rollup -c rollup.config.es.js"
+    "prebuild": "rimraf dist",
+    "build": "NODE_ENV=production rollup -c rollup.config.cjs.js && NODE_ENV=production rollup -c rollup.config.es.js",
+    "postbuild": "node postbuild.js"
   },
   "repository": {
     "type": "git",
