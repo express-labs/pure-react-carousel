@@ -1299,12 +1299,13 @@ var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
     value: function render() {
       var _props2 = this.props,
           className = _props2.className,
+          children = _props2.children,
           currentSlide = _props2.currentSlide,
           store = _props2.store,
           totalSlides = _props2.totalSlides,
           visibleSlides = _props2.visibleSlides,
           dotNumbers = _props2.dotNumbers,
-          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'store', 'totalSlides', 'visibleSlides', 'dotNumbers']);
+          props = objectWithoutProperties(_props2, ['className', 'children', 'currentSlide', 'store', 'totalSlides', 'visibleSlides', 'dotNumbers']);
 
 
       var newClassName = cn([s$5.DotGroup, 'carousel__dot-group', className]);
@@ -1312,7 +1313,8 @@ var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
       return React.createElement(
         'div',
         _extends({ className: newClassName }, props),
-        this.renderDots()
+        this.renderDots(),
+        children
       );
     }
   }]);
