@@ -1352,7 +1352,6 @@ var Image$1 = function (_React$Component) {
     var _this = possibleConstructorReturn(this, (Image.__proto__ || Object.getPrototypeOf(Image)).call(this, props));
 
     _this.state = { imageStatus: LOADING };
-    _this.initImage();
     if (props.hasMasterSpinner) {
       props.store.subscribeMasterSpinner();
     }
@@ -1362,6 +1361,7 @@ var Image$1 = function (_React$Component) {
   createClass(Image, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      this.initImage();
       this.image.onload = this.handleImageLoad;
       this.image.onerror = this.handleImageError;
       this.image.src = this.props.src;
