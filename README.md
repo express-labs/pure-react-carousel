@@ -18,18 +18,31 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
 ## How To Use It.
 Let's make a simple carousel with three slides, a next button, and a back button.
 
-1. Import only the required components into your project.
+1. Add the module to your project.
+
+`npm i -S pure-react-carousel`
+
+2. Import only the required components into your project.
 
 ```javascript
 import React from 'react';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 ```  
 
-2. Put a CarouselProvider component in your code.  This allows the other carousel components to communicate with each other.  The only required properties are the orientation, naturalSlideWidth, and naturalSlideHeight.  And it must have children, of course.  We'll add children in the next step.
+3. Using Webpack or Rollup?  Does your Webpack config have a loader for "css" files?  If so, import the css as well.
 
 ```javascript
 import React from 'react';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+```   
+
+4. Put a CarouselProvider component in your code.  This allows the other carousel components to communicate with each other.  The only required properties are the orientation, naturalSlideWidth, and naturalSlideHeight.  And it must have children, of course.  We'll add children in the next step.
+
+```javascript
+import React from 'react';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 
 export default class extends React.Component {
   render() {
@@ -40,12 +53,13 @@ export default class extends React.Component {
 }
 ```
 
-3. Place the components in any order you wish as long as they are children of a single CarouselProvider component. Some components have ancestor/descendant relationships but they don't have to be direct relatives.  For example: Slides need to go inside of a Slider.
+5. Place the components in any order you wish as long as they are children of a single CarouselProvider component. Some components have ancestor/descendant relationships but they don't have to be direct relatives.  For example: Slides need to go inside of a Slider.
 Slides require an index.  Chances are, a lot of the time, you're going to be populating the slides from data and looping through the data, so it would be easy to add an index in your loop.
 
 ```javascript
 import React from 'react';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 
 export default class extends React.Component {
   render() {
@@ -62,11 +76,12 @@ export default class extends React.Component {
 }
 ```
 
-4. Add some buttons so the user can navigate forward and backwards.
+6. Add some buttons so the user can navigate forward and backwards.
 
 ```javascript
 import React from 'react';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 
 export default class extends React.Component {
   render() {
@@ -85,11 +100,12 @@ export default class extends React.Component {
 }
 ```
 
-5. Make sure to set the required properties for the \<CarouselProvider> component.
+7. Make sure to set the required properties for the \<CarouselProvider> component.
 
 ```javascript
 import React from 'react';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 
 export default class extends React.Component {
   render() {
@@ -118,6 +134,8 @@ There are other components you can add, like ButtonFirst, ButtonLast, an Image c
 
 Obviously, you can customize the heck out of the layout.  If you need to bury your Slider component in 18 parent divs, go for it.  It will still do it's job.  Feel free to add the className property to any of the Components to further customize your carousel.  Or, hook into the many BEM named default CSS class names built into the carousel components.
 
+Some components have a ancestor / descendant relationship but they don't have to be direct descendants of the parent.  For example, Slide needs to be a descendant of Slider, but you can put a bunch of div wrappers around slide if you need to.  A good analogy are the html tags `table` and `tr`.  The `tr` tag needs to be a descendant of `table`, but it doesn't have to be a direct descendant.  You can have a `tbody` between them in the tree.
+
 ## Docs
 
 **A general note:**  You can append your own className to every single component in this library.  Also, any props not consumed by a component are passed through to the root element of each component. This makes all the components in this library HIGHLY configurable.  You can, for example, add your one event handlers, or change aria tags, etc.
@@ -125,8 +143,8 @@ Obviously, you can customize the heck out of the layout.  If you need to bury yo
 ### \<CarouselProvider />
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string \| node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other Carousel components and HTML |
-| className | string | null | No | Optional className string that will be appended to the component's className string |
+| **children** | [string\|node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other Carousel components and HTML |
+| className | [string\|null] | null | No | Optional className string that will be appended to the component's className string |
 | currentSlide | number | 0 | No | \<Slide \> to display on initial render. The indexing of \<Slide /> components starts with 0. |
 | hasMasterSpinner | bool | false | No | When true, a spinner will cover \<Slider /> component until all \<Image \> and \<ImageWithZoom \> are done loading images.  If there are no \<Image /> or \<ImageWithZoom> components, the spinner will spin until this property is set to false |
 | **naturalSlideHeight** | number | | **Yes** | The natural height of each <\Slide > component. ** |
@@ -142,6 +160,8 @@ Obviously, you can customize the heck out of the layout.  If you need to bury yo
 The carousel is responsive and by default will flex to the full width of the <Slider \> parent container.  It's up to you to contain the carousel width via css.  Each slide will be the same height to width ratio ([intrinsic ratio](https://alistapart.com/d/creating-intrinsic-ratios-for-video/example2.html)). CarouselProvider needs to know the default size of each \<Slide />.  Note: you can make the carousel non-responsive by setting the width of <Slider \>to a fixed css unit, like pixels. There are many other ways to make the carousel non-responsive.
 
 ### \<Slider />
+A Slider is a viewport that masks slides.  The Slider component must wrap one or more Slide components.
+
 The Slide component creates the following pseudo HTML by default.
 ```HTML
 <div class="X" aria-live="polite" style="X" ...props>
@@ -156,12 +176,14 @@ The Slide component creates the following pseudo HTML by default.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string \| node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or HTML |
-| className | string | null | No | Optional className string that will be appended to the component's className string. |
+| **children** | [string\|node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or HTML |
+| className | [string\|null] | null | No | Optional className string that will be appended to the component's className string. |
 | style | object | {} | No | Optional css styles to add to the Slider.  Note: internal css properties take precedence over any styles specified in the styles object |
-| onMasterSpinner | [function \| null] | null | No | Optional callback function that is called when the Master Spinner is visible.  Requires that \<CarouselProvider /> set hasMasterSpinner to true |
+| onMasterSpinner | [function\|null] | null | No | Optional callback function that is called when the Master Spinner is visible.  Requires that \<CarouselProvider /> set hasMasterSpinner to true |
 
 ### \<Slide />
+The Slide component is a container with an intrinsic ratio computed by the CarouselProvider naturalSlideWidth and naturalSlideHeight properties.  By default, only one slide is visible in the Slider at a time.  You can change this by altering the visibleSlides property of the CarouselProvider.  Slide components also contain a div that acts as an aria compliant focus ring when the Slide receives focus either by using a keyboard tab, mouse click, or touch.
+
 The Slide component creates the following pseudo HTML by default.
 ```HTML
 <div tabIndex="X" aria-hidden="X" onFocus="X" onBlur="X" class="X" style="X" ...props>
@@ -174,16 +196,37 @@ The Slide component creates the following pseudo HTML by default.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| className | string | null | No | Optional className string that will be appended to the component's className string. |
+| className | [string\|null] | null | No | Optional className string that will be appended to the component's className string. |
 | **index** | number | | **Yes** | You must consecutively number the \<Slide > components in order starting with zero. |
-| innerClassName | string | null | No | Optional className string that will be appended to an internal HTML element created by the Component. Best to just use Chrome Dev Tools to inspect the demo app or check the source code for \<Slide /> |
+| innerClassName | [string\|null] | null | No | Optional className string that will be appended to an internal HTML element created by the Component. Best to just use Chrome Dev Tools to inspect the demo app or check the source code for \<Slide /> |
 | innerTag | string | 'div' | No | The inner HTML element for each Slide. |
-| onBlur | [ function \| null ] | null | No | Optional callback function that is called after the internal onBlur function is called. It is passed the React synthetic event |
-| onFocus | [ function \| null ] | null | No | Optional callback function that is called after the internal onFocus function is called. It is passed the React synthetic event |
-| tabIndex | [ number \| null ] | null | No | When null, the Carousel will set this automatically.  99.9% of the time, you're going to want to leave this alone and let the carousel handle tabIndex automatically. |
+| onBlur | [function\|null] | null | No | Optional callback function that is called after the internal onBlur function is called. It is passed the React synthetic event |
+| onFocus | [function\|null] | null | No | Optional callback function that is called after the internal onFocus function is called. It is passed the React synthetic event |
+| tabIndex | [number\|null] | null | No | When null, the Carousel will set this automatically.  99.9% of the time, you're going to want to leave this alone and let the carousel handle tabIndex automatically. |
 | tag** | string | 'div' | No | The root HTML element for each Slide. |
 
-**Note about the tag property**  If clicking on a carousel slide should do something like, oh, open a shadow box, or navigate to a page, You might want to set this to some other element, like an 'a' tag or even 'button'.  Obviously, if you do this, you're going to have to add some more CSS styles.  Look at the demo app (npm run dev) to see what CSS classes you can hook into.  There are a lot.  Don't forget, You can also supply your own className to append.
+**Note about the tag property**  If clicking on a carousel slide should do something like, oh, open a shadow box, or navigate to a page, You might want to set this to some other element, like an 'a' tag or even 'button'.  Obviously, if you do this, you're going to have to add some more CSS styles.  Look at the demo app (`npm run dev`) to see what CSS classes you can hook into.  There are a lot.  Don't forget, You can also supply your own className to append.
+
+### Dot
+A Dot component is a HTML button.  Dots directly correlate to slides.  Currently visible slides cause the correlating Dot to become disabled.  You can override the auto-disable feature by setting disabled to false (see table below)
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| **children** | [string\|node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or HTML |
+| className | [string\|null] | null | No | Optional className string that will be appended to the component's className string. |
+| disabled | [boolean\|null] | null | No | Null means Dot will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
+| onClick | [function\|null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+| **slide** | number | | **Yes** | There must be a matching \<Slide /> component with a matching index property. Example: `<Dot slide={0} />` will match `<Slide index={0} />`|
+
+
+### DotGroup
+A compound component that creates a bunch of Dot's automatically for you.
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| children | [string\|node\|null] | null | Yes | Any child HTML will appear AFTER the dots. |
+| className | [string\|null] | null | No | Optional className string that will be appended to the component's className string. |
+| dotNumbers | boolean | false | No | Setting to true automatically adds text numbers the dot buttons starting at 1. |
 
 
 ## More Documentation to Come
