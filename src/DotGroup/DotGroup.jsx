@@ -36,7 +36,7 @@ const DotGroup = class DotGroup extends React.Component {
 
   render() {
     const {
-      className, currentSlide, store, totalSlides, visibleSlides, dotNumbers, ...props
+      className, children, currentSlide, store, totalSlides, visibleSlides, dotNumbers, ...props
     } = this.props;
 
     const newClassName = cn([
@@ -48,6 +48,7 @@ const DotGroup = class DotGroup extends React.Component {
     return (
       <div className={newClassName} {...props}>
         {this.renderDots()}
+        {children}
       </div>
     );
   }
