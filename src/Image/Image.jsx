@@ -40,13 +40,13 @@ class Image extends React.Component {
   constructor(props) {
     super(props);
     this.state = { imageStatus: LOADING };
-    this.initImage();
     if (props.hasMasterSpinner) {
       props.store.subscribeMasterSpinner();
     }
   }
 
   componentDidMount() {
+    this.initImage();
     this.image.onload = this.handleImageLoad;
     this.image.onerror = this.handleImageError;
     this.image.src = this.props.src;
