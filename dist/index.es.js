@@ -660,7 +660,6 @@ return deepmerge
 }));
 });
 
-// import clone from 'clone';
 function WithStore(WrappedComponent) {
   var mapStateToProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {
     return {};
