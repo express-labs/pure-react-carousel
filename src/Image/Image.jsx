@@ -37,36 +37,59 @@ class Image extends React.Component {
     style: null,
   }
 
-  constructor(props) {
-    super(props);
-    this.state = { imageStatus: LOADING };
+  static subscribeMasterSpinner(props) {
     if (props.hasMasterSpinner) {
       props.store.subscribeMasterSpinner();
     }
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { imageStatus: LOADING };
+    this.handleImageLoad = this.handleImageLoad.bind(this);
+    this.handleImageError = this.handleImageError.bind(this);
+    this.image = null;
+  }
+
   componentDidMount() {
+    Image.subscribeMasterSpinner(this.props);
     this.initImage();
-    this.image.onload = this.handleImageLoad;
-    this.image.onerror = this.handleImageError;
-    this.image.src = this.props.src;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.src !== this.props.src) {
+      Image.subscribeMasterSpinner(nextProps);
+      this.initImage();
+    }
+  }
+
+  componentWillUnmount() {
+    this.image.removeEventListener('load', this.hamdleImageLoad);
+    this.image.removeEventListener('error', this.handleImageError);
+    this.image.remove();
   }
 
   initImage() {
+    if (this.image !== null) {
+      this.image.removeEventListener('load', this.hamdleImageLoad);
+      this.image.removeEventListener('error', this.handleImageError);
+      this.image.remove();
+    }
     this.image = document.createElement('img');
-    this.handleImageLoad = this.handleImageLoad.bind(this);
-    this.handleImageError = this.handleImageError.bind(this);
+    this.image.addEventListener('load', this.handleImageLoad, false);
+    this.image.addEventListener('error', this.handleImageError, false);
+    this.image.src = this.props.src;
   }
 
   handleImageLoad(ev) {
     this.setState({ imageStatus: SUCCESS });
-    this.props.store.masterSpinnerSuccess();
+    if (this.props.hasMasterSpinner) this.props.store.masterSpinnerSuccess();
     if (this.props.onLoad) this.props.onLoad(ev);
   }
 
   handleImageError(ev) {
     this.setState({ imageStatus: ERROR });
-    this.props.store.masterSpinnerError();
+    if (this.props.hasMasterSpinner) this.props.store.masterSpinnerError();
     if (this.props.onError) this.props.onError(ev);
   }
 

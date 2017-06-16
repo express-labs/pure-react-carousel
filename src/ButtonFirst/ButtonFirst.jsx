@@ -27,7 +27,7 @@ const ButtonFirst = class ButtonFirst extends React.Component {
 
   handleOnClick(ev) {
     const { store, onClick } = this.props;
-    store.setState({
+    store.setStoreState({
       currentSlide: 0,
     }, onClick !== null && onClick.call(this, ev));
   }

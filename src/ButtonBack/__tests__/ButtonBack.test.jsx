@@ -45,7 +45,7 @@ describe('<ButtonBack />', () => {
       >Hello</ButtonBack>,
     );
     wrapper.find('button').simulate('click');
-    expect(mockStore.getState().currentSlide).toBe(1);
+    expect(mockStore.getStoreState().currentSlide).toBe(1);
   });
   it('should call an onClick function passed as a prop', () => {
     const mockStore = new Store({

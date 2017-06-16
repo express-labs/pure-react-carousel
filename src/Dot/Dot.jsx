@@ -33,7 +33,7 @@ const Dot = class Dot extends React.Component {
     const { onClick, slide, store, totalSlides, visibleSlides } = this.props;
     const newSlide = slide >= totalSlides - visibleSlides ? totalSlides - visibleSlides : slide;
 
-    store.setState({
+    store.setStoreState({
       currentSlide: newSlide,
     }, onClick !== null && onClick.call(this, ev));
   }

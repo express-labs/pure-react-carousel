@@ -46,7 +46,7 @@ export default class ButtonBack extends React.Component {
       currentSlide - step,
       0,
     );
-    store.setState({
+    store.setStoreState({
       currentSlide: newCurrentSlide,
     }, onClick !== null && onClick.call(this, ev));
   }

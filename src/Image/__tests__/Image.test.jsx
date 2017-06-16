@@ -84,4 +84,11 @@ describe('<Image />', () => {
     wrapper.setState({ imageStatus: 'error' });
     expect(renderError).toHaveBeenCalledTimes(1);
   });
+  it('if the image src changes, we need to make a new image element and, if hasMasterSpinner === true, subscribe the master spinner', () => {
+    const wrapper = shallow(<Image {...props} hasMasterSpinner />);
+    const instance = wrapper.instance();
+    const spy = jest.spyOn(instance, 'initImage');
+    wrapper.setProps({ src: 'foo.jpg' });
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
 });

@@ -28,7 +28,7 @@ describe('<ButtonLast />', () => {
     const wrapper = mount(<ButtonLast {...props} />);
     wrapper.find('button').simulate('click');
     wrapper.update();
-    expect(props.store.getState().currentSlide).toBe(props.totalSlides - 1);
+    expect(props.store.getStoreState().currentSlide).toBe(props.totalSlides - 1);
   });
   it('should call an onClick function passed as a prop', () => {
     const onClick = jest.fn();

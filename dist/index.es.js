@@ -346,7 +346,7 @@ var ButtonBack = function (_React$Component) {
           store = _props.store;
 
       var newCurrentSlide = Math.max(currentSlide - step, 0);
-      store.setState({
+      store.setStoreState({
         currentSlide: newCurrentSlide
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -660,6 +660,7 @@ return deepmerge
 }));
 });
 
+// import clone from 'clone';
 function WithStore(WrappedComponent) {
   var mapStateToProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {
     return {};
@@ -673,43 +674,42 @@ function WithStore(WrappedComponent) {
 
       var _this = possibleConstructorReturn(this, (Wrapper.__proto__ || Object.getPrototypeOf(Wrapper)).call(this, props, context));
 
-      _this.state = {
-        stateProps: mapStateToProps(context.store.getState())
-      };
+      _this.state = mapStateToProps(context.store.state);
+      _this.updateStateProps = _this.updateStateProps.bind(_this);
       return _this;
     }
 
     createClass(Wrapper, [{
-      key: 'componentDidMount',
-      value: function componentDidMount() {
-        var _this2 = this;
-
-        this.context.store.subscribe(function () {
-          return _this2.updateStateProps();
-        });
+      key: 'componentWillMount',
+      value: function componentWillMount() {
+        this.context.store.subscribe(this.updateStateProps);
       }
     }, {
       key: 'shouldComponentUpdate',
       value: function shouldComponentUpdate(nextProps, nextState) {
-        return !index$2(nextState, this.state) || !index$2(nextProps, this.props);
+        var test = !index$2(nextState, this.state) || !index$2(nextProps, this.props);
+        return test;
+      }
+    }, {
+      key: 'componentWillUnmount',
+      value: function componentWillUnmount() {
+        this.context.store.unsubscribe(this.updateStateProps);
       }
     }, {
       key: 'updateStateProps',
       value: function updateStateProps() {
-        this.setState({
-          stateProps: mapStateToProps(this.context.store.getState())
-        });
+        this.setState(mapStateToProps(this.context.store.state));
       }
     }, {
       key: 'render',
       value: function render() {
-        var props = index$5(this.state.stateProps, this.props);
+        var props = index$5(this.state, this.props);
 
         return React.createElement(
           WrappedComponent,
           _extends({}, props, {
             store: {
-              setState: this.context.store.setState,
+              setStoreState: this.context.store.setStoreState,
               subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
               masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
               masterSpinnerError: this.context.store.masterSpinnerError
@@ -767,7 +767,7 @@ var ButtonFirst = (_temp = _class = function (_React$Component) {
           store = _props.store,
           onClick = _props.onClick;
 
-      store.setState({
+      store.setStoreState({
         currentSlide: 0
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -868,7 +868,7 @@ var ButtonNext = (_temp$1 = _class$1 = function (_React$PureComponent) {
 
       var maxSlide = this.props.totalSlides - this.props.visibleSlides;
       var newCurrentSlide = Math.min(currentSlide + step, maxSlide);
-      store.setState({
+      store.setStoreState({
         currentSlide: newCurrentSlide
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -953,7 +953,7 @@ var ButtonLast = (_temp$2 = _class$2 = function (_React$Component) {
           totalSlides = _props.totalSlides,
           visibleSlides = _props.visibleSlides;
 
-      store.setState({
+      store.setStoreState({
         currentSlide: totalSlides - visibleSlides
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -1126,6 +1126,28 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
       return { store: this.store };
     }
   }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      var _this2 = this;
+
+      var newStoreState = {};
+
+      ['currentSlide', 'hasMasterSpinner', 'naturalSlideHeight', 'naturalSlideWidth', 'orientation', 'step', 'totalSlides', 'touchEnabled', 'visibleSlides'].forEach(function (propName) {
+        if (nextProps[propName] !== _this2.props[propName]) {
+          newStoreState[propName] = nextProps[propName];
+        }
+      });
+
+      if (this.props.totalSlides !== nextProps.totalSlides || this.props.visibleSlides !== nextProps.visibleSlides) {
+        newStoreState.slideSize = slideSize(nextProps.totalSlides, nextProps.visibleSlides);
+        newStoreState.slideTraySize = slideTraySize(nextProps.totalSlides, nextProps.visibleSlides);
+      }
+
+      if (Object.keys(newStoreState).length > 0) {
+        this.store.setStoreState(newStoreState);
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var filteredProps = index$9(this.props, Object.keys(CarouselProvider$$1.propTypes));
@@ -1192,7 +1214,7 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
 
       var newSlide = slide >= totalSlides - visibleSlides ? totalSlides - visibleSlides : slide;
 
-      store.setState({
+      store.setStoreState({
         currentSlide: newSlide
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -1345,6 +1367,14 @@ var s$6 = { "image": "_image_u458c_1" };
 
 var Image$1 = function (_React$Component) {
   inherits(Image, _React$Component);
+  createClass(Image, null, [{
+    key: 'subscribeMasterSpinner',
+    value: function subscribeMasterSpinner(props) {
+      if (props.hasMasterSpinner) {
+        props.store.subscribeMasterSpinner();
+      }
+    }
+  }]);
 
   function Image(props) {
     classCallCheck(this, Image);
@@ -1352,39 +1382,58 @@ var Image$1 = function (_React$Component) {
     var _this = possibleConstructorReturn(this, (Image.__proto__ || Object.getPrototypeOf(Image)).call(this, props));
 
     _this.state = { imageStatus: LOADING };
-    if (props.hasMasterSpinner) {
-      props.store.subscribeMasterSpinner();
-    }
+    _this.handleImageLoad = _this.handleImageLoad.bind(_this);
+    _this.handleImageError = _this.handleImageError.bind(_this);
+    _this.image = null;
     return _this;
   }
 
   createClass(Image, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      Image.subscribeMasterSpinner(this.props);
       this.initImage();
-      this.image.onload = this.handleImageLoad;
-      this.image.onerror = this.handleImageError;
-      this.image.src = this.props.src;
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.src !== this.props.src) {
+        Image.subscribeMasterSpinner(nextProps);
+        this.initImage();
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.image.removeEventListener('load', this.hamdleImageLoad);
+      this.image.removeEventListener('error', this.handleImageError);
+      this.image.remove();
     }
   }, {
     key: 'initImage',
     value: function initImage() {
+      if (this.image !== null) {
+        this.image.removeEventListener('load', this.hamdleImageLoad);
+        this.image.removeEventListener('error', this.handleImageError);
+        this.image.remove();
+      }
       this.image = document.createElement('img');
-      this.handleImageLoad = this.handleImageLoad.bind(this);
-      this.handleImageError = this.handleImageError.bind(this);
+      this.image.addEventListener('load', this.handleImageLoad, false);
+      this.image.addEventListener('error', this.handleImageError, false);
+      this.image.src = this.props.src;
     }
   }, {
     key: 'handleImageLoad',
     value: function handleImageLoad(ev) {
       this.setState({ imageStatus: SUCCESS });
-      this.props.store.masterSpinnerSuccess();
+      if (this.props.hasMasterSpinner) this.props.store.masterSpinnerSuccess();
       if (this.props.onLoad) this.props.onLoad(ev);
     }
   }, {
     key: 'handleImageError',
     value: function handleImageError(ev) {
       this.setState({ imageStatus: ERROR });
-      this.props.store.masterSpinnerError();
+      if (this.props.hasMasterSpinner) this.props.store.masterSpinnerError();
       if (this.props.onError) this.props.onError(ev);
     }
   }, {
@@ -1882,7 +1931,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       newCurrentSlide = Math.max(0, newCurrentSlide);
       newCurrentSlide = Math.min(maxSlide, newCurrentSlide);
 
-      this.props.store.setState({
+      this.props.store.setStoreState({
         currentSlide: newCurrentSlide
       });
     }
@@ -2132,8 +2181,8 @@ var Store = function () {
 
     this.state = index$19(index$5(DEFAULT_STATE, initialState));
     this.subscriptions = [];
-    this.setState = this.setState.bind(this);
-    this.getState = this.getState.bind(this);
+    this.setStoreState = this.setStoreState.bind(this);
+    this.getStoreState = this.getStoreState.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.updateSubscribers = this.updateSubscribers.bind(this);
     this.subscribeMasterSpinner = this.subscribeMasterSpinner.bind(this);
@@ -2142,14 +2191,14 @@ var Store = function () {
   }
 
   createClass(Store, [{
-    key: 'setState',
-    value: function setState(newState, cb) {
+    key: 'setStoreState',
+    value: function setStoreState(newState, cb) {
       this.state = index$19(index$5(this.state, newState));
       this.updateSubscribers(cb);
     }
   }, {
-    key: 'getState',
-    value: function getState() {
+    key: 'getStoreState',
+    value: function getStoreState() {
       return index$5({}, this.state);
     }
   }, {
@@ -2158,31 +2207,37 @@ var Store = function () {
       this.subscriptions.push(func);
     }
   }, {
+    key: 'unsubscribe',
+    value: function unsubscribe(func) {
+      var index = this.subscriptions.indexOf(func);
+      if (index !== -1) this.subscriptions.splice(index, 1);
+    }
+  }, {
     key: 'updateSubscribers',
     value: function updateSubscribers(cb) {
       this.subscriptions.forEach(function (func) {
         return func();
       });
-      if (typeof cb === 'function') cb(this.getState());
+      if (typeof cb === 'function') cb(this.getStoreState());
     }
   }, {
     key: 'subscribeMasterSpinner',
     value: function subscribeMasterSpinner() {
-      this.setState({
+      this.setStoreState({
         masterSpinnerSubscriptionCount: this.state.masterSpinnerSubscriptionCount + 1
       });
     }
   }, {
     key: 'masterSpinnerSuccess',
     value: function masterSpinnerSuccess() {
-      this.setState({
+      this.setStoreState({
         masterSpinnerSuccessCount: this.state.masterSpinnerSuccessCount + 1
       });
     }
   }, {
     key: 'masterSpinnerError',
     value: function masterSpinnerError() {
-      this.setState({
+      this.setStoreState({
         masterSpinnerErrorCount: this.state.masterSpinnerErrorCount + 1
       });
     }

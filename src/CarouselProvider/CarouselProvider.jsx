@@ -67,6 +67,38 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     return { store: this.store };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const newStoreState = {};
+
+    [
+      'currentSlide',
+      'hasMasterSpinner',
+      'naturalSlideHeight',
+      'naturalSlideWidth',
+      'orientation',
+      'step',
+      'totalSlides',
+      'touchEnabled',
+      'visibleSlides',
+    ].forEach((propName) => {
+      if (nextProps[propName] !== this.props[propName]) {
+        newStoreState[propName] = nextProps[propName];
+      }
+    });
+
+    if (
+      this.props.totalSlides !== nextProps.totalSlides ||
+      this.props.visibleSlides !== nextProps.visibleSlides
+    ) {
+      newStoreState.slideSize = slideSize(nextProps.totalSlides, nextProps.visibleSlides);
+      newStoreState.slideTraySize = slideTraySize(nextProps.totalSlides, nextProps.visibleSlides);
+    }
+
+    if (Object.keys(newStoreState).length > 0) {
+      this.store.setStoreState(newStoreState);
+    }
+  }
+
   render() {
     const filteredProps = omit(this.props, Object.keys(CarouselProvider.propTypes));
     const newClassName = cn([

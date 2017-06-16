@@ -28,7 +28,7 @@ const ButtonLast = class ButtonLast extends React.Component {
 
   handleOnClick(ev) {
     const { store, onClick, totalSlides, visibleSlides } = this.props;
-    store.setState({
+    store.setStoreState({
       currentSlide: totalSlides - visibleSlides,
     }, onClick !== null && onClick.call(this, ev));
   }

@@ -106,7 +106,7 @@ const Slider = class Slider extends React.Component {
     newCurrentSlide = Math.max(0, newCurrentSlide);
     newCurrentSlide = Math.min(maxSlide, newCurrentSlide);
 
-    this.props.store.setState({
+    this.props.store.setStoreState({
       currentSlide: newCurrentSlide,
     });
   }

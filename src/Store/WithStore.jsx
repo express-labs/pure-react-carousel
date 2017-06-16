@@ -23,33 +23,35 @@ export default function WithStore(
 
     constructor(props, context) {
       super(props, context);
-      this.state = {
-        stateProps: mapStateToProps(context.store.getState()),
-      };
+      this.state = mapStateToProps(context.store.state);
+      this.updateStateProps = this.updateStateProps.bind(this);
     }
 
-    componentDidMount() {
-      this.context.store.subscribe(() => this.updateStateProps());
+    componentWillMount() {
+      this.context.store.subscribe(this.updateStateProps);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-      return !equal(nextState, this.state) || !equal(nextProps, this.props);
+      const test = !equal(nextState, this.state) || !equal(nextProps, this.props);
+      return test;
+    }
+
+    componentWillUnmount() {
+      this.context.store.unsubscribe(this.updateStateProps);
     }
 
     updateStateProps() {
-      this.setState({
-        stateProps: mapStateToProps(this.context.store.getState()),
-      });
+      this.setState(mapStateToProps(this.context.store.state));
     }
 
     render() {
-      const props = deepMerge(this.state.stateProps, this.props);
+      const props = deepMerge(this.state, this.props);
 
       return (
         <WrappedComponent
           {...props}
           store={{
-            setState: this.context.store.setState,
+            setStoreState: this.context.store.setStoreState,
             subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
             masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
             masterSpinnerError: this.context.store.masterSpinnerError,

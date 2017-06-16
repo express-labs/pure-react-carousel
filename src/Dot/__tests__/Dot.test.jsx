@@ -45,7 +45,7 @@ describe('<Dot />', () => {
   it('should keep the last slide pegged to the right of the viewport if visibleSlides > 1', () => {
     const wrapper = mount(<Dot {...props} slide={10} />);
     wrapper.find('button').simulate('click');
-    expect(props.store.getState().currentSlide).toBe(8);
+    expect(props.store.getStoreState().currentSlide).toBe(8);
   });
   it('should not override disabled if disabled prop is set to false manually', () => {
     const wrapper = mount(<Dot {...props} slide={10} disabled={false} />);

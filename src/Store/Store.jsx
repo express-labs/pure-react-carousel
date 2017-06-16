@@ -11,8 +11,8 @@ const Store = class Store {
   constructor(initialState) {
     this.state = deepFreeze(deepMerge(DEFAULT_STATE, initialState));
     this.subscriptions = [];
-    this.setState = this.setState.bind(this);
-    this.getState = this.getState.bind(this);
+    this.setStoreState = this.setStoreState.bind(this);
+    this.getStoreState = this.getStoreState.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.updateSubscribers = this.updateSubscribers.bind(this);
     this.subscribeMasterSpinner = this.subscribeMasterSpinner.bind(this);
@@ -20,12 +20,12 @@ const Store = class Store {
     this.masterSpinnerError = this.masterSpinnerError.bind(this);
   }
 
-  setState(newState, cb) {
+  setStoreState(newState, cb) {
     this.state = deepFreeze(deepMerge(this.state, newState));
     this.updateSubscribers(cb);
   }
 
-  getState() {
+  getStoreState() {
     return deepMerge({}, this.state);
   }
 
@@ -33,25 +33,30 @@ const Store = class Store {
     this.subscriptions.push(func);
   }
 
+  unsubscribe(func) {
+    const index = this.subscriptions.indexOf(func);
+    if (index !== -1) this.subscriptions.splice(index, 1);
+  }
+
   updateSubscribers(cb) {
     this.subscriptions.forEach(func => func());
-    if (typeof cb === 'function') cb(this.getState());
+    if (typeof cb === 'function') cb(this.getStoreState());
   }
 
   subscribeMasterSpinner() {
-    this.setState({
+    this.setStoreState({
       masterSpinnerSubscriptionCount: this.state.masterSpinnerSubscriptionCount + 1,
     });
   }
 
   masterSpinnerSuccess() {
-    this.setState({
+    this.setStoreState({
       masterSpinnerSuccessCount: this.state.masterSpinnerSuccessCount + 1,
     });
   }
 
   masterSpinnerError() {
-    this.setState({
+    this.setStoreState({
       masterSpinnerErrorCount: this.state.masterSpinnerErrorCount + 1,
     });
   }

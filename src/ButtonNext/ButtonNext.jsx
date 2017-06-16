@@ -59,7 +59,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
       (currentSlide + step),
       maxSlide,
     );
-    store.setState({
+    store.setStoreState({
       currentSlide: newCurrentSlide,
     }, onClick !== null && onClick.call(this, ev));
   }
