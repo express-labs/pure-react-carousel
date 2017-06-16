@@ -70,11 +70,11 @@ class Image extends React.Component {
   }
 
   initImage() {
-    if (this.image !== null) {
-      this.image.removeEventListener('load', this.hamdleImageLoad);
-      this.image.removeEventListener('error', this.handleImageError);
-      this.image.remove();
-    }
+    // if (this.image !== null) {
+    //   this.image.removeEventListener('load', this.hamdleImageLoad);
+    //   this.image.removeEventListener('error', this.handleImageError);
+    //   this.image.remove();
+    // }
     this.image = document.createElement('img');
     this.image.addEventListener('load', this.handleImageLoad, false);
     this.image.addEventListener('error', this.handleImageError, false);
