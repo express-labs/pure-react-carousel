@@ -18,8 +18,8 @@ describe('<Image />', () => {
   it('should make a call to store.subscribeMasterSpinner() if props.hasMasterSpinner is true', () => {
     const spy = jest.spyOn(props.store, 'subscribeMasterSpinner');
     expect(spy).not.toHaveBeenCalled();
-    shallow(<Image {...props} hasMasterSpinner />);
-    expect(spy).toHaveBeenCalled();
+    mount(<Image {...props} hasMasterSpinner />);
+    expect(spy).toHaveBeenCalledTimes(1);
   });
   it('should call any passed-in onLoad after the image loads.', () => {
     const onLoad = jest.fn();
@@ -76,9 +76,12 @@ describe('<Image />', () => {
   });
   it('should call store.masterSpinnerError if image load error and hasMasterSpinner was true', () => {
     const masterSpinnerError = jest.fn();
-    props.store.masterSpinnerError = masterSpinnerError;
     const wrapper = mount(<Image {...props} hasMasterSpinner />);
-    wrapper.setState({ imageStatus: ERROR });
+    const instance = wrapper.instance();
+    const event = new UIEvent('error');
+    props.store.masterSpinnerError = masterSpinnerError;
+    // simulate a load error
+    instance.image.dispatchEvent(event);
     expect(masterSpinnerError).toHaveBeenCalledTimes(1);
   });
   it('should throw an error if state.imageStatus is not LOADING, SUCCESS, or ERROR', () => {

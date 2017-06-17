@@ -87,6 +87,9 @@
       "/dev/",
       "/dist/"
     ],
+    "testMatch": [
+      "**/__tests__/**.test.js?(x)"
+    ],
     "collectCoverage": true,
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
