@@ -2183,6 +2183,7 @@ var Store = function () {
     this.setStoreState = this.setStoreState.bind(this);
     this.getStoreState = this.getStoreState.bind(this);
     this.subscribe = this.subscribe.bind(this);
+    this.unsubscribe = this.unsubscribe.bind(this);
     this.updateSubscribers = this.updateSubscribers.bind(this);
     this.subscribeMasterSpinner = this.subscribeMasterSpinner.bind(this);
     this.masterSpinnerSuccess = this.masterSpinnerSuccess.bind(this);
