@@ -21,8 +21,10 @@ const Slider = class Slider extends React.Component {
     slideSize: PropTypes.number.isRequired,
     store: PropTypes.object.isRequired,
     style: PropTypes.object,
+    tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
     touchEnabled: PropTypes.bool.isRequired,
+    trayTag: PropTypes.string,
     visibleSlides: PropTypes.number,
   }
 
@@ -31,6 +33,8 @@ const Slider = class Slider extends React.Component {
     height: null,
     onMasterSpinner: null,
     style: {},
+    tabIndex: null,
+    trayTag: 'ul',
     visibleSlides: 1,
   }
 
@@ -40,13 +44,14 @@ const Slider = class Slider extends React.Component {
     this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
     this.handleOnTouchMove = this.handleOnTouchMove.bind(this);
     this.handleOnTouchEnd = this.handleOnTouchEnd.bind(this);
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
 
     this.state = {
       deltaX: 0,
       deltaY: 0,
       startX: 0,
       startY: 0,
-      isMoving: false,
+      isBeingTouchDragged: false,
     };
 
     this.originalOverflow = null;
@@ -59,7 +64,7 @@ const Slider = class Slider extends React.Component {
     this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
     this.setState({
-      isMoving: true,
+      isBeingTouchDragged: true,
       startX: touch.screenX,
       startY: touch.screenY,
     });
@@ -75,6 +80,39 @@ const Slider = class Slider extends React.Component {
     });
   }
 
+  handleOnKeyDown(ev) {
+    const { keyCode } = ev;
+    const { currentSlide, store, totalSlides, visibleSlides } = this.props;
+    const newStoreState = {};
+    let isUpdated = false;
+
+    // left arrow
+    if (keyCode === 37) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.focus();
+      if (currentSlide > 0) {
+        newStoreState.currentSlide = currentSlide - 1;
+        isUpdated = true;
+      }
+    }
+
+    // right arrow
+    if (keyCode === 39) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.focus();
+      if (currentSlide < (totalSlides - visibleSlides)) {
+        newStoreState.currentSlide = currentSlide + 1;
+        isUpdated = true;
+      }
+    }
+
+    if (isUpdated && typeof newStoreState.currentSlide === 'number') {
+      store.setStoreState(newStoreState);
+    }
+  }
+
   static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
     return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
   }
@@ -86,8 +124,8 @@ const Slider = class Slider extends React.Component {
   computeCurrentSlide() {
     const slideSizeInPx = Slider.slideSizeInPx(
       this.props.orientation,
-      this.sliderTrayDiv.clientWidth,
-      this.sliderTrayDiv.clientHeight,
+      this.sliderTrayElement.clientWidth,
+      this.sliderTrayElement.clientHeight,
       this.props.totalSlides,
     );
 
@@ -111,6 +149,10 @@ const Slider = class Slider extends React.Component {
     });
   }
 
+  focus() {
+    this.sliderElement.focus();
+  }
+
   handleOnTouchEnd(ev) {
     if (!this.props.touchEnabled) return;
 
@@ -121,7 +163,7 @@ const Slider = class Slider extends React.Component {
       this.setState({
         deltaX: 0,
         deltaY: 0,
-        isMoving: false,
+        isBeingTouchDragged: false,
       });
     }
   }
@@ -161,7 +203,7 @@ const Slider = class Slider extends React.Component {
       children, className, currentSlide, hasMasterSpinner, masterSpinnerErrorCount,
       masterSpinnerSubscriptionCount, masterSpinnerSuccessCount, naturalSlideHeight,
       naturalSlideWidth, onMasterSpinner, orientation, slideTraySize, slideSize, store, style,
-      totalSlides, touchEnabled, visibleSlides,
+      tabIndex, totalSlides, touchEnabled, trayTag: TrayTag, visibleSlides,
       ...props
     } = this.props;
 
@@ -181,18 +223,21 @@ const Slider = class Slider extends React.Component {
 
     // slider tray
     const trayStyle = {};
+    const trans = pct(slideSize * currentSlide * -1);
 
-    if (this.state.isMoving) {
+    if (this.state.isBeingTouchDragged) {
       trayStyle.transition = 'none';
     }
 
     if (orientation === 'vertical') {
-      trayStyle.transform = `translateY(${pct(slideSize * currentSlide * -1)}) translateY(${this.state.deltaY}px)`;
+      trayStyle.top = `translateY(${trans}) translateY(${this.state.deltaY}px)`;
       trayStyle.width = pct(100);
     } else {
       trayStyle.width = pct(slideTraySize);
-      trayStyle.transform = `translateX(${pct(slideSize * currentSlide * -1)}) translateX(${this.state.deltaX}px)`;
+      trayStyle.transform = `translateX(${trans}) translateX(${this.state.deltaX}px)`;
     }
+
+    // console.log(Object.assign({}, trayStyle), new Date());
 
 
     const sliderClasses = cn([
@@ -216,16 +261,22 @@ const Slider = class Slider extends React.Component {
       orientation === 'vertical' ? 'carousel__slider-tray-wrap--vertical' : 'carousel__slider-tray-wrap--horizontal',
     ]);
 
+    const newTabIndex = tabIndex !== null ? tabIndex : 0;
+
     return (
       <div
+        ref={(el) => { this.sliderElement = el; }}
         className={sliderClasses}
         aria-live="polite"
         style={sliderStyle}
+        tabIndex={newTabIndex}
+        onKeyDown={this.handleOnKeyDown}
+        role="listbox"
         {...props}
       >
         <div className={trayWrapClasses} style={trayWrapStyle}>
-          <div
-            ref={(el) => { this.sliderTrayDiv = el; }}
+          <TrayTag
+            ref={(el) => { this.sliderTrayElement = el; }}
             className={trayClasses}
             style={trayStyle}
             onTouchStart={this.handleOnTouchStart}
@@ -233,7 +284,7 @@ const Slider = class Slider extends React.Component {
             onTouchEnd={this.handleOnTouchEnd}
           >
             {children}
-          </div>
+          </TrayTag>
           {this.renderMasterSpinner()}
         </div>
       </div>

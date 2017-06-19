@@ -35,11 +35,11 @@ const Slide = class Slide extends React.PureComponent {
     store: null,
     style: {},
     tabIndex: null,
-    tag: 'div',
+    tag: 'li',
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handleOnFocus = this.handleOnFocus.bind(this);
     this.handleOnBlur = this.handleOnBlur.bind(this);
     this.state = {
@@ -95,6 +95,7 @@ const Slide = class Slide extends React.PureComponent {
       s.slide,
       orientation === 'horizontal' && s.slideHorizontal,
       'carousel__slide',
+      this.state.focused && 'carousel__slide--focused',
       className,
     ]);
 

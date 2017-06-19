@@ -27,22 +27,22 @@ const DevelopmentApp = () => (
           dev tools to throttle the network connection so you can see the spinner.
         </p>
         <Slider className={s.slider}>
-          <Slide tag="a" index={0}>
+          <Slide index={0}>
             <ImageWithZoom src="./media/img01.jpeg" />
           </Slide>
-          <Slide tag="a" index={1}>
+          <Slide index={1}>
             <ImageWithZoom src="./media/img02.jpeg" />
           </Slide>
-          <Slide tag="a" index={2}>
+          <Slide index={2}>
             <ImageWithZoom src="./media/img03.jpeg" />
           </Slide>
-          <Slide tag="a" index={3}>
+          <Slide index={3}>
             <ImageWithZoom src="./media/img04.jpeg" />
           </Slide>
-          <Slide tag="a" index={4}>
+          <Slide index={4}>
             <ImageWithZoom src="./media/img05.jpeg" />
           </Slide>
-          <Slide tag="a" index={5}>
+          <Slide index={5}>
             <ImageWithZoom src="./media/img06.jpeg" />
           </Slide>
         </Slider>
@@ -71,22 +71,22 @@ const DevelopmentApp = () => (
           Also, we added the boolean prop dotNumbers to the DotGroup for displaying slide numbers.
         </p>
         <Slider className={s.slider}>
-          <Slide tag="a" index={0}>
+          <Slide index={0}>
             <ImageWithZoom src="./media/img01.jpeg" />
           </Slide>
-          <Slide tag="a" index={1}>
+          <Slide index={1}>
             <ImageWithZoom src="./media/img02.jpeg" />
           </Slide>
-          <Slide tag="a" index={2}>
+          <Slide index={2}>
             <ImageWithZoom src="./media/img03.jpeg" />
           </Slide>
-          <Slide tag="a" index={3}>
+          <Slide index={3}>
             <ImageWithZoom src="./media/img04.jpeg" />
           </Slide>
-          <Slide tag="a" index={4}>
+          <Slide index={4}>
             <ImageWithZoom src="./media/img05.jpeg" />
           </Slide>
-          <Slide tag="a" index={5}>
+          <Slide index={5}>
             <ImageWithZoom src="./media/img06.jpeg" />
           </Slide>
         </Slider>
@@ -139,22 +139,22 @@ const DevelopmentApp = () => (
           part of the requirements for now.
         </p>
         <Slider className={s.verticalSlider}>
-          <Slide tag="a" index={0}>
+          <Slide index={0}>
             <ImageWithZoom src="./media/img01.jpeg" />
           </Slide>
-          <Slide tag="a" index={1}>
+          <Slide index={1}>
             <ImageWithZoom src="./media/img02.jpeg" />
           </Slide>
-          <Slide tag="a" index={2}>
+          <Slide index={2}>
             <ImageWithZoom src="./media/img03.jpeg" />
           </Slide>
-          <Slide tag="a" index={3}>
+          <Slide index={3}>
             <ImageWithZoom src="./media/img04.jpeg" />
           </Slide>
-          <Slide tag="a" index={4}>
+          <Slide index={4}>
             <ImageWithZoom src="./media/img05.jpeg" />
           </Slide>
-          <Slide tag="a" index={5}>
+          <Slide index={5}>
             <ImageWithZoom src="./media/img06.jpeg" />
           </Slide>
         </Slider>

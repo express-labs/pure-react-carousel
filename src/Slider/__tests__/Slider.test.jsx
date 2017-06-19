@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import clone from 'clone';
 import components from '../../helpers/component-config';
+import Store from '../../Store/Store';
 import Slider from '../Slider';
 
 const touch100 = {
@@ -24,21 +25,21 @@ describe('<Slider />', () => {
   });
   it('should not update the state if touched and touchEnabled is false', () => {
     const wrapper = shallow(<Slider {...props} touchEnabled={false} />);
-    expect(wrapper.state('isMoving')).toBe(false);
+    expect(wrapper.state('isBeingTouchDragged')).toBe(false);
     wrapper.find('.sliderTray').simulate('touchstart');
     wrapper.update();
-    expect(wrapper.state('isMoving')).toBe(false);
+    expect(wrapper.state('isBeingTouchDragged')).toBe(false);
   });
   it('should change state values when slider tray is touched', () => {
     const wrapper = shallow(<Slider {...props} />);
-    expect(wrapper.state('isMoving')).toBe(false);
+    expect(wrapper.state('isBeingTouchDragged')).toBe(false);
     wrapper.find('.sliderTray').simulate('touchstart', touch100);
     wrapper.update();
-    expect(wrapper.state('isMoving')).toBe(true);
+    expect(wrapper.state('isBeingTouchDragged')).toBe(true);
     expect(wrapper.state('startX')).toBe(100);
     expect(wrapper.state('startY')).toBe(100);
   });
-  it('should update deltaX and deltaY when touchmoving', () => {
+  it('should update deltaX and deltaY when isBeingTouchDragged', () => {
     const wrapper = shallow(<Slider {...props} />);
     expect(wrapper.state('startX')).toBe(0);
     expect(wrapper.state('startY')).toBe(0);
@@ -113,13 +114,17 @@ describe('<Slider />', () => {
   });
   it('Should move the slider to slide 2 (index 1 since slide numbering starts at 0) on touchend given the test conditions', () => {
     const wrapper = mount(<Slider {...props} />);
+    expect(wrapper.prop('naturalSlideHeight')).toBe(100);
+    expect(wrapper.prop('naturalSlideWidth')).toBe(100);
+    expect(props.store.state.currentSlide).toBe(0);
     const instance = wrapper.instance();
+    expect(instance.sliderTrayElement).not.toBe(undefined);
     wrapper.setState({
       deltaX: -51,
       deltaY: 0,
     });
     wrapper.update();
-    instance.sliderTrayDiv = {
+    instance.sliderTrayElement = {
       clientWidth: 500,
       clientHeight: 100,
     };
@@ -134,7 +139,7 @@ describe('<Slider />', () => {
       deltaY: 0,
     });
     wrapper.update();
-    instance.sliderTrayDiv = {
+    instance.sliderTrayElement = {
       clientWidth: 500,
       clientHeight: 100,
     };
@@ -149,7 +154,7 @@ describe('<Slider />', () => {
       deltaY: 0,
     });
     wrapper.update();
-    instance.sliderTrayDiv = {
+    instance.sliderTrayElement = {
       clientWidth: 500,
       clientHeight: 100,
     };
@@ -162,27 +167,27 @@ describe('<Slider />', () => {
     wrapper.setState({
       deltaX: 100,
       deltaY: 100,
-      isMoving: true,
+      isBeingTouchDragged: true,
     });
     wrapper.update();
     wrapper.find('.sliderTray').simulate('touchend', { targetTouches: [] });
     wrapper.update();
     expect(wrapper.state('deltaX')).toBe(100);
     expect(wrapper.state('deltaY')).toBe(100);
-    expect(wrapper.state('isMoving')).toBe(true);
+    expect(wrapper.state('isBeingTouchDragged')).toBe(true);
   });
-  it('should still have state.isMoving === true a touch ended but there are still more touches left', () => {
+  it('should still have state.isBeingTouchDragged === true a touch ended but there are still more touches left', () => {
     const wrapper = shallow(<Slider {...props} />);
     const instance = wrapper.instance();
     const handleOnTouchEnd = jest.spyOn(instance, 'handleOnTouchEnd');
     wrapper.setState({
-      isMoving: true,
+      isBeingTouchDragged: true,
     });
     wrapper.update();
     wrapper.find('.sliderTray').simulate('touchend', touch100);
     wrapper.update();
     expect(handleOnTouchEnd).toHaveBeenCalledTimes(1);
-    expect(wrapper.state('isMoving')).toBe(true);
+    expect(wrapper.state('isBeingTouchDragged')).toBe(true);
   });
   it('should show a spinner if the carousel was just inserted in the DOM but the carousel slides are still being added', () => {
     const wrapper = shallow(<Slider {...props} hasMasterSpinner />);
@@ -193,5 +198,46 @@ describe('<Slider />', () => {
     const onMasterSpinner = jest.fn();
     shallow(<Slider {...props} hasMasterSpinner onMasterSpinner={onMasterSpinner} />);
     expect(onMasterSpinner).toHaveBeenCalledTimes(1);
+  });
+  it('should move the slider to slide 1 from slide 0 when pressing the left arrow', () => {
+    const store = new Store({
+      currentSlide: 1,
+    });
+    const wrapper = mount(<Slider {...props} currentSlide={1} store={store} />);
+    expect(store.state.currentSlide).toBe(1);
+    wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 37 });
+    expect(store.state.currentSlide).toBe(0);
+  });
+  it('should NOT move the slider lower than zero when left arrow is pressed', () => {
+    const store = new Store({
+      currentSlide: 0,
+    });
+    const wrapper = mount(<Slider {...props} currentSlide={0} store={store} />);
+    expect(store.state.currentSlide).toBe(0);
+    wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 37 });
+    expect(store.state.currentSlide).toBe(0);
+  });
+  it('should move the slider to slide 0 from slide 1 when pressing the right arrow', () => {
+    const wrapper = mount(<Slider {...props} />);
+    expect(wrapper.prop('store').state.currentSlide).toBe(0);
+    wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
+    expect(wrapper.prop('store').state.currentSlide).toBe(1);
+  });
+  it('should not move the slider from 3 to 4 since !(currentslide < (totalSlides - visibleSlides)', () => {
+    const store = new Store({
+      currentSlide: 3,
+    });
+    const wrapper = mount(<Slider {...props} currentSlide={3} store={store} />);
+    expect(wrapper.prop('store').state.currentSlide).toBe(3);
+    wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
+    expect(wrapper.prop('store').state.currentSlide).toBe(3);
+  });
+  it('the .carousel__slider should have a default tabIndex of 0', () => {
+    const wrapper = shallow(<Slider {...props} />);
+    expect(wrapper.find('.carousel__slider').prop('tabIndex')).toBe(0);
+  });
+  it('override the default tabIndex for .carousel__slider if a tabIndex prop is passed to this component', () => {
+    const wrapper = shallow(<Slider {...props} tabIndex={-1} />);
+    expect(wrapper.find('.carousel__slider').prop('tabIndex')).toBe(-1);
   });
 });

@@ -3,6 +3,8 @@
   display: block;
   box-sizing: border-box;
   height: 0;
+  margin: 0;
+  list-style-type: none;
 
   &:focus {
     outline: none !important;
