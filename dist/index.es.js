@@ -1700,7 +1700,7 @@ var ImageWithZoom$1 = (_temp$6 = _class$6 = function (_React$Component) {
   tag: 'div'
 }, _temp$6);
 
-var s$8 = { "slideInner": "_slideInner_yg1z4_1", "slideHorizontal": "_slideHorizontal_yg1z4_1", "slide": "_slide_yg1z4_1", "focusRing": "_focusRing_yg1z4_24" };
+var s$8 = { "slideInner": "_slideInner_fhwgk_1", "slideHorizontal": "_slideHorizontal_fhwgk_1", "slide": "_slide_fhwgk_1", "focusRing": "_focusRing_fhwgk_26" };
 
 var _class$7;
 var _temp$7;
@@ -1708,10 +1708,10 @@ var _temp$7;
 var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   inherits(Slide, _React$PureComponent);
 
-  function Slide() {
+  function Slide(props) {
     classCallCheck(this, Slide);
 
-    var _this = possibleConstructorReturn(this, (Slide.__proto__ || Object.getPrototypeOf(Slide)).call(this));
+    var _this = possibleConstructorReturn(this, (Slide.__proto__ || Object.getPrototypeOf(Slide)).call(this, props));
 
     _this.handleOnFocus = _this.handleOnFocus.bind(_this);
     _this.handleOnBlur = _this.handleOnBlur.bind(_this);
@@ -1792,7 +1792,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
 
       var newStyle = Object.assign({}, tempStyle, style);
 
-      var newClassName = cn([s$8.slide, orientation === 'horizontal' && s$8.slideHorizontal, 'carousel__slide', className]);
+      var newClassName = cn([s$8.slide, orientation === 'horizontal' && s$8.slideHorizontal, 'carousel__slide', this.state.focused && 'carousel__slide--focused', className]);
 
       var newInnerClassName = cn([s$8.slideInner, 'carousel__inner-slide', innerClassName]);
 
@@ -1848,7 +1848,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   store: null,
   style: {},
   tabIndex: null,
-  tag: 'div'
+  tag: 'li'
 }, _temp$7);
 
 var index$17 = WithStore(Slide, function (state) {
@@ -1863,7 +1863,7 @@ var index$17 = WithStore(Slide, function (state) {
   };
 });
 
-var s$9 = { "horizontalSlider": "_horizontalSlider_qbymx_1", "horizontalSliderTray": "_horizontalSliderTray_qbymx_1", "verticalSlider": "_verticalSlider_qbymx_11", "verticalSliderTray": "_verticalSliderTray_qbymx_1", "verticalTray": "_verticalTray_qbymx_20", "verticalSlideTrayWrap": "_verticalSlideTrayWrap_qbymx_24", "sliderTray": "_sliderTray_qbymx_28", "masterSpinnerContainer": "_masterSpinnerContainer_qbymx_33" };
+var s$9 = { "horizontalSlider": "_horizontalSlider_al8x6_1", "horizontalSliderTray": "_horizontalSliderTray_al8x6_1", "verticalSlider": "_verticalSlider_al8x6_11", "verticalSliderTray": "_verticalSliderTray_al8x6_1", "verticalTray": "_verticalTray_al8x6_20", "verticalSlideTrayWrap": "_verticalSlideTrayWrap_al8x6_24", "sliderTray": "_sliderTray_al8x6_28", "masterSpinnerContainer": "_masterSpinnerContainer_al8x6_37" };
 
 var _class$8;
 var _temp$8;
@@ -1879,13 +1879,14 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     _this.handleOnTouchStart = _this.handleOnTouchStart.bind(_this);
     _this.handleOnTouchMove = _this.handleOnTouchMove.bind(_this);
     _this.handleOnTouchEnd = _this.handleOnTouchEnd.bind(_this);
+    _this.handleOnKeyDown = _this.handleOnKeyDown.bind(_this);
 
     _this.state = {
       deltaX: 0,
       deltaY: 0,
       startX: 0,
       startY: 0,
-      isMoving: false
+      isBeingTouchDragged: false
     };
 
     _this.originalOverflow = null;
@@ -1901,7 +1902,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
       document.documentElement.style.overflow = 'hidden';
       this.setState({
-        isMoving: true,
+        isBeingTouchDragged: true,
         startX: touch.screenX,
         startY: touch.screenY
       });
@@ -1918,9 +1919,48 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       });
     }
   }, {
+    key: 'handleOnKeyDown',
+    value: function handleOnKeyDown(ev) {
+      var keyCode = ev.keyCode;
+      var _props = this.props,
+          currentSlide = _props.currentSlide,
+          store = _props.store,
+          totalSlides = _props.totalSlides,
+          visibleSlides = _props.visibleSlides;
+
+      var newStoreState = {};
+      var isUpdated = false;
+
+      // left arrow
+      if (keyCode === 37) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.focus();
+        if (currentSlide > 0) {
+          newStoreState.currentSlide = currentSlide - 1;
+          isUpdated = true;
+        }
+      }
+
+      // right arrow
+      if (keyCode === 39) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.focus();
+        if (currentSlide < totalSlides - visibleSlides) {
+          newStoreState.currentSlide = currentSlide + 1;
+          isUpdated = true;
+        }
+      }
+
+      if (isUpdated && typeof newStoreState.currentSlide === 'number') {
+        store.setStoreState(newStoreState);
+      }
+    }
+  }, {
     key: 'computeCurrentSlide',
     value: function computeCurrentSlide() {
-      var slideSizeInPx = Slider$$1.slideSizeInPx(this.props.orientation, this.sliderTrayDiv.clientWidth, this.sliderTrayDiv.clientHeight, this.props.totalSlides);
+      var slideSizeInPx = Slider$$1.slideSizeInPx(this.props.orientation, this.sliderTrayElement.clientWidth, this.sliderTrayElement.clientHeight, this.props.totalSlides);
 
       var slidesMoved = Slider$$1.slidesMoved(this.props.orientation, this.state.deltaX, this.state.deltaY, slideSizeInPx);
 
@@ -1935,6 +1975,11 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       });
     }
   }, {
+    key: 'focus',
+    value: function focus() {
+      this.sliderElement.focus();
+    }
+  }, {
     key: 'handleOnTouchEnd',
     value: function handleOnTouchEnd(ev) {
       if (!this.props.touchEnabled) return;
@@ -1946,18 +1991,18 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
         this.setState({
           deltaX: 0,
           deltaY: 0,
-          isMoving: false
+          isBeingTouchDragged: false
         });
       }
     }
   }, {
     key: 'renderMasterSpinner',
     value: function renderMasterSpinner() {
-      var _props = this.props,
-          hasMasterSpinner = _props.hasMasterSpinner,
-          masterSpinnerErrorCount = _props.masterSpinnerErrorCount,
-          masterSpinnerSuccessCount = _props.masterSpinnerSuccessCount,
-          masterSpinnerSubscriptionCount = _props.masterSpinnerSubscriptionCount;
+      var _props2 = this.props,
+          hasMasterSpinner = _props2.hasMasterSpinner,
+          masterSpinnerErrorCount = _props2.masterSpinnerErrorCount,
+          masterSpinnerSuccessCount = _props2.masterSpinnerSuccessCount,
+          masterSpinnerSubscriptionCount = _props2.masterSpinnerSubscriptionCount;
 
 
       var testImageCountReached = masterSpinnerErrorCount + masterSpinnerSuccessCount === masterSpinnerSubscriptionCount;
@@ -1983,26 +2028,28 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var _props2 = this.props,
-          children = _props2.children,
-          className = _props2.className,
-          currentSlide = _props2.currentSlide,
-          hasMasterSpinner = _props2.hasMasterSpinner,
-          masterSpinnerErrorCount = _props2.masterSpinnerErrorCount,
-          masterSpinnerSubscriptionCount = _props2.masterSpinnerSubscriptionCount,
-          masterSpinnerSuccessCount = _props2.masterSpinnerSuccessCount,
-          naturalSlideHeight = _props2.naturalSlideHeight,
-          naturalSlideWidth = _props2.naturalSlideWidth,
-          onMasterSpinner = _props2.onMasterSpinner,
-          orientation = _props2.orientation,
-          slideTraySize$$1 = _props2.slideTraySize,
-          slideSize$$1 = _props2.slideSize,
-          store = _props2.store,
-          style = _props2.style,
-          totalSlides = _props2.totalSlides,
-          touchEnabled = _props2.touchEnabled,
-          visibleSlides = _props2.visibleSlides,
-          props = objectWithoutProperties(_props2, ['children', 'className', 'currentSlide', 'hasMasterSpinner', 'masterSpinnerErrorCount', 'masterSpinnerSubscriptionCount', 'masterSpinnerSuccessCount', 'naturalSlideHeight', 'naturalSlideWidth', 'onMasterSpinner', 'orientation', 'slideTraySize', 'slideSize', 'store', 'style', 'totalSlides', 'touchEnabled', 'visibleSlides']);
+      var _props3 = this.props,
+          children = _props3.children,
+          className = _props3.className,
+          currentSlide = _props3.currentSlide,
+          hasMasterSpinner = _props3.hasMasterSpinner,
+          masterSpinnerErrorCount = _props3.masterSpinnerErrorCount,
+          masterSpinnerSubscriptionCount = _props3.masterSpinnerSubscriptionCount,
+          masterSpinnerSuccessCount = _props3.masterSpinnerSuccessCount,
+          naturalSlideHeight = _props3.naturalSlideHeight,
+          naturalSlideWidth = _props3.naturalSlideWidth,
+          onMasterSpinner = _props3.onMasterSpinner,
+          orientation = _props3.orientation,
+          slideTraySize$$1 = _props3.slideTraySize,
+          slideSize$$1 = _props3.slideSize,
+          store = _props3.store,
+          style = _props3.style,
+          tabIndex = _props3.tabIndex,
+          totalSlides = _props3.totalSlides,
+          touchEnabled = _props3.touchEnabled,
+          TrayTag = _props3.trayTag,
+          visibleSlides = _props3.visibleSlides,
+          props = objectWithoutProperties(_props3, ['children', 'className', 'currentSlide', 'hasMasterSpinner', 'masterSpinnerErrorCount', 'masterSpinnerSubscriptionCount', 'masterSpinnerSuccessCount', 'naturalSlideHeight', 'naturalSlideWidth', 'onMasterSpinner', 'orientation', 'slideTraySize', 'slideSize', 'store', 'style', 'tabIndex', 'totalSlides', 'touchEnabled', 'trayTag', 'visibleSlides']);
 
 
       var sliderStyle = Object.assign({}, style);
@@ -2018,18 +2065,22 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
       // slider tray
       var trayStyle = {};
+      var trans = pct(slideSize$$1 * currentSlide * -1);
 
-      if (this.state.isMoving) {
+      if (this.state.isBeingTouchDragged) {
         trayStyle.transition = 'none';
       }
 
       if (orientation === 'vertical') {
-        trayStyle.transform = 'translateY(' + pct(slideSize$$1 * currentSlide * -1) + ') translateY(' + this.state.deltaY + 'px)';
+        trayStyle.top = 'translateY(' + trans + ') translateY(' + this.state.deltaY + 'px)';
         trayStyle.width = pct(100);
       } else {
         trayStyle.width = pct(slideTraySize$$1);
-        trayStyle.transform = 'translateX(' + pct(slideSize$$1 * currentSlide * -1) + ') translateX(' + this.state.deltaX + 'px)';
+        trayStyle.transform = 'translateX(' + trans + ') translateX(' + this.state.deltaX + 'px)';
       }
+
+      // console.log(Object.assign({}, trayStyle), new Date());
+
 
       var sliderClasses = cn([orientation === 'vertical' ? s$9.verticalSlider : s$9.horizontalSlider, 'carousel__slider', orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal', className]);
 
@@ -2037,21 +2088,29 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
       var trayWrapClasses = cn([s$9.sliderTrayWrap, 'carousel__slider-tray-wrapper', orientation === 'vertical' ? s$9.verticalSlideTrayWrap : s$9.horizontalTrayWrap, orientation === 'vertical' ? 'carousel__slider-tray-wrap--vertical' : 'carousel__slider-tray-wrap--horizontal']);
 
+      var newTabIndex = tabIndex !== null ? tabIndex : 0;
+
       return React.createElement(
         'div',
         _extends({
+          ref: function ref(el) {
+            _this2.sliderElement = el;
+          },
           className: sliderClasses,
           'aria-live': 'polite',
-          style: sliderStyle
+          style: sliderStyle,
+          tabIndex: newTabIndex,
+          onKeyDown: this.handleOnKeyDown,
+          role: 'listbox'
         }, props),
         React.createElement(
           'div',
           { className: trayWrapClasses, style: trayWrapStyle },
           React.createElement(
-            'div',
+            TrayTag,
             {
               ref: function ref(el) {
-                _this2.sliderTrayDiv = el;
+                _this2.sliderTrayElement = el;
               },
               className: trayClasses,
               style: trayStyle,
@@ -2093,14 +2152,18 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   slideSize: index$1.number.isRequired,
   store: index$1.object.isRequired,
   style: index$1.object,
+  tabIndex: index$1.number,
   totalSlides: index$1.number.isRequired,
   touchEnabled: index$1.bool.isRequired,
+  trayTag: index$1.string,
   visibleSlides: index$1.number
 }, _class$8.defaultProps = {
   className: '',
   height: null,
   onMasterSpinner: null,
   style: {},
+  tabIndex: null,
+  trayTag: 'ul',
   visibleSlides: 1
 }, _temp$8);
 
