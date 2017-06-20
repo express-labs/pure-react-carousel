@@ -110,6 +110,7 @@ const Slide = class Slide extends React.PureComponent {
 
     return (
       <Tag
+        ref={(el) => { this.tagRef = el; }}
         tabIndex={newTabIndex}
         aria-hidden={!this.isVisible()}
         onFocus={this.handleOnFocus}
@@ -118,7 +119,10 @@ const Slide = class Slide extends React.PureComponent {
         style={newStyle}
         {...props}
       >
-        <InnerTag className={newInnerClassName}>
+        <InnerTag
+          ref={(el) => { this.innerTagRef = el; }}
+          className={newInnerClassName}
+        >
           {this.props.children}
           {this.renderFocusRing()}
         </InnerTag>

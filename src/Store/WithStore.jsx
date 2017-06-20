@@ -49,6 +49,7 @@ export default function WithStore(
 
       return (
         <WrappedComponent
+          ref={(el) => { this.instance = el; }} // allows access to refs in wrapped components.
           {...props}
           store={{
             setStoreState: this.context.store.setStoreState,
