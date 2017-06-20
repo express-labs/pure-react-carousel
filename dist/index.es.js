@@ -1931,6 +1931,8 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       var newStoreState = {};
       var isUpdated = false;
 
+      if (totalSlides <= visibleSlides) return;
+
       // left arrow
       if (keyCode === 37) {
         ev.preventDefault();
