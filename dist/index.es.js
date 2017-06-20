@@ -702,11 +702,17 @@ function WithStore(WrappedComponent) {
     }, {
       key: 'render',
       value: function render() {
+        var _this2 = this;
+
         var props = index$5(this.state, this.props);
 
         return React.createElement(
           WrappedComponent,
-          _extends({}, props, {
+          _extends({
+            ref: function ref(el) {
+              _this2.instance = el;
+            } // allows access to refs in wrapped components.
+          }, props, {
             store: {
               setStoreState: this.context.store.setStoreState,
               subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
@@ -1758,6 +1764,8 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var _props2 = this.props,
           children = _props2.children,
           className = _props2.className,
@@ -1802,6 +1810,9 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
       return React.createElement(
         Tag,
         _extends({
+          ref: function ref(el) {
+            _this2.tagRef = el;
+          },
           tabIndex: newTabIndex,
           'aria-hidden': !this.isVisible(),
           onFocus: this.handleOnFocus,
@@ -1811,7 +1822,12 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
         }, props),
         React.createElement(
           InnerTag,
-          { className: newInnerClassName },
+          {
+            ref: function ref(el) {
+              _this2.innerTagRef = el;
+            },
+            className: newInnerClassName
+          },
           this.props.children,
           this.renderFocusRing()
         )
