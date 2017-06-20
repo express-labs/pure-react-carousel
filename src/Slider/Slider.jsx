@@ -86,6 +86,8 @@ const Slider = class Slider extends React.Component {
     const newStoreState = {};
     let isUpdated = false;
 
+    if (totalSlides <= visibleSlides) return;
+
     // left arrow
     if (keyCode === 37) {
       ev.preventDefault();

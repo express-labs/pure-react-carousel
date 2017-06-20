@@ -240,4 +240,12 @@ describe('<Slider />', () => {
     const wrapper = shallow(<Slider {...props} tabIndex={-1} />);
     expect(wrapper.find('.carousel__slider').prop('tabIndex')).toBe(-1);
   });
+  it('should not call this.focus() if totalSlides <= visibleSlides', () => {
+    const wrapper = shallow(<Slider {...props} totalSlides={2} visibleSlides={2} />);
+    const instance = wrapper.instance();
+    const focus = jest.spyOn(instance, 'focus');
+    expect(focus).toHaveBeenCalledTimes(0);
+    wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
+    expect(focus).toHaveBeenCalledTimes(0);
+  });
 });
