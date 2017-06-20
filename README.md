@@ -37,7 +37,7 @@ import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-re
 import 'pure-react-carousel/dist/react-carousel.es.css';
 ```   
 
-4. Put a CarouselProvider component in your code.  This allows the other carousel components to communicate with each other.  The only required properties are the orientation, naturalSlideWidth, and naturalSlideHeight.  And it must have children, of course.  We'll add children in the next step.
+4. Put a CarouselProvider component in your code.  This allows the other carousel components to communicate with each other.  The only required properties are the orientation, naturalSlideWidth, and naturalSlideHeight.  The naturalSlideWidth and naturalSlideHeight are used to create an aspect ratio for each slide.  Since the carousel is responsive by default, it will stretch to fill in the width of it's parent container.  The CarouselProvider must also have children.  We'll add the children in the next step.
 
 ```javascript
 import React from 'react';
@@ -47,7 +47,11 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 export default class extends React.Component {
   render() {
     return (
-      <CarouselProvider orientation="horizontal" naturalSlideWidth="100" naturalSlideHeight="125"></CarouselProvider>
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={3}
+      ></CarouselProvider>
     );
   }
 }
@@ -64,7 +68,11 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 export default class extends React.Component {
   render() {
     return (
-      <CarouselProvider>
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={3}
+      >
         <Slider>
           <Slide index={0}>I am the first Slide.</Slide>
           <Slide index={1}>I am the second Slide.</Slide>
@@ -86,35 +94,11 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 export default class extends React.Component {
   render() {
     return (
-      <CarouselProvider>
-        <Slider>
-          <Slide index={0}>I am the first Slide.</Slide>
-          <Slide index={1}>I am the second Slide.</Slide>
-          <Slide index={2}>I am the third Slide.</Slide>
-        </Slider>
-        <ButtonBack>Back</ButtonBack>
-        <ButtonNext>Next</ButtonNext>
-      </CarouselProvider>
-    );
-  }
-}
-```
-
-7. Make sure to set the required properties for the \<CarouselProvider> component.
-
-```javascript
-import React from 'react';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
-import 'pure-react-carousel/dist/react-carousel.es.css';
-
-export default class extends React.Component {
-  render() {
-    return (
       <CarouselProvider
         naturalSlideWidth={100}
         naturalSlideHeight={125}
         totalSlides={3}
-      >
+      >        
         <Slider>
           <Slide index={0}>I am the first Slide.</Slide>
           <Slide index={1}>I am the second Slide.</Slide>
@@ -127,6 +111,7 @@ export default class extends React.Component {
   }
 }
 ```
+
 
 That's it. You have a super basic Carousel.  
 
