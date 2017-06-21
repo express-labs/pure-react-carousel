@@ -14,7 +14,7 @@ const Spinner = class Spinner extends React.PureComponent {
 
   render() {
     const { className, ...filteredProps } = this.props;
-    const newClassName = cn([s.spinner, className]);
+    const newClassName = cn([s.spinner, 'carousel__spinner', className]);
     return (
       <div className={newClassName} {...filteredProps} />
     );
