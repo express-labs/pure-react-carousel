@@ -2223,7 +2223,7 @@ var Spinner$1 = (_temp$9 = _class$9 = function (_React$PureComponent) {
           className = _props.className,
           filteredProps = objectWithoutProperties(_props, ['className']);
 
-      var newClassName = cn([s$10.spinner, className]);
+      var newClassName = cn([s$10.spinner, 'carousel__spinner', className]);
       return React.createElement('div', _extends({ className: newClassName }, filteredProps));
     }
   }]);
