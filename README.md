@@ -235,7 +235,7 @@ A compound component that creates a bunch of Dot's automatically for you.
 ```HTML
 <div class="carousel__dot-group [props.className]" ...props>
   <!-- button repeats for each slide -->
-  <button class="carousel__dot carousel__dot--[slide] [carousel__dot--selected] [props.className]">
+  <button class="carousel__dot carousel__dot--[slide] [carousel__dot--selected]">
     [numbers or blank]
   </button>
 </div>
