@@ -1155,11 +1155,13 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var Tag = this.props.tag;
+
       var filteredProps = index$9(this.props, Object.keys(CarouselProvider$$1.propTypes));
       var newClassName = cn(['carousel', this.props.className]);
 
       return React.createElement(
-        'div',
+        Tag,
         _extends({ className: newClassName }, filteredProps),
         this.props.children
       );
@@ -1175,6 +1177,7 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
   naturalSlideWidth: index$1.number.isRequired,
   orientation: CarouselPropTypes.orientation,
   step: index$1.number,
+  tag: index$1.string,
   totalSlides: index$1.number.isRequired,
   touchEnabled: index$1.bool,
   visibleSlides: index$1.number
@@ -1184,6 +1187,7 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
   hasMasterSpinner: false,
   orientation: 'horizontal',
   step: 1,
+  tag: 'div',
   touchEnabled: true,
   visibleSlides: 1
 }, _class$3.childContextTypes = {
@@ -1758,7 +1762,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   }, {
     key: 'renderFocusRing',
     value: function renderFocusRing() {
-      if (this.state.focused) return React.createElement('div', { className: s$8.focusRing });
+      if (this.state.focused) return React.createElement('div', { className: [s$8.focusRing, 'carousel__slide-focus-ring'].join(' ') });
       return null;
     }
   }, {
@@ -2102,9 +2106,9 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
       var sliderClasses = cn([orientation === 'vertical' ? s$9.verticalSlider : s$9.horizontalSlider, 'carousel__slider', orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal', className]);
 
-      var trayClasses = cn([s$9.sliderTray, 'carousel__slider-tray', orientation === 'vertical' ? s$9.verticalTray : s$9.horizontalTray, orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal']);
-
       var trayWrapClasses = cn([s$9.sliderTrayWrap, 'carousel__slider-tray-wrapper', orientation === 'vertical' ? s$9.verticalSlideTrayWrap : s$9.horizontalTrayWrap, orientation === 'vertical' ? 'carousel__slider-tray-wrap--vertical' : 'carousel__slider-tray-wrap--horizontal']);
+
+      var trayClasses = cn([s$9.sliderTray, 'carousel__slider-tray', orientation === 'vertical' ? s$9.verticalTray : s$9.horizontalTray, orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal']);
 
       var newTabIndex = tabIndex !== null ? tabIndex : 0;
 

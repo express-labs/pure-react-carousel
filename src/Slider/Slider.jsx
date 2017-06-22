@@ -249,18 +249,18 @@ const Slider = class Slider extends React.Component {
       className,
     ]);
 
-    const trayClasses = cn([
-      s.sliderTray,
-      'carousel__slider-tray',
-      orientation === 'vertical' ? s.verticalTray : s.horizontalTray,
-      orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal',
-    ]);
-
     const trayWrapClasses = cn([
       s.sliderTrayWrap,
       'carousel__slider-tray-wrapper',
       orientation === 'vertical' ? s.verticalSlideTrayWrap : s.horizontalTrayWrap,
       orientation === 'vertical' ? 'carousel__slider-tray-wrap--vertical' : 'carousel__slider-tray-wrap--horizontal',
+    ]);
+
+    const trayClasses = cn([
+      s.sliderTray,
+      'carousel__slider-tray',
+      orientation === 'vertical' ? s.verticalTray : s.horizontalTray,
+      orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal',
     ]);
 
     const newTabIndex = tabIndex !== null ? tabIndex : 0;

@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrbinky3000/react-carousel.git"
+    "url": "git+https://github.com/express-labs/pure-react-carousel.git"
   },
   "author": "Matthew Toledo",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mrbinky3000/react-carousel/issues"
+    "url": "https://github.com/express-labs/pure-react-carousel"
   },
-  "homepage": "https://github.com/mrbinky3000/react-carousel#readme",
+  "homepage": "https://github.com/express-labs/pure-react-carousel#readme",
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-plugin-transform-class-properties": "^6.24.1",

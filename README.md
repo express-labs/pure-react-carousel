@@ -136,10 +136,18 @@ Some components have a ancestor / descendant relationship but they don't have to
 | **naturalSlideWidth** | number | | **Yes** | The natural width of each <\Slide > component. ** |
 | orientation | string | "horizontal" | No | Possible values are "horizontal" and "vertical".  Let's you have a horizontal or vertical carousel. |
 | step | number | 1 | No | The number of slides to move when pressing the \<ButtonBack /> and \<ButtonNext /> buttons.|
+| tag | string | 'div' | No | The HTML element to use for the provider. |
 | **totalSlides** | number |  | **Yes** | Always set this to match the total number of \<Slide > components in your carousel |
 | touchEnabled | boolean | true | No | Set to true to enable touch events |
 | visibleSlides | number | 1 | No | The number of slides to show at once.  This number should be <= totalSlides |
 
+#### The CarouselProvider component creates the following pseudo HTML by default:
+
+```HTML
+<props.tag|div class="carousel [props.className]" ...props>
+  [props.children]
+</props.tag|div>
+```
 
 **__More about naturalSlideWidth and naturalSlideHeight__
 The carousel is responsive and by default will flex to the full width of the <Slider \> parent container.  It's up to you to contain the carousel width via css.  Each slide will be the same height to width ratio ([intrinsic ratio](https://alistapart.com/d/creating-intrinsic-ratios-for-video/example2.html)). CarouselProvider needs to know the default size of each \<Slide />.  Note: you can make the carousel non-responsive by setting the width of <Slider \>to a fixed css unit, like pixels. There are many other ways to make the carousel non-responsive.
@@ -147,37 +155,31 @@ The carousel is responsive and by default will flex to the full width of the <Sl
 ### \<Slider />
 A Slider is a viewport that masks slides.  The Slider component must wrap one or more Slide components.
 
-The Slide component creates the following pseudo HTML by default.
-```HTML
-<div class="X" aria-live="polite" style="X" ...props>
-  <div class="X" style="X">
-    <div class="X" style="X" onTouchStart="X" onTouchMove="X" onTouchEnd="X">
-      [content goes here]
-    </div>
-    <div></div><!-- Master Spinner -->
-  </div>
-</div>
-```
-
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | **children** | [string\|node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or HTML |
 | className | [string\|null] | null | No | Optional className string that will be appended to the component's className string. |
 | style | object | {} | No | Optional css styles to add to the Slider.  Note: internal css properties take precedence over any styles specified in the styles object |
+| trayTag | string | 'ul' | No | The HTML tag to used for the tray (the thing that holds all the slides and moves the slides back and forth.) |  
 | onMasterSpinner | [function\|null] | null | No | Optional callback function that is called when the Master Spinner is visible.  Requires that \<CarouselProvider /> set hasMasterSpinner to true |
 
-### \<Slide />
-The Slide component is a container with an intrinsic ratio computed by the CarouselProvider naturalSlideWidth and naturalSlideHeight properties.  By default, only one slide is visible in the Slider at a time.  You can change this by altering the visibleSlides property of the CarouselProvider.  Slide components also contain a div that acts as an aria compliant focus ring when the Slide receives focus either by using a keyboard tab, mouse click, or touch.
+#### The Slider component creates the following pseudo HTML by default.
 
-The Slide component creates the following pseudo HTML by default.
 ```HTML
-<div tabIndex="X" aria-hidden="X" onFocus="X" onBlur="X" class="X" style="X" ...props>
-  <div class="X">
-    [content goes here]
-    <div></div><!-- focus ring -->
+<div class="carousel__slider [carousel__slider--vertical|carousel__slider--horizontal] [props.className]" aria-live="polite" style="[props.style]" ...props>
+  <div class="carousel__slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal]">
+    <props.trayTag|ul class="carousel__slider-tray [carousel__slider-tray--vertical|carousel__slider-tray--horizontal]">
+      [props.children]
+    </props.trayTag|ul>
+    <div class="carousel__master-spinner-container">
+      <div class="carousel__spinner" />
+    </div>
   </div>
 </div>
 ```
+
+### \<Slide />
+The Slide component is a container with an intrinsic ratio computed by the CarouselProvider naturalSlideWidth and naturalSlideHeight properties.  By default, only one slide is visible in the Slider at a time.  You can change this by altering the visibleSlides property of the CarouselProvider.  Slide components also contain a div that acts as an aria compliant focus ring when the Slide receives focus either by using a keyboard tab, mouse click, or touch.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
@@ -188,12 +190,20 @@ The Slide component creates the following pseudo HTML by default.
 | onBlur | [function\|null] | null | No | Optional callback function that is called after the internal onBlur function is called. It is passed the React synthetic event |
 | onFocus | [function\|null] | null | No | Optional callback function that is called after the internal onFocus function is called. It is passed the React synthetic event |
 | tabIndex | [number\|null] | null | No | When null, the Carousel will set this automatically.  99.9% of the time, you're going to want to leave this alone and let the carousel handle tabIndex automatically. |
-| tag** | string | 'div' | No | The root HTML element for each Slide. |
+| tag | string | 'li' | No | The root HTML element for each Slide. |
 
-**Note about the tag property**  If clicking on a carousel slide should do something like, oh, open a shadow box, or navigate to a page, You might want to set this to some other element, like an 'a' tag or even 'button'.  Obviously, if you do this, you're going to have to add some more CSS styles.  Look at the demo app (`npm run dev`) to see what CSS classes you can hook into.  There are a lot.  Don't forget, You can also supply your own className to append.
+#### The Slide component creates the following pseudo HTML by default:
+```HTML
+<props.tag|li class="carousel__slide [carousel__slide--focused] [props.className]" tabIndex="[props.tabIndex]" aria-hidden="[computed internally]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
+  <props.innerTag|div class="X">
+    [props.children]
+    <div class="carousel__slide-focus-ring" />
+  <props.innerTag|div>
+</props.tag|li>
+```
 
 ### Dot
-A Dot component is a HTML button.  Dots directly correlate to slides.  Currently visible slides cause the correlating Dot to become disabled.  You can override the auto-disable feature by setting disabled to false (see table below)
+A Dot component is a HTML button.  Dots directly correlate to slides.  Clicking on a slide causes it to scroll into the left-most visible slot of slider. Currently visible slides cause the correlating Dot to become disabled.  You can override the auto-disable feature by setting disabled to false (see table below)
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
@@ -203,6 +213,13 @@ A Dot component is a HTML button.  Dots directly correlate to slides.  Currently
 | onClick | [function\|null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
 | **slide** | number | | **Yes** | There must be a matching \<Slide /> component with a matching index property. Example: `<Dot slide={0} />` will match `<Slide index={0} />`|
 
+#### The Dot component creates the following pseudo HTML by default:
+
+```HTML
+<button class="carousel__dot carousel__dot--[slide] [carousel__dot--selected] [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+  [props.children]
+</button>
+```
 
 ### DotGroup
 A compound component that creates a bunch of Dot's automatically for you.
@@ -213,6 +230,16 @@ A compound component that creates a bunch of Dot's automatically for you.
 | className | [string\|null] | null | No | Optional className string that will be appended to the component's className string. |
 | dotNumbers | boolean | false | No | Setting to true automatically adds text numbers the dot buttons starting at 1. |
 
+#### The DotGroup component creates the following pseudo HTML by default:
+
+```HTML
+<div class="carousel__dot-group [props.className]" ...props>
+  <!-- button repeats for each slide -->
+  <button class="carousel__dot carousel__dot--[slide] [carousel__dot--selected] [props.className]">
+    [numbers or blank]
+  </button>
+</div>
+```
 
 ## More Documentation to Come
 I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.
@@ -220,4 +247,4 @@ I promise to add docs for every component.  In the meantime, feel free to downlo
 ## Dev Workflow
 - `npm run dev` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload
 - `npm run build` compiles commonjs and ES modules and places them in the dist directory
-- `npm test` runs jest (not configured yet)
+- `npm test` runs test using Jest + Enzyme.

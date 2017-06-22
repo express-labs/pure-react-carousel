@@ -14,6 +14,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     naturalSlideWidth: PropTypes.number.isRequired,
     orientation: CarouselPropTypes.orientation,
     step: PropTypes.number,
+    tag: PropTypes.string,
     totalSlides: PropTypes.number.isRequired,
     touchEnabled: PropTypes.bool,
     visibleSlides: PropTypes.number,
@@ -25,6 +26,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     hasMasterSpinner: false,
     orientation: 'horizontal',
     step: 1,
+    tag: 'div',
     touchEnabled: true,
     visibleSlides: 1,
   }
@@ -100,13 +102,14 @@ const CarouselProvider = class CarouselProvider extends React.Component {
   }
 
   render() {
+    const { tag: Tag } = this.props;
     const filteredProps = omit(this.props, Object.keys(CarouselProvider.propTypes));
     const newClassName = cn([
       'carousel',
       this.props.className,
     ]);
 
-    return <div className={newClassName} {...filteredProps}>{this.props.children}</div>;
+    return <Tag className={newClassName} {...filteredProps}>{this.props.children}</Tag>;
   }
 };
 
