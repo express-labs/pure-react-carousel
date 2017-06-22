@@ -238,6 +238,7 @@ A compound component that creates a bunch of Dot's automatically for you.
   <button class="carousel__dot carousel__dot--[slide] [carousel__dot--selected]">
     [numbers or blank]
   </button>
+  [props.children]
 </div>
 ```
 
