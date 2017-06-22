@@ -195,7 +195,7 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 #### The Slide component creates the following pseudo HTML by default:
 ```HTML
 <props.tag|li class="carousel__slide [carousel__slide--focused] [props.className]" tabIndex="[props.tabIndex]" aria-hidden="[computed internally]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
-  <props.innerTag|div class="X">
+  <props.innerTag|div class="carousel__inner-slide [props.innerClassName]">
     [props.children]
     <div class="carousel__slide-focus-ring" />
   <props.innerTag|div>
