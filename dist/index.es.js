@@ -1930,12 +1930,16 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   }, {
     key: 'handleOnTouchMove',
     value: function handleOnTouchMove(ev) {
+      var _this2 = this;
+
       if (!this.props.touchEnabled) return;
 
       var touch = ev.targetTouches[0];
-      this.setState({
-        deltaX: touch.screenX - this.state.startX,
-        deltaY: touch.screenY - this.state.startY
+      window.requestAnimationFrame(function () {
+        _this2.setState({
+          deltaX: touch.screenX - _this2.state.startX,
+          deltaY: touch.screenY - _this2.state.startY
+        });
       });
     }
   }, {
@@ -2048,7 +2052,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _props3 = this.props,
           children = _props3.children,
@@ -2094,15 +2098,12 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       }
 
       if (orientation === 'vertical') {
-        trayStyle.top = 'translateY(' + trans + ') translateY(' + this.state.deltaY + 'px)';
+        trayStyle.transform = 'translateY(' + trans + ') translateY(' + this.state.deltaY + 'px)';
         trayStyle.width = pct(100);
       } else {
         trayStyle.width = pct(slideTraySize$$1);
         trayStyle.transform = 'translateX(' + trans + ') translateX(' + this.state.deltaX + 'px)';
       }
-
-      // console.log(Object.assign({}, trayStyle), new Date());
-
 
       var sliderClasses = cn([orientation === 'vertical' ? s$9.verticalSlider : s$9.horizontalSlider, 'carousel__slider', orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal', className]);
 
@@ -2112,11 +2113,13 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
       var newTabIndex = tabIndex !== null ? tabIndex : 0;
 
+      // console.log(Object.assign({}, trayStyle), new Date());
+
       return React.createElement(
         'div',
         _extends({
           ref: function ref(el) {
-            _this2.sliderElement = el;
+            _this3.sliderElement = el;
           },
           className: sliderClasses,
           'aria-live': 'polite',
@@ -2132,7 +2135,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
             TrayTag,
             {
               ref: function ref(el) {
-                _this2.sliderTrayElement = el;
+                _this3.sliderTrayElement = el;
               },
               className: trayClasses,
               style: trayStyle,
@@ -2154,7 +2157,13 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   }, {
     key: 'slidesMoved',
     value: function slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
-      return -Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx);
+      var threshold = 0.1;
+      var bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
+      var smallDrag = Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= slideSizeInPx * threshold ? 1 : 0;
+      if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
+        return Math.max(smallDrag, bigDrag);
+      }
+      return -Math.max(bigDrag, smallDrag);
     }
   }]);
   return Slider$$1;

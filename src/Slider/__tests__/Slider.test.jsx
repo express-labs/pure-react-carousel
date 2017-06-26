@@ -14,6 +14,9 @@ const touch100 = {
   ],
 };
 
+// mock requestAnimationFrame
+global.requestAnimationFrame = f => f();
+
 describe('<Slider />', () => {
   let props;
   beforeEach(() => {
@@ -83,7 +86,7 @@ describe('<Slider />', () => {
   it('Slider.slidesMoved should return 0 given the test conditions (horizontal)', () => {
     expect(Slider.slidesMoved(
       'horizontal',
-      49,
+      9,
       0,
       100,
     )).toBe(0);
@@ -91,7 +94,7 @@ describe('<Slider />', () => {
   it('Slider.slidesMoved should return -1 given the test conditions (horizontal)', () => {
     expect(Slider.slidesMoved(
       'horizontal',
-      50,
+      10,
       0,
       100,
     )).toBe(-1);
@@ -100,7 +103,7 @@ describe('<Slider />', () => {
     expect(Slider.slidesMoved(
       'vertical',
       0,
-      49,
+      9,
       100,
     )).toBe(0);
   });
@@ -108,7 +111,7 @@ describe('<Slider />', () => {
     expect(Slider.slidesMoved(
       'vertical',
       0,
-      50,
+      10,
       100,
     )).toBe(-1);
   });

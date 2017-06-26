@@ -74,9 +74,11 @@ const Slider = class Slider extends React.Component {
     if (!this.props.touchEnabled) return;
 
     const touch = ev.targetTouches[0];
-    this.setState({
-      deltaX: touch.screenX - this.state.startX,
-      deltaY: touch.screenY - this.state.startY,
+    window.requestAnimationFrame(() => {
+      this.setState({
+        deltaX: touch.screenX - this.state.startX,
+        deltaY: touch.screenY - this.state.startY,
+      });
     });
   }
 
@@ -120,7 +122,13 @@ const Slider = class Slider extends React.Component {
   }
 
   static slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
-    return -Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx);
+    const threshold = 0.1;
+    const bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
+    const smallDrag = (Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= (slideSizeInPx * threshold)) ? 1 : 0;
+    if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
+      return Math.max(smallDrag, bigDrag);
+    }
+    return -Math.max(bigDrag, smallDrag);
   }
 
   computeCurrentSlide() {
@@ -232,15 +240,12 @@ const Slider = class Slider extends React.Component {
     }
 
     if (orientation === 'vertical') {
-      trayStyle.top = `translateY(${trans}) translateY(${this.state.deltaY}px)`;
+      trayStyle.transform = `translateY(${trans}) translateY(${this.state.deltaY}px)`;
       trayStyle.width = pct(100);
     } else {
       trayStyle.width = pct(slideTraySize);
       trayStyle.transform = `translateX(${trans}) translateX(${this.state.deltaX}px)`;
     }
-
-    // console.log(Object.assign({}, trayStyle), new Date());
-
 
     const sliderClasses = cn([
       orientation === 'vertical' ? s.verticalSlider : s.horizontalSlider,
@@ -264,6 +269,8 @@ const Slider = class Slider extends React.Component {
     ]);
 
     const newTabIndex = tabIndex !== null ? tabIndex : 0;
+
+    // console.log(Object.assign({}, trayStyle), new Date());
 
     return (
       <div
