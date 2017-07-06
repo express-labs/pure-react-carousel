@@ -1,7 +1,6 @@
 import { mount } from 'enzyme';
 import React from 'react';
 import Store from '../Store';
-import WithStore from '../WithStore';
 import CarouselProvider from '../../CarouselProvider';
 import Slide from '../../Slide';
 import components from '../../helpers/component-config';
