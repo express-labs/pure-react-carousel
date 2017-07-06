@@ -1896,10 +1896,11 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
     var _this = possibleConstructorReturn(this, (Slider$$1.__proto__ || Object.getPrototypeOf(Slider$$1)).call(this));
 
-    _this.handleOnTouchStart = _this.handleOnTouchStart.bind(_this);
-    _this.handleOnTouchMove = _this.handleOnTouchMove.bind(_this);
-    _this.handleOnTouchEnd = _this.handleOnTouchEnd.bind(_this);
     _this.handleOnKeyDown = _this.handleOnKeyDown.bind(_this);
+    _this.handleOnTouchCancel = _this.handleOnTouchCancel.bind(_this);
+    _this.handleOnTouchEnd = _this.handleOnTouchEnd.bind(_this);
+    _this.handleOnTouchMove = _this.handleOnTouchMove.bind(_this);
+    _this.handleOnTouchStart = _this.handleOnTouchStart.bind(_this);
 
     _this.state = {
       deltaX: 0,
@@ -2007,19 +2008,27 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     }
   }, {
     key: 'handleOnTouchEnd',
-    value: function handleOnTouchEnd(ev) {
+    value: function handleOnTouchEnd() {
+      this.endTouchMove();
+    }
+  }, {
+    key: 'handleOnTouchCancel',
+    value: function handleOnTouchCancel() {
+      this.endTouchMove();
+    }
+  }, {
+    key: 'endTouchMove',
+    value: function endTouchMove() {
       if (!this.props.touchEnabled) return;
 
-      if (ev.targetTouches.length === 0) {
-        this.computeCurrentSlide();
-        document.documentElement.style.overflow = this.originalOverflow;
-        this.originalOverflow = null;
-        this.setState({
-          deltaX: 0,
-          deltaY: 0,
-          isBeingTouchDragged: false
-        });
-      }
+      this.computeCurrentSlide();
+      document.documentElement.style.overflow = this.originalOverflow;
+      this.originalOverflow = null;
+      this.setState({
+        deltaX: 0,
+        deltaY: 0,
+        isBeingTouchDragged: false
+      });
     }
   }, {
     key: 'renderMasterSpinner',
@@ -2141,7 +2150,8 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
               style: trayStyle,
               onTouchStart: this.handleOnTouchStart,
               onTouchMove: this.handleOnTouchMove,
-              onTouchEnd: this.handleOnTouchEnd
+              onTouchEnd: this.handleOnTouchEnd,
+              onTouchCancel: this.handleOnTouchCancel
             },
             children
           ),
