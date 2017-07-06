@@ -41,10 +41,11 @@ const Slider = class Slider extends React.Component {
 
   constructor() {
     super();
-    this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
-    this.handleOnTouchMove = this.handleOnTouchMove.bind(this);
-    this.handleOnTouchEnd = this.handleOnTouchEnd.bind(this);
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
+    this.handleOnTouchCancel = this.handleOnTouchCancel.bind(this);
+    this.handleOnTouchEnd = this.handleOnTouchEnd.bind(this);
+    this.handleOnTouchMove = this.handleOnTouchMove.bind(this);
+    this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
 
     this.state = {
       deltaX: 0,
@@ -163,19 +164,25 @@ const Slider = class Slider extends React.Component {
     this.sliderElement.focus();
   }
 
-  handleOnTouchEnd(ev) {
+  handleOnTouchEnd() {
+    this.endTouchMove();
+  }
+
+  handleOnTouchCancel() {
+    this.endTouchMove();
+  }
+
+  endTouchMove() {
     if (!this.props.touchEnabled) return;
 
-    if (ev.targetTouches.length === 0) {
-      this.computeCurrentSlide();
-      document.documentElement.style.overflow = this.originalOverflow;
-      this.originalOverflow = null;
-      this.setState({
-        deltaX: 0,
-        deltaY: 0,
-        isBeingTouchDragged: false,
-      });
-    }
+    this.computeCurrentSlide();
+    document.documentElement.style.overflow = this.originalOverflow;
+    this.originalOverflow = null;
+    this.setState({
+      deltaX: 0,
+      deltaY: 0,
+      isBeingTouchDragged: false,
+    });
   }
 
   renderMasterSpinner() {
@@ -291,6 +298,7 @@ const Slider = class Slider extends React.Component {
             onTouchStart={this.handleOnTouchStart}
             onTouchMove={this.handleOnTouchMove}
             onTouchEnd={this.handleOnTouchEnd}
+            onTouchCancel={this.handleOnTouchCancel}
           >
             {children}
           </TrayTag>
