@@ -179,7 +179,7 @@ describe('<Slider />', () => {
     expect(wrapper.state('deltaY')).toBe(100);
     expect(wrapper.state('isBeingTouchDragged')).toBe(true);
   });
-  // skipping this test for now v1.8.2
+  // skipping this test for now v1.8.1
   xit('should still have state.isBeingTouchDragged === true a touch ended but there are still more touches left', () => {
     const wrapper = shallow(<Slider {...props} />);
     const instance = wrapper.instance();
