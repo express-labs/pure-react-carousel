@@ -56,10 +56,28 @@ const Slider = class Slider extends React.Component {
     };
 
     this.originalOverflow = null;
+    this.moveTimer = null;
+
+    this.requestAnimationFrame =
+      window.requestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.msRequestAnimationFrame;
+
+    this.cancelAnimationFrame =
+      window.cancelAnimationFrame ||
+      window.mozCancelAnimationFrame;
+  }
+
+  componentWillUnmount() {
+    this.cancelAnimationFrame.call(window, this.moveTimer);
+    this.moveTimer = null;
   }
 
   handleOnTouchStart(ev) {
     if (!this.props.touchEnabled) return;
+
+    this.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
     this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
@@ -74,8 +92,10 @@ const Slider = class Slider extends React.Component {
   handleOnTouchMove(ev) {
     if (!this.props.touchEnabled) return;
 
+    this.cancelAnimationFrame.call(window, this.moveTimer);
+
     const touch = ev.targetTouches[0];
-    window.requestAnimationFrame(() => {
+    this.moveTimer = this.requestAnimationFrame.call(window, () => {
       this.setState({
         deltaX: touch.screenX - this.state.startX,
         deltaY: touch.screenY - this.state.startY,
@@ -174,6 +194,8 @@ const Slider = class Slider extends React.Component {
 
   endTouchMove() {
     if (!this.props.touchEnabled) return;
+
+    this.cancelAnimationFrame.call(window, this.moveTimer);
 
     this.computeCurrentSlide();
     document.documentElement.style.overflow = this.originalOverflow;
