@@ -1896,10 +1896,11 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
     var _this = possibleConstructorReturn(this, (Slider$$1.__proto__ || Object.getPrototypeOf(Slider$$1)).call(this));
 
-    _this.handleOnTouchStart = _this.handleOnTouchStart.bind(_this);
-    _this.handleOnTouchMove = _this.handleOnTouchMove.bind(_this);
-    _this.handleOnTouchEnd = _this.handleOnTouchEnd.bind(_this);
     _this.handleOnKeyDown = _this.handleOnKeyDown.bind(_this);
+    _this.handleOnTouchCancel = _this.handleOnTouchCancel.bind(_this);
+    _this.handleOnTouchEnd = _this.handleOnTouchEnd.bind(_this);
+    _this.handleOnTouchMove = _this.handleOnTouchMove.bind(_this);
+    _this.handleOnTouchStart = _this.handleOnTouchStart.bind(_this);
 
     _this.state = {
       deltaX: 0,
@@ -1910,17 +1911,34 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     };
 
     _this.originalOverflow = null;
+    _this.moveTimer = null;
+
+    _this.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+    _this.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
     return _this;
   }
 
   createClass(Slider$$1, [{
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.cancelAnimationFrame.call(window, this.moveTimer);
+      this.moveTimer = null;
+    }
+  }, {
     key: 'handleOnTouchStart',
     value: function handleOnTouchStart(ev) {
       if (!this.props.touchEnabled) return;
 
+      this.cancelAnimationFrame.call(window, this.moveTimer);
+
       var touch = ev.targetTouches[0];
-      this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
-      document.documentElement.style.overflow = 'hidden';
+      if (this.props.orientation === 'vertical') {
+        this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
+        document.documentElement.style.overflow = 'hidden';
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
       this.setState({
         isBeingTouchDragged: true,
         startX: touch.screenX,
@@ -1930,12 +1948,18 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   }, {
     key: 'handleOnTouchMove',
     value: function handleOnTouchMove(ev) {
+      var _this2 = this;
+
       if (!this.props.touchEnabled) return;
 
+      this.cancelAnimationFrame.call(window, this.moveTimer);
+
       var touch = ev.targetTouches[0];
-      this.setState({
-        deltaX: touch.screenX - this.state.startX,
-        deltaY: touch.screenY - this.state.startY
+      this.moveTimer = this.requestAnimationFrame.call(window, function () {
+        _this2.setState({
+          deltaX: touch.screenX - _this2.state.startX,
+          deltaY: touch.screenY - _this2.state.startY
+        });
       });
     }
   }, {
@@ -2003,19 +2027,32 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     }
   }, {
     key: 'handleOnTouchEnd',
-    value: function handleOnTouchEnd(ev) {
+    value: function handleOnTouchEnd() {
+      this.endTouchMove();
+    }
+  }, {
+    key: 'handleOnTouchCancel',
+    value: function handleOnTouchCancel() {
+      this.endTouchMove();
+    }
+  }, {
+    key: 'endTouchMove',
+    value: function endTouchMove() {
       if (!this.props.touchEnabled) return;
 
-      if (ev.targetTouches.length === 0) {
-        this.computeCurrentSlide();
+      this.cancelAnimationFrame.call(window, this.moveTimer);
+
+      this.computeCurrentSlide();
+      if (this.props.orientation === 'vertical') {
         document.documentElement.style.overflow = this.originalOverflow;
         this.originalOverflow = null;
-        this.setState({
-          deltaX: 0,
-          deltaY: 0,
-          isBeingTouchDragged: false
-        });
       }
+
+      this.setState({
+        deltaX: 0,
+        deltaY: 0,
+        isBeingTouchDragged: false
+      });
     }
   }, {
     key: 'renderMasterSpinner',
@@ -2048,7 +2085,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _props3 = this.props,
           children = _props3.children,
@@ -2094,15 +2131,12 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       }
 
       if (orientation === 'vertical') {
-        trayStyle.top = 'translateY(' + trans + ') translateY(' + this.state.deltaY + 'px)';
+        trayStyle.transform = 'translateY(' + trans + ') translateY(' + this.state.deltaY + 'px)';
         trayStyle.width = pct(100);
       } else {
         trayStyle.width = pct(slideTraySize$$1);
         trayStyle.transform = 'translateX(' + trans + ') translateX(' + this.state.deltaX + 'px)';
       }
-
-      // console.log(Object.assign({}, trayStyle), new Date());
-
 
       var sliderClasses = cn([orientation === 'vertical' ? s$9.verticalSlider : s$9.horizontalSlider, 'carousel__slider', orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal', className]);
 
@@ -2112,11 +2146,13 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
       var newTabIndex = tabIndex !== null ? tabIndex : 0;
 
+      // console.log(Object.assign({}, trayStyle), new Date());
+
       return React.createElement(
         'div',
         _extends({
           ref: function ref(el) {
-            _this2.sliderElement = el;
+            _this3.sliderElement = el;
           },
           className: sliderClasses,
           'aria-live': 'polite',
@@ -2132,13 +2168,14 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
             TrayTag,
             {
               ref: function ref(el) {
-                _this2.sliderTrayElement = el;
+                _this3.sliderTrayElement = el;
               },
               className: trayClasses,
               style: trayStyle,
               onTouchStart: this.handleOnTouchStart,
               onTouchMove: this.handleOnTouchMove,
-              onTouchEnd: this.handleOnTouchEnd
+              onTouchEnd: this.handleOnTouchEnd,
+              onTouchCancel: this.handleOnTouchCancel
             },
             children
           ),
@@ -2154,7 +2191,13 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   }, {
     key: 'slidesMoved',
     value: function slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
-      return -Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx);
+      var threshold = 0.1;
+      var bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
+      var smallDrag = Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= slideSizeInPx * threshold ? 1 : 0;
+      if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
+        return Math.max(smallDrag, bigDrag);
+      }
+      return -Math.max(bigDrag, smallDrag);
     }
   }]);
   return Slider$$1;

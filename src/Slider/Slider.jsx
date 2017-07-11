@@ -38,13 +38,13 @@ const Slider = class Slider extends React.Component {
     visibleSlides: 1,
   }
 
-
   constructor() {
     super();
-    this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
-    this.handleOnTouchMove = this.handleOnTouchMove.bind(this);
-    this.handleOnTouchEnd = this.handleOnTouchEnd.bind(this);
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
+    this.handleOnTouchCancel = this.handleOnTouchCancel.bind(this);
+    this.handleOnTouchEnd = this.handleOnTouchEnd.bind(this);
+    this.handleOnTouchMove = this.handleOnTouchMove.bind(this);
+    this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
 
     this.state = {
       deltaX: 0,
@@ -55,14 +55,27 @@ const Slider = class Slider extends React.Component {
     };
 
     this.originalOverflow = null;
+    this.moveTimer = null;
+  }
+
+
+  componentWillUnmount() {
+    window.cancelAnimationFrame.call(window, this.moveTimer);
+    this.moveTimer = null;
   }
 
   handleOnTouchStart(ev) {
     if (!this.props.touchEnabled) return;
 
+    window.cancelAnimationFrame.call(window, this.moveTimer);
+
     const touch = ev.targetTouches[0];
-    this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
+    if (this.props.orientation === 'vertical') {
+      this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
+      document.documentElement.style.overflow = 'hidden';
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
     this.setState({
       isBeingTouchDragged: true,
       startX: touch.screenX,
@@ -73,10 +86,14 @@ const Slider = class Slider extends React.Component {
   handleOnTouchMove(ev) {
     if (!this.props.touchEnabled) return;
 
+    window.cancelAnimationFrame.call(window, this.moveTimer);
+
     const touch = ev.targetTouches[0];
-    this.setState({
-      deltaX: touch.screenX - this.state.startX,
-      deltaY: touch.screenY - this.state.startY,
+    this.moveTimer = window.requestAnimationFrame.call(window, () => {
+      this.setState({
+        deltaX: touch.screenX - this.state.startX,
+        deltaY: touch.screenY - this.state.startY,
+      });
     });
   }
 
@@ -120,7 +137,13 @@ const Slider = class Slider extends React.Component {
   }
 
   static slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
-    return -Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx);
+    const threshold = 0.1;
+    const bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
+    const smallDrag = (Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= (slideSizeInPx * threshold)) ? 1 : 0;
+    if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
+      return Math.max(smallDrag, bigDrag);
+    }
+    return -Math.max(bigDrag, smallDrag);
   }
 
   computeCurrentSlide() {
@@ -155,19 +178,30 @@ const Slider = class Slider extends React.Component {
     this.sliderElement.focus();
   }
 
-  handleOnTouchEnd(ev) {
+  handleOnTouchEnd() {
+    this.endTouchMove();
+  }
+
+  handleOnTouchCancel() {
+    this.endTouchMove();
+  }
+
+  endTouchMove() {
     if (!this.props.touchEnabled) return;
 
-    if (ev.targetTouches.length === 0) {
-      this.computeCurrentSlide();
+    window.cancelAnimationFrame.call(window, this.moveTimer);
+
+    this.computeCurrentSlide();
+    if (this.props.orientation === 'vertical') {
       document.documentElement.style.overflow = this.originalOverflow;
       this.originalOverflow = null;
-      this.setState({
-        deltaX: 0,
-        deltaY: 0,
-        isBeingTouchDragged: false,
-      });
     }
+
+    this.setState({
+      deltaX: 0,
+      deltaY: 0,
+      isBeingTouchDragged: false,
+    });
   }
 
   renderMasterSpinner() {
@@ -232,15 +266,12 @@ const Slider = class Slider extends React.Component {
     }
 
     if (orientation === 'vertical') {
-      trayStyle.top = `translateY(${trans}) translateY(${this.state.deltaY}px)`;
+      trayStyle.transform = `translateY(${trans}) translateY(${this.state.deltaY}px)`;
       trayStyle.width = pct(100);
     } else {
       trayStyle.width = pct(slideTraySize);
       trayStyle.transform = `translateX(${trans}) translateX(${this.state.deltaX}px)`;
     }
-
-    // console.log(Object.assign({}, trayStyle), new Date());
-
 
     const sliderClasses = cn([
       orientation === 'vertical' ? s.verticalSlider : s.horizontalSlider,
@@ -265,6 +296,8 @@ const Slider = class Slider extends React.Component {
 
     const newTabIndex = tabIndex !== null ? tabIndex : 0;
 
+    // console.log(Object.assign({}, trayStyle), new Date());
+
     return (
       <div
         ref={(el) => { this.sliderElement = el; }}
@@ -284,6 +317,7 @@ const Slider = class Slider extends React.Component {
             onTouchStart={this.handleOnTouchStart}
             onTouchMove={this.handleOnTouchMove}
             onTouchEnd={this.handleOnTouchEnd}
+            onTouchCancel={this.handleOnTouchCancel}
           >
             {children}
           </TrayTag>
