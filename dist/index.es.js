@@ -1911,17 +1911,34 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     };
 
     _this.originalOverflow = null;
+    _this.moveTimer = null;
+
+    _this.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+    _this.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
     return _this;
   }
 
   createClass(Slider$$1, [{
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.cancelAnimationFrame.call(window, this.moveTimer);
+      this.moveTimer = null;
+    }
+  }, {
     key: 'handleOnTouchStart',
     value: function handleOnTouchStart(ev) {
       if (!this.props.touchEnabled) return;
 
+      this.cancelAnimationFrame.call(window, this.moveTimer);
+
       var touch = ev.targetTouches[0];
-      this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
-      document.documentElement.style.overflow = 'hidden';
+      if (this.props.orientation === 'vertical') {
+        this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
+        document.documentElement.style.overflow = 'hidden';
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
       this.setState({
         isBeingTouchDragged: true,
         startX: touch.screenX,
@@ -1935,8 +1952,10 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
       if (!this.props.touchEnabled) return;
 
+      this.cancelAnimationFrame.call(window, this.moveTimer);
+
       var touch = ev.targetTouches[0];
-      window.requestAnimationFrame(function () {
+      this.moveTimer = this.requestAnimationFrame.call(window, function () {
         _this2.setState({
           deltaX: touch.screenX - _this2.state.startX,
           deltaY: touch.screenY - _this2.state.startY
@@ -2021,9 +2040,14 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     value: function endTouchMove() {
       if (!this.props.touchEnabled) return;
 
+      this.cancelAnimationFrame.call(window, this.moveTimer);
+
       this.computeCurrentSlide();
-      document.documentElement.style.overflow = this.originalOverflow;
-      this.originalOverflow = null;
+      if (this.props.orientation === 'vertical') {
+        document.documentElement.style.overflow = this.originalOverflow;
+        this.originalOverflow = null;
+      }
+
       this.setState({
         deltaX: 0,
         deltaY: 0,

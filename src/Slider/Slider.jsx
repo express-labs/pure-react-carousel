@@ -38,7 +38,6 @@ const Slider = class Slider extends React.Component {
     visibleSlides: 1,
   }
 
-
   constructor() {
     super();
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
@@ -56,14 +55,27 @@ const Slider = class Slider extends React.Component {
     };
 
     this.originalOverflow = null;
+    this.moveTimer = null;
+  }
+
+
+  componentWillUnmount() {
+    window.cancelAnimationFrame.call(window, this.moveTimer);
+    this.moveTimer = null;
   }
 
   handleOnTouchStart(ev) {
     if (!this.props.touchEnabled) return;
 
+    window.cancelAnimationFrame.call(window, this.moveTimer);
+
     const touch = ev.targetTouches[0];
-    this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
+    if (this.props.orientation === 'vertical') {
+      this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
+      document.documentElement.style.overflow = 'hidden';
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
     this.setState({
       isBeingTouchDragged: true,
       startX: touch.screenX,
@@ -74,8 +86,10 @@ const Slider = class Slider extends React.Component {
   handleOnTouchMove(ev) {
     if (!this.props.touchEnabled) return;
 
+    window.cancelAnimationFrame.call(window, this.moveTimer);
+
     const touch = ev.targetTouches[0];
-    window.requestAnimationFrame(() => {
+    this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState({
         deltaX: touch.screenX - this.state.startX,
         deltaY: touch.screenY - this.state.startY,
@@ -175,9 +189,14 @@ const Slider = class Slider extends React.Component {
   endTouchMove() {
     if (!this.props.touchEnabled) return;
 
+    window.cancelAnimationFrame.call(window, this.moveTimer);
+
     this.computeCurrentSlide();
-    document.documentElement.style.overflow = this.originalOverflow;
-    this.originalOverflow = null;
+    if (this.props.orientation === 'vertical') {
+      document.documentElement.style.overflow = this.originalOverflow;
+      this.originalOverflow = null;
+    }
+
     this.setState({
       deltaX: 0,
       deltaY: 0,
