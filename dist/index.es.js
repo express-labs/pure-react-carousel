@@ -1,11 +1,5 @@
 import React from 'react';
 
-var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-
-
-
-
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
@@ -575,21 +569,19 @@ function getEnumerableProperties (object) {
 
 var index$2 = equal;
 
-var index$5 = createCommonjsModule(function (module, exports) {
-(function (root, factory) {
-    if (typeof undefined === 'function' && undefined.amd) {
-        undefined(factory);
-    } else {
-        module.exports = factory();
-    }
-}(commonjsGlobal, function () {
+var index$2$1 = function isMergeableObject(value) {
+	return isNonNullObject(value) && isNotSpecial(value)
+};
 
-function isMergeableObject(val) {
-    var nonNullObject = val && typeof val === 'object';
+function isNonNullObject(value) {
+	return !!value && typeof value === 'object'
+}
 
-    return nonNullObject
-        && Object.prototype.toString.call(val) !== '[object RegExp]'
-        && Object.prototype.toString.call(val) !== '[object Date]'
+function isNotSpecial(value) {
+	var stringValue = Object.prototype.toString.call(value);
+
+	return stringValue !== '[object RegExp]'
+		&& stringValue !== '[object Date]'
 }
 
 function emptyTarget(val) {
@@ -598,7 +590,7 @@ function emptyTarget(val) {
 
 function cloneIfNecessary(value, optionsArgument) {
     var clone = optionsArgument && optionsArgument.clone === true;
-    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+    return (clone && index$2$1(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
 }
 
 function defaultArrayMerge(target, source, optionsArgument) {
@@ -606,7 +598,7 @@ function defaultArrayMerge(target, source, optionsArgument) {
     source.forEach(function(e, i) {
         if (typeof destination[i] === 'undefined') {
             destination[i] = cloneIfNecessary(e, optionsArgument);
-        } else if (isMergeableObject(e)) {
+        } else if (index$2$1(e)) {
             destination[i] = deepmerge(target[i], e, optionsArgument);
         } else if (target.indexOf(e) === -1) {
             destination.push(cloneIfNecessary(e, optionsArgument));
@@ -617,13 +609,13 @@ function defaultArrayMerge(target, source, optionsArgument) {
 
 function mergeObject(target, source, optionsArgument) {
     var destination = {};
-    if (isMergeableObject(target)) {
-        Object.keys(target).forEach(function (key) {
+    if (index$2$1(target)) {
+        Object.keys(target).forEach(function(key) {
             destination[key] = cloneIfNecessary(target[key], optionsArgument);
         });
     }
-    Object.keys(source).forEach(function (key) {
-        if (!isMergeableObject(source[key]) || !target[key]) {
+    Object.keys(source).forEach(function(key) {
+        if (!index$2$1(source[key]) || !target[key]) {
             destination[key] = cloneIfNecessary(source[key], optionsArgument);
         } else {
             destination[key] = deepmerge(target[key], source[key], optionsArgument);
@@ -633,12 +625,16 @@ function mergeObject(target, source, optionsArgument) {
 }
 
 function deepmerge(target, source, optionsArgument) {
-    var array = Array.isArray(source);
+    var sourceIsArray = Array.isArray(source);
+    var targetIsArray = Array.isArray(target);
     var options = optionsArgument || { arrayMerge: defaultArrayMerge };
-    var arrayMerge = options.arrayMerge || defaultArrayMerge;
+    var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
 
-    if (array) {
-        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
+    if (!sourceAndTargetTypesMatch) {
+        return cloneIfNecessary(source, optionsArgument)
+    } else if (sourceIsArray) {
+        var arrayMerge = options.arrayMerge || defaultArrayMerge;
+        return arrayMerge(target, source, optionsArgument)
     } else {
         return mergeObject(target, source, optionsArgument)
     }
@@ -655,10 +651,9 @@ deepmerge.all = function deepmergeAll(array, optionsArgument) {
     })
 };
 
-return deepmerge
+var index$5 = deepmerge;
 
-}));
-});
+var cjs = index$5;
 
 function WithStore(WrappedComponent) {
   var mapStateToProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {
@@ -704,7 +699,7 @@ function WithStore(WrappedComponent) {
       value: function render() {
         var _this2 = this;
 
-        var props = index$5(this.state, this.props);
+        var props = cjs(this.state, this.props);
 
         return React.createElement(
           WrappedComponent,
@@ -1912,17 +1907,13 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
     _this.originalOverflow = null;
     _this.moveTimer = null;
-
-    _this.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-
-    _this.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
     return _this;
   }
 
   createClass(Slider$$1, [{
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      this.cancelAnimationFrame.call(window, this.moveTimer);
+      window.cancelAnimationFrame.call(window, this.moveTimer);
       this.moveTimer = null;
     }
   }, {
@@ -1930,7 +1921,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     value: function handleOnTouchStart(ev) {
       if (!this.props.touchEnabled) return;
 
-      this.cancelAnimationFrame.call(window, this.moveTimer);
+      window.cancelAnimationFrame.call(window, this.moveTimer);
 
       var touch = ev.targetTouches[0];
       if (this.props.orientation === 'vertical') {
@@ -1952,10 +1943,10 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
 
       if (!this.props.touchEnabled) return;
 
-      this.cancelAnimationFrame.call(window, this.moveTimer);
+      window.cancelAnimationFrame.call(window, this.moveTimer);
 
       var touch = ev.targetTouches[0];
-      this.moveTimer = this.requestAnimationFrame.call(window, function () {
+      this.moveTimer = window.requestAnimationFrame.call(window, function () {
         _this2.setState({
           deltaX: touch.screenX - _this2.state.startX,
           deltaY: touch.screenY - _this2.state.startY
@@ -2040,7 +2031,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     value: function endTouchMove() {
       if (!this.props.touchEnabled) return;
 
-      this.cancelAnimationFrame.call(window, this.moveTimer);
+      window.cancelAnimationFrame.call(window, this.moveTimer);
 
       this.computeCurrentSlide();
       if (this.props.orientation === 'vertical') {
@@ -2306,7 +2297,7 @@ var Store = function () {
   function Store(initialState) {
     classCallCheck(this, Store);
 
-    this.state = index$19(index$5(DEFAULT_STATE, initialState));
+    this.state = index$19(cjs(DEFAULT_STATE, initialState));
     this.subscriptions = [];
     this.setStoreState = this.setStoreState.bind(this);
     this.getStoreState = this.getStoreState.bind(this);
@@ -2321,13 +2312,13 @@ var Store = function () {
   createClass(Store, [{
     key: 'setStoreState',
     value: function setStoreState(newState, cb) {
-      this.state = index$19(index$5(this.state, newState));
+      this.state = index$19(cjs(this.state, newState));
       this.updateSubscribers(cb);
     }
   }, {
     key: 'getStoreState',
     value: function getStoreState() {
-      return index$5({}, this.state);
+      return cjs({}, this.state);
     }
   }, {
     key: 'subscribe',
