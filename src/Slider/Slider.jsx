@@ -38,7 +38,6 @@ const Slider = class Slider extends React.Component {
     visibleSlides: 1,
   }
 
-
   constructor() {
     super();
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
@@ -57,27 +56,18 @@ const Slider = class Slider extends React.Component {
 
     this.originalOverflow = null;
     this.moveTimer = null;
-
-    this.requestAnimationFrame =
-      window.requestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      window.webkitRequestAnimationFrame ||
-      window.msRequestAnimationFrame;
-
-    this.cancelAnimationFrame =
-      window.cancelAnimationFrame ||
-      window.mozCancelAnimationFrame;
   }
 
+
   componentWillUnmount() {
-    this.cancelAnimationFrame.call(window, this.moveTimer);
+    window.cancelAnimationFrame.call(window, this.moveTimer);
     this.moveTimer = null;
   }
 
   handleOnTouchStart(ev) {
     if (!this.props.touchEnabled) return;
 
-    this.cancelAnimationFrame.call(window, this.moveTimer);
+    window.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
     if (this.props.orientation === 'vertical') {
@@ -96,10 +86,10 @@ const Slider = class Slider extends React.Component {
   handleOnTouchMove(ev) {
     if (!this.props.touchEnabled) return;
 
-    this.cancelAnimationFrame.call(window, this.moveTimer);
+    window.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
-    this.moveTimer = this.requestAnimationFrame.call(window, () => {
+    this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState({
         deltaX: touch.screenX - this.state.startX,
         deltaY: touch.screenY - this.state.startY,
@@ -199,7 +189,7 @@ const Slider = class Slider extends React.Component {
   endTouchMove() {
     if (!this.props.touchEnabled) return;
 
-    this.cancelAnimationFrame.call(window, this.moveTimer);
+    window.cancelAnimationFrame.call(window, this.moveTimer);
 
     this.computeCurrentSlide();
     if (this.props.orientation === 'vertical') {
