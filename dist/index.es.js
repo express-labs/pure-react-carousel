@@ -1486,7 +1486,7 @@ var Image$1 = function (_React$Component) {
 
       var newClassName = cn([s$6.image, 'carousel__image', this.props.isBgImage && 'carousel__image--with-background', 'carousel__image--success', this.props.className]);
 
-      var newStyle = Object.assign({}, style);
+      var newStyle = _extends({}, style);
 
       var newFilteredProps = filteredProps;
 
@@ -1496,7 +1496,7 @@ var Image$1 = function (_React$Component) {
             tempFilteredProps = objectWithoutProperties(filteredProps, ['src', 'alt']);
 
         newFilteredProps = tempFilteredProps;
-        newStyle = Object.assign({}, style, {
+        newStyle = _extends({}, style, {
           backgroundImage: 'url("' + src + '")',
           backgroundSize: 'cover'
         });
@@ -1797,7 +1797,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
         tempStyle.paddingBottom = pct(naturalSlideHeight * 100 / naturalSlideWidth);
       }
 
-      var newStyle = Object.assign({}, tempStyle, style);
+      var newStyle = _extends({}, tempStyle, style);
 
       var newClassName = cn([s$8.slide, orientation === 'horizontal' && s$8.slideHorizontal, 'carousel__slide', this.state.focused && 'carousel__slide--focused', className]);
 
@@ -2102,7 +2102,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
           props = objectWithoutProperties(_props3, ['children', 'className', 'currentSlide', 'hasMasterSpinner', 'masterSpinnerErrorCount', 'masterSpinnerSubscriptionCount', 'masterSpinnerSuccessCount', 'naturalSlideHeight', 'naturalSlideWidth', 'onMasterSpinner', 'orientation', 'slideTraySize', 'slideSize', 'store', 'style', 'tabIndex', 'totalSlides', 'touchEnabled', 'trayTag', 'visibleSlides']);
 
 
-      var sliderStyle = Object.assign({}, style);
+      var sliderStyle = _extends({}, style);
 
       // slider tray wrap
       var trayWrapStyle = {};

@@ -1,6 +1,6 @@
 {
   "name": "pure-react-carousel",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "description": "A highly impartial suite of React components that can be assembled by the consumer to create a responsive, aria compliant, carousel with almost no limits on DOM structure or CSS styles. If you're tired of fighting some other developer's CSS and DOM structure, this carousel is for you.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -34,6 +34,7 @@
     "babel-eslint": "^7.2.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
