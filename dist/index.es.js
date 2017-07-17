@@ -1409,18 +1409,13 @@ var Image$1 = function (_React$Component) {
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      this.image.removeEventListener('load', this.hamdleImageLoad);
+      this.image.removeEventListener('load', this.handleImageLoad);
       this.image.removeEventListener('error', this.handleImageError);
-      this.image.remove();
+      this.image = null;
     }
   }, {
     key: 'initImage',
     value: function initImage() {
-      // if (this.image !== null) {
-      //   this.image.removeEventListener('load', this.hamdleImageLoad);
-      //   this.image.removeEventListener('error', this.handleImageError);
-      //   this.image.remove();
-      // }
       this.image = document.createElement('img');
       this.image.addEventListener('load', this.handleImageLoad, false);
       this.image.addEventListener('error', this.handleImageError, false);

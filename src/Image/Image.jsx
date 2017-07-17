@@ -66,7 +66,7 @@ class Image extends React.Component {
   componentWillUnmount() {
     this.image.removeEventListener('load', this.handleImageLoad);
     this.image.removeEventListener('error', this.handleImageError);
-    this.image.remove();
+    this.image = null;
   }
 
   initImage() {
