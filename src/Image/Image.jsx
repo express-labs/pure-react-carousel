@@ -10,11 +10,8 @@ class Image extends React.Component {
     className: PropTypes.string,
     hasMasterSpinner: PropTypes.bool.isRequired,
     isBgImage: CarouselPropTypes.isBgImage,
-    naturalSlideHeight: PropTypes.number.isRequired,
-    naturalSlideWidth: PropTypes.number.isRequired,
     onError: PropTypes.func,
     onLoad: PropTypes.func,
-    orientation: CarouselPropTypes.orientation.isRequired,
     renderError: PropTypes.func,
     renderLoading: PropTypes.func,
     src: PropTypes.string.isRequired,
@@ -159,8 +156,8 @@ class Image extends React.Component {
 
   render() {
     const {
-      children, className, hasMasterSpinner, isBgImage, naturalSlideHeight, naturalSlideWidth,
-      onError, onLoad, orientation, renderError, renderLoading, store, style, tag,
+      children, className, hasMasterSpinner, isBgImage,
+      onError, onLoad, renderError, renderLoading, store, style, tag,
       ...filteredProps
     } = this.props;
 

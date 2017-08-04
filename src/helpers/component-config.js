@@ -99,8 +99,6 @@ export default {
     component: Image,
     props: {
       hasMasterSpinner: false,
-      naturalSlideHeight: 400,
-      naturalSlideWidth: 300,
       orientation: 'horizontal',
       src: 'bob.jpg',
       store: new Store({}),
