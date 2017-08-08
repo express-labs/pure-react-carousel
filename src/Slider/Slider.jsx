@@ -10,9 +10,7 @@ const Slider = class Slider extends React.Component {
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     hasMasterSpinner: PropTypes.bool.isRequired,
-    masterSpinnerErrorCount: PropTypes.number.isRequired,
-    masterSpinnerSuccessCount: PropTypes.number.isRequired,
-    masterSpinnerSubscriptionCount: PropTypes.number.isRequired,
+    masterSpinnerFinished: PropTypes.bool.isRequired,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
     onMasterSpinner: PropTypes.func,
@@ -205,18 +203,9 @@ const Slider = class Slider extends React.Component {
   }
 
   renderMasterSpinner() {
-    const {
-      hasMasterSpinner, masterSpinnerErrorCount,
-      masterSpinnerSuccessCount, masterSpinnerSubscriptionCount,
-    } = this.props;
+    const { hasMasterSpinner, masterSpinnerFinished } = this.props;
 
-    const testImageCountReached = (
-      masterSpinnerErrorCount + masterSpinnerSuccessCount
-    ) === masterSpinnerSubscriptionCount;
-
-    const testInitialLoad = masterSpinnerSubscriptionCount === 0;
-
-    if (hasMasterSpinner && (!testImageCountReached || testInitialLoad)) {
+    if (hasMasterSpinner && (!masterSpinnerFinished)) {
       if (typeof this.props.onMasterSpinner === 'function') this.props.onMasterSpinner();
 
       return (
@@ -236,10 +225,9 @@ const Slider = class Slider extends React.Component {
 
   render() {
     const {
-      children, className, currentSlide, hasMasterSpinner, masterSpinnerErrorCount,
-      masterSpinnerSubscriptionCount, masterSpinnerSuccessCount, naturalSlideHeight,
-      naturalSlideWidth, onMasterSpinner, orientation, slideTraySize, slideSize, store, style,
-      tabIndex, totalSlides, touchEnabled, trayTag: TrayTag, visibleSlides,
+      children, className, currentSlide, hasMasterSpinner, masterSpinnerFinished,
+      naturalSlideHeight, naturalSlideWidth, onMasterSpinner, orientation, slideTraySize, slideSize,
+      store, style, tabIndex, totalSlides, touchEnabled, trayTag: TrayTag, visibleSlides,
       ...props
     } = this.props;
 

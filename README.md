@@ -268,13 +268,10 @@ A compound component that creates a bunch of Dot's automatically for you.
 | isBgImage | bool | false | No | Setting this to true makes the image load as a background image.  Any child JSX (see children property) will appear on top of the image. If set to false, no image will appear unless your child JSX displays the image via an image tag or some other means. |
 | onError | [func&#124;null] | null | No | Callback function called if the image defined by the src property fails to load.  This Callback is fired after the Image component's internal handleImageError method. |
 | onLoad |  [func&#124;null] | null | No | Callback function called if the image defined by the src property loads successfully.  This Callback is fired after the Image component's internal renderSuccess method. |
-orientation: CarouselPropTypes.orientation.isRequired,
-renderError: PropTypes.func,
-renderLoading: PropTypes.func,
-src: PropTypes.string.isRequired,
-store: PropTypes.object.isRequired,
-style: PropTypes.object,
-tag: PropTypes.string,
+| renderError| [func&#124;null] | null | No | When defined, if an image fails to load, this function is called.  It must return JSX which will be rendered instead of the broken image. |
+| renderLoading | [func&#124;null] | null | No | When defined, this function is called while the image is loading.  It must return JSX which will be rendered instead of the loading image. |
+| **src** | **string** | | **Yes** | **URL of the image** |
+| tag | string | "img" | No | The element that will receive the image. Another option might be to set this to "div". Any tag besides "img" will result in the image being loaded as the css background-image for that tag. |
 
 ## More Documentation to Come
 I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.

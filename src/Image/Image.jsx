@@ -36,7 +36,13 @@ class Image extends React.Component {
 
   static subscribeMasterSpinner(props) {
     if (props.hasMasterSpinner) {
-      props.store.subscribeMasterSpinner();
+      props.store.subscribeMasterSpinner(props.src);
+    }
+  }
+
+  static unsubscribeMasterSpinner(props) {
+    if (props.hasMasterSpinner) {
+      props.store.unsubscribeMasterSpinner(props.src);
     }
   }
 
@@ -61,6 +67,7 @@ class Image extends React.Component {
   }
 
   componentWillUnmount() {
+    Image.unsubscribeMasterSpinner(this.props);
     this.image.removeEventListener('load', this.handleImageLoad);
     this.image.removeEventListener('error', this.handleImageError);
     this.image = null;
@@ -75,13 +82,13 @@ class Image extends React.Component {
 
   handleImageLoad(ev) {
     this.setState({ imageStatus: SUCCESS });
-    if (this.props.hasMasterSpinner) this.props.store.masterSpinnerSuccess();
+    if (this.props.hasMasterSpinner) this.props.store.masterSpinnerSuccess(this.props.src);
     if (this.props.onLoad) this.props.onLoad(ev);
   }
 
   handleImageError(ev) {
     this.setState({ imageStatus: ERROR });
-    if (this.props.hasMasterSpinner) this.props.store.masterSpinnerError();
+    if (this.props.hasMasterSpinner) this.props.store.masterSpinnerError(this.props.src);
     if (this.props.onError) this.props.onError(ev);
   }
 

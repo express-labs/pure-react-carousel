@@ -709,10 +709,11 @@ function WithStore(WrappedComponent) {
             } // allows access to refs in wrapped components.
           }, props, {
             store: {
+              masterSpinnerError: this.context.store.masterSpinnerError,
+              masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
               setStoreState: this.context.store.setStoreState,
               subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
-              masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
-              masterSpinnerError: this.context.store.masterSpinnerError
+              unsubscribeMasterSpinner: this.context.store.unsubscribeMasterSpinner
             }
           }),
           this.props.children
@@ -1375,7 +1376,14 @@ var Image$1 = function (_React$Component) {
     key: 'subscribeMasterSpinner',
     value: function subscribeMasterSpinner(props) {
       if (props.hasMasterSpinner) {
-        props.store.subscribeMasterSpinner();
+        props.store.subscribeMasterSpinner(props.src);
+      }
+    }
+  }, {
+    key: 'unsubscribeMasterSpinner',
+    value: function unsubscribeMasterSpinner(props) {
+      if (props.hasMasterSpinner) {
+        props.store.unsubscribeMasterSpinner(props.src);
       }
     }
   }]);
@@ -1409,6 +1417,7 @@ var Image$1 = function (_React$Component) {
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
+      Image.unsubscribeMasterSpinner(this.props);
       this.image.removeEventListener('load', this.handleImageLoad);
       this.image.removeEventListener('error', this.handleImageError);
       this.image = null;
@@ -1425,14 +1434,14 @@ var Image$1 = function (_React$Component) {
     key: 'handleImageLoad',
     value: function handleImageLoad(ev) {
       this.setState({ imageStatus: SUCCESS });
-      if (this.props.hasMasterSpinner) this.props.store.masterSpinnerSuccess();
+      if (this.props.hasMasterSpinner) this.props.store.masterSpinnerSuccess(this.props.src);
       if (this.props.onLoad) this.props.onLoad(ev);
     }
   }, {
     key: 'handleImageError',
     value: function handleImageError(ev) {
       this.setState({ imageStatus: ERROR });
-      if (this.props.hasMasterSpinner) this.props.store.masterSpinnerError();
+      if (this.props.hasMasterSpinner) this.props.store.masterSpinnerError(this.props.src);
       if (this.props.onError) this.props.onError(ev);
     }
   }, {
@@ -1511,17 +1520,14 @@ var Image$1 = function (_React$Component) {
           className = _props2.className,
           hasMasterSpinner = _props2.hasMasterSpinner,
           isBgImage = _props2.isBgImage,
-          naturalSlideHeight = _props2.naturalSlideHeight,
-          naturalSlideWidth = _props2.naturalSlideWidth,
           onError = _props2.onError,
           onLoad = _props2.onLoad,
-          orientation = _props2.orientation,
           renderError = _props2.renderError,
           renderLoading = _props2.renderLoading,
           store = _props2.store,
           style = _props2.style,
           tag = _props2.tag,
-          filteredProps = objectWithoutProperties(_props2, ['children', 'className', 'hasMasterSpinner', 'isBgImage', 'naturalSlideHeight', 'naturalSlideWidth', 'onError', 'onLoad', 'orientation', 'renderError', 'renderLoading', 'store', 'style', 'tag']);
+          filteredProps = objectWithoutProperties(_props2, ['children', 'className', 'hasMasterSpinner', 'isBgImage', 'onError', 'onLoad', 'renderError', 'renderLoading', 'store', 'style', 'tag']);
 
 
       switch (this.state.imageStatus) {
@@ -1545,11 +1551,8 @@ Image$1.propTypes = {
   className: index$1.string,
   hasMasterSpinner: index$1.bool.isRequired,
   isBgImage: CarouselPropTypes.isBgImage,
-  naturalSlideHeight: index$1.number.isRequired,
-  naturalSlideWidth: index$1.number.isRequired,
   onError: index$1.func,
   onLoad: index$1.func,
-  orientation: CarouselPropTypes.orientation.isRequired,
   renderError: index$1.func,
   renderLoading: index$1.func,
   src: index$1.string.isRequired,
@@ -1574,8 +1577,6 @@ Image$1.defaultProps = {
 var Image = WithStore(Image$1, function (state) {
   return {
     hasMasterSpinner: state.hasMasterSpinner,
-    naturalSlideHeight: state.naturalSlideHeight,
-    naturalSlideWidth: state.naturalSlideWidth,
     orientation: state.orientation
   };
 });
@@ -2045,16 +2046,10 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     value: function renderMasterSpinner() {
       var _props2 = this.props,
           hasMasterSpinner = _props2.hasMasterSpinner,
-          masterSpinnerErrorCount = _props2.masterSpinnerErrorCount,
-          masterSpinnerSuccessCount = _props2.masterSpinnerSuccessCount,
-          masterSpinnerSubscriptionCount = _props2.masterSpinnerSubscriptionCount;
+          masterSpinnerFinished = _props2.masterSpinnerFinished;
 
 
-      var testImageCountReached = masterSpinnerErrorCount + masterSpinnerSuccessCount === masterSpinnerSubscriptionCount;
-
-      var testInitialLoad = masterSpinnerSubscriptionCount === 0;
-
-      if (hasMasterSpinner && (!testImageCountReached || testInitialLoad)) {
+      if (hasMasterSpinner && !masterSpinnerFinished) {
         if (typeof this.props.onMasterSpinner === 'function') this.props.onMasterSpinner();
 
         return React.createElement(
@@ -2078,9 +2073,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
           className = _props3.className,
           currentSlide = _props3.currentSlide,
           hasMasterSpinner = _props3.hasMasterSpinner,
-          masterSpinnerErrorCount = _props3.masterSpinnerErrorCount,
-          masterSpinnerSubscriptionCount = _props3.masterSpinnerSubscriptionCount,
-          masterSpinnerSuccessCount = _props3.masterSpinnerSuccessCount,
+          masterSpinnerFinished = _props3.masterSpinnerFinished,
           naturalSlideHeight = _props3.naturalSlideHeight,
           naturalSlideWidth = _props3.naturalSlideWidth,
           onMasterSpinner = _props3.onMasterSpinner,
@@ -2094,7 +2087,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
           touchEnabled = _props3.touchEnabled,
           TrayTag = _props3.trayTag,
           visibleSlides = _props3.visibleSlides,
-          props = objectWithoutProperties(_props3, ['children', 'className', 'currentSlide', 'hasMasterSpinner', 'masterSpinnerErrorCount', 'masterSpinnerSubscriptionCount', 'masterSpinnerSuccessCount', 'naturalSlideHeight', 'naturalSlideWidth', 'onMasterSpinner', 'orientation', 'slideTraySize', 'slideSize', 'store', 'style', 'tabIndex', 'totalSlides', 'touchEnabled', 'trayTag', 'visibleSlides']);
+          props = objectWithoutProperties(_props3, ['children', 'className', 'currentSlide', 'hasMasterSpinner', 'masterSpinnerFinished', 'naturalSlideHeight', 'naturalSlideWidth', 'onMasterSpinner', 'orientation', 'slideTraySize', 'slideSize', 'store', 'style', 'tabIndex', 'totalSlides', 'touchEnabled', 'trayTag', 'visibleSlides']);
 
 
       var sliderStyle = _extends({}, style);
@@ -2192,9 +2185,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   className: index$1.string,
   currentSlide: index$1.number.isRequired,
   hasMasterSpinner: index$1.bool.isRequired,
-  masterSpinnerErrorCount: index$1.number.isRequired,
-  masterSpinnerSuccessCount: index$1.number.isRequired,
-  masterSpinnerSubscriptionCount: index$1.number.isRequired,
+  masterSpinnerFinished: index$1.bool.isRequired,
   naturalSlideHeight: index$1.number.isRequired,
   naturalSlideWidth: index$1.number.isRequired,
   onMasterSpinner: index$1.func,
@@ -2222,9 +2213,7 @@ var index$18 = WithStore(Slider$$1, function (state) {
   return {
     currentSlide: state.currentSlide,
     hasMasterSpinner: state.hasMasterSpinner,
-    masterSpinnerErrorCount: state.masterSpinnerErrorCount,
-    masterSpinnerSubscriptionCount: state.masterSpinnerSubscriptionCount,
-    masterSpinnerSuccessCount: state.masterSpinnerSuccessCount,
+    masterSpinnerFinished: state.masterSpinnerFinished,
     naturalSlideHeight: state.naturalSlideHeight,
     naturalSlideWidth: state.naturalSlideWidth,
     orientation: state.orientation,
@@ -2283,9 +2272,7 @@ var index$19 = function deepFreeze (o) {
 };
 
 var DEFAULT_STATE = {
-  masterSpinnerSubscriptionCount: 0,
-  masterSpinnerErrorCount: 0,
-  masterSpinnerSuccessCount: 0
+  masterSpinnerFinished: false
 };
 
 var Store = function () {
@@ -2294,12 +2281,14 @@ var Store = function () {
 
     this.state = index$19(cjs(DEFAULT_STATE, initialState));
     this.subscriptions = [];
+    this.masterSpinnerSubscriptions = {};
     this.setStoreState = this.setStoreState.bind(this);
     this.getStoreState = this.getStoreState.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.unsubscribe = this.unsubscribe.bind(this);
     this.updateSubscribers = this.updateSubscribers.bind(this);
     this.subscribeMasterSpinner = this.subscribeMasterSpinner.bind(this);
+    this.unsubscribeMasterSpinner = this.unsubscribeMasterSpinner.bind(this);
     this.masterSpinnerSuccess = this.masterSpinnerSuccess.bind(this);
     this.masterSpinnerError = this.masterSpinnerError.bind(this);
   }
@@ -2336,24 +2325,53 @@ var Store = function () {
     }
   }, {
     key: 'subscribeMasterSpinner',
-    value: function subscribeMasterSpinner() {
-      this.setStoreState({
-        masterSpinnerSubscriptionCount: this.state.masterSpinnerSubscriptionCount + 1
-      });
+    value: function subscribeMasterSpinner(src) {
+      var index = Object.keys(this.masterSpinnerSubscriptions).indexOf(src);
+      if (index === -1) {
+        this.masterSpinnerSubscriptions[src] = {
+          success: false,
+          error: false,
+          complete: false
+        };
+      }
+    }
+  }, {
+    key: 'unsubscribeMasterSpinner',
+    value: function unsubscribeMasterSpinner(src) {
+      var index = Object.keys(this.masterSpinnerSubscriptions).indexOf(src);
+      if (index === -1) {
+        return false;
+      }
+      return delete this.masterSpinnerSubscriptions[src];
     }
   }, {
     key: 'masterSpinnerSuccess',
-    value: function masterSpinnerSuccess() {
+    value: function masterSpinnerSuccess(src) {
+      this.masterSpinnerSubscriptions[src].success = true;
+      this.masterSpinnerSubscriptions[src].complete = true;
       this.setStoreState({
-        masterSpinnerSuccessCount: this.state.masterSpinnerSuccessCount + 1
+        masterSpinnerFinished: this.isMasterSpinnerFinished()
       });
     }
   }, {
     key: 'masterSpinnerError',
-    value: function masterSpinnerError() {
+    value: function masterSpinnerError(src) {
+      this.masterSpinnerSubscriptions[src].error = true;
+      this.masterSpinnerSubscriptions[src].complete = true;
       this.setStoreState({
-        masterSpinnerErrorCount: this.state.masterSpinnerErrorCount + 1
+        masterSpinnerFinished: this.isMasterSpinnerFinished()
       });
+    }
+  }, {
+    key: 'isMasterSpinnerFinished',
+    value: function isMasterSpinnerFinished() {
+      var _this = this;
+
+      var completeCount = 0;
+      Object.keys(this.masterSpinnerSubscriptions).forEach(function (report) {
+        if (_this.masterSpinnerSubscriptions[report].complete) completeCount += 1;
+      });
+      return completeCount === Object.keys(this.masterSpinnerSubscriptions).length;
     }
   }]);
   return Store;

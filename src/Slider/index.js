@@ -4,9 +4,7 @@ import WithStore from '../Store/WithStore';
 export default WithStore(Slider, state => ({
   currentSlide: state.currentSlide,
   hasMasterSpinner: state.hasMasterSpinner,
-  masterSpinnerErrorCount: state.masterSpinnerErrorCount,
-  masterSpinnerSubscriptionCount: state.masterSpinnerSubscriptionCount,
-  masterSpinnerSuccessCount: state.masterSpinnerSuccessCount,
+  masterSpinnerFinished: state.masterSpinnerFinished,
   naturalSlideHeight: state.naturalSlideHeight,
   naturalSlideWidth: state.naturalSlideWidth,
   orientation: state.orientation,
