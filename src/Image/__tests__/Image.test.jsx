@@ -21,6 +21,20 @@ describe('<Image />', () => {
     mount(<Image {...props} hasMasterSpinner />);
     expect(spy).toHaveBeenCalledTimes(1);
   });
+  it('should make a call to store.unsubscribeMasterSpinner() if props.hasMasterSpinner is true and the component will unmount', () => {
+    const spy = jest.spyOn(props.store, 'unsubscribeMasterSpinner');
+    expect(spy).not.toHaveBeenCalled();
+    const wrapper = mount(<Image {...props} hasMasterSpinner />);
+    wrapper.unmount();
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+  it('should NOT make a call to store.unsubscribeMasterSpinner() if props.hasMasterSpinner is false and the component will unmount', () => {
+    const spy = jest.spyOn(props.store, 'unsubscribeMasterSpinner');
+    expect(spy).not.toHaveBeenCalled();
+    const wrapper = mount(<Image {...props} />);
+    wrapper.unmount();
+    expect(spy).not.toHaveBeenCalled();
+  });
   it('should call any passed-in onLoad after the image loads.', () => {
     const onLoad = jest.fn();
     expect(onLoad).not.toHaveBeenCalled();

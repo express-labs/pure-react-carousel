@@ -49,26 +49,82 @@ describe('Store', () => {
     store.updateSubscribers(callback);
     expect(callback).toHaveBeenCalledTimes(1);
   });
-  it('subscribeMasterSpinner() should increment the masterSpinnerSubscriptionCount', () => {
-    expect(store.state.masterSpinnerSubscriptionCount).toBe(0);
-    store.subscribeMasterSpinner();
-    expect(store.state.masterSpinnerSubscriptionCount).toBe(1);
-    expect(store.state.masterSpinnerErrorCount).toBe(0);
-    expect(store.state.masterSpinnerSuccessCount).toBe(0);
+  it('subscribeMasterSpinner() append a src to the list of masterSpinnerSubscriptions', () => {
+    expect(store.masterSpinnerSubscriptions).toEqual({});
+    store.subscribeMasterSpinner('/home/bob.jpg');
+    expect(store.masterSpinnerSubscriptions['/home/bob.jpg']).toEqual({
+      success: false,
+      error: false,
+      complete: false,
+    });
   });
-  it('masterSpinnerSuccess() should increment the masterSpinnerSuccessCount', () => {
-    expect(store.state.masterSpinnerSubscriptionCount).toBe(0);
-    store.masterSpinnerSuccess();
-    expect(store.state.masterSpinnerSubscriptionCount).toBe(0);
-    expect(store.state.masterSpinnerErrorCount).toBe(0);
-    expect(store.state.masterSpinnerSuccessCount).toBe(1);
+  it('masterSpinnerSuccess() should set masterSpinnerSubscriptions[src].success and masterSpinnerSubscriptions[src].complete to true', () => {
+    expect(store.masterSpinnerSubscriptions).toEqual({});
+    store.subscribeMasterSpinner('/home/bob.jpg');
+    expect(store.masterSpinnerSubscriptions['/home/bob.jpg']).toEqual({
+      success: false,
+      error: false,
+      complete: false,
+    });
+    store.masterSpinnerSuccess('/home/bob.jpg');
+    expect(store.masterSpinnerSubscriptions['/home/bob.jpg']).toEqual({
+      success: true,
+      error: false,
+      complete: true,
+    });
   });
-  it('masterSpinnerError() should increment the masterSpinnerErrorCount', () => {
-    expect(store.state.masterSpinnerErrorCount).toBe(0);
-    store.masterSpinnerError();
-    expect(store.state.masterSpinnerSubscriptionCount).toBe(0);
-    expect(store.state.masterSpinnerErrorCount).toBe(1);
-    expect(store.state.masterSpinnerSuccessCount).toBe(0);
+  it('masterSpinnerError() should set masterSpinnerSubscriptions[src].error and masterSpinnerSubscriptions[src].complete to true', () => {
+    expect(store.masterSpinnerSubscriptions).toEqual({});
+    store.subscribeMasterSpinner('/home/bob.jpg');
+    expect(store.masterSpinnerSubscriptions['/home/bob.jpg']).toEqual({
+      success: false,
+      error: false,
+      complete: false,
+    });
+    store.masterSpinnerError('/home/bob.jpg');
+    expect(store.masterSpinnerSubscriptions['/home/bob.jpg']).toEqual({
+      success: false,
+      error: true,
+      complete: true,
+    });
+  });
+  it('subscribeMasterSpinner() should not append a duplicate listener for the same image src', () => {
+    expect(store.masterSpinnerSubscriptions).toEqual({});
+    store.subscribeMasterSpinner('/home/bob.jpg');
+    store.subscribeMasterSpinner('/home/bob.jpg');
+    expect(store.masterSpinnerSubscriptions['/home/bob.jpg']).toEqual({
+      success: false,
+      error: false,
+      complete: false,
+    });
+  });
+  it('unsubscribeMasterSpinner() should not remove anything but the supplied src', () => {
+    expect(store.masterSpinnerSubscriptions).toEqual({});
+    store.subscribeMasterSpinner('/home/bob.jpg');
+    store.subscribeMasterSpinner('/home/poo.jpg');
+    expect(store.masterSpinnerSubscriptions).toEqual({
+      '/home/bob.jpg': { success: false, error: false, complete: false },
+      '/home/poo.jpg': { success: false, error: false, complete: false },
+    });
+    expect(store.unsubscribeMasterSpinner('/home/bob.jpg')).toBe(true);
+    expect(store.unsubscribeMasterSpinner('/home/bob.jpg')).toBe(false);
+    expect(store.masterSpinnerSubscriptions).toEqual({
+      '/home/poo.jpg': { success: false, error: false, complete: false },
+    });
+  });
+  it('isMasterSpinnerFinished() should return false if every image is not complete', () => {
+    expect(store.masterSpinnerSubscriptions).toEqual({});
+    store.subscribeMasterSpinner('/home/bob.jpg');
+    store.subscribeMasterSpinner('/home/poo.jpg');
+    expect(store.masterSpinnerSubscriptions).toEqual({
+      '/home/bob.jpg': { success: false, error: false, complete: false },
+      '/home/poo.jpg': { success: false, error: false, complete: false },
+    });
+    expect(store.isMasterSpinnerFinished()).toBe(false);
+    store.masterSpinnerSuccess('/home/bob.jpg');
+    expect(store.isMasterSpinnerFinished()).toBe(false);
+    store.masterSpinnerError('/home/poo.jpg');
+    expect(store.isMasterSpinnerFinished()).toBe(true);
   });
 });
 

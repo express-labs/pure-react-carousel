@@ -52,10 +52,11 @@ export default function WithStore(
           ref={(el) => { this.instance = el; }} // allows access to refs in wrapped components.
           {...props}
           store={{
+            masterSpinnerError: this.context.store.masterSpinnerError,
+            masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
             setStoreState: this.context.store.setStoreState,
             subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
-            masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
-            masterSpinnerError: this.context.store.masterSpinnerError,
+            unsubscribeMasterSpinner: this.context.store.unsubscribeMasterSpinner,
           }}
         >{this.props.children}</WrappedComponent>);
     }

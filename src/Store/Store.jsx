@@ -2,21 +2,21 @@ import deepMerge from 'deepmerge';
 import deepFreeze from 'deep-freeze';
 
 const DEFAULT_STATE = {
-  masterSpinnerSubscriptionCount: 0,
-  masterSpinnerErrorCount: 0,
-  masterSpinnerSuccessCount: 0,
+  masterSpinnerFinished: false,
 };
 
 const Store = class Store {
   constructor(initialState) {
     this.state = deepFreeze(deepMerge(DEFAULT_STATE, initialState));
     this.subscriptions = [];
+    this.masterSpinnerSubscriptions = {};
     this.setStoreState = this.setStoreState.bind(this);
     this.getStoreState = this.getStoreState.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.unsubscribe = this.unsubscribe.bind(this);
     this.updateSubscribers = this.updateSubscribers.bind(this);
     this.subscribeMasterSpinner = this.subscribeMasterSpinner.bind(this);
+    this.unsubscribeMasterSpinner = this.unsubscribeMasterSpinner.bind(this);
     this.masterSpinnerSuccess = this.masterSpinnerSuccess.bind(this);
     this.masterSpinnerError = this.masterSpinnerError.bind(this);
   }
@@ -44,22 +44,47 @@ const Store = class Store {
     if (typeof cb === 'function') cb(this.getStoreState());
   }
 
-  subscribeMasterSpinner() {
+  subscribeMasterSpinner(src) {
+    const index = Object.keys(this.masterSpinnerSubscriptions).indexOf(src);
+    if (index === -1) {
+      this.masterSpinnerSubscriptions[src] = {
+        success: false,
+        error: false,
+        complete: false,
+      };
+    }
+  }
+
+  unsubscribeMasterSpinner(src) {
+    const index = Object.keys(this.masterSpinnerSubscriptions).indexOf(src);
+    if (index === -1) {
+      return false;
+    }
+    return delete this.masterSpinnerSubscriptions[src];
+  }
+
+  masterSpinnerSuccess(src) {
+    this.masterSpinnerSubscriptions[src].success = true;
+    this.masterSpinnerSubscriptions[src].complete = true;
     this.setStoreState({
-      masterSpinnerSubscriptionCount: this.state.masterSpinnerSubscriptionCount + 1,
+      masterSpinnerFinished: this.isMasterSpinnerFinished(),
     });
   }
 
-  masterSpinnerSuccess() {
+  masterSpinnerError(src) {
+    this.masterSpinnerSubscriptions[src].error = true;
+    this.masterSpinnerSubscriptions[src].complete = true;
     this.setStoreState({
-      masterSpinnerSuccessCount: this.state.masterSpinnerSuccessCount + 1,
+      masterSpinnerFinished: this.isMasterSpinnerFinished(),
     });
   }
 
-  masterSpinnerError() {
-    this.setStoreState({
-      masterSpinnerErrorCount: this.state.masterSpinnerErrorCount + 1,
+  isMasterSpinnerFinished() {
+    let completeCount = 0;
+    Object.keys(this.masterSpinnerSubscriptions).forEach((report) => {
+      if (this.masterSpinnerSubscriptions[report].complete) completeCount += 1;
     });
+    return completeCount === Object.keys(this.masterSpinnerSubscriptions).length;
   }
 };
 
