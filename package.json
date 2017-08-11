@@ -18,7 +18,8 @@
     "dev": "NODE_ENV=development rollup -w -c rollup.config.dev.js",
     "prebuild": "rimraf dist",
     "build": "NODE_ENV=production rollup -c rollup.config.cjs.js && NODE_ENV=production rollup -c rollup.config.es.js",
-    "postbuild": "node postbuild.js"
+    "postbuild": "node postbuild.js",
+    "build:watch": "watch 'npm run build' src"
   },
   "repository": {
     "type": "git",
@@ -75,7 +76,8 @@
     "rollup-plugin-serve": "^0.3.0",
     "rollup-plugin-uglify": "^2.0.1",
     "rollup-watch": "^3.2.2",
-    "uglify-es": "^3.0.15"
+    "uglify-es": "^3.0.15",
+    "watch": "^1.0.2"
   },
   "peerDependencies": {
     "react": "15.x",
