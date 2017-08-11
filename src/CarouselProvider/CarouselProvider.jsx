@@ -101,6 +101,10 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.store.unsubscribeAllMasterSpinner();
+  }
+
   render() {
     const { tag: Tag } = this.props;
     const filteredProps = omit(this.props, Object.keys(CarouselProvider.propTypes));
