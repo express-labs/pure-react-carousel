@@ -57,6 +57,7 @@ export default function WithStore(
             setStoreState: this.context.store.setStoreState,
             subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
             unsubscribeMasterSpinner: this.context.store.unsubscribeMasterSpinner,
+            unsubscribeAllMasterSpinner: this.context.store.unsubscribeAllMasterSpinner,
           }}
         >{this.props.children}</WrappedComponent>);
     }

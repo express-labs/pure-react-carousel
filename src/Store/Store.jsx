@@ -17,6 +17,7 @@ const Store = class Store {
     this.updateSubscribers = this.updateSubscribers.bind(this);
     this.subscribeMasterSpinner = this.subscribeMasterSpinner.bind(this);
     this.unsubscribeMasterSpinner = this.unsubscribeMasterSpinner.bind(this);
+    this.unsubscribeAllMasterSpinner = this.unsubscribeAllMasterSpinner.bind(this);
     this.masterSpinnerSuccess = this.masterSpinnerSuccess.bind(this);
     this.masterSpinnerError = this.masterSpinnerError.bind(this);
   }
@@ -60,31 +61,38 @@ const Store = class Store {
     if (index === -1) {
       return false;
     }
+    this.setMasterSpinnerFinished();
     return delete this.masterSpinnerSubscriptions[src];
+  }
+
+  unsubscribeAllMasterSpinner() {
+    this.masterSpinnerSubscriptions = {};
+    this.setMasterSpinnerFinished();
   }
 
   masterSpinnerSuccess(src) {
     this.masterSpinnerSubscriptions[src].success = true;
     this.masterSpinnerSubscriptions[src].complete = true;
-    this.setStoreState({
-      masterSpinnerFinished: this.isMasterSpinnerFinished(),
-    });
+    this.setMasterSpinnerFinished();
   }
 
   masterSpinnerError(src) {
     this.masterSpinnerSubscriptions[src].error = true;
     this.masterSpinnerSubscriptions[src].complete = true;
+    this.setMasterSpinnerFinished();
+  }
+
+  setMasterSpinnerFinished() {
     this.setStoreState({
       masterSpinnerFinished: this.isMasterSpinnerFinished(),
     });
   }
 
   isMasterSpinnerFinished() {
-    let completeCount = 0;
-    Object.keys(this.masterSpinnerSubscriptions).forEach((report) => {
-      if (this.masterSpinnerSubscriptions[report].complete) completeCount += 1;
-    });
-    return completeCount === Object.keys(this.masterSpinnerSubscriptions).length;
+    // console.log('MASTER SPINNER SUBSCRIPTIONS', this.masterSpinnerSubscriptions);
+    return !Object.keys(this.masterSpinnerSubscriptions).find(
+      src => this.masterSpinnerSubscriptions[src].complete !== true,
+    );
   }
 };
 

@@ -61,6 +61,7 @@ class Image extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.src !== this.props.src) {
+      Image.unsubscribeMasterSpinner(this.props);
       Image.subscribeMasterSpinner(nextProps);
       this.initImage();
     }
@@ -74,10 +75,25 @@ class Image extends React.Component {
   }
 
   initImage() {
+    this.setState({ imageStatus: LOADING });
     this.image = document.createElement('img');
+
+    // set event listeners first
     this.image.addEventListener('load', this.handleImageLoad, false);
     this.image.addEventListener('error', this.handleImageError, false);
+
+    // setting img.src initiates the image load.
     this.image.src = this.props.src;
+
+    // Was the image cached? force the image through the load process again.
+    // NOTE: figure out a way to test this.  It might involve breaking initImage
+    // up into some other methods.
+    /* istanbul ignore if  */
+    if (this.image.readyState || this.image.complete) {
+      const src = this.image.src;
+      this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+      this.image.src = src;
+    }
   }
 
   handleImageLoad(ev) {

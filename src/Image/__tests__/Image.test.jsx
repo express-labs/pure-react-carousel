@@ -58,6 +58,14 @@ describe('<Image />', () => {
     instance.image.dispatchEvent(event);
     expect(wrapper.hasClass('imageError')).toBe(true);
   });
+  it('should call the default onError if an image load fails and there is no custom onError.', () => {
+    const wrapper = mount(<Image {...props} src="crap.junk" />);
+    const instance = wrapper.instance();
+    const event = new UIEvent('error');
+    // simulate a load error
+    instance.image.dispatchEvent(event);
+    expect(wrapper.hasClass('imageError')).toBe(true);
+  });
   it('should render the default error with the class "carousel__image--with-background" if isBgImage === true', () => {
     const newProps = Object.assign({}, props, { tag: 'div' });
     const wrapper = mount(<Image {...newProps} src="crap.junk" isBgImage />);

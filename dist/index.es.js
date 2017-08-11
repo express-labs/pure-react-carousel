@@ -713,7 +713,8 @@ function WithStore(WrappedComponent) {
               masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
               setStoreState: this.context.store.setStoreState,
               subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
-              unsubscribeMasterSpinner: this.context.store.unsubscribeMasterSpinner
+              unsubscribeMasterSpinner: this.context.store.unsubscribeMasterSpinner,
+              unsubscribeAllMasterSpinner: this.context.store.unsubscribeAllMasterSpinner
             }
           }),
           this.props.children
@@ -1149,6 +1150,11 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
       }
     }
   }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.store.unsubscribeAllMasterSpinner();
+    }
+  }, {
     key: 'render',
     value: function render() {
       var Tag = this.props.tag;
@@ -1410,6 +1416,7 @@ var Image$1 = function (_React$Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       if (nextProps.src !== this.props.src) {
+        Image.unsubscribeMasterSpinner(this.props);
         Image.subscribeMasterSpinner(nextProps);
         this.initImage();
       }
@@ -1425,10 +1432,25 @@ var Image$1 = function (_React$Component) {
   }, {
     key: 'initImage',
     value: function initImage() {
+      this.setState({ imageStatus: LOADING });
       this.image = document.createElement('img');
+
+      // set event listeners first
       this.image.addEventListener('load', this.handleImageLoad, false);
       this.image.addEventListener('error', this.handleImageError, false);
+
+      // setting img.src initiates the image load.
       this.image.src = this.props.src;
+
+      // Was the image cached? force the image through the load process again.
+      // NOTE: figure out a way to test this.  It might involve breaking initImage
+      // up into some other methods.
+      /* istanbul ignore if  */
+      if (this.image.readyState || this.image.complete) {
+        var src = this.image.src;
+        this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+        this.image.src = src;
+      }
     }
   }, {
     key: 'handleImageLoad',
@@ -2289,6 +2311,7 @@ var Store = function () {
     this.updateSubscribers = this.updateSubscribers.bind(this);
     this.subscribeMasterSpinner = this.subscribeMasterSpinner.bind(this);
     this.unsubscribeMasterSpinner = this.unsubscribeMasterSpinner.bind(this);
+    this.unsubscribeAllMasterSpinner = this.unsubscribeAllMasterSpinner.bind(this);
     this.masterSpinnerSuccess = this.masterSpinnerSuccess.bind(this);
     this.masterSpinnerError = this.masterSpinnerError.bind(this);
   }
@@ -2342,22 +2365,32 @@ var Store = function () {
       if (index === -1) {
         return false;
       }
+      this.setMasterSpinnerFinished();
       return delete this.masterSpinnerSubscriptions[src];
+    }
+  }, {
+    key: 'unsubscribeAllMasterSpinner',
+    value: function unsubscribeAllMasterSpinner() {
+      this.masterSpinnerSubscriptions = {};
+      this.setMasterSpinnerFinished();
     }
   }, {
     key: 'masterSpinnerSuccess',
     value: function masterSpinnerSuccess(src) {
       this.masterSpinnerSubscriptions[src].success = true;
       this.masterSpinnerSubscriptions[src].complete = true;
-      this.setStoreState({
-        masterSpinnerFinished: this.isMasterSpinnerFinished()
-      });
+      this.setMasterSpinnerFinished();
     }
   }, {
     key: 'masterSpinnerError',
     value: function masterSpinnerError(src) {
       this.masterSpinnerSubscriptions[src].error = true;
       this.masterSpinnerSubscriptions[src].complete = true;
+      this.setMasterSpinnerFinished();
+    }
+  }, {
+    key: 'setMasterSpinnerFinished',
+    value: function setMasterSpinnerFinished() {
       this.setStoreState({
         masterSpinnerFinished: this.isMasterSpinnerFinished()
       });
@@ -2367,11 +2400,10 @@ var Store = function () {
     value: function isMasterSpinnerFinished() {
       var _this = this;
 
-      var completeCount = 0;
-      Object.keys(this.masterSpinnerSubscriptions).forEach(function (report) {
-        if (_this.masterSpinnerSubscriptions[report].complete) completeCount += 1;
+      // console.log('MASTER SPINNER SUBSCRIPTIONS', this.masterSpinnerSubscriptions);
+      return !Object.keys(this.masterSpinnerSubscriptions).find(function (src) {
+        return _this.masterSpinnerSubscriptions[src].complete !== true;
       });
-      return completeCount === Object.keys(this.masterSpinnerSubscriptions).length;
     }
   }]);
   return Store;
