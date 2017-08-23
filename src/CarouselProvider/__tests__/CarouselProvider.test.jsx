@@ -1,10 +1,12 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import clone from 'clone';
 import CarouselProvider from '../';
 import components from '../../helpers/component-config';
 
 let props;
+
+jest.useFakeTimers();
 
 describe('<CarouselProvider />', () => {
   beforeEach(() => {
@@ -55,5 +57,16 @@ describe('<CarouselProvider />', () => {
     wrapper.setProps({ 'data-foo': 2 });
     const end = clone(instance.store.state);
     expect(start).toEqual(end);
+  });
+  it('should set disable animation to false if we updated currentSlide and animationDisabled is false', () => {
+    const wrapper = mount((
+      <CarouselProvider
+        {...props}
+      >Hello</CarouselProvider>
+    ));
+    wrapper.setProps({ currentSlide: 1 });
+    expect(wrapper.instance().getStore().state.disableAnimation).toBe(true);
+    jest.runAllTimers();
+    expect(wrapper.instance().getStore().state.disableAnimation).toBe(false);
   });
 });

@@ -12,6 +12,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     hasMasterSpinner: PropTypes.bool,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
+    disableAnimation: PropTypes.bool,
     orientation: CarouselPropTypes.orientation,
     step: PropTypes.number,
     tag: PropTypes.string,
@@ -24,6 +25,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     className: null,
     currentSlide: 0,
     hasMasterSpinner: false,
+    disableAnimation: false,
     orientation: 'horizontal',
     step: 1,
     tag: 'div',
@@ -45,6 +47,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       masterSpinnerThreshold: 0,
       naturalSlideHeight: props.naturalSlideHeight,
       naturalSlideWidth: props.naturalSlideWidth,
+      disableAnimation: props.disableAnimation,
       orientation: props.orientation,
       slideSize: slideSize(props.totalSlides, props.visibleSlides),
       slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
@@ -54,6 +57,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       visibleSlides: props.visibleSlides,
     };
     this.store = new Store(options);
+    this.disableAnimationTimer = null;
   }
 
   // Utility function for tests.
@@ -73,7 +77,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     const newStoreState = {};
 
     [
-      'currentSlide',
+      'disableAnimation',
       'hasMasterSpinner',
       'naturalSlideHeight',
       'naturalSlideWidth',
@@ -87,6 +91,24 @@ const CarouselProvider = class CarouselProvider extends React.Component {
         newStoreState[propName] = nextProps[propName];
       }
     });
+
+    const { currentSlide, disableAnimation } = this.store.getStoreState();
+    const isNewCurrentSlide = currentSlide !== nextProps.currentSlide;
+    const isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
+
+    if (isNewCurrentSlide) {
+      newStoreState.currentSlide = nextProps.currentSlide;
+    }
+
+    if (isNewCurrentSlide && !isAnimationDisabled) {
+      newStoreState.disableAnimation = true;
+      window.clearTimeout(this.disableAnimationTimer);
+      this.disableAnimationTimer = window.setTimeout(() => {
+        this.store.setStoreState({
+          disableAnimation: false,
+        });
+      }, 160);
+    }
 
     if (
       this.props.totalSlides !== nextProps.totalSlides ||
@@ -103,6 +125,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
 
   componentWillUnmount() {
     this.store.unsubscribeAllMasterSpinner();
+    window.clearTimeout(this.disableAnimationTimer);
   }
 
   render() {

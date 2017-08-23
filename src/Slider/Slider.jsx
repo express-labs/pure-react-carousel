@@ -13,6 +13,7 @@ const Slider = class Slider extends React.Component {
     masterSpinnerFinished: PropTypes.bool.isRequired,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
+    disableAnimation: PropTypes.bool,
     onMasterSpinner: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
     slideTraySize: PropTypes.number.isRequired,
@@ -29,6 +30,7 @@ const Slider = class Slider extends React.Component {
   static defaultProps = {
     className: '',
     height: null,
+    disableAnimation: false,
     onMasterSpinner: null,
     style: {},
     tabIndex: null,
@@ -225,7 +227,7 @@ const Slider = class Slider extends React.Component {
 
   render() {
     const {
-      children, className, currentSlide, hasMasterSpinner, masterSpinnerFinished,
+      children, className, currentSlide, disableAnimation, hasMasterSpinner, masterSpinnerFinished,
       naturalSlideHeight, naturalSlideWidth, onMasterSpinner, orientation, slideTraySize, slideSize,
       store, style, tabIndex, totalSlides, touchEnabled, trayTag: TrayTag, visibleSlides,
       ...props
@@ -249,7 +251,7 @@ const Slider = class Slider extends React.Component {
     const trayStyle = {};
     const trans = pct(slideSize * currentSlide * -1);
 
-    if (this.state.isBeingTouchDragged) {
+    if (this.state.isBeingTouchDragged || disableAnimation) {
       trayStyle.transition = 'none';
     }
 

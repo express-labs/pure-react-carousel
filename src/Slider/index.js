@@ -7,6 +7,7 @@ export default WithStore(Slider, state => ({
   masterSpinnerFinished: state.masterSpinnerFinished,
   naturalSlideHeight: state.naturalSlideHeight,
   naturalSlideWidth: state.naturalSlideWidth,
+  disableAnimation: state.disableAnimation,
   orientation: state.orientation,
   slideSize: state.slideSize,
   slideTraySize: state.slideTraySize,
