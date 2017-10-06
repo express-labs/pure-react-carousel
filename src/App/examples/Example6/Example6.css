@@ -1,0 +1,28 @@
+.headline {
+  background-color: darkgrey;
+}
+
+.container {
+  position: relative;
+  max-width: 800px;
+  margin: auto;
+}
+
+.buttonBack {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.buttonNext {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+
+.dotGroup {
+  text-align: center;
+}

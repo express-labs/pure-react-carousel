@@ -111,7 +111,8 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/dev/",
-      "/dist/"
+      "/dist/",
+      "/src/App/examples/"
     ],
     "coverageReporters": [
       "text",
