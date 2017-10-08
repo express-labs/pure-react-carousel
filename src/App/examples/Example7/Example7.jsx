@@ -4,12 +4,11 @@ import {
   ButtonNext,
   CarouselProvider,
   DotGroup,
-  ImageWithZoom,
   Slide,
   Slider,
 } from '../../../';
-
-import s from './Example6.css';
+import SlideComponent from './SlideComponent';
+import s from './Example7.css';
 
 export default () => (
   <CarouselProvider
@@ -28,22 +27,22 @@ export default () => (
     <div className={s.container}>
       <Slider className={s.slider}>
         <Slide index={0}>
-          <ImageWithZoom src="./media/img01.jpeg" />
+          <SlideComponent />
         </Slide>
         <Slide index={1}>
-          <ImageWithZoom src="./media/img02.jpeg" />
+          <SlideComponent />
         </Slide>
         <Slide index={2}>
-          <ImageWithZoom src="./media/img03.jpeg" />
+          <SlideComponent />
         </Slide>
         <Slide index={3}>
-          <ImageWithZoom src="./media/img04.jpeg" />
+          <SlideComponent />
         </Slide>
         <Slide index={4}>
-          <ImageWithZoom src="./media/img05.jpeg" />
+          <SlideComponent />
         </Slide>
         <Slide index={5}>
-          <ImageWithZoom src="./media/img06.jpeg" />
+          <SlideComponent />
         </Slide>
       </Slider>
       <ButtonBack className={s.buttonBack}>Back</ButtonBack>

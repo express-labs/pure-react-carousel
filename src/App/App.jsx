@@ -44,7 +44,7 @@ class DevelopmentApp extends React.Component {
           <option value="3">Carousel (Just One Image)</option>
           <option value="4">Vertical Carousel (With Master Loading Spinner)</option>
           <option value="5">Horizontal Carousel (With Master Loading Spinner)</option>
-          <option value="6">Simple Carousel with vertically alligned nav buttons </option>
+          <option value="6">Simple Carousel with vertically alligned nav buttons</option>
         </select>
         <hr />
         { (this.state.value === '0' || this.state.value === '1') && (
