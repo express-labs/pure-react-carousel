@@ -19,7 +19,7 @@ describe('<ButtonNext />', () => {
   });
   it('should be disabled if the currentSlide >= totalSlides - visibleSlides', () => {
     const newProps = Object.assign({}, props, {
-      store: new Store({
+      carouselStore: new Store({
         currentSlide: 5,
         totalSlides: 7,
         visibleSlides: 2,
@@ -29,7 +29,7 @@ describe('<ButtonNext />', () => {
     expect(wrapper.prop('disabled')).toBe(true);
   });
   it('should NOT be disabled if the currentSlide < totalSlides - visibleSlides', () => {
-    const store = new Store({
+    const carouselStore = new Store({
       currentSlide: 4,
       totalSlides: 7,
       visibleSlides: 2,
@@ -41,7 +41,7 @@ describe('<ButtonNext />', () => {
       totalSlides: 7,
       visibleSlides: 2,
       step: 1,
-      store,
+      carouselStore,
     });
 
     const wrapper = shallow(<ButtonNext {...newProps} />);
@@ -52,7 +52,7 @@ describe('<ButtonNext />', () => {
     expect(wrapper.prop('disabled')).toBe(true);
   });
   it('should add the value of step from currentSlide when clicked.', () => {
-    const store = new Store({
+    const carouselStore = new Store({
       currentSlide: 0,
       totalSlides: 7,
       visibleSlides: 2,
@@ -60,7 +60,7 @@ describe('<ButtonNext />', () => {
     });
 
     const newProps = Object.assign({}, props, {
-      store,
+      carouselStore,
       currentSlide: 0,
       totalSlides: 7,
       visibleSlides: 2,
@@ -70,7 +70,7 @@ describe('<ButtonNext />', () => {
     const wrapper = mount(<ButtonNext {...newProps} />);
     wrapper.find('button').simulate('click');
     wrapper.update();
-    expect(store.state.currentSlide).toBe(2);
+    expect(carouselStore.state.currentSlide).toBe(2);
   });
   it('should call an onClick function passed as a prop', () => {
     const onClick = jest.fn();
@@ -97,10 +97,10 @@ describe('<ButtonNext />', () => {
     ));
 
     const instance = wrapper.instance();
-    expect(instance.store.state.currentSlide).toBe(4);
+    expect(instance.carouselStore.state.currentSlide).toBe(4);
     wrapper.find('button').simulate('click');
     wrapper.update();
-    expect(instance.store.state.currentSlide).toBe(newProps.totalSlides - newProps.visibleSlides);
+    expect(instance.carouselStore.state.currentSlide).toBe(newProps.totalSlides - newProps.visibleSlides);
     expect(wrapper.find('button').prop('disabled')).toBe(true);
   });
 });

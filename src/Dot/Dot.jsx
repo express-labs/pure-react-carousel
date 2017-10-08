@@ -12,7 +12,7 @@ const Dot = class Dot extends React.Component {
     onClick: PropTypes.func,
     selected: PropTypes.bool,
     slide: PropTypes.number.isRequired,
-    store: PropTypes.object.isRequired,
+    carouselStore: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
   }
@@ -30,17 +30,17 @@ const Dot = class Dot extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { onClick, slide, store, totalSlides, visibleSlides } = this.props;
+    const { onClick, slide, carouselStore, totalSlides, visibleSlides } = this.props;
     const newSlide = slide >= totalSlides - visibleSlides ? totalSlides - visibleSlides : slide;
 
-    store.setStoreState({
+    carouselStore.setStoreState({
       currentSlide: newSlide,
     }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
     const {
-      children, className, currentSlide, disabled, onClick, selected, slide, store, totalSlides,
+      children, className, currentSlide, disabled, onClick, selected, slide, carouselStore, totalSlides,
       visibleSlides, ...props
     } = this.props;
     const defaultSelected = slide >= currentSlide && slide < (currentSlide + visibleSlides);

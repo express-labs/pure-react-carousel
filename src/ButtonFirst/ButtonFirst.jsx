@@ -10,7 +10,7 @@ const ButtonFirst = class ButtonFirst extends React.Component {
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
-    store: PropTypes.object.isRequired,
+    carouselStore: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
   }
 
@@ -26,15 +26,15 @@ const ButtonFirst = class ButtonFirst extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { store, onClick } = this.props;
-    store.setStoreState({
+    const { carouselStore, onClick } = this.props;
+    carouselStore.setStoreState({
       currentSlide: 0,
     }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
     const {
-      className, currentSlide, disabled, onClick, store, totalSlides, ...props
+      className, currentSlide, disabled, onClick, carouselStore, totalSlides, ...props
     } = this.props;
 
     const newClassName = cn([

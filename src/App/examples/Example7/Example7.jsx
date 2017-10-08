@@ -17,31 +17,31 @@ export default () => (
     step={3}
     naturalSlideWidth={400}
     naturalSlideHeight={500}
-    hasMasterSpinner
   >
-    <h1 className={s.headline}>Simple Carousel with vertically alligned nav buttons</h1>
+    <h1 className={s.headline}>Simple Carousel With React Redux</h1>
     <p>
-      Wrap the &lt;Slider /&gt;, &lt;ButtonBack /&gt;, &lt;ButonNext /&gt; components in a div with
-      relative positioning.  Add absolute positioning to the buttons.
+      The slides in this example use components that utilize React-Redux to track a counter value.
+      This example demonstraits that the context used by Pure React Carousel won&apos;t interfere
+      with components connected to React-Redux.
     </p>
     <div className={s.container}>
       <Slider className={s.slider}>
-        <Slide index={0}>
+        <Slide className={s.slide} index={0}>
           <SlideComponent />
         </Slide>
-        <Slide index={1}>
+        <Slide className={s.slide} index={1}>
           <SlideComponent />
         </Slide>
-        <Slide index={2}>
+        <Slide className={s.slide} index={2}>
           <SlideComponent />
         </Slide>
-        <Slide index={3}>
+        <Slide className={s.slide} index={3}>
           <SlideComponent />
         </Slide>
-        <Slide index={4}>
+        <Slide className={s.slide} index={4}>
           <SlideComponent />
         </Slide>
-        <Slide index={5}>
+        <Slide className={s.slide} index={5}>
           <SlideComponent />
         </Slide>
       </Slider>

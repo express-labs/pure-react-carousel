@@ -10,7 +10,7 @@ const ButtonLast = class ButtonLast extends React.Component {
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
-    store: PropTypes.object.isRequired,
+    carouselStore: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
   }
@@ -27,15 +27,15 @@ const ButtonLast = class ButtonLast extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { store, onClick, totalSlides, visibleSlides } = this.props;
-    store.setStoreState({
+    const { carouselStore, onClick, totalSlides, visibleSlides } = this.props;
+    carouselStore.setStoreState({
       currentSlide: totalSlides - visibleSlides,
     }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
     const {
-      className, currentSlide, disabled, onClick, store, totalSlides, visibleSlides, ...props
+      className, currentSlide, disabled, onClick, carouselStore, totalSlides, visibleSlides, ...props
     } = this.props;
 
     const newClassName = cn([

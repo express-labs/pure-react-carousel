@@ -15,7 +15,7 @@ class Image extends React.Component {
     renderError: PropTypes.func,
     renderLoading: PropTypes.func,
     src: PropTypes.string.isRequired,
-    store: PropTypes.object.isRequired,
+    carouselStore: PropTypes.object.isRequired,
     style: PropTypes.object,
     tag: PropTypes.string,
   }
@@ -36,13 +36,13 @@ class Image extends React.Component {
 
   static subscribeMasterSpinner(props) {
     if (props.hasMasterSpinner) {
-      props.store.subscribeMasterSpinner(props.src);
+      props.carouselStore.subscribeMasterSpinner(props.src);
     }
   }
 
   static unsubscribeMasterSpinner(props) {
     if (props.hasMasterSpinner) {
-      props.store.unsubscribeMasterSpinner(props.src);
+      props.carouselStore.unsubscribeMasterSpinner(props.src);
     }
   }
 
@@ -98,13 +98,13 @@ class Image extends React.Component {
 
   handleImageLoad(ev) {
     this.setState({ imageStatus: SUCCESS });
-    if (this.props.hasMasterSpinner) this.props.store.masterSpinnerSuccess(this.props.src);
+    if (this.props.hasMasterSpinner) this.props.carouselStore.masterSpinnerSuccess(this.props.src);
     if (this.props.onLoad) this.props.onLoad(ev);
   }
 
   handleImageError(ev) {
     this.setState({ imageStatus: ERROR });
-    if (this.props.hasMasterSpinner) this.props.store.masterSpinnerError(this.props.src);
+    if (this.props.hasMasterSpinner) this.props.carouselStore.masterSpinnerError(this.props.src);
     if (this.props.onError) this.props.onError(ev);
   }
 
@@ -180,7 +180,7 @@ class Image extends React.Component {
   render() {
     const {
       children, className, hasMasterSpinner, isBgImage,
-      onError, onLoad, renderError, renderLoading, store, style, tag,
+      onError, onLoad, renderError, renderLoading, carouselStore, style, tag,
       ...filteredProps
     } = this.props;
 

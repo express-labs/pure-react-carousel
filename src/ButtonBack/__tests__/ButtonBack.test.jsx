@@ -7,7 +7,7 @@ import ButtonBackWithStore from '../';
 
 describe('<ButtonBack />', () => {
   it('should render', () => {
-    const wrapper = shallow(<ButtonBack currentSlide={1} step={1} store={{}}>Hello</ButtonBack>);
+    const wrapper = shallow(<ButtonBack currentSlide={1} step={1} carouselStore={{}}>Hello</ButtonBack>);
     expect(wrapper.exists()).toBe(true);
   });
   it('should be disabled if the currentSlide is 0', () => {
@@ -15,7 +15,7 @@ describe('<ButtonBack />', () => {
       <ButtonBack
         currentSlide={0}
         step={1}
-        store={{}}
+        carouselStore={{}}
       >Hello</ButtonBack>,
     );
     expect(wrapper.prop('disabled')).toBe(true);
@@ -25,7 +25,7 @@ describe('<ButtonBack />', () => {
       <ButtonBack
         currentSlide={1}
         step={1}
-        store={{}}
+        carouselStore={{}}
         disabled
       >Hello</ButtonBack>,
     );
@@ -41,7 +41,7 @@ describe('<ButtonBack />', () => {
       <ButtonBack
         currentSlide={4}
         step={3}
-        store={mockStore}
+        carouselStore={mockStore}
       >Hello</ButtonBack>,
     );
     wrapper.find('button').simulate('click');
@@ -59,7 +59,7 @@ describe('<ButtonBack />', () => {
       <ButtonBack
         currentSlide={4}
         step={3}
-        store={mockStore}
+        carouselStore={mockStore}
         onClick={mockOnClick}
       >Hello</ButtonBack>,
     );
@@ -90,7 +90,7 @@ describe('<ButtonBack />', () => {
       <ButtonBack
         currentSlide={4}
         step={3}
-        store={{}}
+        carouselStore={{}}
         className="bob"
       >Hello</ButtonBack>,
     );
@@ -104,7 +104,7 @@ describe('<ButtonBack />', () => {
       <ButtonBack
         currentSlide={4}
         step={3}
-        store={{}}
+        carouselStore={{}}
         foo="bar"
       >Hello</ButtonBack>,
     );

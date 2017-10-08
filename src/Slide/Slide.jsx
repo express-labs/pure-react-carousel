@@ -17,7 +17,7 @@ const Slide = class Slide extends React.PureComponent {
     onFocus: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
     slideSize: PropTypes.number.isRequired,
-    store: PropTypes.object,
+    carouselStore: PropTypes.object,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     tag: PropTypes.string,
@@ -32,7 +32,7 @@ const Slide = class Slide extends React.PureComponent {
     innerTag: 'div',
     onBlur: null,
     onFocus: null,
-    store: null,
+    carouselStore: null,
     style: {},
     tabIndex: null,
     tag: 'li',
@@ -74,7 +74,7 @@ const Slide = class Slide extends React.PureComponent {
   render() {
     const {
       children, className, currentSlide, index, innerClassName, innerTag: InnerTag,
-      naturalSlideHeight, naturalSlideWidth, onBlur, onFocus, orientation, slideSize, store, style,
+      naturalSlideHeight, naturalSlideWidth, onBlur, onFocus, orientation, slideSize, carouselStore, style,
       tabIndex, tag: Tag, totalSlides, visibleSlides,
       ...props
     } = this.props;

@@ -11,7 +11,7 @@ export default class ButtonBack extends React.Component {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     step: PropTypes.number.isRequired,
-    store: PropTypes.object.isRequired,
+    carouselStore: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -43,18 +43,18 @@ export default class ButtonBack extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { currentSlide, onClick, step, store } = this.props;
+    const { currentSlide, onClick, step, carouselStore } = this.props;
     const newCurrentSlide = Math.max(
       currentSlide - step,
       0,
     );
-    store.setStoreState({
+    carouselStore.setStoreState({
       currentSlide: newCurrentSlide,
     }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
-    const { className, currentSlide, disabled, onClick, step, store, ...props } = this.props;
+    const { className, currentSlide, disabled, onClick, step, carouselStore, ...props } = this.props;
 
     const newClassName = cn([
       s.buttonBack,

@@ -28,7 +28,7 @@ describe('<ButtonLast />', () => {
     const wrapper = mount(<ButtonLast {...props} />);
     wrapper.find('button').simulate('click');
     wrapper.update();
-    expect(props.store.getStoreState().currentSlide).toBe(props.totalSlides - 1);
+    expect(props.carouselStore.getStoreState().currentSlide).toBe(props.totalSlides - 1);
   });
   it('should call an onClick function passed as a prop', () => {
     const onClick = jest.fn();
@@ -41,7 +41,7 @@ describe('<ButtonLast />', () => {
   it('should set the button to disabled when (visibleSlides > 1) and (currentSlide > totalSlides - visibleSlides)', () => {
     const newProps = Object.assign({}, props, {
       currentSlide: 5,
-      store: new Store({
+      carouselStore: new Store({
         currentSlide: 5,
         totalSlides: 7,
         visibleSlides: 2,
@@ -55,7 +55,7 @@ describe('<ButtonLast />', () => {
   it('should NOT set the button to disabled when (visibleSlides > 1) and (currentSlide <= totalSlides - visibleSlides)', () => {
     const newProps = Object.assign({}, props, {
       currentSlide: 4,
-      store: new Store({
+      carouselStore: new Store({
         currentSlide: 4,
         totalSlides: 7,
         visibleSlides: 2,

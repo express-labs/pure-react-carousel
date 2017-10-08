@@ -6,6 +6,7 @@ import {
   Example4,
   Example5,
   Example6,
+  Example7,
 } from './examples';
 import s from './style.css';
 
@@ -45,6 +46,7 @@ class DevelopmentApp extends React.Component {
           <option value="4">Vertical Carousel (With Master Loading Spinner)</option>
           <option value="5">Horizontal Carousel (With Master Loading Spinner)</option>
           <option value="6">Simple Carousel with vertically alligned nav buttons</option>
+          <option value="7">Simple Carousel with react-redux</option>
         </select>
         <hr />
         { (this.state.value === '0' || this.state.value === '1') && (
@@ -80,6 +82,12 @@ class DevelopmentApp extends React.Component {
         { (this.state.value === '0' || this.state.value === '6') && (
           <section id="example--6">
             <Example6 />
+          </section>
+        )}
+
+        { (this.state.value === '0' || this.state.value === '7') && (
+          <section id="example--7">
+            <Example7 />
           </section>
         )}
 

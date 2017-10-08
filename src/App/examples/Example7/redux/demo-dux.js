@@ -22,14 +22,14 @@ const initialState = {
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case INCREMENT: {
-      let count = { state };
+      let { count } = state;
       count += 1;
-      return Object.assign({}, { count }, state);
+      return Object.assign({}, state, { count });
     }
     case DECREMENT: {
-      let count = { state };
+      let { count } = state;
       count -= 1;
-      return Object.assign({}, { count }, state);
+      return Object.assign({}, state, { count });
     }
     default:
       return state;

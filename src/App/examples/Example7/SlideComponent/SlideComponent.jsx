@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import s from './SliderComponent.css';
 
 
 export default class SlideComponent extends React.Component {
@@ -18,9 +19,8 @@ export default class SlideComponent extends React.Component {
   constructor() {
     super();
 
-    ['handleIncrement', 'handleDecrement'].forEach((func) => {
-      this[func].bind(this);
-    });
+    this.handleIncrement = this.handleIncrement.bind(this);
+    this.handleDecrement = this.handleDecrement.bind(this);
   }
 
   handleIncrement() {
@@ -33,7 +33,7 @@ export default class SlideComponent extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={s.container}>
         <div>{this.props.children}</div>
         <div>
           <p>Count: { this.props.count }</p>

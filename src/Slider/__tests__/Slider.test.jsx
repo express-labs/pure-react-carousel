@@ -60,7 +60,7 @@ describe('<Slider />', () => {
     expect(wrapper.state('startX')).toBe(100);
     expect(wrapper.state('startY')).toBe(100);
   });
-  it('should set store the document\'s original overflow value on a touchStart event and set the document overflow to hidden.', () => {
+  it('should set carouselStore the document\'s original overflow value on a touchStart event and set the document overflow to hidden.', () => {
     global.document.documentElement.style.overflow = 'bob';
     touch100.preventDefault.mockReset();
     touch100.stopPropagation.mockReset();
@@ -73,7 +73,7 @@ describe('<Slider />', () => {
     expect(touch100.stopPropagation).toHaveBeenCalledTimes(1);
     global.document.documentElement.style.overflow = '';
   });
-  it('should restore the document\'s original overflow value and set originalOverflow to null on a vertical carousel touchEnd', () => {
+  it('should recarouselStore the document\'s original overflow value and set originalOverflow to null on a vertical carousel touchEnd', () => {
     global.document.documentElement.style.overflow = 'bob';
     const wrapper = shallow(<Slider {...props} orientation="vertical" />);
     const instance = wrapper.instance();
@@ -165,7 +165,7 @@ describe('<Slider />', () => {
     const wrapper = mount(<Slider {...props} />);
     expect(wrapper.prop('naturalSlideHeight')).toBe(100);
     expect(wrapper.prop('naturalSlideWidth')).toBe(100);
-    expect(props.store.state.currentSlide).toBe(0);
+    expect(props.carouselStore.state.currentSlide).toBe(0);
     const instance = wrapper.instance();
     expect(instance.sliderTrayElement).not.toBe(undefined);
     wrapper.setState({
@@ -178,7 +178,7 @@ describe('<Slider />', () => {
       clientHeight: 100,
     };
     wrapper.find('.sliderTray').simulate('touchend', { targetTouches: [] });
-    expect(props.store.state.currentSlide).toBe(1);
+    expect(props.carouselStore.state.currentSlide).toBe(1);
   });
   it('Should keep the slider on slide 0 on touchend when dragging the slider past the start of the slide show.', () => {
     const wrapper = mount(<Slider {...props} />);
@@ -193,7 +193,7 @@ describe('<Slider />', () => {
       clientHeight: 100,
     };
     wrapper.find('.sliderTray').simulate('touchend', { targetTouches: [] });
-    expect(props.store.state.currentSlide).toBe(0);
+    expect(props.carouselStore.state.currentSlide).toBe(0);
   });
   it('Should move the slider to totalSlides - visibleSlides - 1 when dragging past the last slide.', () => {
     const wrapper = mount(<Slider {...props} />);
@@ -208,7 +208,7 @@ describe('<Slider />', () => {
       clientHeight: 100,
     };
     wrapper.find('.sliderTray').simulate('touchend', { targetTouches: [] });
-    expect(props.store.state.currentSlide).toBe(3);
+    expect(props.carouselStore.state.currentSlide).toBe(3);
   });
   it('should not change the state at all when touchEnd and touchEnabled prop is false', () => {
     const wrapper = shallow(<Slider {...props} touchEnabled={false} />);
@@ -265,37 +265,37 @@ describe('<Slider />', () => {
     expect(onMasterSpinner).toHaveBeenCalledTimes(1);
   });
   it('should move the slider to slide 1 from slide 0 when pressing the left arrow', () => {
-    const store = new Store({
+    const carouselStore = new Store({
       currentSlide: 1,
     });
-    const wrapper = mount(<Slider {...props} currentSlide={1} store={store} />);
-    expect(store.state.currentSlide).toBe(1);
+    const wrapper = mount(<Slider {...props} currentSlide={1} carouselStore={carouselStore} />);
+    expect(carouselStore.state.currentSlide).toBe(1);
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 37 });
-    expect(store.state.currentSlide).toBe(0);
+    expect(carouselStore.state.currentSlide).toBe(0);
   });
   it('should NOT move the slider lower than zero when left arrow is pressed', () => {
-    const store = new Store({
+    const carouselStore = new Store({
       currentSlide: 0,
     });
-    const wrapper = mount(<Slider {...props} currentSlide={0} store={store} />);
-    expect(store.state.currentSlide).toBe(0);
+    const wrapper = mount(<Slider {...props} currentSlide={0} carouselStore={carouselStore} />);
+    expect(carouselStore.state.currentSlide).toBe(0);
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 37 });
-    expect(store.state.currentSlide).toBe(0);
+    expect(carouselStore.state.currentSlide).toBe(0);
   });
   it('should move the slider to slide 0 from slide 1 when pressing the right arrow', () => {
     const wrapper = mount(<Slider {...props} />);
-    expect(wrapper.prop('store').state.currentSlide).toBe(0);
+    expect(wrapper.prop('carouselStore').state.currentSlide).toBe(0);
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
-    expect(wrapper.prop('store').state.currentSlide).toBe(1);
+    expect(wrapper.prop('carouselStore').state.currentSlide).toBe(1);
   });
   it('should not move the slider from 3 to 4 since !(currentslide < (totalSlides - visibleSlides)', () => {
-    const store = new Store({
+    const carouselStore = new Store({
       currentSlide: 3,
     });
-    const wrapper = mount(<Slider {...props} currentSlide={3} store={store} />);
-    expect(wrapper.prop('store').state.currentSlide).toBe(3);
+    const wrapper = mount(<Slider {...props} currentSlide={3} carouselStore={carouselStore} />);
+    expect(wrapper.prop('carouselStore').state.currentSlide).toBe(3);
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
-    expect(wrapper.prop('store').state.currentSlide).toBe(3);
+    expect(wrapper.prop('carouselStore').state.currentSlide).toBe(3);
   });
   it('the .carousel__slider should have a default tabIndex of 0', () => {
     const wrapper = shallow(<Slider {...props} />);

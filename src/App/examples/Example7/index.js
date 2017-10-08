@@ -6,9 +6,14 @@ import Example7 from './Example7';
 
 
 // create a redux store to store application state
-const store = createStore(combineReducers(demoReducer));
+/* eslint-disable no-underscore-dangle */
+const store = createStore(
+  combineReducers({ demoReducer }),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
+/* eslint-enable */
 
-export default (
+export default () => (
   <Provider store={store}>
     <Example7 />
   </Provider>

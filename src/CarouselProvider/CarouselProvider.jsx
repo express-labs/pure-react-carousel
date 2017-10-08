@@ -34,7 +34,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
   }
 
   static childContextTypes = {
-    store: PropTypes.object,
+    carouselStore: PropTypes.object,
   }
 
   constructor(props, context) {
@@ -56,21 +56,12 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       touchEnabled: props.touchEnabled,
       visibleSlides: props.visibleSlides,
     };
-    this.store = new Store(options);
+    this.carouselStore = new Store(options);
     this.disableAnimationTimer = null;
   }
 
-  // Utility function for tests.
-  // in jest + enzyme tests you can do wrapper.instance().getStore()
-  // you can also just do...
-  // wrapper.instance().store
-  // I created this method to make it obvious that you have access to store.
-  getStore() {
-    return this.store;
-  }
-
   getChildContext() {
-    return { store: this.store };
+    return { carouselStore: this.carouselStore };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -92,7 +83,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       }
     });
 
-    const { currentSlide, disableAnimation } = this.store.getStoreState();
+    const { currentSlide, disableAnimation } = this.carouselStore.getStoreState();
     const isNewCurrentSlide = currentSlide !== nextProps.currentSlide;
     const isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
 
@@ -104,7 +95,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       newStoreState.disableAnimation = true;
       window.clearTimeout(this.disableAnimationTimer);
       this.disableAnimationTimer = window.setTimeout(() => {
-        this.store.setStoreState({
+        this.carouselStore.setStoreState({
           disableAnimation: false,
         });
       }, 160);
@@ -119,13 +110,22 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     }
 
     if (Object.keys(newStoreState).length > 0) {
-      this.store.setStoreState(newStoreState);
+      this.carouselStore.setStoreState(newStoreState);
     }
   }
 
   componentWillUnmount() {
-    this.store.unsubscribeAllMasterSpinner();
+    this.carouselStore.unsubscribeAllMasterSpinner();
     window.clearTimeout(this.disableAnimationTimer);
+  }
+
+  // Utility function for tests.
+  // in jest + enzyme tests you can do wrapper.instance().getStore()
+  // you can also just do...
+  // wrapper.instance().carouselStore
+  // I created this method to make it obvious that you have access to carouselStore.
+  getStore() {
+    return this.carouselStore;
   }
 
   render() {
