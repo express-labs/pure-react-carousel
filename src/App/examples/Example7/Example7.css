@@ -1,0 +1,14 @@
+.container {
+  max-width: 800px;
+}
+
+
+.slider {
+  background-color: yellow;
+}
+
+.slide:nth-child(1) { background: darkred; color: white }
+.slide:nth-child(2) { background: limegreen; }
+.slide:nth-child(3) { background: cyan; }
+.slide:nth-child(4) { background: royalblue; color: white }
+.slide:nth-child(5) { background: orange; }

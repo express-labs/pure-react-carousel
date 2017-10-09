@@ -5,6 +5,7 @@ import s from './Dot.css';
 
 const Dot = class Dot extends React.Component {
   static propTypes = {
+    carouselStore: PropTypes.object.isRequired,
     children: CarouselPropTypes.children.isRequired,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
@@ -12,7 +13,6 @@ const Dot = class Dot extends React.Component {
     onClick: PropTypes.func,
     selected: PropTypes.bool,
     slide: PropTypes.number.isRequired,
-    store: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
   }
@@ -30,18 +30,18 @@ const Dot = class Dot extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { onClick, slide, store, totalSlides, visibleSlides } = this.props;
+    const { carouselStore, onClick, slide, totalSlides, visibleSlides } = this.props;
     const newSlide = slide >= totalSlides - visibleSlides ? totalSlides - visibleSlides : slide;
 
-    store.setStoreState({
+    carouselStore.setStoreState({
       currentSlide: newSlide,
     }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
     const {
-      children, className, currentSlide, disabled, onClick, selected, slide, store, totalSlides,
-      visibleSlides, ...props
+      carouselStore, children, className, currentSlide, disabled, onClick, selected, slide,
+      totalSlides, visibleSlides, ...props
     } = this.props;
     const defaultSelected = slide >= currentSlide && slide < (currentSlide + visibleSlides);
     const newSelected = typeof selected === 'boolean' ? selected : defaultSelected;

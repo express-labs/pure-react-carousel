@@ -9,10 +9,10 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     children: CarouselPropTypes.children.isRequired,
     className: PropTypes.string,
     currentSlide: PropTypes.number,
+    disableAnimation: PropTypes.bool,
     hasMasterSpinner: PropTypes.bool,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
-    disableAnimation: PropTypes.bool,
     orientation: CarouselPropTypes.orientation,
     step: PropTypes.number,
     tag: PropTypes.string,
@@ -24,8 +24,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
   static defaultProps = {
     className: null,
     currentSlide: 0,
-    hasMasterSpinner: false,
     disableAnimation: false,
+    hasMasterSpinner: false,
     orientation: 'horizontal',
     step: 1,
     tag: 'div',
@@ -34,20 +34,20 @@ const CarouselProvider = class CarouselProvider extends React.Component {
   }
 
   static childContextTypes = {
-    store: PropTypes.object,
+    carouselStore: PropTypes.object,
   }
 
   constructor(props, context) {
     super(props, context);
     const options = {
       currentSlide: props.currentSlide,
+      disableAnimation: props.disableAnimation,
       hasMasterSpinner: props.hasMasterSpinner,
       imageErrorCount: 0,
       imageSuccessCount: 0,
       masterSpinnerThreshold: 0,
       naturalSlideHeight: props.naturalSlideHeight,
       naturalSlideWidth: props.naturalSlideWidth,
-      disableAnimation: props.disableAnimation,
       orientation: props.orientation,
       slideSize: slideSize(props.totalSlides, props.visibleSlides),
       slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
@@ -56,21 +56,12 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       touchEnabled: props.touchEnabled,
       visibleSlides: props.visibleSlides,
     };
-    this.store = new Store(options);
+    this.carouselStore = new Store(options);
     this.disableAnimationTimer = null;
   }
 
-  // Utility function for tests.
-  // in jest + enzyme tests you can do wrapper.instance().getStore()
-  // you can also just do...
-  // wrapper.instance().store
-  // I created this method to make it obvious that you have access to store.
-  getStore() {
-    return this.store;
-  }
-
   getChildContext() {
-    return { store: this.store };
+    return { carouselStore: this.carouselStore };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -92,7 +83,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       }
     });
 
-    const { currentSlide, disableAnimation } = this.store.getStoreState();
+    const { currentSlide, disableAnimation } = this.carouselStore.getStoreState();
     const isNewCurrentSlide = currentSlide !== nextProps.currentSlide;
     const isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
 
@@ -104,7 +95,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       newStoreState.disableAnimation = true;
       window.clearTimeout(this.disableAnimationTimer);
       this.disableAnimationTimer = window.setTimeout(() => {
-        this.store.setStoreState({
+        this.carouselStore.setStoreState({
           disableAnimation: false,
         });
       }, 160);
@@ -119,13 +110,22 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     }
 
     if (Object.keys(newStoreState).length > 0) {
-      this.store.setStoreState(newStoreState);
+      this.carouselStore.setStoreState(newStoreState);
     }
   }
 
   componentWillUnmount() {
-    this.store.unsubscribeAllMasterSpinner();
+    this.carouselStore.unsubscribeAllMasterSpinner();
     window.clearTimeout(this.disableAnimationTimer);
+  }
+
+  // Utility function for tests.
+  // in jest + enzyme tests you can do wrapper.instance().getStore()
+  // you can also just do...
+  // wrapper.instance().carouselStore
+  // I created this method to make it obvious that you have access to carouselStore.
+  getStore() {
+    return this.carouselStore;
   }
 
   render() {

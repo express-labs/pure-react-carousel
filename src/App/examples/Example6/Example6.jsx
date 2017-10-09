@@ -20,10 +20,10 @@ export default () => (
     naturalSlideHeight={500}
     hasMasterSpinner
   >
-    <h1 className={s.headline}>Carousel (With Master Loading Spinner)</h1>
+    <h1 className={s.headline}>Simple Carousel with vertically alligned nav buttons</h1>
     <p>
-      This spinner will go away after all the images have loaded. You might want to use
-      Chrome dev tools to throttle the network connection so you can see the spinner.
+      Wrap the &lt;Slider /&gt;, &lt;ButtonBack /&gt;, &lt;ButonNext /&gt; components in a div with
+      relative positioning.  Add absolute positioning to the buttons.
     </p>
     <div className={s.container}>
       <Slider className={s.slider}>

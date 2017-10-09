@@ -33,19 +33,19 @@ describe('<Dot />', () => {
     wrapper.find('button').simulate('click');
     expect(onClick.mock.calls.length).toBe(1);
   });
-  it('should update store.state.currentSlide with the value of slide', () => {
+  it('should update carouselStore.state.currentSlide with the value of slide', () => {
     const onClick = jest.fn();
-    const store = new Store(Object.assign({}, props, { currentSlide: 0 }));
-    const newProps = Object.assign({}, props, { onClick, store });
+    const carouselStore = new Store(Object.assign({}, props, { currentSlide: 0 }));
+    const newProps = Object.assign({}, props, { onClick, carouselStore });
     const wrapper = mount(<Dot {...newProps} />);
-    expect(store.state.currentSlide).toBe(0);
+    expect(carouselStore.state.currentSlide).toBe(0);
     wrapper.find('button').simulate('click');
-    expect(store.state.currentSlide).toEqual(props.slide);
+    expect(carouselStore.state.currentSlide).toEqual(props.slide);
   });
   it('should keep the last slide pegged to the right of the viewport if visibleSlides > 1', () => {
     const wrapper = mount(<Dot {...props} slide={10} />);
     wrapper.find('button').simulate('click');
-    expect(props.store.getStoreState().currentSlide).toBe(8);
+    expect(props.carouselStore.getStoreState().currentSlide).toBe(8);
   });
   it('should not override disabled if disabled prop is set to false manually', () => {
     const wrapper = mount(<Dot {...props} slide={10} disabled={false} />);

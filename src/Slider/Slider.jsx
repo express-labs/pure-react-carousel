@@ -6,19 +6,19 @@ import s from './slider.css';
 
 const Slider = class Slider extends React.Component {
   static propTypes = {
+    carouselStore: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
+    disableAnimation: PropTypes.bool,
     hasMasterSpinner: PropTypes.bool.isRequired,
     masterSpinnerFinished: PropTypes.bool.isRequired,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
-    disableAnimation: PropTypes.bool,
     onMasterSpinner: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
-    slideTraySize: PropTypes.number.isRequired,
     slideSize: PropTypes.number.isRequired,
-    store: PropTypes.object.isRequired,
+    slideTraySize: PropTypes.number.isRequired,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
@@ -29,13 +29,27 @@ const Slider = class Slider extends React.Component {
 
   static defaultProps = {
     className: '',
-    height: null,
     disableAnimation: false,
+    height: null,
     onMasterSpinner: null,
     style: {},
     tabIndex: null,
     trayTag: 'ul',
     visibleSlides: 1,
+  }
+
+  static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
+    return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
+  }
+
+  static slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
+    const threshold = 0.1;
+    const bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
+    const smallDrag = (Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= (slideSizeInPx * threshold)) ? 1 : 0;
+    if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
+      return Math.max(smallDrag, bigDrag);
+    }
+    return -Math.max(bigDrag, smallDrag);
   }
 
   constructor() {
@@ -99,7 +113,7 @@ const Slider = class Slider extends React.Component {
 
   handleOnKeyDown(ev) {
     const { keyCode } = ev;
-    const { currentSlide, store, totalSlides, visibleSlides } = this.props;
+    const { carouselStore, currentSlide, totalSlides, visibleSlides } = this.props;
     const newStoreState = {};
     let isUpdated = false;
 
@@ -128,22 +142,8 @@ const Slider = class Slider extends React.Component {
     }
 
     if (isUpdated && typeof newStoreState.currentSlide === 'number') {
-      store.setStoreState(newStoreState);
+      carouselStore.setStoreState(newStoreState);
     }
-  }
-
-  static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
-    return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
-  }
-
-  static slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
-    const threshold = 0.1;
-    const bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
-    const smallDrag = (Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= (slideSizeInPx * threshold)) ? 1 : 0;
-    if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
-      return Math.max(smallDrag, bigDrag);
-    }
-    return -Math.max(bigDrag, smallDrag);
   }
 
   computeCurrentSlide() {
@@ -169,7 +169,7 @@ const Slider = class Slider extends React.Component {
     newCurrentSlide = Math.max(0, newCurrentSlide);
     newCurrentSlide = Math.min(maxSlide, newCurrentSlide);
 
-    this.props.store.setStoreState({
+    this.props.carouselStore.setStoreState({
       currentSlide: newCurrentSlide,
     });
   }
@@ -227,9 +227,10 @@ const Slider = class Slider extends React.Component {
 
   render() {
     const {
-      children, className, currentSlide, disableAnimation, hasMasterSpinner, masterSpinnerFinished,
-      naturalSlideHeight, naturalSlideWidth, onMasterSpinner, orientation, slideTraySize, slideSize,
-      store, style, tabIndex, totalSlides, touchEnabled, trayTag: TrayTag, visibleSlides,
+      carouselStore, children, className, currentSlide, disableAnimation, hasMasterSpinner,
+      masterSpinnerFinished, naturalSlideHeight, naturalSlideWidth, onMasterSpinner, orientation,
+      slideSize, slideTraySize, style, tabIndex, totalSlides, touchEnabled, trayTag: TrayTag,
+      visibleSlides,
       ...props
     } = this.props;
 

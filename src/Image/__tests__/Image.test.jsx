@@ -15,21 +15,21 @@ describe('<Image />', () => {
     const wrapper = mount(<Image {...props} />);
     expect(wrapper.exists()).toBe(true);
   });
-  it('should make a call to store.subscribeMasterSpinner() if props.hasMasterSpinner is true', () => {
-    const spy = jest.spyOn(props.store, 'subscribeMasterSpinner');
+  it('should make a call to carouselStore.subscribeMasterSpinner() if props.hasMasterSpinner is true', () => {
+    const spy = jest.spyOn(props.carouselStore, 'subscribeMasterSpinner');
     expect(spy).not.toHaveBeenCalled();
     mount(<Image {...props} hasMasterSpinner />);
     expect(spy).toHaveBeenCalledTimes(1);
   });
-  it('should make a call to store.unsubscribeMasterSpinner() if props.hasMasterSpinner is true and the component will unmount', () => {
-    const spy = jest.spyOn(props.store, 'unsubscribeMasterSpinner');
+  it('should make a call to carouselStore.unsubscribeMasterSpinner() if props.hasMasterSpinner is true and the component will unmount', () => {
+    const spy = jest.spyOn(props.carouselStore, 'unsubscribeMasterSpinner');
     expect(spy).not.toHaveBeenCalled();
     const wrapper = mount(<Image {...props} hasMasterSpinner />);
     wrapper.unmount();
     expect(spy).toHaveBeenCalledTimes(1);
   });
-  it('should NOT make a call to store.unsubscribeMasterSpinner() if props.hasMasterSpinner is false and the component will unmount', () => {
-    const spy = jest.spyOn(props.store, 'unsubscribeMasterSpinner');
+  it('should NOT make a call to carouselStore.unsubscribeMasterSpinner() if props.hasMasterSpinner is false and the component will unmount', () => {
+    const spy = jest.spyOn(props.carouselStore, 'unsubscribeMasterSpinner');
     expect(spy).not.toHaveBeenCalled();
     const wrapper = mount(<Image {...props} />);
     wrapper.unmount();
@@ -96,12 +96,12 @@ describe('<Image />', () => {
     wrapper.setState({ imageStatus: ERROR });
     expect(renderError).toHaveBeenCalledTimes(1);
   });
-  it('should call store.masterSpinnerError if image load error and hasMasterSpinner was true', () => {
+  it('should call carouselStore.masterSpinnerError if image load error and hasMasterSpinner was true', () => {
     const masterSpinnerError = jest.fn();
     const wrapper = mount(<Image {...props} hasMasterSpinner />);
     const instance = wrapper.instance();
     const event = new UIEvent('error');
-    props.store.masterSpinnerError = masterSpinnerError;
+    props.carouselStore.masterSpinnerError = masterSpinnerError;
     // simulate a load error
     instance.image.dispatchEvent(event);
     expect(masterSpinnerError).toHaveBeenCalledTimes(1);

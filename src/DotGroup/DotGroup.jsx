@@ -9,7 +9,7 @@ const DotGroup = class DotGroup extends React.Component {
     children: CarouselPropTypes.children,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
-    store: PropTypes.object.isRequired,
+    carouselStore: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
     dotNumbers: PropTypes.bool,
@@ -36,7 +36,8 @@ const DotGroup = class DotGroup extends React.Component {
 
   render() {
     const {
-      className, children, currentSlide, store, totalSlides, visibleSlides, dotNumbers, ...props
+      carouselStore, children, className, currentSlide, dotNumbers, totalSlides, visibleSlides,
+      ...props
     } = this.props;
 
     const newClassName = cn([

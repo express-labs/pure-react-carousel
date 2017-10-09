@@ -21,7 +21,7 @@ export default {
       children: 'hello',
       currentSlide: 1,
       step: 1,
-      store: new Store({}),
+      carouselStore: new Store({}),
     },
   },
   ButtonFirst: {
@@ -29,7 +29,7 @@ export default {
     props: {
       children: 'hello',
       currentSlide: 1,
-      store: new Store({
+      carouselStore: new Store({
         currentSlide: 1,
         totalSlides: 7,
         visibleSlides: 1,
@@ -42,7 +42,7 @@ export default {
     props: {
       children: 'hello',
       currentSlide: 1,
-      store: new Store({
+      carouselStore: new Store({
         currentSlide: 1,
         totalSlides: 7,
         visibleSlides: 1,
@@ -57,7 +57,7 @@ export default {
       children: 'hello',
       currentSlide: 1,
       step: 1,
-      store: new Store({}),
+      carouselStore: new Store({}),
       totalSlides: 3,
       visibleSlides: 2,
     },
@@ -77,7 +77,7 @@ export default {
       children: 'hello',
       currentSlide: 0,
       slide: 2,
-      store: new Store({
+      carouselStore: new Store({
         currentSlide: 0,
         totalSlides: 10,
         visibleSlides: 2,
@@ -90,7 +90,7 @@ export default {
     component: DotGroup,
     props: {
       currentSlide: 1,
-      store: new Store({}),
+      carouselStore: new Store({}),
       totalSlides: 3,
       visibleSlides: 2,
     },
@@ -101,7 +101,7 @@ export default {
       hasMasterSpinner: false,
       orientation: 'horizontal',
       src: 'bob.jpg',
-      store: new Store({}),
+      carouselStore: new Store({}),
     },
   },
   ImageWithZoom: {
@@ -135,7 +135,7 @@ export default {
       orientation: 'horizontal',
       slideTraySize: 250,
       slideSize: 50,
-      store: new Store({
+      carouselStore: new Store({
         currentSlide: 0,
       }),
       totalSlides: 5,

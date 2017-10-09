@@ -18,17 +18,17 @@ export default function WithStore(
     }
 
     static contextTypes = {
-      store: propTypes.object,
+      carouselStore: propTypes.object,
     }
 
     constructor(props, context) {
       super(props, context);
-      this.state = mapStateToProps(context.store.state);
+      this.state = mapStateToProps(context.carouselStore.state);
       this.updateStateProps = this.updateStateProps.bind(this);
     }
 
     componentWillMount() {
-      this.context.store.subscribe(this.updateStateProps);
+      this.context.carouselStore.subscribe(this.updateStateProps);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -37,11 +37,11 @@ export default function WithStore(
     }
 
     componentWillUnmount() {
-      this.context.store.unsubscribe(this.updateStateProps);
+      this.context.carouselStore.unsubscribe(this.updateStateProps);
     }
 
     updateStateProps() {
-      this.setState(mapStateToProps(this.context.store.state));
+      this.setState(mapStateToProps(this.context.carouselStore.state));
     }
 
     render() {
@@ -51,13 +51,13 @@ export default function WithStore(
         <WrappedComponent
           ref={(el) => { this.instance = el; }} // allows access to refs in wrapped components.
           {...props}
-          store={{
-            masterSpinnerError: this.context.store.masterSpinnerError,
-            masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
-            setStoreState: this.context.store.setStoreState,
-            subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
-            unsubscribeMasterSpinner: this.context.store.unsubscribeMasterSpinner,
-            unsubscribeAllMasterSpinner: this.context.store.unsubscribeAllMasterSpinner,
+          carouselStore={{
+            masterSpinnerError: this.context.carouselStore.masterSpinnerError,
+            masterSpinnerSuccess: this.context.carouselStore.masterSpinnerSuccess,
+            setStoreState: this.context.carouselStore.setStoreState,
+            subscribeMasterSpinner: this.context.carouselStore.subscribeMasterSpinner,
+            unsubscribeMasterSpinner: this.context.carouselStore.unsubscribeMasterSpinner,
+            unsubscribeAllMasterSpinner: this.context.carouselStore.unsubscribeAllMasterSpinner,
           }}
         >{this.props.children}</WrappedComponent>);
     }

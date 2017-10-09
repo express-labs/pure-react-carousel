@@ -5,19 +5,19 @@ import s from './ButtonBack.css';
 
 export default class ButtonBack extends React.Component {
   static propTypes = {
+    carouselStore: PropTypes.object.isRequired,
     children: CarouselPropTypes.children.isRequired,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     step: PropTypes.number.isRequired,
-    store: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
+    className: null,
     disabled: null,
     onClick: null,
-    className: null,
   }
 
   static setDisabled(disabled, currentSlide) {
@@ -43,18 +43,20 @@ export default class ButtonBack extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { currentSlide, onClick, step, store } = this.props;
+    const { carouselStore, currentSlide, onClick, step } = this.props;
     const newCurrentSlide = Math.max(
       currentSlide - step,
       0,
     );
-    store.setStoreState({
+    carouselStore.setStoreState({
       currentSlide: newCurrentSlide,
     }, onClick !== null && onClick.call(this, ev));
   }
 
   render() {
-    const { className, currentSlide, disabled, onClick, step, store, ...props } = this.props;
+    const {
+      carouselStore, className, currentSlide, disabled, onClick, step, ...props
+    } = this.props;
 
     const newClassName = cn([
       s.buttonBack,
