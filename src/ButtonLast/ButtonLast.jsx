@@ -5,12 +5,12 @@ import { CarouselPropTypes, cn } from '../helpers';
 
 const ButtonLast = class ButtonLast extends React.Component {
   static propTypes = {
+    carouselStore: PropTypes.object.isRequired,
     children: CarouselPropTypes.children.isRequired,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
-    carouselStore: PropTypes.object.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
   }
@@ -35,7 +35,8 @@ const ButtonLast = class ButtonLast extends React.Component {
 
   render() {
     const {
-      className, currentSlide, disabled, onClick, carouselStore, totalSlides, visibleSlides, ...props
+      carouselStore, className, currentSlide, disabled, onClick, totalSlides, visibleSlides,
+      ...props
     } = this.props;
 
     const newClassName = cn([

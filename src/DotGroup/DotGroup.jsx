@@ -36,7 +36,8 @@ const DotGroup = class DotGroup extends React.Component {
 
   render() {
     const {
-      className, children, currentSlide, carouselStore, totalSlides, visibleSlides, dotNumbers, ...props
+      carouselStore, children, className, currentSlide, dotNumbers, totalSlides, visibleSlides,
+      ...props
     } = this.props;
 
     const newClassName = cn([

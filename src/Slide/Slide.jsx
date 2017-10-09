@@ -5,6 +5,7 @@ import s from './slide.css';
 
 const Slide = class Slide extends React.PureComponent {
   static propTypes = {
+    carouselStore: PropTypes.object,
     children: CarouselPropTypes.children,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
@@ -17,7 +18,6 @@ const Slide = class Slide extends React.PureComponent {
     onFocus: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
     slideSize: PropTypes.number.isRequired,
-    carouselStore: PropTypes.object,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     tag: PropTypes.string,
@@ -26,13 +26,13 @@ const Slide = class Slide extends React.PureComponent {
   }
 
   static defaultProps = {
+    carouselStore: null,
     children: null,
     className: null,
     innerClassName: null,
     innerTag: 'div',
     onBlur: null,
     onFocus: null,
-    carouselStore: null,
     style: {},
     tabIndex: null,
     tag: 'li',
@@ -73,8 +73,8 @@ const Slide = class Slide extends React.PureComponent {
 
   render() {
     const {
-      children, className, currentSlide, index, innerClassName, innerTag: InnerTag,
-      naturalSlideHeight, naturalSlideWidth, onBlur, onFocus, orientation, slideSize, carouselStore, style,
+      carouselStore, children, className, currentSlide, index, innerClassName, innerTag: InnerTag,
+      naturalSlideHeight, naturalSlideWidth, onBlur, onFocus, orientation, slideSize, style,
       tabIndex, tag: Tag, totalSlides, visibleSlides,
       ...props
     } = this.props;

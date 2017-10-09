@@ -6,19 +6,19 @@ import s from './slider.css';
 
 const Slider = class Slider extends React.Component {
   static propTypes = {
+    carouselStore: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
+    disableAnimation: PropTypes.bool,
     hasMasterSpinner: PropTypes.bool.isRequired,
     masterSpinnerFinished: PropTypes.bool.isRequired,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
-    disableAnimation: PropTypes.bool,
     onMasterSpinner: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
-    slideTraySize: PropTypes.number.isRequired,
     slideSize: PropTypes.number.isRequired,
-    carouselStore: PropTypes.object.isRequired,
+    slideTraySize: PropTypes.number.isRequired,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
@@ -29,8 +29,8 @@ const Slider = class Slider extends React.Component {
 
   static defaultProps = {
     className: '',
-    height: null,
     disableAnimation: false,
+    height: null,
     onMasterSpinner: null,
     style: {},
     tabIndex: null,
@@ -113,7 +113,7 @@ const Slider = class Slider extends React.Component {
 
   handleOnKeyDown(ev) {
     const { keyCode } = ev;
-    const { currentSlide, carouselStore, totalSlides, visibleSlides } = this.props;
+    const { carouselStore, currentSlide, totalSlides, visibleSlides } = this.props;
     const newStoreState = {};
     let isUpdated = false;
 
@@ -227,9 +227,10 @@ const Slider = class Slider extends React.Component {
 
   render() {
     const {
-      children, className, currentSlide, disableAnimation, hasMasterSpinner, masterSpinnerFinished,
-      naturalSlideHeight, naturalSlideWidth, onMasterSpinner, orientation, slideTraySize, slideSize,
-      carouselStore, style, tabIndex, totalSlides, touchEnabled, trayTag: TrayTag, visibleSlides,
+      carouselStore, children, className, currentSlide, disableAnimation, hasMasterSpinner,
+      masterSpinnerFinished, naturalSlideHeight, naturalSlideWidth, onMasterSpinner, orientation,
+      slideSize, slideTraySize, style, tabIndex, totalSlides, touchEnabled, trayTag: TrayTag,
+      visibleSlides,
       ...props
     } = this.props;
 

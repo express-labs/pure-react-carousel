@@ -338,13 +338,13 @@ var ButtonBack = function (_React$Component) {
     key: 'handleOnClick',
     value: function handleOnClick(ev) {
       var _props = this.props,
+          carouselStore = _props.carouselStore,
           currentSlide = _props.currentSlide,
           onClick = _props.onClick,
-          step = _props.step,
-          store = _props.store;
+          step = _props.step;
 
       var newCurrentSlide = Math.max(currentSlide - step, 0);
-      store.setStoreState({
+      carouselStore.setStoreState({
         currentSlide: newCurrentSlide
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -352,13 +352,13 @@ var ButtonBack = function (_React$Component) {
     key: 'render',
     value: function render() {
       var _props2 = this.props,
+          carouselStore = _props2.carouselStore,
           className = _props2.className,
           currentSlide = _props2.currentSlide,
           disabled = _props2.disabled,
           onClick = _props2.onClick,
           step = _props2.step,
-          store = _props2.store,
-          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'disabled', 'onClick', 'step', 'store']);
+          props = objectWithoutProperties(_props2, ['carouselStore', 'className', 'currentSlide', 'disabled', 'onClick', 'step']);
 
 
       var newClassName = cn([s.buttonBack, 'carousel__back-button', className]);
@@ -379,18 +379,18 @@ var ButtonBack = function (_React$Component) {
 }(React.Component);
 
 ButtonBack.propTypes = {
+  carouselStore: index$1.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
   className: index$1.string,
   currentSlide: index$1.number.isRequired,
   disabled: index$1.bool,
   onClick: index$1.func,
-  step: index$1.number.isRequired,
-  store: index$1.object.isRequired
+  step: index$1.number.isRequired
 };
 ButtonBack.defaultProps = {
+  className: null,
   disabled: null,
-  onClick: null,
-  className: null
+  onClick: null
 };
 
 var index$3 = createCommonjsModule(function (module, exports) {
@@ -672,7 +672,7 @@ function WithStore(WrappedComponent) {
 
       var _this = possibleConstructorReturn(this, (Wrapper.__proto__ || Object.getPrototypeOf(Wrapper)).call(this, props, context));
 
-      _this.state = mapStateToProps(context.store.state);
+      _this.state = mapStateToProps(context.carouselStore.state);
       _this.updateStateProps = _this.updateStateProps.bind(_this);
       return _this;
     }
@@ -680,7 +680,7 @@ function WithStore(WrappedComponent) {
     createClass(Wrapper, [{
       key: 'componentWillMount',
       value: function componentWillMount() {
-        this.context.store.subscribe(this.updateStateProps);
+        this.context.carouselStore.subscribe(this.updateStateProps);
       }
     }, {
       key: 'shouldComponentUpdate',
@@ -691,12 +691,12 @@ function WithStore(WrappedComponent) {
     }, {
       key: 'componentWillUnmount',
       value: function componentWillUnmount() {
-        this.context.store.unsubscribe(this.updateStateProps);
+        this.context.carouselStore.unsubscribe(this.updateStateProps);
       }
     }, {
       key: 'updateStateProps',
       value: function updateStateProps() {
-        this.setState(mapStateToProps(this.context.store.state));
+        this.setState(mapStateToProps(this.context.carouselStore.state));
       }
     }, {
       key: 'render',
@@ -712,13 +712,13 @@ function WithStore(WrappedComponent) {
               _this2.instance = el;
             } // allows access to refs in wrapped components.
           }, props, {
-            store: {
-              masterSpinnerError: this.context.store.masterSpinnerError,
-              masterSpinnerSuccess: this.context.store.masterSpinnerSuccess,
-              setStoreState: this.context.store.setStoreState,
-              subscribeMasterSpinner: this.context.store.subscribeMasterSpinner,
-              unsubscribeMasterSpinner: this.context.store.unsubscribeMasterSpinner,
-              unsubscribeAllMasterSpinner: this.context.store.unsubscribeAllMasterSpinner
+            carouselStore: {
+              masterSpinnerError: this.context.carouselStore.masterSpinnerError,
+              masterSpinnerSuccess: this.context.carouselStore.masterSpinnerSuccess,
+              setStoreState: this.context.carouselStore.setStoreState,
+              subscribeMasterSpinner: this.context.carouselStore.subscribeMasterSpinner,
+              unsubscribeMasterSpinner: this.context.carouselStore.unsubscribeMasterSpinner,
+              unsubscribeAllMasterSpinner: this.context.carouselStore.unsubscribeAllMasterSpinner
             }
           }),
           this.props.children
@@ -735,7 +735,7 @@ function WithStore(WrappedComponent) {
     children: null
   };
   Wrapper.contextTypes = {
-    store: index$1.object
+    carouselStore: index$1.object
   };
 
 
@@ -770,10 +770,10 @@ var ButtonFirst = (_temp = _class = function (_React$Component) {
     key: 'handleOnClick',
     value: function handleOnClick(ev) {
       var _props = this.props,
-          store = _props.store,
+          carouselStore = _props.carouselStore,
           onClick = _props.onClick;
 
-      store.setStoreState({
+      carouselStore.setStoreState({
         currentSlide: 0
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -781,13 +781,13 @@ var ButtonFirst = (_temp = _class = function (_React$Component) {
     key: 'render',
     value: function render() {
       var _props2 = this.props,
+          carouselStore = _props2.carouselStore,
           className = _props2.className,
           currentSlide = _props2.currentSlide,
           disabled = _props2.disabled,
           onClick = _props2.onClick,
-          store = _props2.store,
           totalSlides = _props2.totalSlides,
-          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'disabled', 'onClick', 'store', 'totalSlides']);
+          props = objectWithoutProperties(_props2, ['carouselStore', 'className', 'currentSlide', 'disabled', 'onClick', 'totalSlides']);
 
 
       var newClassName = cn([s$1.buttonFirst, 'carousel__first-button', className]);
@@ -808,12 +808,12 @@ var ButtonFirst = (_temp = _class = function (_React$Component) {
   }]);
   return ButtonFirst;
 }(React.Component), _class.propTypes = {
+  carouselStore: index$1.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
   className: index$1.string,
   currentSlide: index$1.number.isRequired,
   disabled: index$1.bool,
   onClick: index$1.func,
-  store: index$1.object.isRequired,
   totalSlides: index$1.number.isRequired
 }, _class.defaultProps = {
   className: null,
@@ -874,11 +874,11 @@ var ButtonNext = (_temp$1 = _class$1 = function (_React$PureComponent) {
           currentSlide = _props.currentSlide,
           onClick = _props.onClick,
           step = _props.step,
-          store = _props.store;
+          carouselStore = _props.carouselStore;
 
       var maxSlide = this.props.totalSlides - this.props.visibleSlides;
       var newCurrentSlide = Math.min(currentSlide + step, maxSlide);
-      store.setStoreState({
+      carouselStore.setStoreState({
         currentSlide: newCurrentSlide
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -886,15 +886,15 @@ var ButtonNext = (_temp$1 = _class$1 = function (_React$PureComponent) {
     key: 'render',
     value: function render() {
       var _props2 = this.props,
+          carouselStore = _props2.carouselStore,
           className = _props2.className,
           currentSlide = _props2.currentSlide,
           disabled = _props2.disabled,
           onClick = _props2.onClick,
           step = _props2.step,
-          store = _props2.store,
           totalSlides = _props2.totalSlides,
           visibleSlides = _props2.visibleSlides,
-          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'disabled', 'onClick', 'step', 'store', 'totalSlides', 'visibleSlides']);
+          props = objectWithoutProperties(_props2, ['carouselStore', 'className', 'currentSlide', 'disabled', 'onClick', 'step', 'totalSlides', 'visibleSlides']);
 
 
       var newClassName = cn([s$2.buttonNext, 'carousel__next-button', className]);
@@ -913,18 +913,18 @@ var ButtonNext = (_temp$1 = _class$1 = function (_React$PureComponent) {
   }]);
   return ButtonNext;
 }(React.PureComponent), _class$1.propTypes = {
+  carouselStore: index$1.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
   className: index$1.string,
   currentSlide: index$1.number.isRequired,
   disabled: index$1.bool,
   onClick: index$1.func,
   step: index$1.number.isRequired,
-  store: index$1.object.isRequired,
   totalSlides: index$1.number.isRequired,
   visibleSlides: index$1.number.isRequired
 }, _class$1.defaultProps = {
-  disabled: null,
   className: null,
+  disabled: null,
   onClick: null
 }, _temp$1);
 
@@ -958,12 +958,12 @@ var ButtonLast = (_temp$2 = _class$2 = function (_React$Component) {
     key: 'handleOnClick',
     value: function handleOnClick(ev) {
       var _props = this.props,
-          store = _props.store,
+          carouselStore = _props.carouselStore,
           onClick = _props.onClick,
           totalSlides = _props.totalSlides,
           visibleSlides = _props.visibleSlides;
 
-      store.setStoreState({
+      carouselStore.setStoreState({
         currentSlide: totalSlides - visibleSlides
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -971,14 +971,14 @@ var ButtonLast = (_temp$2 = _class$2 = function (_React$Component) {
     key: 'render',
     value: function render() {
       var _props2 = this.props,
+          carouselStore = _props2.carouselStore,
           className = _props2.className,
           currentSlide = _props2.currentSlide,
           disabled = _props2.disabled,
           onClick = _props2.onClick,
-          store = _props2.store,
           totalSlides = _props2.totalSlides,
           visibleSlides = _props2.visibleSlides,
-          props = objectWithoutProperties(_props2, ['className', 'currentSlide', 'disabled', 'onClick', 'store', 'totalSlides', 'visibleSlides']);
+          props = objectWithoutProperties(_props2, ['carouselStore', 'className', 'currentSlide', 'disabled', 'onClick', 'totalSlides', 'visibleSlides']);
 
 
       var newClassName = cn([s$3.buttonLast, 'carousel__last-button', className]);
@@ -999,12 +999,12 @@ var ButtonLast = (_temp$2 = _class$2 = function (_React$Component) {
   }]);
   return ButtonLast;
 }(React.Component), _class$2.propTypes = {
+  carouselStore: index$1.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
   className: index$1.string,
   currentSlide: index$1.number.isRequired,
   disabled: index$1.bool,
   onClick: index$1.func,
-  store: index$1.object.isRequired,
   totalSlides: index$1.number.isRequired,
   visibleSlides: index$1.number.isRequired
 }, _class$2.defaultProps = {
@@ -1100,13 +1100,13 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
 
     var options = {
       currentSlide: props.currentSlide,
+      disableAnimation: props.disableAnimation,
       hasMasterSpinner: props.hasMasterSpinner,
       imageErrorCount: 0,
       imageSuccessCount: 0,
       masterSpinnerThreshold: 0,
       naturalSlideHeight: props.naturalSlideHeight,
       naturalSlideWidth: props.naturalSlideWidth,
-      disableAnimation: props.disableAnimation,
       orientation: props.orientation,
       slideSize: slideSize(props.totalSlides, props.visibleSlides),
       slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
@@ -1115,27 +1115,15 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
       touchEnabled: props.touchEnabled,
       visibleSlides: props.visibleSlides
     };
-    _this.store = new Store(options);
+    _this.carouselStore = new Store(options);
     _this.disableAnimationTimer = null;
     return _this;
   }
 
-  // Utility function for tests.
-  // in jest + enzyme tests you can do wrapper.instance().getStore()
-  // you can also just do...
-  // wrapper.instance().store
-  // I created this method to make it obvious that you have access to store.
-
-
   createClass(CarouselProvider$$1, [{
-    key: 'getStore',
-    value: function getStore() {
-      return this.store;
-    }
-  }, {
     key: 'getChildContext',
     value: function getChildContext() {
-      return { store: this.store };
+      return { carouselStore: this.carouselStore };
     }
   }, {
     key: 'componentWillReceiveProps',
@@ -1150,9 +1138,9 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
         }
       });
 
-      var _store$getStoreState = this.store.getStoreState(),
-          currentSlide = _store$getStoreState.currentSlide,
-          disableAnimation = _store$getStoreState.disableAnimation;
+      var _carouselStore$getSto = this.carouselStore.getStoreState(),
+          currentSlide = _carouselStore$getSto.currentSlide,
+          disableAnimation = _carouselStore$getSto.disableAnimation;
 
       var isNewCurrentSlide = currentSlide !== nextProps.currentSlide;
       var isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
@@ -1165,7 +1153,7 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
         newStoreState.disableAnimation = true;
         window.clearTimeout(this.disableAnimationTimer);
         this.disableAnimationTimer = window.setTimeout(function () {
-          _this2.store.setStoreState({
+          _this2.carouselStore.setStoreState({
             disableAnimation: false
           });
         }, 160);
@@ -1177,14 +1165,26 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
       }
 
       if (Object.keys(newStoreState).length > 0) {
-        this.store.setStoreState(newStoreState);
+        this.carouselStore.setStoreState(newStoreState);
       }
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      this.store.unsubscribeAllMasterSpinner();
+      this.carouselStore.unsubscribeAllMasterSpinner();
       window.clearTimeout(this.disableAnimationTimer);
+    }
+
+    // Utility function for tests.
+    // in jest + enzyme tests you can do wrapper.instance().getStore()
+    // you can also just do...
+    // wrapper.instance().carouselStore
+    // I created this method to make it obvious that you have access to carouselStore.
+
+  }, {
+    key: 'getStore',
+    value: function getStore() {
+      return this.carouselStore;
     }
   }, {
     key: 'render',
@@ -1206,10 +1206,10 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
   children: CarouselPropTypes.children.isRequired,
   className: index$1.string,
   currentSlide: index$1.number,
+  disableAnimation: index$1.bool,
   hasMasterSpinner: index$1.bool,
   naturalSlideHeight: index$1.number.isRequired,
   naturalSlideWidth: index$1.number.isRequired,
-  disableAnimation: index$1.bool,
   orientation: CarouselPropTypes.orientation,
   step: index$1.number,
   tag: index$1.string,
@@ -1219,15 +1219,15 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
 }, _class$3.defaultProps = {
   className: null,
   currentSlide: 0,
-  hasMasterSpinner: false,
   disableAnimation: false,
+  hasMasterSpinner: false,
   orientation: 'horizontal',
   step: 1,
   tag: 'div',
   touchEnabled: true,
   visibleSlides: 1
 }, _class$3.childContextTypes = {
-  store: index$1.object
+  carouselStore: index$1.object
 }, _temp$3);
 
 var s$4 = { "dot": "_dot_27k82_1" };
@@ -1251,15 +1251,15 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
     key: 'handleOnClick',
     value: function handleOnClick(ev) {
       var _props = this.props,
+          carouselStore = _props.carouselStore,
           onClick = _props.onClick,
           slide = _props.slide,
-          store = _props.store,
           totalSlides = _props.totalSlides,
           visibleSlides = _props.visibleSlides;
 
       var newSlide = slide >= totalSlides - visibleSlides ? totalSlides - visibleSlides : slide;
 
-      store.setStoreState({
+      carouselStore.setStoreState({
         currentSlide: newSlide
       }, onClick !== null && onClick.call(this, ev));
     }
@@ -1267,6 +1267,7 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
     key: 'render',
     value: function render() {
       var _props2 = this.props,
+          carouselStore = _props2.carouselStore,
           children = _props2.children,
           className = _props2.className,
           currentSlide = _props2.currentSlide,
@@ -1274,10 +1275,9 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
           onClick = _props2.onClick,
           selected = _props2.selected,
           slide = _props2.slide,
-          store = _props2.store,
           totalSlides = _props2.totalSlides,
           visibleSlides = _props2.visibleSlides,
-          props = objectWithoutProperties(_props2, ['children', 'className', 'currentSlide', 'disabled', 'onClick', 'selected', 'slide', 'store', 'totalSlides', 'visibleSlides']);
+          props = objectWithoutProperties(_props2, ['carouselStore', 'children', 'className', 'currentSlide', 'disabled', 'onClick', 'selected', 'slide', 'totalSlides', 'visibleSlides']);
 
       var defaultSelected = slide >= currentSlide && slide < currentSlide + visibleSlides;
       var newSelected = typeof selected === 'boolean' ? selected : defaultSelected;
@@ -1299,6 +1299,7 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
   }]);
   return Dot;
 }(React.Component), _class$4.propTypes = {
+  carouselStore: index$1.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
   className: index$1.string,
   currentSlide: index$1.number.isRequired,
@@ -1306,7 +1307,6 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
   onClick: index$1.func,
   selected: index$1.bool,
   slide: index$1.number.isRequired,
-  store: index$1.object.isRequired,
   totalSlides: index$1.number.isRequired,
   visibleSlides: index$1.number.isRequired
 }, _class$4.defaultProps = {
@@ -1365,14 +1365,14 @@ var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
     key: 'render',
     value: function render() {
       var _props2 = this.props,
-          className = _props2.className,
+          carouselStore = _props2.carouselStore,
           children = _props2.children,
+          className = _props2.className,
           currentSlide = _props2.currentSlide,
-          store = _props2.store,
+          dotNumbers = _props2.dotNumbers,
           totalSlides = _props2.totalSlides,
           visibleSlides = _props2.visibleSlides,
-          dotNumbers = _props2.dotNumbers,
-          props = objectWithoutProperties(_props2, ['className', 'children', 'currentSlide', 'store', 'totalSlides', 'visibleSlides', 'dotNumbers']);
+          props = objectWithoutProperties(_props2, ['carouselStore', 'children', 'className', 'currentSlide', 'dotNumbers', 'totalSlides', 'visibleSlides']);
 
 
       var newClassName = cn([s$5.DotGroup, 'carousel__dot-group', className]);
@@ -1390,7 +1390,7 @@ var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
   children: CarouselPropTypes.children,
   className: index$1.string,
   currentSlide: index$1.number.isRequired,
-  store: index$1.object.isRequired,
+  carouselStore: index$1.object.isRequired,
   totalSlides: index$1.number.isRequired,
   visibleSlides: index$1.number.isRequired,
   dotNumbers: index$1.bool
@@ -1416,14 +1416,14 @@ var Image$1 = function (_React$Component) {
     key: 'subscribeMasterSpinner',
     value: function subscribeMasterSpinner(props) {
       if (props.hasMasterSpinner) {
-        props.store.subscribeMasterSpinner(props.src);
+        props.carouselStore.subscribeMasterSpinner(props.src);
       }
     }
   }, {
     key: 'unsubscribeMasterSpinner',
     value: function unsubscribeMasterSpinner(props) {
       if (props.hasMasterSpinner) {
-        props.store.unsubscribeMasterSpinner(props.src);
+        props.carouselStore.unsubscribeMasterSpinner(props.src);
       }
     }
   }]);
@@ -1490,14 +1490,14 @@ var Image$1 = function (_React$Component) {
     key: 'handleImageLoad',
     value: function handleImageLoad(ev) {
       this.setState({ imageStatus: SUCCESS });
-      if (this.props.hasMasterSpinner) this.props.store.masterSpinnerSuccess(this.props.src);
+      if (this.props.hasMasterSpinner) this.props.carouselStore.masterSpinnerSuccess(this.props.src);
       if (this.props.onLoad) this.props.onLoad(ev);
     }
   }, {
     key: 'handleImageError',
     value: function handleImageError(ev) {
       this.setState({ imageStatus: ERROR });
-      if (this.props.hasMasterSpinner) this.props.store.masterSpinnerError(this.props.src);
+      if (this.props.hasMasterSpinner) this.props.carouselStore.masterSpinnerError(this.props.src);
       if (this.props.onError) this.props.onError(ev);
     }
   }, {
@@ -1572,6 +1572,7 @@ var Image$1 = function (_React$Component) {
     key: 'render',
     value: function render() {
       var _props2 = this.props,
+          carouselStore = _props2.carouselStore,
           children = _props2.children,
           className = _props2.className,
           hasMasterSpinner = _props2.hasMasterSpinner,
@@ -1580,10 +1581,9 @@ var Image$1 = function (_React$Component) {
           onLoad = _props2.onLoad,
           renderError = _props2.renderError,
           renderLoading = _props2.renderLoading,
-          store = _props2.store,
           style = _props2.style,
           tag = _props2.tag,
-          filteredProps = objectWithoutProperties(_props2, ['children', 'className', 'hasMasterSpinner', 'isBgImage', 'onError', 'onLoad', 'renderError', 'renderLoading', 'store', 'style', 'tag']);
+          filteredProps = objectWithoutProperties(_props2, ['carouselStore', 'children', 'className', 'hasMasterSpinner', 'isBgImage', 'onError', 'onLoad', 'renderError', 'renderLoading', 'style', 'tag']);
 
 
       switch (this.state.imageStatus) {
@@ -1603,6 +1603,7 @@ var Image$1 = function (_React$Component) {
 
 Image$1.propTypes = {
   alt: index$1.string,
+  carouselStore: index$1.object.isRequired,
   children: CarouselPropTypes.children,
   className: index$1.string,
   hasMasterSpinner: index$1.bool.isRequired,
@@ -1612,7 +1613,6 @@ Image$1.propTypes = {
   renderError: index$1.func,
   renderLoading: index$1.func,
   src: index$1.string.isRequired,
-  store: index$1.object.isRequired,
   style: index$1.object,
   tag: index$1.string
 };
@@ -1626,8 +1626,8 @@ Image$1.defaultProps = {
   onLoad: null,
   renderError: null,
   renderLoading: null,
-  tag: 'img',
-  style: null
+  style: null,
+  tag: 'img'
 };
 
 var Image = WithStore(Image$1, function (state) {
@@ -1818,6 +1818,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
       var _this2 = this;
 
       var _props2 = this.props,
+          carouselStore = _props2.carouselStore,
           children = _props2.children,
           className = _props2.className,
           currentSlide = _props2.currentSlide,
@@ -1830,13 +1831,12 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
           onFocus = _props2.onFocus,
           orientation = _props2.orientation,
           slideSize$$1 = _props2.slideSize,
-          store = _props2.store,
           style = _props2.style,
           tabIndex = _props2.tabIndex,
           Tag = _props2.tag,
           totalSlides = _props2.totalSlides,
           visibleSlides = _props2.visibleSlides,
-          props = objectWithoutProperties(_props2, ['children', 'className', 'currentSlide', 'index', 'innerClassName', 'innerTag', 'naturalSlideHeight', 'naturalSlideWidth', 'onBlur', 'onFocus', 'orientation', 'slideSize', 'store', 'style', 'tabIndex', 'tag', 'totalSlides', 'visibleSlides']);
+          props = objectWithoutProperties(_props2, ['carouselStore', 'children', 'className', 'currentSlide', 'index', 'innerClassName', 'innerTag', 'naturalSlideHeight', 'naturalSlideWidth', 'onBlur', 'onFocus', 'orientation', 'slideSize', 'style', 'tabIndex', 'tag', 'totalSlides', 'visibleSlides']);
 
 
       var tempStyle = {};
@@ -1887,6 +1887,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   }]);
   return Slide;
 }(React.PureComponent), _class$7.propTypes = {
+  carouselStore: index$1.object,
   children: CarouselPropTypes.children,
   className: index$1.string,
   currentSlide: index$1.number.isRequired,
@@ -1899,20 +1900,19 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   onFocus: index$1.func,
   orientation: CarouselPropTypes.orientation.isRequired,
   slideSize: index$1.number.isRequired,
-  store: index$1.object,
   style: index$1.object,
   tabIndex: index$1.number,
   tag: index$1.string,
   totalSlides: index$1.number.isRequired,
   visibleSlides: index$1.number.isRequired
 }, _class$7.defaultProps = {
+  carouselStore: null,
   children: null,
   className: null,
   innerClassName: null,
   innerTag: 'div',
   onBlur: null,
   onFocus: null,
-  store: null,
   style: {},
   tabIndex: null,
   tag: 'li'
@@ -1937,6 +1937,23 @@ var _temp$8;
 
 var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   inherits(Slider$$1, _React$Component);
+  createClass(Slider$$1, null, [{
+    key: 'slideSizeInPx',
+    value: function slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
+      return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
+    }
+  }, {
+    key: 'slidesMoved',
+    value: function slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
+      var threshold = 0.1;
+      var bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
+      var smallDrag = Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= slideSizeInPx * threshold ? 1 : 0;
+      if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
+        return Math.max(smallDrag, bigDrag);
+      }
+      return -Math.max(bigDrag, smallDrag);
+    }
+  }]);
 
   function Slider$$1() {
     classCallCheck(this, Slider$$1);
@@ -2010,8 +2027,8 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     value: function handleOnKeyDown(ev) {
       var keyCode = ev.keyCode;
       var _props = this.props,
+          carouselStore = _props.carouselStore,
           currentSlide = _props.currentSlide,
-          store = _props.store,
           totalSlides = _props.totalSlides,
           visibleSlides = _props.visibleSlides;
 
@@ -2043,7 +2060,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       }
 
       if (isUpdated && typeof newStoreState.currentSlide === 'number') {
-        store.setStoreState(newStoreState);
+        carouselStore.setStoreState(newStoreState);
       }
     }
   }, {
@@ -2059,7 +2076,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       newCurrentSlide = Math.max(0, newCurrentSlide);
       newCurrentSlide = Math.min(maxSlide, newCurrentSlide);
 
-      this.props.store.setStoreState({
+      this.props.carouselStore.setStoreState({
         currentSlide: newCurrentSlide
       });
     }
@@ -2125,6 +2142,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       var _this3 = this;
 
       var _props3 = this.props,
+          carouselStore = _props3.carouselStore,
           children = _props3.children,
           className = _props3.className,
           currentSlide = _props3.currentSlide,
@@ -2135,16 +2153,15 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
           naturalSlideWidth = _props3.naturalSlideWidth,
           onMasterSpinner = _props3.onMasterSpinner,
           orientation = _props3.orientation,
-          slideTraySize$$1 = _props3.slideTraySize,
           slideSize$$1 = _props3.slideSize,
-          store = _props3.store,
+          slideTraySize$$1 = _props3.slideTraySize,
           style = _props3.style,
           tabIndex = _props3.tabIndex,
           totalSlides = _props3.totalSlides,
           touchEnabled = _props3.touchEnabled,
           TrayTag = _props3.trayTag,
           visibleSlides = _props3.visibleSlides,
-          props = objectWithoutProperties(_props3, ['children', 'className', 'currentSlide', 'disableAnimation', 'hasMasterSpinner', 'masterSpinnerFinished', 'naturalSlideHeight', 'naturalSlideWidth', 'onMasterSpinner', 'orientation', 'slideTraySize', 'slideSize', 'store', 'style', 'tabIndex', 'totalSlides', 'touchEnabled', 'trayTag', 'visibleSlides']);
+          props = objectWithoutProperties(_props3, ['carouselStore', 'children', 'className', 'currentSlide', 'disableAnimation', 'hasMasterSpinner', 'masterSpinnerFinished', 'naturalSlideHeight', 'naturalSlideWidth', 'onMasterSpinner', 'orientation', 'slideSize', 'slideTraySize', 'style', 'tabIndex', 'totalSlides', 'touchEnabled', 'trayTag', 'visibleSlides']);
 
 
       var sliderStyle = _extends({}, style);
@@ -2219,38 +2236,22 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
         )
       );
     }
-  }], [{
-    key: 'slideSizeInPx',
-    value: function slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
-      return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
-    }
-  }, {
-    key: 'slidesMoved',
-    value: function slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
-      var threshold = 0.1;
-      var bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
-      var smallDrag = Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= slideSizeInPx * threshold ? 1 : 0;
-      if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
-        return Math.max(smallDrag, bigDrag);
-      }
-      return -Math.max(bigDrag, smallDrag);
-    }
   }]);
   return Slider$$1;
 }(React.Component), _class$8.propTypes = {
+  carouselStore: index$1.object.isRequired,
   children: index$1.node.isRequired,
   className: index$1.string,
   currentSlide: index$1.number.isRequired,
+  disableAnimation: index$1.bool,
   hasMasterSpinner: index$1.bool.isRequired,
   masterSpinnerFinished: index$1.bool.isRequired,
   naturalSlideHeight: index$1.number.isRequired,
   naturalSlideWidth: index$1.number.isRequired,
-  disableAnimation: index$1.bool,
   onMasterSpinner: index$1.func,
   orientation: CarouselPropTypes.orientation.isRequired,
-  slideTraySize: index$1.number.isRequired,
   slideSize: index$1.number.isRequired,
-  store: index$1.object.isRequired,
+  slideTraySize: index$1.number.isRequired,
   style: index$1.object,
   tabIndex: index$1.number,
   totalSlides: index$1.number.isRequired,
@@ -2259,8 +2260,8 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   visibleSlides: index$1.number
 }, _class$8.defaultProps = {
   className: '',
-  height: null,
   disableAnimation: false,
+  height: null,
   onMasterSpinner: null,
   style: {},
   tabIndex: null,

@@ -6,6 +6,7 @@ import s from './Image.css';
 class Image extends React.Component {
   static propTypes = {
     alt: PropTypes.string,
+    carouselStore: PropTypes.object.isRequired,
     children: CarouselPropTypes.children,
     className: PropTypes.string,
     hasMasterSpinner: PropTypes.bool.isRequired,
@@ -15,7 +16,6 @@ class Image extends React.Component {
     renderError: PropTypes.func,
     renderLoading: PropTypes.func,
     src: PropTypes.string.isRequired,
-    carouselStore: PropTypes.object.isRequired,
     style: PropTypes.object,
     tag: PropTypes.string,
   }
@@ -30,8 +30,8 @@ class Image extends React.Component {
     onLoad: null,
     renderError: null,
     renderLoading: null,
-    tag: 'img',
     style: null,
+    tag: 'img',
   }
 
   static subscribeMasterSpinner(props) {
@@ -179,8 +179,8 @@ class Image extends React.Component {
 
   render() {
     const {
-      children, className, hasMasterSpinner, isBgImage,
-      onError, onLoad, renderError, renderLoading, carouselStore, style, tag,
+      carouselStore, children, className, hasMasterSpinner, isBgImage, onError, onLoad, renderError,
+      renderLoading, style, tag,
       ...filteredProps
     } = this.props;
 
