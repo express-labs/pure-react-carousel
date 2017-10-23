@@ -4,13 +4,13 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
+"use strict";
+
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -43,30 +43,15 @@ var emptyFunction_1 = emptyFunction;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
-
-var validateFormat = function validateFormat(format) {};
+'use strict';
 
 function invariant(condition, format, a, b, c, d, e, f) {
-  validateFormat(format);
-
   if (!condition) {
     var error;
     if (format === undefined) {
@@ -88,17 +73,30 @@ function invariant(condition, format, a, b, c, d, e, f) {
 var invariant_1 = invariant;
 
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
+
+'use strict';
 
 var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 var ReactPropTypesSecret_1 = ReactPropTypesSecret;
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+
+
+
 
 var factoryWithThrowingShims = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -136,7 +134,8 @@ var factoryWithThrowingShims = function() {
     objectOf: getShim,
     oneOf: getShim,
     oneOfType: getShim,
-    shape: getShim
+    shape: getShim,
+    exact: getShim
   };
 
   ReactPropTypes.checkPropTypes = emptyFunction_1;
@@ -145,14 +144,12 @@ var factoryWithThrowingShims = function() {
   return ReactPropTypes;
 };
 
-var index$1 = createCommonjsModule(function (module) {
+var propTypes = createCommonjsModule(function (module) {
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 {
@@ -190,7 +187,7 @@ var SUCCESS = 'success';
 var ERROR = 'error';
 
 var CarouselPropTypes = {
-  children: index$1.oneOfType([index$1.arrayOf(index$1.node), index$1.node]),
+  children: propTypes.oneOfType([propTypes.arrayOf(propTypes.node), propTypes.node]),
   height: function height(props, propName) {
     var prop = props[propName];
     if (props.orientation === 'vertical' && (prop === null || typeof prop !== 'number')) {
@@ -198,7 +195,7 @@ var CarouselPropTypes = {
     }
     return null;
   },
-  orientation: index$1.oneOf(['horizontal', 'vertical']),
+  orientation: propTypes.oneOf(['horizontal', 'vertical']),
   isBgImage: function isBgImage(props, propName) {
     var value = props[propName];
     if (value === true && props.tag === 'img') {
@@ -209,6 +206,123 @@ var CarouselPropTypes = {
 };
 
 var s = { "buttonBack": "_buttonBack_113ph_1" };
+
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
+
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
+  };
+
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
+
+
+
+
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -379,13 +493,13 @@ var ButtonBack = function (_React$Component) {
 }(React.Component);
 
 ButtonBack.propTypes = {
-  carouselStore: index$1.object.isRequired,
+  carouselStore: propTypes.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
-  className: index$1.string,
-  currentSlide: index$1.number.isRequired,
-  disabled: index$1.bool,
-  onClick: index$1.func,
-  step: index$1.number.isRequired
+  className: propTypes.string,
+  currentSlide: propTypes.number.isRequired,
+  disabled: propTypes.bool,
+  onClick: propTypes.func,
+  step: propTypes.number.isRequired
 };
 ButtonBack.defaultProps = {
   className: null,
@@ -393,7 +507,7 @@ ButtonBack.defaultProps = {
   onClick: null
 };
 
-var index$3 = createCommonjsModule(function (module, exports) {
+var type = createCommonjsModule(function (module, exports) {
 var toString = {}.toString;
 var DomNode = typeof window != 'undefined'
   ? window.Node
@@ -457,8 +571,8 @@ var types = exports.types = {
 function equal(a, b, memos){
   // All identical values are equivalent
   if (a === b) return true
-  var fnA = types[index$3(a)];
-  var fnB = types[index$3(b)];
+  var fnA = types[type(a)];
+  var fnB = types[type(b)];
   return fnA && fnA === fnB
     ? fnA(a, b, memos)
     : false
@@ -571,21 +685,33 @@ function getEnumerableProperties (object) {
   return result
 }
 
-var index$2 = equal;
+var equals = equal;
 
-var index$2$1 = function isMergeableObject(value) {
-	return isNonNullObject(value) && isNotSpecial(value)
+'use strict';
+
+var isMergeableObject = function isMergeableObject(value) {
+	return isNonNullObject(value)
+		&& !isSpecial(value)
 };
 
 function isNonNullObject(value) {
 	return !!value && typeof value === 'object'
 }
 
-function isNotSpecial(value) {
+function isSpecial(value) {
 	var stringValue = Object.prototype.toString.call(value);
 
-	return stringValue !== '[object RegExp]'
-		&& stringValue !== '[object Date]'
+	return stringValue === '[object RegExp]'
+		|| stringValue === '[object Date]'
+		|| isReactElement(value)
+}
+
+// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
+var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
+
+function isReactElement(value) {
+	return value.$$typeof === REACT_ELEMENT_TYPE
 }
 
 function emptyTarget(val) {
@@ -594,7 +720,7 @@ function emptyTarget(val) {
 
 function cloneIfNecessary(value, optionsArgument) {
     var clone = optionsArgument && optionsArgument.clone === true;
-    return (clone && index$2$1(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
 }
 
 function defaultArrayMerge(target, source, optionsArgument) {
@@ -602,7 +728,7 @@ function defaultArrayMerge(target, source, optionsArgument) {
     source.forEach(function(e, i) {
         if (typeof destination[i] === 'undefined') {
             destination[i] = cloneIfNecessary(e, optionsArgument);
-        } else if (index$2$1(e)) {
+        } else if (isMergeableObject(e)) {
             destination[i] = deepmerge(target[i], e, optionsArgument);
         } else if (target.indexOf(e) === -1) {
             destination.push(cloneIfNecessary(e, optionsArgument));
@@ -613,13 +739,13 @@ function defaultArrayMerge(target, source, optionsArgument) {
 
 function mergeObject(target, source, optionsArgument) {
     var destination = {};
-    if (index$2$1(target)) {
+    if (isMergeableObject(target)) {
         Object.keys(target).forEach(function(key) {
             destination[key] = cloneIfNecessary(target[key], optionsArgument);
         });
     }
     Object.keys(source).forEach(function(key) {
-        if (!index$2$1(source[key]) || !target[key]) {
+        if (!isMergeableObject(source[key]) || !target[key]) {
             destination[key] = cloneIfNecessary(source[key], optionsArgument);
         } else {
             destination[key] = deepmerge(target[key], source[key], optionsArgument);
@@ -655,9 +781,9 @@ deepmerge.all = function deepmergeAll(array, optionsArgument) {
     })
 };
 
-var index$5 = deepmerge;
+var deepmerge_1 = deepmerge;
 
-var cjs = index$5;
+var cjs = deepmerge_1;
 
 function WithStore(WrappedComponent) {
   var mapStateToProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {
@@ -685,7 +811,7 @@ function WithStore(WrappedComponent) {
     }, {
       key: 'shouldComponentUpdate',
       value: function shouldComponentUpdate(nextProps, nextState) {
-        var test = !index$2(nextState, this.state) || !index$2(nextProps, this.props);
+        var test = !equals(nextState, this.state) || !equals(nextProps, this.props);
         return test;
       }
     }, {
@@ -735,7 +861,7 @@ function WithStore(WrappedComponent) {
     children: null
   };
   Wrapper.contextTypes = {
-    carouselStore: index$1.object
+    carouselStore: propTypes.object
   };
 
 
@@ -808,20 +934,20 @@ var ButtonFirst = (_temp = _class = function (_React$Component) {
   }]);
   return ButtonFirst;
 }(React.Component), _class.propTypes = {
-  carouselStore: index$1.object.isRequired,
+  carouselStore: propTypes.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
-  className: index$1.string,
-  currentSlide: index$1.number.isRequired,
-  disabled: index$1.bool,
-  onClick: index$1.func,
-  totalSlides: index$1.number.isRequired
+  className: propTypes.string,
+  currentSlide: propTypes.number.isRequired,
+  disabled: propTypes.bool,
+  onClick: propTypes.func,
+  totalSlides: propTypes.number.isRequired
 }, _class.defaultProps = {
   className: null,
   disabled: null,
   onClick: null
 }, _temp);
 
-var index$6 = WithStore(ButtonFirst, function (state) {
+var index$1 = WithStore(ButtonFirst, function (state) {
   return {
     currentSlide: state.currentSlide,
     totalSlides: state.totalSlides
@@ -913,22 +1039,22 @@ var ButtonNext = (_temp$1 = _class$1 = function (_React$PureComponent) {
   }]);
   return ButtonNext;
 }(React.PureComponent), _class$1.propTypes = {
-  carouselStore: index$1.object.isRequired,
+  carouselStore: propTypes.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
-  className: index$1.string,
-  currentSlide: index$1.number.isRequired,
-  disabled: index$1.bool,
-  onClick: index$1.func,
-  step: index$1.number.isRequired,
-  totalSlides: index$1.number.isRequired,
-  visibleSlides: index$1.number.isRequired
+  className: propTypes.string,
+  currentSlide: propTypes.number.isRequired,
+  disabled: propTypes.bool,
+  onClick: propTypes.func,
+  step: propTypes.number.isRequired,
+  totalSlides: propTypes.number.isRequired,
+  visibleSlides: propTypes.number.isRequired
 }, _class$1.defaultProps = {
   className: null,
   disabled: null,
   onClick: null
 }, _temp$1);
 
-var index$7 = WithStore(ButtonNext, function (state) {
+var index$2 = WithStore(ButtonNext, function (state) {
   return {
     currentSlide: state.currentSlide,
     step: state.step,
@@ -999,21 +1125,21 @@ var ButtonLast = (_temp$2 = _class$2 = function (_React$Component) {
   }]);
   return ButtonLast;
 }(React.Component), _class$2.propTypes = {
-  carouselStore: index$1.object.isRequired,
+  carouselStore: propTypes.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
-  className: index$1.string,
-  currentSlide: index$1.number.isRequired,
-  disabled: index$1.bool,
-  onClick: index$1.func,
-  totalSlides: index$1.number.isRequired,
-  visibleSlides: index$1.number.isRequired
+  className: propTypes.string,
+  currentSlide: propTypes.number.isRequired,
+  disabled: propTypes.bool,
+  onClick: propTypes.func,
+  totalSlides: propTypes.number.isRequired,
+  visibleSlides: propTypes.number.isRequired
 }, _class$2.defaultProps = {
   className: null,
   disabled: null,
   onClick: null
 }, _temp$2);
 
-var index$8 = WithStore(ButtonLast, function (state) {
+var index$3 = WithStore(ButtonLast, function (state) {
   return {
     currentSlide: state.currentSlide,
     totalSlides: state.totalSlides,
@@ -1028,7 +1154,9 @@ var index$8 = WithStore(ButtonLast, function (state) {
  * Licensed under the MIT License.
  */
 
-var index$10 = function isExtendable(val) {
+'use strict';
+
+var isExtendable = function isExtendable(val) {
   return typeof val !== 'undefined' && val !== null
     && (typeof val === 'object' || typeof val === 'function');
 };
@@ -1040,7 +1168,9 @@ var index$10 = function isExtendable(val) {
  * Released under the MIT License.
  */
 
-var index$14 = function forIn(obj, fn, thisArg) {
+'use strict';
+
+var forIn = function forIn(obj, fn, thisArg) {
   for (var key in obj) {
     if (fn.call(thisArg, obj[key], key, obj) === false) {
       break;
@@ -1048,18 +1178,40 @@ var index$14 = function forIn(obj, fn, thisArg) {
   }
 };
 
+/*!
+ * for-own <https://github.com/jonschlinkert/for-own>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+
+'use strict';
+
+
 var hasOwn = Object.prototype.hasOwnProperty;
 
-var index$12 = function forOwn(obj, fn, thisArg) {
-  index$14(obj, function(val, key) {
+var forOwn = function forOwn(obj, fn, thisArg) {
+  forIn(obj, function(val, key) {
     if (hasOwn.call(obj, key)) {
       return fn.call(thisArg, obj[key], key, obj);
     }
   });
 };
 
-var index$9 = function omit(obj, keys) {
-  if (!index$10(obj)) return {};
+/*!
+ * object.omit <https://github.com/jonschlinkert/object.omit>
+ *
+ * Copyright (c) 2014-2015, Jon Schlinkert.
+ * Licensed under the MIT License.
+ */
+
+'use strict';
+
+
+
+
+var object_omit = function omit(obj, keys) {
+  if (!isExtendable(obj)) return {};
 
   keys = [].concat.apply([], [].slice.call(arguments, 1));
   var last = keys[keys.length - 1];
@@ -1074,7 +1226,7 @@ var index$9 = function omit(obj, keys) {
     return obj;
   }
 
-  index$12(obj, function(value, key) {
+  forOwn(obj, function(value, key) {
     if (keys.indexOf(key) === -1) {
 
       if (!isFunction) {
@@ -1091,12 +1243,12 @@ var _class$3;
 var _temp$3;
 
 var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
-  inherits(CarouselProvider$$1, _React$Component);
+  inherits(CarouselProvider, _React$Component);
 
-  function CarouselProvider$$1(props, context) {
-    classCallCheck(this, CarouselProvider$$1);
+  function CarouselProvider(props, context) {
+    classCallCheck(this, CarouselProvider);
 
-    var _this = possibleConstructorReturn(this, (CarouselProvider$$1.__proto__ || Object.getPrototypeOf(CarouselProvider$$1)).call(this, props, context));
+    var _this = possibleConstructorReturn(this, (CarouselProvider.__proto__ || Object.getPrototypeOf(CarouselProvider)).call(this, props, context));
 
     var options = {
       currentSlide: props.currentSlide,
@@ -1120,7 +1272,7 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
     return _this;
   }
 
-  createClass(CarouselProvider$$1, [{
+  createClass(CarouselProvider, [{
     key: 'getChildContext',
     value: function getChildContext() {
       return { carouselStore: this.carouselStore };
@@ -1191,7 +1343,7 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
     value: function render() {
       var Tag = this.props.tag;
 
-      var filteredProps = index$9(this.props, Object.keys(CarouselProvider$$1.propTypes));
+      var filteredProps = object_omit(this.props, Object.keys(CarouselProvider.propTypes));
       var newClassName = cn(['carousel', this.props.className]);
 
       return React.createElement(
@@ -1201,21 +1353,21 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
       );
     }
   }]);
-  return CarouselProvider$$1;
+  return CarouselProvider;
 }(React.Component), _class$3.propTypes = {
   children: CarouselPropTypes.children.isRequired,
-  className: index$1.string,
-  currentSlide: index$1.number,
-  disableAnimation: index$1.bool,
-  hasMasterSpinner: index$1.bool,
-  naturalSlideHeight: index$1.number.isRequired,
-  naturalSlideWidth: index$1.number.isRequired,
+  className: propTypes.string,
+  currentSlide: propTypes.number,
+  disableAnimation: propTypes.bool,
+  hasMasterSpinner: propTypes.bool,
+  naturalSlideHeight: propTypes.number.isRequired,
+  naturalSlideWidth: propTypes.number.isRequired,
   orientation: CarouselPropTypes.orientation,
-  step: index$1.number,
-  tag: index$1.string,
-  totalSlides: index$1.number.isRequired,
-  touchEnabled: index$1.bool,
-  visibleSlides: index$1.number
+  step: propTypes.number,
+  tag: propTypes.string,
+  totalSlides: propTypes.number.isRequired,
+  touchEnabled: propTypes.bool,
+  visibleSlides: propTypes.number
 }, _class$3.defaultProps = {
   className: null,
   currentSlide: 0,
@@ -1227,7 +1379,7 @@ var CarouselProvider$1 = (_temp$3 = _class$3 = function (_React$Component) {
   touchEnabled: true,
   visibleSlides: 1
 }, _class$3.childContextTypes = {
-  carouselStore: index$1.object
+  carouselStore: propTypes.object
 }, _temp$3);
 
 var s$4 = { "dot": "_dot_27k82_1" };
@@ -1299,16 +1451,16 @@ var Dot$1 = (_temp$4 = _class$4 = function (_React$Component) {
   }]);
   return Dot;
 }(React.Component), _class$4.propTypes = {
-  carouselStore: index$1.object.isRequired,
+  carouselStore: propTypes.object.isRequired,
   children: CarouselPropTypes.children.isRequired,
-  className: index$1.string,
-  currentSlide: index$1.number.isRequired,
-  disabled: index$1.bool,
-  onClick: index$1.func,
-  selected: index$1.bool,
-  slide: index$1.number.isRequired,
-  totalSlides: index$1.number.isRequired,
-  visibleSlides: index$1.number.isRequired
+  className: propTypes.string,
+  currentSlide: propTypes.number.isRequired,
+  disabled: propTypes.bool,
+  onClick: propTypes.func,
+  selected: propTypes.bool,
+  slide: propTypes.number.isRequired,
+  totalSlides: propTypes.number.isRequired,
+  visibleSlides: propTypes.number.isRequired
 }, _class$4.defaultProps = {
   className: null,
   disabled: null,
@@ -1329,15 +1481,15 @@ var s$5 = {};
 var _class$5;
 var _temp$5;
 
-var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
-  inherits(DotGroup$$1, _React$Component);
+var DotGroup = (_temp$5 = _class$5 = function (_React$Component) {
+  inherits(DotGroup, _React$Component);
 
-  function DotGroup$$1() {
-    classCallCheck(this, DotGroup$$1);
-    return possibleConstructorReturn(this, (DotGroup$$1.__proto__ || Object.getPrototypeOf(DotGroup$$1)).apply(this, arguments));
+  function DotGroup() {
+    classCallCheck(this, DotGroup);
+    return possibleConstructorReturn(this, (DotGroup.__proto__ || Object.getPrototypeOf(DotGroup)).apply(this, arguments));
   }
 
-  createClass(DotGroup$$1, [{
+  createClass(DotGroup, [{
     key: 'renderDots',
     value: function renderDots() {
       var _props = this.props,
@@ -1385,22 +1537,22 @@ var DotGroup$$1 = (_temp$5 = _class$5 = function (_React$Component) {
       );
     }
   }]);
-  return DotGroup$$1;
+  return DotGroup;
 }(React.Component), _class$5.propTypes = {
   children: CarouselPropTypes.children,
-  className: index$1.string,
-  currentSlide: index$1.number.isRequired,
-  carouselStore: index$1.object.isRequired,
-  totalSlides: index$1.number.isRequired,
-  visibleSlides: index$1.number.isRequired,
-  dotNumbers: index$1.bool
+  className: propTypes.string,
+  currentSlide: propTypes.number.isRequired,
+  carouselStore: propTypes.object.isRequired,
+  totalSlides: propTypes.number.isRequired,
+  visibleSlides: propTypes.number.isRequired,
+  dotNumbers: propTypes.bool
 }, _class$5.defaultProps = {
   children: null,
   className: null,
   dotNumbers: false
 }, _temp$5);
 
-var index$16 = WithStore(DotGroup$$1, function (state) {
+var index$4 = WithStore(DotGroup, function (state) {
   return {
     currentSlide: state.currentSlide,
     totalSlides: state.totalSlides,
@@ -1602,19 +1754,19 @@ var Image$1 = function (_React$Component) {
 }(React.Component);
 
 Image$1.propTypes = {
-  alt: index$1.string,
-  carouselStore: index$1.object.isRequired,
+  alt: propTypes.string,
+  carouselStore: propTypes.object.isRequired,
   children: CarouselPropTypes.children,
-  className: index$1.string,
-  hasMasterSpinner: index$1.bool.isRequired,
+  className: propTypes.string,
+  hasMasterSpinner: propTypes.bool.isRequired,
   isBgImage: CarouselPropTypes.isBgImage,
-  onError: index$1.func,
-  onLoad: index$1.func,
-  renderError: index$1.func,
-  renderLoading: index$1.func,
-  src: index$1.string.isRequired,
-  style: index$1.object,
-  tag: index$1.string
+  onError: propTypes.func,
+  onLoad: propTypes.func,
+  renderError: propTypes.func,
+  renderLoading: propTypes.func,
+  src: propTypes.string.isRequired,
+  style: propTypes.object,
+  tag: propTypes.string
 };
 Image$1.defaultProps = {
   alt: '',
@@ -1643,12 +1795,12 @@ var _class$6;
 var _temp$6;
 
 var ImageWithZoom$1 = (_temp$6 = _class$6 = function (_React$Component) {
-  inherits(ImageWithZoom$$1, _React$Component);
+  inherits(ImageWithZoom, _React$Component);
 
-  function ImageWithZoom$$1() {
-    classCallCheck(this, ImageWithZoom$$1);
+  function ImageWithZoom() {
+    classCallCheck(this, ImageWithZoom);
 
-    var _this = possibleConstructorReturn(this, (ImageWithZoom$$1.__proto__ || Object.getPrototypeOf(ImageWithZoom$$1)).call(this));
+    var _this = possibleConstructorReturn(this, (ImageWithZoom.__proto__ || Object.getPrototypeOf(ImageWithZoom)).call(this));
 
     _this.state = {
       isImageLoading: true,
@@ -1664,7 +1816,7 @@ var ImageWithZoom$1 = (_temp$6 = _class$6 = function (_React$Component) {
     return _this;
   }
 
-  createClass(ImageWithZoom$$1, [{
+  createClass(ImageWithZoom, [{
     key: 'handleImageComplete',
     value: function handleImageComplete() {
       this.setState({
@@ -1748,11 +1900,11 @@ var ImageWithZoom$1 = (_temp$6 = _class$6 = function (_React$Component) {
       );
     }
   }]);
-  return ImageWithZoom$$1;
+  return ImageWithZoom;
 }(React.Component), _class$6.propTypes = {
   // alt: PropTypes.string,
-  src: index$1.string.isRequired,
-  tag: index$1.string
+  src: propTypes.string.isRequired,
+  tag: propTypes.string
 }, _class$6.defaultProps = {
   tag: 'div'
 }, _temp$6);
@@ -1791,20 +1943,34 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   }, {
     key: 'handleOnFocus',
     value: function handleOnFocus(ev) {
+      var _this2 = this;
+
       var onFocus = this.props.onFocus;
+
 
       this.setState({
         focused: true
-      }, onFocus !== null && onFocus.call(this, ev));
+      }, function () {
+        if (onFocus !== null) {
+          onFocus.call(_this2, ev);
+        }
+      });
     }
   }, {
     key: 'handleOnBlur',
     value: function handleOnBlur(ev) {
+      var _this3 = this;
+
       var onBlur = this.props.onBlur;
+
 
       this.setState({
         focused: false
-      }, onBlur !== null && onBlur.call(this, ev));
+      }, function () {
+        if (onBlur !== null) {
+          onBlur.call(_this3, ev);
+        }
+      });
     }
   }, {
     key: 'renderFocusRing',
@@ -1815,7 +1981,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this4 = this;
 
       var _props2 = this.props,
           carouselStore = _props2.carouselStore,
@@ -1862,7 +2028,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
         Tag,
         _extends({
           ref: function ref(el) {
-            _this2.tagRef = el;
+            _this4.tagRef = el;
           },
           tabIndex: newTabIndex,
           'aria-hidden': !this.isVisible(),
@@ -1875,7 +2041,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
           InnerTag,
           {
             ref: function ref(el) {
-              _this2.innerTagRef = el;
+              _this4.innerTagRef = el;
             },
             className: newInnerClassName
           },
@@ -1887,24 +2053,24 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   }]);
   return Slide;
 }(React.PureComponent), _class$7.propTypes = {
-  carouselStore: index$1.object,
+  carouselStore: propTypes.object,
   children: CarouselPropTypes.children,
-  className: index$1.string,
-  currentSlide: index$1.number.isRequired,
-  index: index$1.number.isRequired,
-  innerClassName: index$1.string,
-  innerTag: index$1.string,
-  naturalSlideHeight: index$1.number.isRequired,
-  naturalSlideWidth: index$1.number.isRequired,
-  onBlur: index$1.func,
-  onFocus: index$1.func,
+  className: propTypes.string,
+  currentSlide: propTypes.number.isRequired,
+  index: propTypes.number.isRequired,
+  innerClassName: propTypes.string,
+  innerTag: propTypes.string,
+  naturalSlideHeight: propTypes.number.isRequired,
+  naturalSlideWidth: propTypes.number.isRequired,
+  onBlur: propTypes.func,
+  onFocus: propTypes.func,
   orientation: CarouselPropTypes.orientation.isRequired,
-  slideSize: index$1.number.isRequired,
-  style: index$1.object,
-  tabIndex: index$1.number,
-  tag: index$1.string,
-  totalSlides: index$1.number.isRequired,
-  visibleSlides: index$1.number.isRequired
+  slideSize: propTypes.number.isRequired,
+  style: propTypes.object,
+  tabIndex: propTypes.number,
+  tag: propTypes.string,
+  totalSlides: propTypes.number.isRequired,
+  visibleSlides: propTypes.number.isRequired
 }, _class$7.defaultProps = {
   carouselStore: null,
   children: null,
@@ -1918,7 +2084,7 @@ var Slide = (_temp$7 = _class$7 = function (_React$PureComponent) {
   tag: 'li'
 }, _temp$7);
 
-var index$17 = WithStore(Slide, function (state) {
+var index$5 = WithStore(Slide, function (state) {
   return {
     currentSlide: state.currentSlide,
     naturalSlideHeight: state.naturalSlideHeight,
@@ -1935,9 +2101,9 @@ var s$9 = { "horizontalSlider": "_horizontalSlider_al8x6_1", "horizontalSliderTr
 var _class$8;
 var _temp$8;
 
-var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
-  inherits(Slider$$1, _React$Component);
-  createClass(Slider$$1, null, [{
+var Slider = (_temp$8 = _class$8 = function (_React$Component) {
+  inherits(Slider, _React$Component);
+  createClass(Slider, null, [{
     key: 'slideSizeInPx',
     value: function slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
       return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
@@ -1955,10 +2121,10 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     }
   }]);
 
-  function Slider$$1() {
-    classCallCheck(this, Slider$$1);
+  function Slider() {
+    classCallCheck(this, Slider);
 
-    var _this = possibleConstructorReturn(this, (Slider$$1.__proto__ || Object.getPrototypeOf(Slider$$1)).call(this));
+    var _this = possibleConstructorReturn(this, (Slider.__proto__ || Object.getPrototypeOf(Slider)).call(this));
 
     _this.handleOnKeyDown = _this.handleOnKeyDown.bind(_this);
     _this.handleOnTouchCancel = _this.handleOnTouchCancel.bind(_this);
@@ -1979,7 +2145,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
     return _this;
   }
 
-  createClass(Slider$$1, [{
+  createClass(Slider, [{
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       window.cancelAnimationFrame.call(window, this.moveTimer);
@@ -2066,9 +2232,9 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   }, {
     key: 'computeCurrentSlide',
     value: function computeCurrentSlide() {
-      var slideSizeInPx = Slider$$1.slideSizeInPx(this.props.orientation, this.sliderTrayElement.clientWidth, this.sliderTrayElement.clientHeight, this.props.totalSlides);
+      var slideSizeInPx = Slider.slideSizeInPx(this.props.orientation, this.sliderTrayElement.clientWidth, this.sliderTrayElement.clientHeight, this.props.totalSlides);
 
-      var slidesMoved = Slider$$1.slidesMoved(this.props.orientation, this.state.deltaX, this.state.deltaY, slideSizeInPx);
+      var slidesMoved = Slider.slidesMoved(this.props.orientation, this.state.deltaX, this.state.deltaY, slideSizeInPx);
 
       var maxSlide = this.props.totalSlides - Math.min(this.props.totalSlides, this.props.visibleSlides);
 
@@ -2237,27 +2403,27 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
       );
     }
   }]);
-  return Slider$$1;
+  return Slider;
 }(React.Component), _class$8.propTypes = {
-  carouselStore: index$1.object.isRequired,
-  children: index$1.node.isRequired,
-  className: index$1.string,
-  currentSlide: index$1.number.isRequired,
-  disableAnimation: index$1.bool,
-  hasMasterSpinner: index$1.bool.isRequired,
-  masterSpinnerFinished: index$1.bool.isRequired,
-  naturalSlideHeight: index$1.number.isRequired,
-  naturalSlideWidth: index$1.number.isRequired,
-  onMasterSpinner: index$1.func,
+  carouselStore: propTypes.object.isRequired,
+  children: propTypes.node.isRequired,
+  className: propTypes.string,
+  currentSlide: propTypes.number.isRequired,
+  disableAnimation: propTypes.bool,
+  hasMasterSpinner: propTypes.bool.isRequired,
+  masterSpinnerFinished: propTypes.bool.isRequired,
+  naturalSlideHeight: propTypes.number.isRequired,
+  naturalSlideWidth: propTypes.number.isRequired,
+  onMasterSpinner: propTypes.func,
   orientation: CarouselPropTypes.orientation.isRequired,
-  slideSize: index$1.number.isRequired,
-  slideTraySize: index$1.number.isRequired,
-  style: index$1.object,
-  tabIndex: index$1.number,
-  totalSlides: index$1.number.isRequired,
-  touchEnabled: index$1.bool.isRequired,
-  trayTag: index$1.string,
-  visibleSlides: index$1.number
+  slideSize: propTypes.number.isRequired,
+  slideTraySize: propTypes.number.isRequired,
+  style: propTypes.object,
+  tabIndex: propTypes.number,
+  totalSlides: propTypes.number.isRequired,
+  touchEnabled: propTypes.bool.isRequired,
+  trayTag: propTypes.string,
+  visibleSlides: propTypes.number
 }, _class$8.defaultProps = {
   className: '',
   disableAnimation: false,
@@ -2269,7 +2435,7 @@ var Slider$$1 = (_temp$8 = _class$8 = function (_React$Component) {
   visibleSlides: 1
 }, _temp$8);
 
-var index$18 = WithStore(Slider$$1, function (state) {
+var index$6 = WithStore(Slider, function (state) {
   return {
     currentSlide: state.currentSlide,
     hasMasterSpinner: state.hasMasterSpinner,
@@ -2312,12 +2478,12 @@ var Spinner$1 = (_temp$9 = _class$9 = function (_React$PureComponent) {
   }]);
   return Spinner;
 }(React.PureComponent), _class$9.propTypes = {
-  className: index$1.string
+  className: propTypes.string
 }, _class$9.defaultProps = {
   className: null
 }, _temp$9);
 
-var index$19 = function deepFreeze (o) {
+var deepFreeze = function deepFreeze (o) {
   Object.freeze(o);
 
   Object.getOwnPropertyNames(o).forEach(function (prop) {
@@ -2340,7 +2506,7 @@ var Store = function () {
   function Store(initialState) {
     classCallCheck(this, Store);
 
-    this.state = index$19(cjs(DEFAULT_STATE, initialState));
+    this.state = deepFreeze(cjs(DEFAULT_STATE, initialState));
     this.subscriptions = [];
     this.masterSpinnerSubscriptions = {};
     this.setStoreState = this.setStoreState.bind(this);
@@ -2358,7 +2524,7 @@ var Store = function () {
   createClass(Store, [{
     key: 'setStoreState',
     value: function setStoreState(newState, cb) {
-      this.state = index$19(cjs(this.state, newState));
+      this.state = deepFreeze(cjs(this.state, newState));
       this.updateSubscribers(cb);
     }
   }, {
@@ -2448,5 +2614,5 @@ var Store = function () {
   return Store;
 }();
 
-export { index as ButtonBack, index$6 as ButtonFirst, index$7 as ButtonNext, index$8 as ButtonLast, CarouselProvider$1 as CarouselProvider, Dot, index$16 as DotGroup, Image, ImageWithZoom$1 as ImageWithZoom, index$17 as Slide, index$18 as Slider, Spinner$1 as Spinner, Store };
+export { index as ButtonBack, index$1 as ButtonFirst, index$2 as ButtonNext, index$3 as ButtonLast, CarouselProvider$1 as CarouselProvider, Dot, index$4 as DotGroup, Image, ImageWithZoom$1 as ImageWithZoom, index$5 as Slide, index$6 as Slider, Spinner$1 as Spinner, Store };
 //# sourceMappingURL=index.es.js.map
