@@ -54,16 +54,22 @@ const Slide = class Slide extends React.PureComponent {
 
   handleOnFocus(ev) {
     const { onFocus } = this.props;
+
     this.setState({
       focused: true,
-    }, onFocus !== null && onFocus.call(this, ev));
+    }, () => {
+      if (onFocus !== null) { onFocus.call(this, ev); }
+    });
   }
 
   handleOnBlur(ev) {
     const { onBlur } = this.props;
+
     this.setState({
       focused: false,
-    }, onBlur !== null && onBlur.call(this, ev));
+    }, () => {
+      if (onBlur !== null) { onBlur.call(this, ev); }
+    });
   }
 
   renderFocusRing() {
