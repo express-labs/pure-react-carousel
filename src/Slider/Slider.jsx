@@ -66,12 +66,18 @@ const Slider = class Slider extends React.Component {
       startX: 0,
       startY: 0,
       isBeingTouchDragged: false,
+      isScrolling: false,
     };
 
     this.originalOverflow = null;
     this.moveTimer = null;
   }
 
+  componentDidMount() {
+    window.addEventListener('scroll', () => {
+      this.setState({ isScrolling: true })
+    }, { passive: true });
+  }
 
   componentWillUnmount() {
     window.cancelAnimationFrame.call(window, this.moveTimer);
@@ -79,7 +85,7 @@ const Slider = class Slider extends React.Component {
   }
 
   handleOnTouchStart(ev) {
-    if (!this.props.touchEnabled) return;
+    if (!this.props.touchEnabled || (this.props.orientation === 'horizontal' && this.state.isScrolling)) return;
 
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
@@ -98,7 +104,7 @@ const Slider = class Slider extends React.Component {
   }
 
   handleOnTouchMove(ev) {
-    if (!this.props.touchEnabled) return;
+    if (!this.props.touchEnabled || (this.props.orientation === 'horizontal' && this.state.isScrolling)) return;
 
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
@@ -201,6 +207,7 @@ const Slider = class Slider extends React.Component {
       deltaX: 0,
       deltaY: 0,
       isBeingTouchDragged: false,
+      isScrolling: false,
     });
   }
 
