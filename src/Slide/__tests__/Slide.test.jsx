@@ -1,8 +1,11 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import clone from 'clone';
 import components from '../../helpers/component-config';
 import Slide from '../Slide';
+
+configure({ adapter: new Adapter() });
 
 describe('<Slide />', () => {
   let props;

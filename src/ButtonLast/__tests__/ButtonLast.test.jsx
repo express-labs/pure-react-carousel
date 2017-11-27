@@ -1,9 +1,12 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
 import clone from 'clone';
+import Adapter from 'enzyme-adapter-react-16';
 import ButtonLast from '../ButtonLast';
 import Store from '../../Store/Store';
 import components from '../../helpers/component-config';
+
+configure({ adapter: new Adapter() });
 
 let props;
 
