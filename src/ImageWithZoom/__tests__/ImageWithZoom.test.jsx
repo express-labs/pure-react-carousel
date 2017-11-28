@@ -34,11 +34,16 @@ describe('<ImageWithZoom />', () => {
   fit('should add hovering classes to the overlay when mouse is hovering', () => {
     expect(imageWithZoom.find('div.overlay').hasClass('hover')).toBe(false);
     expect(imageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
-    console.log(imageWithZoom.debug());
+
+    console.log('before mouseover debug:\n', imageWithZoom.debug());
+    console.log('before mouseover html:\n', imageWithZoom.html());
     imageWithZoom.find('Wrapper.overlay').simulate('mouseover');
-    console.log(imageWithZoom.html());
-    expect(imageWithZoom.html().find('div.overlay').hasClass('hover')).toBe(true);
-    expect(imageWithZoom.html().find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(true);
+    wrapper.update();
+    console.log('after mouseover html:\n', imageWithZoom.html());
+    console.log('after mouseover debug\n', imageWithZoom.debug());
+
+    expect(imageWithZoom.find('div.overlay').hasClass('hover')).toBe(true);
+    expect(imageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(true);
   });
   it('should remove hovering classes to the overlay when mouse is not hovering', () => {
     expect(wrapper.find('div.overlay').hasClass('hover')).toBe(false);

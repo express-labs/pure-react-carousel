@@ -119,7 +119,6 @@ class Image extends React.Component {
 
   renderLoading(filteredProps) {
     const Tag = this.tempTag();
-    console.log('renderLoading');
 
     const newClassName = cn([
       s.image,
@@ -135,7 +134,6 @@ class Image extends React.Component {
 
   renderError(filteredProps) {
     const Tag = this.tempTag();
-    console.log('renderError');
 
     const newClassName = cn([
       s.image,
@@ -158,7 +156,6 @@ class Image extends React.Component {
       'carousel__image--success',
       this.props.className,
     ]);
-    console.log('renderSuccess', newClassName);
 
     let newStyle = Object.assign({}, style);
 

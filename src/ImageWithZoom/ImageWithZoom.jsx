@@ -4,6 +4,7 @@ import { Image, Spinner } from '../';
 import { cn } from '../helpers';
 import s from './ImageWithZoom.css';
 
+
 const ImageWithZoom = class ImageWithZoom extends React.Component {
   static propTypes = {
     // alt: PropTypes.string,
@@ -37,7 +38,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
   }
 
   handleOnMouseOver() {
-    console.log('handleOnMouseOver');
+    console.log('ImageWithZoom.handleOnMouseOver()');
     this.setState({
       hovering: true,
     });
@@ -85,7 +86,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       this.state.hovering && 'carousel__zoom-image-overlay--hovering',
     ]);
 
-    console.log('this.state', Object.assign({}, this.state));
+    console.log('ImageWithZoom.render() state', Object.assign({}, this.state));
 
     const overlayStyle = {};
     overlayStyle.transformOrigin = `${this.state.x}% ${this.state.y}%`;
