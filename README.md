@@ -60,8 +60,7 @@ Let's make a simple carousel with three slides, a next button, and a back button
   }
   ```
 
-5. Place the components in any order you wish as long as they are children of a single CarouselProvider component. Some components have ancestor/descendant relationships but they don't have to be direct relatives.  For example: Slides need to go inside of a Slider.
-Slides require an index.  Chances are, a lot of the time, you're going to be populating the slides from data and looping through the data, so it would be easy to add an index in your loop.
+5. Place the components in any order you wish as long as they are children of a single CarouselProvider component. Some components have ancestor/descendant relationships but they don't have to be direct relatives.  For example: Slides need to go inside of a Slider. Slides also require a sequentially numbered index prop starting at zero.  Chances are, a lot of the time, you're going to be populating the slides from data and looping through the data, so it would be easy to add an index in your loop.
 
   ```JSX
   import React from 'react';
@@ -164,7 +163,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 </props.tag|div>
 ```
 
-**__More about naturalSlideWidth and naturalSlideHeight__**``
+**__More about naturalSlideWidth and naturalSlideHeight__**
 The carousel is responsive and by default will flex to the full width of the <Slider \> parent container.  It's up to you to contain the carousel width via css.  Each slide will be the same height to width ratio ([intrinsic ratio](https://alistapart.com/d/creating-intrinsic-ratios-for-video/example2.html)). CarouselProvider needs to know the default size of each &lt;Slide />.  Note: you can make the carousel non-responsive by setting the width of <Slider \>to a fixed css unit, like pixels. There are many other ways to make the carousel non-responsive.
 
 ### &lt;Slider />
@@ -218,7 +217,7 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 ```
 
 ### &lt;Dot />
-A Dot component is a HTML button.  Dots directly correlate to slides.  Clicking on a slide causes it to scroll into the left-most visible slot of slider. Currently visible slides cause the correlating Dot to become disabled.  You can override the auto-disable feature by setting disabled to false (see table below)
+A Dot component is a HTML button.  Dots directly correlate to slides.  Clicking on a dot causes it's correlating slide to scroll into the left-most visible slot of slider. The dots for currently visible slides cause are disabled.  You can override the auto-disable feature by setting disabled to false (see table below)
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |

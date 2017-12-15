@@ -507,7 +507,7 @@ ButtonBack.defaultProps = {
   onClick: null
 };
 
-var type = createCommonjsModule(function (module, exports) {
+var jkrosoType = createCommonjsModule(function (module, exports) {
 var toString = {}.toString;
 var DomNode = typeof window != 'undefined'
   ? window.Node
@@ -571,8 +571,8 @@ var types = exports.types = {
 function equal(a, b, memos){
   // All identical values are equivalent
   if (a === b) return true
-  var fnA = types[type(a)];
-  var fnB = types[type(b)];
+  var fnA = types[jkrosoType(a)];
+  var fnB = types[jkrosoType(b)];
   return fnA && fnA === fnB
     ? fnA(a, b, memos)
     : false
