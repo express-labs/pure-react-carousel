@@ -12,6 +12,7 @@ const Slider = class Slider extends React.Component {
     currentSlide: PropTypes.number.isRequired,
     disableAnimation: PropTypes.bool,
     hasMasterSpinner: PropTypes.bool.isRequired,
+    lockPerpendicularScroll: PropTypes.bool.isRequired,
     masterSpinnerFinished: PropTypes.bool.isRequired,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
@@ -97,6 +98,16 @@ const Slider = class Slider extends React.Component {
     });
   }
 
+  computeDelta({ screenX, screenY }) {
+    let deltaX = screenX - this.state.startX;
+    let deltaY = screenY - this.state.startY;
+    if (this.props.lockPerpendicularScroll) {
+      if (this.props.orientation === 'horizontal') deltaY = this.state.startY;
+      if (this.props.orientation === 'vertical') deltaX = this.state.startX;
+    }
+    return { deltaX, deltaY };
+  }
+
   handleOnTouchMove(ev) {
     if (!this.props.touchEnabled) return;
 
@@ -104,10 +115,7 @@ const Slider = class Slider extends React.Component {
 
     const touch = ev.targetTouches[0];
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
-      this.setState({
-        deltaX: touch.screenX - this.state.startX,
-        deltaY: touch.screenY - this.state.startY,
-      });
+      this.setState(this.computeDelta({ ...touch }));
     });
   }
 
@@ -228,9 +236,9 @@ const Slider = class Slider extends React.Component {
   render() {
     const {
       carouselStore, children, className, currentSlide, disableAnimation, hasMasterSpinner,
-      masterSpinnerFinished, naturalSlideHeight, naturalSlideWidth, onMasterSpinner, orientation,
-      slideSize, slideTraySize, style, tabIndex, totalSlides, touchEnabled, trayTag: TrayTag,
-      visibleSlides,
+      lockPerpendicularScroll, masterSpinnerFinished, naturalSlideHeight, naturalSlideWidth,
+      onMasterSpinner, orientation, slideSize, slideTraySize, style, tabIndex, totalSlides,
+      touchEnabled, trayTag: TrayTag, visibleSlides,
       ...props
     } = this.props;
 
