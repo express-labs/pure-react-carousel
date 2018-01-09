@@ -1,6 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+// import Adapter from 'enzyme-adapter-react-16';
 import components from '../helpers/component-config';
+
+// configure({ adapter: new Adapter() });
 
 describe('All visual components should pass through props that are not consumed by that component.', () => {
   Object.keys(components).forEach((conf) => {

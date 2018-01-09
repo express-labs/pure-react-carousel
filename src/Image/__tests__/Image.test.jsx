@@ -1,9 +1,12 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, render, configure } from 'enzyme';
+// import Adapter from 'enzyme-adapter-react-16';
 import clone from 'clone';
 import components from '../../helpers/component-config';
 import { ERROR } from '../../helpers/index';
 import Image from '../Image';
+
+// configure({ adapter: new Adapter() });
 
 let props;
 
@@ -48,6 +51,7 @@ describe('<Image />', () => {
     const event = new UIEvent('error');
     // simulate a load error
     instance.image.dispatchEvent(event);
+    wrapper.update();
     expect(onError).toHaveBeenCalled();
   });
   it('should call the default onError if an image load fails and there is no custom onError.', () => {
@@ -56,7 +60,8 @@ describe('<Image />', () => {
     const event = new UIEvent('error');
     // simulate a load error
     instance.image.dispatchEvent(event);
-    expect(wrapper.hasClass('imageError')).toBe(true);
+    wrapper.update();
+    expect(wrapper.find('div').hasClass('imageError')).toBe(true);
   });
   it('should call the default onError if an image load fails and there is no custom onError.', () => {
     const wrapper = mount(<Image {...props} src="crap.junk" />);
@@ -64,7 +69,8 @@ describe('<Image />', () => {
     const event = new UIEvent('error');
     // simulate a load error
     instance.image.dispatchEvent(event);
-    expect(wrapper.hasClass('imageError')).toBe(true);
+    wrapper.update();
+    expect(wrapper.find('div').hasClass('imageError')).toBe(true);
   });
   it('should render the default error with the class "carousel__image--with-background" if isBgImage === true', () => {
     const newProps = Object.assign({}, props, { tag: 'div' });
@@ -72,7 +78,7 @@ describe('<Image />', () => {
     // simulate a load error
     wrapper.setState({ imageStatus: 'error' });
     wrapper.update();
-    expect(wrapper.hasClass('carousel__image--with-background')).toBe(true);
+    expect(wrapper.find('div').hasClass('carousel__image--with-background')).toBe(true);
   });
   it('should render with class carousel__image--with-background when isBgImage prop is true', () => {
     const wrapper = mount(<Image {...props} tag="div" isBgImage />);
