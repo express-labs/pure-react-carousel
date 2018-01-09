@@ -55,6 +55,7 @@ const Slider = class Slider extends React.Component {
 
   constructor() {
     super();
+    this.handleDocumentScroll = this.handleDocumentScroll.bind(this);
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
     this.handleOnTouchCancel = this.handleOnTouchCancel.bind(this);
     this.handleOnTouchEnd = this.handleOnTouchEnd.bind(this);
@@ -66,17 +67,31 @@ const Slider = class Slider extends React.Component {
       deltaY: 0,
       startX: 0,
       startY: 0,
+      isDocumentScrolling: null,
       isBeingTouchDragged: false,
     };
 
     this.originalOverflow = null;
     this.moveTimer = null;
+    this.documentScrollTimer = null;
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleDocumentScroll);
   }
 
 
   componentWillUnmount() {
+    document.documentElement.removeEventListener('scroll', this.handleDocumentScroll);
     window.cancelAnimationFrame.call(window, this.moveTimer);
+    window.cancelAnimationFrame.call(window, this.documentScrollTimer);
     this.moveTimer = null;
+    this.documentScrollTimer = null;
+  }
+
+  handleDocumentScroll() {
+    if (!this.props.touchEnabled) return;
+    this.setState({ isDocumentScrolling: true });
   }
 
   handleOnTouchStart(ev) {
@@ -98,24 +113,20 @@ const Slider = class Slider extends React.Component {
     });
   }
 
-  computeDelta({ screenX, screenY }) {
-    let deltaX = screenX - this.state.startX;
-    let deltaY = screenY - this.state.startY;
-    if (this.props.lockPerpendicularScroll) {
-      if (this.props.orientation === 'horizontal') deltaY = this.state.startY;
-      if (this.props.orientation === 'vertical') deltaX = this.state.startX;
-    }
-    return { deltaX, deltaY };
-  }
-
   handleOnTouchMove(ev) {
-    if (!this.props.touchEnabled) return;
+    if (
+      !this.props.touchEnabled ||
+      (this.props.lockPerpendicularScroll && this.state.isDocumentScrolling)
+    ) return;
 
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
-      this.setState(this.computeDelta({ ...touch }));
+      this.setState({
+        deltaX: touch.screenX - this.state.startX,
+        deltaY: touch.screenY - this.state.startY,
+      });
     });
   }
 
@@ -209,6 +220,7 @@ const Slider = class Slider extends React.Component {
       deltaX: 0,
       deltaY: 0,
       isBeingTouchDragged: false,
+      isDocumentScrolling: this.props.lockPerpendicularScroll ? false : null,
     });
   }
 

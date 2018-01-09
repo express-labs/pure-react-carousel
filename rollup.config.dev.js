@@ -22,15 +22,20 @@ var cache;
 const cssExportMap = {};
 
 export default {
-  entry: 'src/app.js',
+  input: 'src/app.js',
   cache: cache,
-  format: 'umd',
-  moduleName: 'pureReactCarousel',
-  dest: 'dev/script/index.umd.js',
-  sourceMap: true,
-  sourceMapFile: path.resolve('dev/main.umd.js'),
+  output: {
+    name: 'pureReactCarousel',
+    file: 'dev/script/index.umd.js',
+    format: 'umd',
+    sourcemap: true,
+  },
+  sourcemapFile: path.resolve('dev/main.umd.js'),
   // exclude peerDependencies from our bundle, except for react, react-dom, prop-types when dev'ing
-  external: Object.keys(omit(pkg.peerDependencies, ['react', 'react-dom'])),
+  external: Object.keys(omit(pkg.peerDependencies, [
+    'react',
+    'react-dom'
+  ])),
   plugins: [
     postcss({
       sourceMap: 'inline', // true, "inline" or false
@@ -72,7 +77,7 @@ export default {
         'node_modules/process-es6/**'
       ],
       namedExports: {
-        'node_modules/react/react.js': ['Children', 'Component', 'PropTypes', 'createElement'],
+        'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createElement'],
         'node_modules/react-dom/index.js': ['render']
       }
     }),
