@@ -8,7 +8,7 @@ export default WithStore(Slider, state => ({
   naturalSlideHeight: state.naturalSlideHeight,
   naturalSlideWidth: state.naturalSlideWidth,
   disableAnimation: state.disableAnimation,
-  lockPerpendicularScroll: state.lockPerpendicularScroll,
+  lockOnWindowScroll: state.lockOnWindowScroll,
   orientation: state.orientation,
   slideSize: state.slideSize,
   slideTraySize: state.slideTraySize,

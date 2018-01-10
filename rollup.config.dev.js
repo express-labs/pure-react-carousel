@@ -29,8 +29,8 @@ export default {
     file: 'dev/script/index.umd.js',
     format: 'umd',
     sourcemap: true,
+    sourcemapFile: path.resolve('dev/main.umd.js'),
   },
-  sourcemapFile: path.resolve('dev/main.umd.js'),
   // exclude peerDependencies from our bundle, except for react, react-dom, prop-types when dev'ing
   external: Object.keys(omit(pkg.peerDependencies, [
     'react',

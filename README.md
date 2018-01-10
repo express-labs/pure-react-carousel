@@ -146,6 +146,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string |
 | currentSlide | number | 0 | No | &lt;Slide \> to display on initial render. The indexing of &lt;Slide /> components starts with 0. |
 | hasMasterSpinner | bool | false | No | When true, a spinner will cover &lt;Slider /> component until all &lt;Image \> and &lt;ImageWithZoom \> are done loading images.  If there are no &lt;Image /> or &lt;ImageWithZoom> components, the spinner will spin until this property is set to false |
+| lockOnWindowScroll | bool | false | No | When set to true, scrolling of the carousel slides are disabled while the browser window is scrolling |
 | **naturalSlideHeight** | number | | **Yes** | The natural height of each <\Slide > component. ** |
 | **naturalSlideWidth** | number | | **Yes** | The natural width of each <\Slide > component. ** |
 | orientation | string | "horizontal" | No | Possible values are "horizontal" and "vertical".  Let's you have a horizontal or vertical carousel. |
@@ -271,6 +272,94 @@ A compound component that creates a bunch of Dot's automatically for you.
 | renderLoading | [func&#124;null] | null | No | When defined, this function is called while the image is loading.  It must return JSX which will be rendered instead of the loading image. |
 | **src** | **string** | | **Yes** | **URL of the image** |
 | tag | string | "img" | No | The element that will receive the image. Another option might be to set this to "div". Any tag besides "img" will result in the image being loaded as the css background-image for that tag. |
+
+
+### WithStore() Higher Order Component
+
+__NOTE: ADVANCED USE ONLY.__
+
+Use this HOC to pass CarouselProvider state properties as props to a component. Basically, Your custom component must be an descendant of `<CarouselProvider>`.  It doesn't have to be a direct descendant, it just needs to be between some the opening and closing CarouselProvider tags somewhere. For example...
+
+```html
+// pseudocode example
+<CarouselProvider>
+  <YourComponentHere />
+</CarouselProvider>
+```
+
+WithStore has two arguments:  
+
+`WithStore([component], [mapstateToProps])`
+
+- The first argument is the component to wrap (ex: YourComponentHere) and it's required.
+
+- The second argument is optional. It is a "map state to props" function that you must create.  This function maps the state of the CarouselProvider to props used by your component.  Your "map state to props" function will receive one argument: an object with the current CarouselProvider state.  Your function must return an object where the keys are names of props to pass to your component and the values map to properties of the CarouselProvider's state.
+
+Here's more pseudocode.  I've listed a bunch of properties that exist in the CarouselProvider.
+
+```javascript
+  import React from 'react';
+  import { WithStore } from 'pure-react-carousel';
+
+  class YourComponentHere extends React.Component {
+    // ... stuff
+  }
+
+  export default WithStore(YourComponentHere, state => ({
+    // these are read only properties.  we use the "deepFreeze"
+    // npm package to make these properties immutable. You don't have to use
+    // all of these, just pick the ones you need.
+    currentSlide: state.currentSlide,
+    disableAnimation: state.disableAnimation,
+    hasMasterSpinner: state.hasMasterSpinner,
+    imageErrorCount: state.imageErrorCount,
+    imageSuccessCount: state.imageSuccessCount,
+    lockOnWindowScroll: state.lockOnWindowScroll,
+    masterSpinnerThreshold: state.masterSpinnerThreshold,
+    naturalSlideHeight: state.naturalSlideHeight,
+    naturalSlideWidth: state.naturalSlideWidth,
+    orientation: state.orientation,
+    slideSize: state.slideSize,
+    slideTraySize: state.slideTraySize
+    step: state.step,
+    totalSlides: state.totalSlides,
+    touchEnabled: state.touchEnabled,
+    visibleSlides: state.visibleSlides,
+  }));
+```
+
+Any component wrapped with WithStore will also receive a prop called `carouselStore` which contains the method setStoreState which  you can use to "safely" (use at your own risk) mutate the CarouselProvider's state.  There are other methods in carouselStore.  Don't use them.
+
+__setStoreState__: 🦄 🌈 🎂 Use this to mutate any of the properties listed in the WithStore example above. For example, if you want to skip to slide 2 you can put `this.props.carouselStore.setStoreState({ currentSlide: 2 })` inside a class method in your component.
+
+More pseudocode.
+
+```javascript
+  import React from 'react';
+  import { WithProvider } from 'pure-react-carousel';
+
+  class YourComponentHere extends React.Component {
+    // ... stuff
+
+    handleClick() {
+      this.props.carouselStore.setStoreState({ currentSlide: 2 });
+    }
+  }
+
+  export default WithStore(YourComponentHere);
+```
+
+Fun fact: you can add any arbitrary values that you want to the CarouselProvider's state.  So, if you have several custom components that need to share data, have at it.
+
+__masterSpinnerError__: 💀 DON'T USE THIS.
+
+__masterSpinnerSuccess__: ⚠️ DON'T USE THIS.
+
+__subscribeMasterSpinner__: 💩 DON'T USE THIS.
+
+__unsubscribeMasterSpinner__: 🔥 DON'T USE THIS.
+
+__unsubscribeAllMasterSpinner__: Don't call this manually unless you have some sort of super-customized carousel. This is called internally once all `<Image hasMasterSpinner />` and all `<ImageWithZoom hasMasterSpinner />` components are finished loading their images.  Calling this directly will force a "success" state and the master spinner (the spinner that covers the entire carousel while loading) will turn off.
 
 ## More Documentation to Come
 I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.

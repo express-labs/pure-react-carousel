@@ -1,11 +1,12 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-// import Adapter from 'enzyme-adapter-react-16';
+import { shallow, configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import clone from 'clone';
 import components from '../../helpers/component-config';
 import DotGroup from '../DotGroup';
 
-// configure({ adapter: new Adapter() });
+configure({ adapter: new Adapter() });
+
 
 let props;
 

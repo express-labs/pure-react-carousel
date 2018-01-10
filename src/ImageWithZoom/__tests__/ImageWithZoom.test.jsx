@@ -1,14 +1,13 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
 import clone from 'clone';
-// import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16';
 import components from '../../helpers/component-config';
-import { ERROR } from '../../helpers/index';
 import ImageWithZoom from '../ImageWithZoom';
 import CarouselProvider from '../../CarouselProvider/CarouselProvider';
-import Store from '../../Store/Store';
 
-// configure({ adapter: new Adapter() });
+configure({ adapter: new Adapter() });
+
 
 describe('<ImageWithZoom />', () => {
   let wrapper;
@@ -31,16 +30,16 @@ describe('<ImageWithZoom />', () => {
   it('should render', () => {
     expect(wrapper.exists()).toBe(true);
   });
-  fit('should add hovering classes to the overlay when mouse is hovering', () => {
+  it('should add hovering classes to the overlay when mouse is hovering', () => {
     expect(imageWithZoom.find('div.overlay').hasClass('hover')).toBe(false);
     expect(imageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
-    console.log('before click debug:\n', imageWithZoom.debug());
     imageWithZoom.find('Wrapper.overlay').simulate('mouseover');
-    console.log('after html:\n', imageWithZoom.html());
-    console.log('after debug\n', imageWithZoom.debug());
 
-    expect(imageWithZoom.html().find('div.overlay').hasClass('hover')).toBe(true);
-    expect(imageWithZoom.html().find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(true);
+    // enzyme 3.x wrappers are immutable, so we need to find stuff again after an update.
+    const updatedImageWithZoom = wrapper.find(ImageWithZoom);
+
+    expect(updatedImageWithZoom.find('div.overlay').hasClass('hover')).toBe(true);
+    expect(updatedImageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(true);
   });
   it('should remove hovering classes to the overlay when mouse is not hovering', () => {
     expect(wrapper.find('div.overlay').hasClass('hover')).toBe(false);

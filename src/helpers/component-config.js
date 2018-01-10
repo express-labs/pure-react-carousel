@@ -141,6 +141,7 @@ export default {
       totalSlides: 5,
       touchEnabled: true,
       visibleSlides: 2,
+      lockOnWindowScroll: false,
     },
   },
   Spinner: {

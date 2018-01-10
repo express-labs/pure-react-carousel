@@ -23,7 +23,7 @@ export default function WithStore(
 
     constructor(props, context) {
       super(props, context);
-      this.state = mapStateToProps(context.carouselStore.state);
+      this.state = mapStateToProps({ ...context.carouselStore.state });
       this.updateStateProps = this.updateStateProps.bind(this);
     }
 
@@ -41,7 +41,7 @@ export default function WithStore(
     }
 
     updateStateProps() {
-      this.setState(mapStateToProps(this.context.carouselStore.state));
+      this.setState(mapStateToProps({ ...this.context.carouselStore.state }));
     }
 
     render() {

@@ -1,13 +1,14 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-// import Adapter from 'enzyme-adapter-react-16';
+import { shallow, mount, configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import ButtonBack from '../ButtonBack';
 
 import Store from '../../Store/Store';
 import { CarouselProvider } from '../../';
 import ButtonBackWithStore from '../';
 
-// configure({ adapter: new Adapter() });
+configure({ adapter: new Adapter() });
+
 
 describe('<ButtonBack />', () => {
   it('should render', () => {

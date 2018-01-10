@@ -45,10 +45,11 @@
     "clone": "^2.1.1",
     "cssnano": "^3.10.0",
     "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "escape-string-regexp": "^1.0.5",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.0",
-    "eslint-config-mrb3k-jest": "^0.0.1",
+    "eslint-config-mrb3k-jest": "^0.3.2",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^5.0.1",
     "eslint-plugin-node": "^4.2.2",
@@ -80,7 +81,7 @@
     "rollup-plugin-serve": "^0.3.0",
     "rollup-plugin-uglify": "^2.0.1",
     "rollup-watch": "^3.2.2",
-    "uglify-es": "^3.0.15",
+    "uglify-es": "^3.3.5",
     "watch": "^1.0.2"
   },
   "peerDependencies": {
@@ -132,6 +133,8 @@
         "statements": 95
       }
     },
-    "setupFiles": ["raf/polyfill"]
+    "setupFiles": [
+      "raf/polyfill"
+    ]
   }
 }

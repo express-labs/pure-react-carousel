@@ -1,12 +1,13 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-// import Adapter from 'enzyme-adapter-react-16';
+import { shallow, mount, configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import clone from 'clone';
 import components from '../../helpers/component-config';
 import Dot from '../Dot';
 import Store from '../../Store/Store';
 
-// configure({ adapter: new Adapter() });
+configure({ adapter: new Adapter() });
+
 
 let props;
 

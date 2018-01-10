@@ -14,9 +14,9 @@ export default () => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
     hasMasterSpinner
-    lockPerpendicularScroll
+    lockOnWindowScroll
   >
-    <h1 className={s.headline}>Carousel (lockPerpendicularScroll set to TRUE)</h1>
+    <h1 className={s.headline}>Carousel (lockOnWindowScroll set to TRUE)</h1>
     <p>
       - When scrolling the browser, up and down, horizontal scrollers will not scroll horizontally.
     </p>

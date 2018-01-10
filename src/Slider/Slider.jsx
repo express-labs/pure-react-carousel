@@ -12,7 +12,7 @@ const Slider = class Slider extends React.Component {
     currentSlide: PropTypes.number.isRequired,
     disableAnimation: PropTypes.bool,
     hasMasterSpinner: PropTypes.bool.isRequired,
-    lockPerpendicularScroll: PropTypes.bool.isRequired,
+    lockOnWindowScroll: PropTypes.bool.isRequired,
     masterSpinnerFinished: PropTypes.bool.isRequired,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
@@ -73,7 +73,7 @@ const Slider = class Slider extends React.Component {
 
     this.originalOverflow = null;
     this.moveTimer = null;
-    this.documentScrollTimer = null;
+    this.isDocumentScrolling = null;
   }
 
   componentDidMount() {
@@ -84,14 +84,13 @@ const Slider = class Slider extends React.Component {
   componentWillUnmount() {
     document.documentElement.removeEventListener('scroll', this.handleDocumentScroll);
     window.cancelAnimationFrame.call(window, this.moveTimer);
-    window.cancelAnimationFrame.call(window, this.documentScrollTimer);
     this.moveTimer = null;
-    this.documentScrollTimer = null;
+    this.isDocumentScrolling = null;
   }
 
   handleDocumentScroll() {
     if (!this.props.touchEnabled) return;
-    this.setState({ isDocumentScrolling: true });
+    this.isDocumentScrolling = true;
   }
 
   handleOnTouchStart(ev) {
@@ -116,7 +115,7 @@ const Slider = class Slider extends React.Component {
   handleOnTouchMove(ev) {
     if (
       !this.props.touchEnabled ||
-      (this.props.lockPerpendicularScroll && this.state.isDocumentScrolling)
+      (this.props.lockOnWindowScroll && this.isDocumentScrolling)
     ) return;
 
     window.cancelAnimationFrame.call(window, this.moveTimer);
@@ -220,8 +219,9 @@ const Slider = class Slider extends React.Component {
       deltaX: 0,
       deltaY: 0,
       isBeingTouchDragged: false,
-      isDocumentScrolling: this.props.lockPerpendicularScroll ? false : null,
     });
+
+    this.isDocumentScrolling = this.props.lockOnWindowScroll ? false : null;
   }
 
   renderMasterSpinner() {
@@ -248,7 +248,7 @@ const Slider = class Slider extends React.Component {
   render() {
     const {
       carouselStore, children, className, currentSlide, disableAnimation, hasMasterSpinner,
-      lockPerpendicularScroll, masterSpinnerFinished, naturalSlideHeight, naturalSlideWidth,
+      lockOnWindowScroll, masterSpinnerFinished, naturalSlideHeight, naturalSlideWidth,
       onMasterSpinner, orientation, slideSize, slideTraySize, style, tabIndex, totalSlides,
       touchEnabled, trayTag: TrayTag, visibleSlides,
       ...props

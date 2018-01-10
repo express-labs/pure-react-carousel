@@ -20,13 +20,15 @@ var cache;
 const cssExportMap = {};
 
 export default {
-  entry: 'src/index.js',
+  input: 'src/index.js',
   cache: cache,
-  format: 'cjs',
-  moduleName: 'pureReactCarousel',
-  dest: 'dist/index.cjs.js',
-  sourceMap: true,
-  sourceMapFile: path.resolve('dist/main.cjs.js'),
+  output: {
+    name: 'pureReactCarousel',
+    format: 'cjs',
+    sourcemap: true,
+    sourcemapFile: path.resolve('dist/main.cjs.js'),
+    file: 'dist/index.cjs.js',
+  },
   // exclude peerDependencies from our bundle
   external: Object.keys(pkg.peerDependencies),
   plugins: [
