@@ -1,9 +1,13 @@
-import { mount } from 'enzyme';
 import React from 'react';
+import { mount, configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import Store from '../Store';
 import CarouselProvider from '../../CarouselProvider';
 import Slide from '../../Slide';
 import components from '../../helpers/component-config';
+
+configure({ adapter: new Adapter() });
+
 
 describe('Store', () => {
   let carouselStore;

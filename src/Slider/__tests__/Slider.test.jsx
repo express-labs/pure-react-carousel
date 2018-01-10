@@ -1,9 +1,13 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import clone from 'clone';
 import components from '../../helpers/component-config';
 import Store from '../../Store/Store';
 import Slider from '../Slider';
+
+configure({ adapter: new Adapter() });
+
 
 const touch100 = {
   preventDefault: jest.fn(),
@@ -103,6 +107,22 @@ describe('<Slider />', () => {
     wrapper.find('.sliderTray').simulate('touchmove', touch100);
     expect(wrapper.state('deltaX')).toBe(0);
     expect(wrapper.state('deltaY')).toBe(0);
+  });
+  it('touchmove should not alter state if props.lockOnWindowScroll and this.isDocumentScrolling are both true', () => {
+    const wrapper = shallow(<Slider {...props} lockOnWindowScroll />);
+    const instance = wrapper.instance();
+    instance.handleDocumentScroll();
+    expect(wrapper.state('startX')).toBe(0);
+    expect(wrapper.state('startY')).toBe(0);
+    wrapper.find('.sliderTray').simulate('touchmove', touch100);
+    expect(wrapper.state('deltaX')).toBe(0);
+    expect(wrapper.state('deltaY')).toBe(0);
+  });
+  it('should not set this.isDocumentScrolling to true if touchEnabled is false', () => {
+    const wrapper = shallow(<Slider {...props} touchEnabled={false} />);
+    const instance = wrapper.instance();
+    instance.handleDocumentScroll();
+    expect(instance.isDocumentScrolling).toBe(null);
   });
   it('should assign the correct vertical css classes when orientation="vertical"', () => {
     const wrapper = shallow(<Slider {...props} orientation="vertical" />);
@@ -312,5 +332,21 @@ describe('<Slider />', () => {
     expect(focus).toHaveBeenCalledTimes(0);
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
     expect(focus).toHaveBeenCalledTimes(0);
+  });
+  it('endTouchMove should set this.isDocumentScrolling to false if props.lockOnWindowScroll is true', () => {
+    const wrapper = shallow(<Slider {...props} lockOnWindowScroll />);
+    const instance = wrapper.instance();
+    instance.computeCurrentSlide = () => {};
+    instance.handleDocumentScroll();
+    expect(instance.isDocumentScrolling).toBe(true);
+    instance.endTouchMove();
+    expect(instance.isDocumentScrolling).toBe(false);
+  });
+  it('endTouchMove should NOT set this.isDocumentScrolling to false if props.lockOnWindowScroll is FALSE', () => {
+    const wrapper = shallow(<Slider {...props} />);
+    const instance = wrapper.instance();
+    instance.computeCurrentSlide = () => {};
+    instance.endTouchMove();
+    expect(instance.isDocumentScrolling).toBe(null);
   });
 });

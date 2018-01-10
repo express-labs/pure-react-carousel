@@ -1,11 +1,15 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
 import clone from 'clone';
+import Adapter from 'enzyme-adapter-react-16';
 import components from '../../helpers/component-config';
 import ButtonNext from '../ButtonNext';
 import Store from '../../Store/Store';
 import CarouselProvider from '../../CarouselProvider/CarouselProvider';
 import ButtonNextWithStore from '../';
+
+configure({ adapter: new Adapter() });
+
 
 let props;
 
