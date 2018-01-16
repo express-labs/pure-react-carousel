@@ -1,13 +1,20 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import ButtonBack from '../ButtonBack';
+
 import Store from '../../Store/Store';
 import { CarouselProvider } from '../../';
 import ButtonBackWithStore from '../';
 
+configure({ adapter: new Adapter() });
+
+
 describe('<ButtonBack />', () => {
   it('should render', () => {
-    const wrapper = shallow(<ButtonBack currentSlide={1} step={1} carouselStore={{}}>Hello</ButtonBack>);
+    const wrapper = shallow(
+      <ButtonBack currentSlide={1} step={1} carouselStore={{}}>Hello</ButtonBack>
+    );
     expect(wrapper.exists()).toBe(true);
   });
   it('should be disabled if the currentSlide is 0', () => {
