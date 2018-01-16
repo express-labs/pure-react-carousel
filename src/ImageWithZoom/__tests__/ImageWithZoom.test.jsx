@@ -1,11 +1,13 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import components from '../../helpers/component-config';
+import { shallow, mount, configure } from 'enzyme';
 import clone from 'clone';
-import { ERROR } from '../../helpers/index';
+import Adapter from 'enzyme-adapter-react-16';
+import components from '../../helpers/component-config';
 import ImageWithZoom from '../ImageWithZoom';
 import CarouselProvider from '../../CarouselProvider/CarouselProvider';
-import Store from '../../Store/Store';
+
+configure({ adapter: new Adapter() });
+
 
 describe('<ImageWithZoom />', () => {
   let wrapper;
@@ -29,22 +31,25 @@ describe('<ImageWithZoom />', () => {
     expect(wrapper.exists()).toBe(true);
   });
   it('should add hovering classes to the overlay when mouse is hovering', () => {
-    expect(imageWithZoom.find('.overlay').hasClass('hover')).toBe(false);
-    expect(imageWithZoom.find('.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
-    imageWithZoom.find('.overlay').simulate('mouseover');
-    wrapper.update();
-    expect(imageWithZoom.find('.overlay').hasClass('hover')).toBe(true);
-    expect(imageWithZoom.find('.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(true);
+    expect(imageWithZoom.find('div.overlay').hasClass('hover')).toBe(false);
+    expect(imageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
+    imageWithZoom.find('Wrapper.overlay').simulate('mouseover');
+
+    // enzyme 3.x wrappers are immutable, so we need to find stuff again after an update.
+    const updatedImageWithZoom = wrapper.find(ImageWithZoom);
+
+    expect(updatedImageWithZoom.find('div.overlay').hasClass('hover')).toBe(true);
+    expect(updatedImageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(true);
   });
   it('should remove hovering classes to the overlay when mouse is not hovering', () => {
-    expect(wrapper.find('.overlay').hasClass('hover')).toBe(false);
-    expect(wrapper.find('.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
-    wrapper.find('.overlay').simulate('mouseover');
+    expect(wrapper.find('div.overlay').hasClass('hover')).toBe(false);
+    expect(wrapper.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
+    wrapper.find('div.overlay').simulate('mouseover');
     wrapper.update();
-    wrapper.find('.overlay').simulate('mouseout');
+    wrapper.find('div.overlay').simulate('mouseout');
     wrapper.update();
-    expect(wrapper.find('.overlay').hasClass('hover')).toBe(false);
-    expect(wrapper.find('.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
+    expect(wrapper.find('div.overlay').hasClass('hover')).toBe(false);
+    expect(wrapper.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
   });
   it('should properly set state for x y when mouse moving', () => {
     const shallowWrapper = shallow((
