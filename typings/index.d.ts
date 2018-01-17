@@ -63,7 +63,7 @@ interface CarouselProviderProps {
 type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
 declare const CarouselProvider: CarouselProviderInterface
 
-interface InjectedProps {
+export interface CarouselInjectedProps {
   setStoreState: ({}: CarouselState) => void
 }
 
