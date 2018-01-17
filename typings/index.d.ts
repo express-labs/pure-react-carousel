@@ -86,7 +86,7 @@ type InferableComponentEnhancer<TInjectedProps> =
     InferableComponentEnhancerWithProps<TInjectedProps, {}>
 
 interface WithStoreInterface {
-  (): InferableComponentEnhancer<InjectedProps>
+  <P extends InjectedProps>(component: Component<P>): InferableComponentEnhancer<InjectedProps>
 }
 
 declare const WithStore: WithStoreInterface
@@ -102,6 +102,5 @@ export {
   Image,
   ImageWithZoom,
   Slide,
-  Slider,
-  WithStore
+  Slider
 }
