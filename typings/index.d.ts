@@ -17,31 +17,24 @@ import {
 } from './carouselElements.d'
 
 interface CarouselState {
-  currentSlide: number
-  disableAnimation: boolean
-  hasMasterSpinner: boolean
-  imageErrorCount: number
-  imageSuccessCount: number
-  lockOnWindowScroll: boolean
-  masterSpinnerThreshold: number
-  naturalSlideHeight: number
-  naturalSlideWidth: number
-  orientation: 'horizontal' | 'vertical'
-  slideSize: number
-  slideTraySize: number
-  step: number
-  totalSlides: number
-  touchEnabled: boolean
-  visibleSlides: number
+  readonly currentSlide: number
+  readonly disableAnimation: boolean
+  readonly hasMasterSpinner: boolean
+  readonly imageErrorCount: number
+  readonly imageSuccessCount: number
+  readonly lockOnWindowScroll: boolean
+  readonly masterSpinnerThreshold: number
+  readonly naturalSlideHeight: number
+  readonly naturalSlideWidth: number
+  readonly orientation: 'horizontal' | 'vertical'
+  readonly slideSize: number
+  readonly slideTraySize: number
+  readonly step: number
+  readonly totalSlides: number
+  readonly touchEnabled: boolean
+  readonly visibleSlides: number
 }
 
-/**
- * CarouselProvider allows the other carousel components to communicate with each other.
- * The only required properties are the orientation, naturalSlideWidth, and naturalSlideHeight.
- * The naturalSlideWidth and naturalSlideHeight are used to create an aspect ratio for each slide.
- * Since the carousel is responsive by default, it will stretch to fill in the width of it's parent container.
- * The CarouselProvider must also have children.
- */
 interface CarouselProviderProps {
   readonly children: React.ReactNode
   readonly className?: string
@@ -60,16 +53,41 @@ interface CarouselProviderProps {
 }
 
 type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
+/**
+ * CarouselProvider allows the other carousel components to communicate with each other.
+ * The only required properties are the orientation, naturalSlideWidth, and naturalSlideHeight.
+ * The naturalSlideWidth and naturalSlideHeight are used to create an aspect ratio for each slide.
+ * Since the carousel is responsive by default, it will stretch to fill in the width of it's parent container.
+ * The CarouselProvider must also have children.
+ */
 declare const CarouselProvider: CarouselProviderInterface
 
 export interface CarouselInjectedProps {
-  setStoreState: ({  }: CarouselState) => void
+  readonly setStoreState: (state: CarouselState) => void
 }
 
+// Diff / Omit taken from https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-311923766
+type Diff<T extends string, U extends string> = ({ [P in T]: P } &
+  { [P in U]: never } & { readonly [x: string]: never })[T]
+type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>
+
+type MapStateToProps<TStateProps> = (state: CarouselState) => TStateProps
+
 interface WithStoreInterface {
-  <P extends CarouselInjectedProps>(
-    component: React.Component<P>
-  ): React.Component<CarouselInjectedProps>
+  <CustomProps extends CarouselInjectedProps>(
+    component: React.ComponentClass<CustomProps>
+  ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> & {
+    readonly WrappedComponent: React.ComponentClass<CustomProps>
+  }
+
+  <CustomProps extends CarouselInjectedProps, CustomStateProps>(
+    component: React.ComponentClass<CustomProps & CustomStateProps>,
+    state: MapStateToProps<CustomStateProps>
+  ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> & {
+    readonly WrappedComponent: React.ComponentClass<
+      CustomProps & CustomStateProps
+    >
+  }
 }
 
 declare const WithStore: WithStoreInterface
