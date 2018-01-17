@@ -16,14 +16,6 @@ import {
   Slider
 } from './carouselElements.d'
 
-type ComponentClass<P> = React.ComponentClass<P>;
-type StatelessComponent<P> = React.StatelessComponent<P>;
-type Component<P> = React.ComponentType<P>;
-
-// Diff / Omit taken from https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-311923766
-type Diff<T extends string, U extends string> = ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T];
-type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
-
 interface CarouselState {
   currentSlide: number
   disableAnimation: boolean
@@ -75,18 +67,8 @@ interface InjectedProps {
   setStoreState: ({}: CarouselState) => void
 }
 
-export interface InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> {
-    <P extends TInjectedProps>(
-        component: Component<P>
-    ): ComponentClass<Omit<P, keyof TInjectedProps> & TNeedsProps> & {WrappedComponent: Component<P>}
-}
-
-
-type InferableComponentEnhancer<TInjectedProps> =
-    InferableComponentEnhancerWithProps<TInjectedProps, {}>
-
 interface WithStoreInterface {
-  <P extends InjectedProps>(component: Component<P>): InferableComponentEnhancer<InjectedProps>
+  <P extends InjectedProps>(component: React.Component<P>): React.Component<InjectedProps>
 }
 
 declare const WithStore: WithStoreInterface
