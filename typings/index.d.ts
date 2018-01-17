@@ -4,25 +4,36 @@
 
 import * as React from 'react'
 
-import * as CarouselElements from  './carouselElements.d'
+import {
+  ButtonBack,
+  ButtonFirst,
+  ButtonLast,
+  ButtonNext,
+  Dot,
+  DotGroup,
+  Image,
+  ImageWithZoom,
+  Slide,
+  Slider
+} from './carouselElements.d'
 
 interface CarouselState {
-  currentSlide: number,
-  disableAnimation: boolean,
-  hasMasterSpinner: boolean,
-  imageErrorCount: number,
-  imageSuccessCount: number,
-  lockOnWindowScroll: boolean,
-  masterSpinnerThreshold: number,
-  naturalSlideHeight: state.naturalSlideHeight,
-  naturalSlideWidth: state.naturalSlideWidth,
-  orientation: state.orientation,
-  slideSize: state.slideSize,
-  slideTraySize: state.slideTraySize
-  step: state.step,
-  totalSlides: state.totalSlides,
-  touchEnabled: state.touchEnabled,
-  visibleSlides: state.visibleSlides,
+  currentSlide: number
+  disableAnimation: boolean
+  hasMasterSpinner: boolean
+  imageErrorCount: number
+  imageSuccessCount: number
+  lockOnWindowScroll: boolean
+  masterSpinnerThreshold: number
+  naturalSlideHeight: naturalSlideHeight
+  naturalSlideWidth: naturalSlideWidth
+  orientation: orientation
+  slideSize: slideSize
+  slideTraySize: slideTraySize
+  step: step
+  totalSlides: totalSlides
+  touchEnabled: touchEnabled
+  visibleSlides: visibleSlides
 }
 
 interface CarouselProviderProps {
@@ -44,8 +55,6 @@ interface CarouselProviderProps {
 type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
 declare const CarouselProvider: CarouselProviderInterface
 
-
-
 interface EnhancedComponent {}
 
 interface WithStoreInterface {
@@ -55,6 +64,15 @@ interface WithStoreInterface {
 declare const WithStore: WithStoreInterface
 
 export {
-  CarouselElements,
+  ButtonBack,
+  ButtonFirst,
+  ButtonLast,
+  ButtonNext,
   CarouselProvider,
+  Dot,
+  DotGroup,
+  Image,
+  ImageWithZoom,
+  Slide,
+  Slider
 }
