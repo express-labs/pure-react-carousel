@@ -56,19 +56,20 @@ interface CarouselProviderProps {
   readonly tag?: string
   readonly totalSlides: CarouselState['totalSlides']
   readonly touchEnabled?: CarouselState['touchEnabled']
-  readonly visibleSlides?:  CarouselState['visibleSlides']
+  readonly visibleSlides?: CarouselState['visibleSlides']
 }
-
 
 type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
 declare const CarouselProvider: CarouselProviderInterface
 
 export interface CarouselInjectedProps {
-  setStoreState: ({}: CarouselState) => void
+  setStoreState: ({  }: CarouselState) => void
 }
 
 interface WithStoreInterface {
-  <P extends InjectedProps>(component: React.Component<P>): React.Component<InjectedProps>
+  <P extends CarouselInjectedProps>(
+    component: React.Component<P>
+  ): React.Component<CarouselInjectedProps>
 }
 
 declare const WithStore: WithStoreInterface
