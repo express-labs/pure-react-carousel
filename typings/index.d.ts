@@ -55,15 +55,23 @@ interface CarouselProviderProps {
 type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
 /**
  * CarouselProvider allows the other carousel components to communicate with each other.
- * The only required properties are the orientation, naturalSlideWidth, and naturalSlideHeight.
- * The naturalSlideWidth and naturalSlideHeight are used to create an aspect ratio for each slide.
- * Since the carousel is responsive by default, it will stretch to fill in the width of it's parent container.
+ *
+ * The only required properties are:
+ * the orientation, naturalSlideWidth, and naturalSlideHeight.
+ *
+ * The naturalSlideWidth and naturalSlideHeight are used
+ * to create an aspect ratio for each slide.
+ *
+ * Since the carousel is responsive by default,
+ * it will stretch to fill in the width of it's parent container.
+ *
  * The CarouselProvider must also have children.
  */
 declare const CarouselProvider: CarouselProviderInterface
 
 export interface CarouselInjectedProps {
   readonly setStoreState: (state: CarouselState) => void
+  readonly unsubscribeAllMasterSpinner: () => void
 }
 
 // Diff / Omit taken from https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-311923766
@@ -89,7 +97,25 @@ interface WithStoreInterface {
     >
   }
 }
-
+/**
+ * Use this HOC to pass CarouselProvider state properties as props to a component.
+ * Basically, Your custom component must be an descendant of <CarouselProvider>.
+ * It doesn't have to be a direct descendant,
+ * it just needs to be between some the opening and closing CarouselProvider tags somewhere.
+ *
+ * <CarouselProvider>
+ *  <YourComponentHere />
+ * </CarouselProvider>
+ *
+ * WithStore has two arguments:
+ *  WithStore([component], [mapstateToProps])
+ *
+ *  The first argument is the component to wrap (ex: YourComponentHere) and it's required.
+ *
+ *  The second argument is optional.
+ *  It is a "map state to props" function that you must create.
+ *
+ */
 declare const WithStore: WithStoreInterface
 
 export {

@@ -361,6 +361,106 @@ __unsubscribeMasterSpinner__: 🔥 DON'T USE THIS.
 
 __unsubscribeAllMasterSpinner__: Don't call this manually unless you have some sort of super-customized carousel. This is called internally once all `<Image hasMasterSpinner />` and all `<ImageWithZoom hasMasterSpinner />` components are finished loading their images.  Calling this directly will force a "success" state and the master spinner (the spinner that covers the entire carousel while loading) will turn off.
 
+## TypeScript usage
+The current bundled Typescript definitions are mostly complete. Certain edge case could have been not accounted for! Pull requests to improve them are welcome and appreciated.
+
+If you've never contributed to open source before, then you may find [this free video course](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github) helpful.
+
+In case of provided components, it is pretty straightforward. Simply import them and pass necessary props. At the moment types will not prevent you from using the library incorrectly (for example rendering Slider outside CarouselProvider) therefore please check the documentation if something goes wrong.
+
+### WithStore() Higher Order Component
+
+Following the documentation above, only props save to use are exposed:
+
+```TypeScript
+interface CarouselState {
+  readonly currentSlide: number
+  readonly disableAnimation: boolean
+  readonly hasMasterSpinner: boolean
+  readonly imageErrorCount: number
+  readonly imageSuccessCount: number
+  readonly lockOnWindowScroll: boolean
+  readonly masterSpinnerThreshold: number
+  readonly naturalSlideHeight: number
+  readonly naturalSlideWidth: number
+  readonly orientation: 'horizontal' | 'vertical'
+  readonly slideSize: number
+  readonly slideTraySize: number
+  readonly step: number
+  readonly totalSlides: number
+  readonly touchEnabled: boolean
+  readonly visibleSlides: number
+}
+
+export interface CarouselInjectedProps {
+  readonly setStoreState: (state: CarouselState) => void
+  readonly unsubscribeAllMasterSpinner: () => void
+}
+```
+
+### Examples:
+
+*  Both with MapStateToProps and custom props
+
+```TypeScript
+import {
+  CarouselInjectedProps,
+  WithStore,
+} from 'pure-react-carousel'
+
+interface UpdateCheckProps extends CarouselInjectedProps {
+  readonly name: string,
+}
+
+interface UpdateCheckCarouselState {
+  readonly currentSlide: number,
+  readonly disableAnimation: boolean,
+}
+
+class InjectedComponent extends Component<
+  UpdateCheckProps & UpdateCheckCarouselState
+> {
+  public render() {
+    console.log(this.props)
+    return <div>I am a fancy class</div>
+  }
+}
+
+const DecoratedComponent = WithStore<UpdateCheckProps, UpdateCheckCarouselState>(
+  InjectedComponent,
+  state => ({
+    currentSlide: state.currentSlide,
+    disableAnimation: state.disableAnimation,
+  }),
+)
+
+<CarouselProvider>
+  <DecoratedComponent name="NewName" />
+</CarouselProvider>
+```
+
+* No MapStateToProps
+
+```TypeScript
+
+interface UpdateCheckProps extends CarouselInjectedProps {
+  readonly name: string,
+}
+
+class InjectedComponent extends Component<UpdateCheckProps> {
+  public render() {
+    console.log(this.props)
+    return <div>I am a fancy class</div>
+  }
+}
+
+const DecoratedComponent = WithStore<UpdateCheckProps>(InjectedComponent)
+
+// This will work too, with or without custom props
+
+const DecoratedComponent = WithStore(InjectedComponent)
+```
+
 ## More Documentation to Come
 I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.
 
