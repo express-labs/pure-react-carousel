@@ -102,5 +102,6 @@ export {
   Image,
   ImageWithZoom,
   Slide,
-  Slider
+  Slider,
+  WithStore
 }
