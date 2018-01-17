@@ -398,6 +398,9 @@ export interface CarouselInjectedProps {
 }
 ```
 
+**Also the first argument which is the component to wrap, needs to be a `React.ComponentClass` to render properly and therefore stateless component are not possible.**
+
+
 ### Examples:
 
 *  Both with MapStateToProps and custom props
