@@ -1,7 +1,3 @@
-// Type definitions for pure-react-carousel 1.9.11
-// Definitions by: Jedrzej Lewandowski <https://github.com/TheFullResolution>
-// TypeScript Version: 2.6.2
-
 import * as React from 'react'
 
 interface SliderProps {
@@ -12,6 +8,7 @@ interface SliderProps {
   readonly trayTag?: string
 }
 type SliderInterface = React.ComponentClass<SliderProps>
+
 declare const Slider: SliderInterface
 
 interface SlideProps {
@@ -71,24 +68,6 @@ interface DotProps {
 type DotInterface = React.ComponentClass<DotProps>
 declare const Dot: DotInterface
 
-interface CarouselProviderProps {
-  readonly children: React.ReactNode
-  readonly className?: string
-  readonly currentSlide?: number
-  readonly disableAnimation?: boolean
-  readonly hasMasterSpinner?: boolean
-  readonly naturalSlideHeight: number
-  readonly naturalSlideWidth: number
-  readonly orientation?: 'horizontal' | 'vertical'
-  readonly step?: number
-  readonly tag?: string
-  readonly totalSlides: number
-  readonly touchEnabled?: boolean
-  readonly visibleSlides?: boolean
-}
-type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
-declare const CarouselProvider: CarouselProviderInterface
-
 interface ButtonNextProps {
   readonly children: React.ReactChild
   readonly className?: string
@@ -121,12 +100,12 @@ interface ButtonFirstProps {
 type ButtonFirstInterface = React.ComponentClass<ButtonFirstProps>
 declare const ButtonFirst: ButtonLastInterface
 
+
 export {
   ButtonBack,
   ButtonFirst,
   ButtonLast,
   ButtonNext,
-  CarouselProvider,
   Dot,
   DotGroup,
   Image,
