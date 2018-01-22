@@ -1,6 +1,32 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
+# Table of contents
+  * [<g\-emoji alias="hammer\_and\_wrench" fallback\-src="https://assets\-cdn\.github\.com/images/icons/emoji/unicode/1f6e0\.png" ios\-version="9\.1">🛠</g\-emoji> Tutorial](#-tutorial)
+  * [Component Properties (props)](#component-properties-props)
+      * [classname](#classname)
+      * [styles](#styles)
+      * [event props (onClick, onFocus, onBlur, etc)](#event-props-onclick-onfocus-onblur-etc)
+      * [all other props](#all-other-props)
+  * [Components](#components)
+    * [&lt;CarouselProvider /&gt;](#carouselprovider-)
+      * [The CarouselProvider component creates the following pseudo HTML by default:](#the-carouselprovider-component-creates-the-following-pseudo-html-by-default)
+    * [&lt;Slider /&gt;](#slider-)
+      * [The Slider component creates the following pseudo HTML by default\.](#the-slider-component-creates-the-following-pseudo-html-by-default)
+    * [&lt;Slide /&gt;](#slide-)
+      * [The Slide component creates the following pseudo HTML by default:](#the-slide-component-creates-the-following-pseudo-html-by-default)
+    * [&lt;Dot /&gt;](#dot-)
+      * [The Dot component creates the following pseudo HTML by default:](#the-dot-component-creates-the-following-pseudo-html-by-default)
+    * [&lt;DotGroup /&gt;](#dotgroup-)
+      * [The DotGroup component creates the following pseudo HTML by default:](#the-dotgroup-component-creates-the-following-pseudo-html-by-default)
+    * [&lt;Image /&gt;](#image-)
+    * [WithStore() Higher Order Component](#withstore-higher-order-component)
+  * [TypeScript usage](#typescript-usage)
+    * [WithStore() Higher Order Component](#withstore-higher-order-component-1)
+    * [Examples:](#examples)
+  * [More Documentation to Come](#more-documentation-to-come)
+  * [Dev Workflow](#dev-workflow)
+
 # pure-react-carousel
 A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.
 
