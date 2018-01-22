@@ -21,6 +21,7 @@
     "postbuild": "node postbuild.js",
     "build:watch": "watch 'npm run build' src"
   },
+  "typings": "typings/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/express-labs/pure-react-carousel.git"
