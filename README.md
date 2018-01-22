@@ -1,22 +1,6 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
-# Table of contents
-  * [🛠 Tutorial](#-tutorial)
-  * [Component Properties (props)](#component-properties-props)
-  * [Components](#components)
-    * [&lt;CarouselProvider /&gt;](#carouselprovider-)
-    * [&lt;Slider /&gt;](#slider-)
-    * [&lt;Slide /&gt;](#slide-)
-    * [&lt;Dot /&gt;](#dot-)
-    * [&lt;DotGroup /&gt;](#dotgroup-)
-    * [&lt;Image /&gt;](#image-)
-    * [WithStore() Higher Order Component](#withstore-higher-order-component)
-  * [TypeScript usage](#typescript-usage)
-    * [WithStore() Higher Order Component](#withstore-higher-order-component-1)
-    * [Examples](#examples)
-  * [Dev Workflow](#dev-workflow)
-
 # pure-react-carousel
 A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.
 
@@ -33,6 +17,22 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
 - Lets you put any class names, properties, attributes, or styles on any of the components that you need.
 - Supports ES6 and commonjs.
 - Has 100% test coverage. Solid!
+
+# Table of contents
+  * [🛠 Tutorial](#-tutorial)
+  * [Component Properties (props)](#component-properties-props)
+  * [Components](#components)
+    * [&lt;CarouselProvider /&gt;](#carouselprovider-)
+    * [&lt;Slider /&gt;](#slider-)
+    * [&lt;Slide /&gt;](#slide-)
+    * [&lt;Dot /&gt;](#dot-)
+    * [&lt;DotGroup /&gt;](#dotgroup-)
+    * [&lt;Image /&gt;](#image-)
+    * [WithStore() Higher Order Component](#withstore-higher-order-component)
+  * [TypeScript usage](#typescript-usage)
+    * [WithStore() Higher Order Component](#withstore-higher-order-component-1)
+    * [Examples](#examples)
+  * [Dev Workflow](#dev-workflow)
 
 ## 🛠 Tutorial
 Let's make a simple carousel with three slides, a next button, and a back button.
