@@ -8,6 +8,7 @@ import Slider from '../Slider';
 
 configure({ adapter: new Adapter() });
 
+jest.useFakeTimers();
 
 const touch100 = {
   preventDefault: jest.fn(),
@@ -18,6 +19,13 @@ const touch100 = {
       screenY: 100,
     },
   ],
+};
+
+const drag100 = {
+  persist: jest.fn(),
+  preventDefault: jest.fn(),
+  screenX: 100,
+  screenY: 100,
 };
 
 // mock requestAnimationFrame
@@ -348,5 +356,121 @@ describe('<Slider />', () => {
     instance.computeCurrentSlide = () => {};
     instance.endTouchMove();
     expect(instance.isDocumentScrolling).toBe(null);
+  });
+
+  it('should not change isBeingMouseDragged on mousedown event when dragging is disabled', () => {
+    const wrapper = shallow(<Slider {...props} dragEnabled={false} />);
+    expect(wrapper.state('isBeingMouseDragged')).toBe(false);
+
+    wrapper.find('.sliderTray').simulate('mousedown', drag100);
+    wrapper.update();
+
+    expect(wrapper.state('isBeingMouseDragged')).toBe(false);
+  });
+
+  it('should set isBeingMouseDragged to true on mousedown event', () => {
+    const wrapper = shallow(<Slider {...props} />);
+    expect(wrapper.state('isBeingMouseDragged')).toBe(false);
+
+    wrapper.find('.sliderTray').simulate('mousedown', drag100);
+    wrapper.update();
+
+    expect(wrapper.state('isBeingMouseDragged')).toBe(true);
+  });
+
+  it('should set isBeingMouseDragged and mouseIsMoving to false on mouseup event', () => {
+    jest.clearAllTimers();
+
+    const wrapper = shallow(<Slider {...props} />);
+    const instance = wrapper.instance();
+
+    instance.sliderTrayElement = {
+      clientWidth: 100,
+      clientHeight: 100,
+    };
+
+    wrapper.find('.sliderTray').simulate('mousedown', drag100);
+    wrapper.update();
+
+    expect(wrapper.state('isBeingMouseDragged')).toBe(true);
+
+    wrapper.find('.sliderTray').simulate('mousemove', drag100);
+    wrapper.update();
+
+    expect(wrapper.state('mouseIsMoving')).toBe(true);
+
+    wrapper.find('.sliderTray').simulate('mouseup', drag100);
+    wrapper.update();
+
+    jest.runTimersToTime(100);
+
+    expect(wrapper.state('isBeingMouseDragged')).toBe(false);
+    expect(wrapper.state('mouseIsMoving')).toBe(false);
+  });
+
+  it('should set mouseIsMoving to true when the mouse is moving while in a dragging state', () => {
+    const wrapper = shallow(<Slider {...props} />);
+
+    wrapper.find('.sliderTray').simulate('mousedown', drag100);
+    wrapper.update();
+    wrapper.find('.sliderTray').simulate('mousemove', drag100);
+    wrapper.update();
+
+    expect(wrapper.state('mouseIsMoving')).toBe(true);
+  });
+
+  it('should prevent default action on clicks when being dragged and mouse is moving', () => {
+    const wrapper = shallow(<Slider {...props} />);
+
+    wrapper.find('.sliderTray').simulate('mousedown', drag100);
+    wrapper.update();
+    wrapper.find('.sliderTray').simulate('mousemove', drag100);
+    wrapper.update();
+
+    drag100.preventDefault.mockReset();
+
+    wrapper.find('.sliderTray').simulate('click', drag100);
+    wrapper.update();
+
+    expect(drag100.preventDefault).toHaveBeenCalled();
+  });
+
+  it('should not prevent default action on clicks when not dragging or mouse moving', () => {
+    const wrapper = shallow(<Slider {...props} />);
+
+    drag100.preventDefault.mockReset();
+
+    wrapper.find('.sliderTray').simulate('click', drag100);
+    wrapper.update();
+
+    expect(drag100.preventDefault).toHaveBeenCalledTimes(0);
+  });
+
+  it('should not do anything on clicks when dragging is disabled', () => {
+    const wrapper = shallow(<Slider {...props} dragEnabled={false} />);
+    const instance = wrapper.instance();
+    expect(instance.handleOnMouseClick(drag100)).toBeUndefined();
+  });
+
+  it('should not do anything when moving the mouse if not dragging', () => {
+    const wrapper = shallow(<Slider {...props} />);
+
+    wrapper.find('.sliderTray').simulate('mousemove', drag100);
+    wrapper.update();
+
+    expect(wrapper.state('deltaX')).toBe(0);
+    expect(wrapper.state('deltaY')).toBe(0);
+  });
+
+  it('should not do anything when moving the mouse if dragging is not enabled', () => {
+    const wrapper = shallow(<Slider {...props} dragEnabled={false} />);
+
+    wrapper.find('.sliderTray').simulate('mouseup', drag100);
+    wrapper.update();
+    wrapper.find('.sliderTray').simulate('mousemove', drag100);
+    wrapper.update();
+
+    expect(wrapper.state('deltaX')).toBe(0);
+    expect(wrapper.state('deltaY')).toBe(0);
   });
 });

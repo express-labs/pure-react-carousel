@@ -140,6 +140,7 @@ export default {
       }),
       totalSlides: 5,
       touchEnabled: true,
+      dragEnabled: true,
       visibleSlides: 2,
       lockOnWindowScroll: false,
     },

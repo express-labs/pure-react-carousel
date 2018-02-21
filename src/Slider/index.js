@@ -14,5 +14,6 @@ export default WithStore(Slider, state => ({
   slideTraySize: state.slideTraySize,
   totalSlides: state.totalSlides,
   touchEnabled: state.touchEnabled,
+  dragEnabled: state.dragEnabled,
   visibleSlides: state.visibleSlides,
 }));
