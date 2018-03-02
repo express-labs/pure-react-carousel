@@ -65,7 +65,6 @@ const Slider = class Slider extends React.Component {
     this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
 
     this.handleOnMouseDown = this.handleOnMouseDown.bind(this);
-    this.handleOnMouseUp = this.handleOnMouseUp.bind(this);
     this.handleOnMouseMove = this.handleOnMouseMove.bind(this);
     this.handleOnMouseClick = this.handleOnMouseClick.bind(this);
 
@@ -153,14 +152,6 @@ const Slider = class Slider extends React.Component {
     this.onDragStart(ev.screenX, ev.screenY, false, true);
   }
 
-  handleOnMouseUp() {
-    if (!this.props.dragEnabled || !this.state.isBeingMouseDragged) return;
-
-    setTimeout(() => {
-      this.onDragEnd();
-    }, 100);
-  }
-
   handleOnMouseMove(ev) {
     if (!this.props.dragEnabled || !this.state.isBeingMouseDragged) return;
 
@@ -171,11 +162,13 @@ const Slider = class Slider extends React.Component {
   }
 
   handleOnMouseClick(ev) {
-    if (!this.props.dragEnabled) return;
+    if (!this.props.dragEnabled || !this.state.isBeingMouseDragged) return;
 
     if (this.state.isBeingMouseDragged && this.state.mouseIsMoving) {
       ev.preventDefault();
     }
+
+    this.onDragEnd();
   }
 
   handleOnTouchStart(ev) {
@@ -393,7 +386,6 @@ const Slider = class Slider extends React.Component {
             onTouchEnd={this.handleOnTouchEnd}
             onTouchCancel={this.handleOnTouchCancel}
             onMouseDown={this.handleOnMouseDown}
-            onMouseUp={this.handleOnMouseUp}
             onMouseMove={this.handleOnMouseMove}
             onClick={this.handleOnMouseClick}
           >

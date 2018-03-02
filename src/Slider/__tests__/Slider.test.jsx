@@ -8,8 +8,6 @@ import Slider from '../Slider';
 
 configure({ adapter: new Adapter() });
 
-jest.useFakeTimers();
-
 const touch100 = {
   preventDefault: jest.fn(),
   stopPropagation: jest.fn(),
@@ -378,9 +376,7 @@ describe('<Slider />', () => {
     expect(wrapper.state('isBeingMouseDragged')).toBe(true);
   });
 
-  it('should set isBeingMouseDragged and mouseIsMoving to false on mouseup event', () => {
-    jest.clearAllTimers();
-
+  it('should set isBeingMouseDragged and mouseIsMoving to false on click event', () => {
     const wrapper = shallow(<Slider {...props} />);
     const instance = wrapper.instance();
 
@@ -399,10 +395,8 @@ describe('<Slider />', () => {
 
     expect(wrapper.state('mouseIsMoving')).toBe(true);
 
-    wrapper.find('.sliderTray').simulate('mouseup', drag100);
+    wrapper.find('.sliderTray').simulate('click', drag100);
     wrapper.update();
-
-    jest.runTimersToTime(100);
 
     expect(wrapper.state('isBeingMouseDragged')).toBe(false);
     expect(wrapper.state('mouseIsMoving')).toBe(false);
@@ -421,6 +415,12 @@ describe('<Slider />', () => {
 
   it('should prevent default action on clicks when being dragged and mouse is moving', () => {
     const wrapper = shallow(<Slider {...props} />);
+    const instance = wrapper.instance();
+
+    instance.sliderTrayElement = {
+      clientWidth: 100,
+      clientHeight: 100,
+    };
 
     wrapper.find('.sliderTray').simulate('mousedown', drag100);
     wrapper.update();
@@ -465,7 +465,7 @@ describe('<Slider />', () => {
   it('should not do anything when moving the mouse if dragging is not enabled', () => {
     const wrapper = shallow(<Slider {...props} dragEnabled={false} />);
 
-    wrapper.find('.sliderTray').simulate('mouseup', drag100);
+    wrapper.find('.sliderTray').simulate('click', drag100);
     wrapper.update();
     wrapper.find('.sliderTray').simulate('mousemove', drag100);
     wrapper.update();
