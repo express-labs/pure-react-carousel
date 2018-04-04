@@ -10,16 +10,20 @@ const Slider = class Slider extends React.Component {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
-    disableAnimation: PropTypes.bool,
+    disableAnimation: PropTypes.bool.isRequired,
     hasMasterSpinner: PropTypes.bool.isRequired,
+    interval: PropTypes.number.isRequired,
+    isPlaying: PropTypes.bool.isRequired,
     lockOnWindowScroll: PropTypes.bool.isRequired,
     masterSpinnerFinished: PropTypes.bool.isRequired,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
     onMasterSpinner: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
+    playDirection: CarouselPropTypes.direction.isRequired,
     slideSize: PropTypes.number.isRequired,
     slideTraySize: PropTypes.number.isRequired,
+    step: PropTypes.number.isRequired,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
@@ -30,7 +34,6 @@ const Slider = class Slider extends React.Component {
 
   static defaultProps = {
     className: '',
-    disableAnimation: false,
     height: null,
     onMasterSpinner: null,
     style: {},
@@ -61,6 +64,8 @@ const Slider = class Slider extends React.Component {
     this.handleOnTouchEnd = this.handleOnTouchEnd.bind(this);
     this.handleOnTouchMove = this.handleOnTouchMove.bind(this);
     this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
+    this.playBackward = this.playBackward.bind(this);
+    this.playForward = this.playForward.bind(this);
 
     this.state = {
       deltaX: 0,
@@ -71,19 +76,26 @@ const Slider = class Slider extends React.Component {
       isBeingTouchDragged: false,
     };
 
-    this.originalOverflow = null;
-    this.moveTimer = null;
+    this.interval = null;
     this.isDocumentScrolling = null;
+    this.moveTimer = null;
+    this.originalOverflow = null;
   }
 
   componentDidMount() {
     window.addEventListener('scroll', this.handleDocumentScroll);
+    if (this.props.isPlaying) this.play();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.isPlaying && !nextProps.isPlaying) this.stop();
+    if (!this.props.isPlaying && nextProps.isPlaying) this.play();
+  }
 
   componentWillUnmount() {
     document.documentElement.removeEventListener('scroll', this.handleDocumentScroll);
     window.cancelAnimationFrame.call(window, this.moveTimer);
+    this.stop();
     this.moveTimer = null;
     this.isDocumentScrolling = null;
   }
@@ -95,6 +107,10 @@ const Slider = class Slider extends React.Component {
 
   handleOnTouchStart(ev) {
     if (!this.props.touchEnabled) return;
+
+    this.props.carouselStore.setStoreState({
+      isPlaying: false,
+    });
 
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
@@ -129,11 +145,20 @@ const Slider = class Slider extends React.Component {
     });
   }
 
+  forward() {
+    const { currentSlide, step, totalSlides, visibleSlides } = this.props;
+    return Math.min(currentSlide + step, totalSlides - visibleSlides);
+  }
+
+  backward() {
+    const { currentSlide, step } = this.props;
+    return Math.max(currentSlide - step, 0);
+  }
+
   handleOnKeyDown(ev) {
     const { keyCode } = ev;
     const { carouselStore, currentSlide, totalSlides, visibleSlides } = this.props;
     const newStoreState = {};
-    let isUpdated = false;
 
     if (totalSlides <= visibleSlides) return;
 
@@ -142,10 +167,8 @@ const Slider = class Slider extends React.Component {
       ev.preventDefault();
       ev.stopPropagation();
       this.focus();
-      if (currentSlide > 0) {
-        newStoreState.currentSlide = currentSlide - 1;
-        isUpdated = true;
-      }
+      newStoreState.currentSlide = Math.max(0, currentSlide - 1);
+      newStoreState.isPlaying = false;
     }
 
     // right arrow
@@ -153,15 +176,40 @@ const Slider = class Slider extends React.Component {
       ev.preventDefault();
       ev.stopPropagation();
       this.focus();
-      if (currentSlide < (totalSlides - visibleSlides)) {
-        newStoreState.currentSlide = currentSlide + 1;
-        isUpdated = true;
-      }
+      newStoreState.currentSlide = Math.min(
+        totalSlides - visibleSlides,
+        currentSlide + 1,
+      );
+      newStoreState.isPlaying = false;
     }
 
-    if (isUpdated && typeof newStoreState.currentSlide === 'number') {
-      carouselStore.setStoreState(newStoreState);
-    }
+    carouselStore.setStoreState(newStoreState);
+  }
+
+  playForward() {
+    const { carouselStore, currentSlide } = this.props;
+    carouselStore.setStoreState({
+      currentSlide: this.forward() === currentSlide ? 0 : this.forward(),
+    });
+  }
+
+  playBackward() {
+    const { carouselStore, currentSlide, totalSlides, visibleSlides } = this.props;
+    carouselStore.setStoreState({
+      currentSlide: (
+        this.backward() === currentSlide ? totalSlides - visibleSlides : this.backward()
+      ),
+    });
+  }
+
+  play() {
+    const { playDirection } = this.props;
+    this.interval = setInterval(playDirection === 'forward' ? this.playForward : this.playBackward, this.props.interval);
+  }
+
+  stop() {
+    window.clearInterval(this.interval);
+    this.interval = null;
   }
 
   computeCurrentSlide() {
@@ -247,10 +295,29 @@ const Slider = class Slider extends React.Component {
 
   render() {
     const {
-      carouselStore, children, className, currentSlide, disableAnimation, hasMasterSpinner,
-      lockOnWindowScroll, masterSpinnerFinished, naturalSlideHeight, naturalSlideWidth,
-      onMasterSpinner, orientation, slideSize, slideTraySize, style, tabIndex, totalSlides,
-      touchEnabled, trayTag: TrayTag, visibleSlides,
+      carouselStore,
+      children,
+      className,
+      currentSlide,
+      disableAnimation,
+      hasMasterSpinner,
+      interval,
+      isPlaying,
+      lockOnWindowScroll,
+      masterSpinnerFinished,
+      naturalSlideHeight,
+      naturalSlideWidth,
+      onMasterSpinner,
+      orientation,
+      playDirection,
+      slideSize,
+      slideTraySize,
+      style,
+      tabIndex,
+      totalSlides,
+      touchEnabled,
+      trayTag: TrayTag,
+      visibleSlides,
       ...props
     } = this.props;
 
