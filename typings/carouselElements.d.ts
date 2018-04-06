@@ -49,7 +49,7 @@ declare const ImageWithZoom: ImageWithZoomInterface
 
 interface ImageProps {
   readonly alt?: string
-  readonly children: React.ReactNode
+  readonly children?: React.ReactNode
   readonly className?: string
   readonly hasMasterSpinner: boolean
   readonly isBgImage?: boolean
