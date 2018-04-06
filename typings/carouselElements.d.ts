@@ -99,7 +99,8 @@ declare const Dot: DotInterface
 interface ButtonNextProps {
   readonly children: React.ReactChild
   readonly className?: string
-  readonly onClick?: () => void
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
 type ButtonNextInterface = React.ComponentClass<ButtonNextProps>
 declare const ButtonNext: ButtonNextInterface
@@ -109,7 +110,8 @@ declare const ButtonNext: ButtonNextInterface
 interface ButtonBackProps {
   readonly children: React.ReactChild
   readonly className?: string
-  readonly onClick?: () => void
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
 type ButtonBackInterface = React.ComponentClass<ButtonBackProps>
 declare const ButtonBack: ButtonBackInterface
@@ -119,7 +121,8 @@ declare const ButtonBack: ButtonBackInterface
 interface ButtonLastProps {
   readonly children: React.ReactChild
   readonly className?: string
-  readonly onClick?: () => void
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
 type ButtonLastInterface = React.ComponentClass<ButtonLastProps>
 declare const ButtonLast: ButtonLastInterface
@@ -129,17 +132,30 @@ declare const ButtonLast: ButtonLastInterface
 interface ButtonFirstProps {
   readonly children: React.ReactChild
   readonly className?: string
-  readonly onClick?: () => void
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
 type ButtonFirstInterface = React.ComponentClass<ButtonFirstProps>
 declare const ButtonFirst: ButtonLastInterface
 
+
+
+interface ButtonPlayProps {
+  readonly children: React.ReactChild
+  readonly childrenPaused?: React.ReactNode
+  readonly childrenPlaying?: React.ReactNode
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
+}
+type ButtonPlayInterface = React.ComponentClass<ButtonPlayProps>
+declare const ButtonPlay: ButtonLastInterface
 
 export {
   ButtonBack,
   ButtonFirst,
   ButtonLast,
   ButtonNext,
+  ButtonPlay,
   Dot,
   DotGroup,
   Image,

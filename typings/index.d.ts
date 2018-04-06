@@ -23,6 +23,7 @@ interface CarouselState {
   readonly imageErrorCount: number
   readonly imageSuccessCount: number
   readonly lockOnWindowScroll: boolean
+  readonly masterSpinnerFinished: boolean
   readonly masterSpinnerThreshold: number
   readonly naturalSlideHeight: number
   readonly naturalSlideWidth: number
@@ -41,9 +42,12 @@ interface CarouselProviderProps {
   readonly currentSlide?: CarouselState['currentSlide']
   readonly disableAnimation?: CarouselState['disableAnimation']
   readonly hasMasterSpinner?: CarouselState['hasMasterSpinner']
+  readonly interval?: number
+  readonly isPlaying?: boolean
   readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
   readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
   readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
+  readonly playDirection: 'forward'|'backward' 
   readonly orientation?: CarouselState['orientation']
   readonly step?: CarouselState['step']
   readonly tag?: string
