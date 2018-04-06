@@ -1,6 +1,6 @@
-// Type definitions for pure-react-carousel 1.10.0
+// Type definitions for pure-react-carousel 1.12.0 
 // Definitions by: Jedrzej Lewandowski <https://github.com/TheFullResolution>
-// TypeScript Version: 2.6.1
+// TypeScript Version: 2.7.2
 
 import * as React from 'react'
 import {
