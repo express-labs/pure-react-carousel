@@ -8,6 +8,7 @@ import {
   ButtonFirst,
   ButtonLast,
   ButtonNext,
+  ButtonPlay,
   Dot,
   DotGroup,
   Image,
@@ -47,7 +48,7 @@ interface CarouselProviderProps {
   readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
   readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
   readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
-  readonly playDirection?: 'forward'|'backward' 
+  readonly playDirection?: 'forward'|'backward'
   readonly orientation?: CarouselState['orientation']
   readonly step?: CarouselState['step']
   readonly tag?: string
@@ -127,6 +128,7 @@ export {
   ButtonFirst,
   ButtonLast,
   ButtonNext,
+  ButtonPlay,
   CarouselProvider,
   Dot,
   DotGroup,
