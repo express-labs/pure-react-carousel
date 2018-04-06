@@ -141,7 +141,6 @@ declare const ButtonFirst: ButtonLastInterface
 
 
 interface ButtonPlayProps {
-  readonly children?: React.ReactChild
   readonly childrenPaused?: React.ReactNode
   readonly childrenPlaying?: React.ReactNode
   readonly disabled?: boolean
