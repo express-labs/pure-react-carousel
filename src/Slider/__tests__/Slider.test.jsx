@@ -413,7 +413,7 @@ describe('<Slider />', () => {
     expect(wrapper.state('mouseIsMoving')).toBe(true);
   });
 
-  it('should prevent default action on clicks when being dragged and mouse is moving', () => {
+  it('should prevent default action on clicks when mouse is moving', () => {
     const wrapper = shallow(<Slider {...props} />);
     const instance = wrapper.instance();
 
@@ -427,18 +427,31 @@ describe('<Slider />', () => {
     wrapper.find('.sliderTray').simulate('mousemove', drag100);
     wrapper.update();
 
+    expect(wrapper.state('mouseIsMoving')).toBe(true);
     drag100.preventDefault.mockReset();
 
     wrapper.find('.sliderTray').simulate('click', drag100);
     wrapper.update();
 
     expect(drag100.preventDefault).toHaveBeenCalled();
+    expect(wrapper.state('mouseIsMoving')).toBe(false);
   });
 
   it('should not prevent default action on clicks when not dragging or mouse moving', () => {
-    const wrapper = shallow(<Slider {...props} />);
+    const wrapper = shallow(<Slider {...props} dragEnabled />);
+    const instance = wrapper.instance();
+
+    instance.sliderTrayElement = {
+      clientWidth: 100,
+      clientHeight: 100,
+    };
 
     drag100.preventDefault.mockReset();
+
+    wrapper.setState({
+      isBeingMouseDragged: true,
+      mouseIsMoving: false,
+    });
 
     wrapper.find('.sliderTray').simulate('click', drag100);
     wrapper.update();

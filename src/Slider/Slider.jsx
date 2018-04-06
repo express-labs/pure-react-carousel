@@ -164,7 +164,7 @@ const Slider = class Slider extends React.Component {
   handleOnMouseClick(ev) {
     if (!this.props.dragEnabled || !this.state.isBeingMouseDragged) return;
 
-    if (this.state.isBeingMouseDragged && this.state.mouseIsMoving) {
+    if (this.state.mouseIsMoving) {
       ev.preventDefault();
     }
 
