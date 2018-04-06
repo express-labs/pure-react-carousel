@@ -148,7 +148,7 @@ interface ButtonPlayProps {
   readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
 type ButtonPlayInterface = React.ComponentClass<ButtonPlayProps>
-declare const ButtonPlay: ButtonLastInterface
+declare const ButtonPlay: ButtonPlayInterface
 
 export {
   ButtonBack,
