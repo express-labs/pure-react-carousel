@@ -170,6 +170,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | tag | string | 'div' | No | The HTML element to use for the provider. |
 | **totalSlides** | number |  | **Yes** | Always set this to match the total number of &lt;Slide > components in your carousel |
 | touchEnabled | boolean | true | No | Set to true to enable touch events |
+| dragEnabled | boolean | true | No | Set to true to enable mouse dragging events |
 | visibleSlides | number | 1 | No | The number of slides to show at once.  This number should be <= totalSlides |
 
 #### The CarouselProvider component creates the following pseudo HTML by default:
@@ -340,6 +341,7 @@ Here's more pseudocode.  I've listed a bunch of properties that exist in the Car
     step: state.step,
     totalSlides: state.totalSlides,
     touchEnabled: state.touchEnabled,
+    dragEnabled: state.dragEnabled,
     visibleSlides: state.visibleSlides,
   }));
 ```
@@ -405,6 +407,7 @@ interface CarouselState {
   readonly step: number
   readonly totalSlides: number
   readonly touchEnabled: boolean
+  readonly dragEnabled: boolean
   readonly visibleSlides: number
 }
 
