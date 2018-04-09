@@ -1,4 +1,4 @@
-// Type definitions for pure-react-carousel 1.12.0 
+// Type definitions for pure-react-carousel 1.12.0
 // Definitions by: Jedrzej Lewandowski <https://github.com/TheFullResolution>
 // TypeScript Version: 2.7.2
 
@@ -75,8 +75,10 @@ type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
 declare const CarouselProvider: CarouselProviderInterface
 
 export interface CarouselInjectedProps {
-  readonly setStoreState: (state: CarouselState) => void
-  readonly unsubscribeAllMasterSpinner: () => void
+  readonly carouselStore: {
+    readonly setStoreState: (state: CarouselState) => void
+    readonly unsubscribeAllMasterSpinner: () => void
+  }
 }
 
 // Diff / Omit taken from https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-311923766
