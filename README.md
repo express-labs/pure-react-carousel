@@ -510,8 +510,10 @@ interface CarouselState {
 }
 
 export interface CarouselInjectedProps {
-  readonly setStoreState: (state: CarouselState) => void
-  readonly unsubscribeAllMasterSpinner: () => void
+  readonly carouselStore: {
+    readonly setStoreState: (state: CarouselState) => void
+    readonly unsubscribeAllMasterSpinner: () => void
+  }
 }
 ```
 
