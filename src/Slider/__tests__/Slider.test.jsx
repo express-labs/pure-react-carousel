@@ -349,4 +349,22 @@ describe('<Slider />', () => {
     instance.endTouchMove();
     expect(instance.isDocumentScrolling).toBe(null);
   });
+  it('should not supply the default css transitions if classNameAnimation property is not null', () => {
+    const wrapper = shallow(<Slider {...props} classNameAnimation="my-animation" />);
+    expect(wrapper.find('.sliderAnimation').exists()).toBe(false);
+    expect(wrapper.find('.my-animation').exists()).toBe(true);
+  });
+  it('should supply the default css transitions if classNameAnimation property null', () => {
+    const wrapper = shallow(<Slider {...props} />);
+    expect(wrapper.find('.sliderAnimation').exists()).toBe(true);
+    expect(wrapper.find('.my-animation').exists()).toBe(false);
+  });
+  it('should apply the classNameTray class to the tray', () => {
+    const wrapper = shallow(<Slider {...props} classNameTray="tray-class" />);
+    expect(wrapper.find('.tray-class').exists()).toBe(true);
+  });
+  it('should apply the classNameTrayWrap class to the tray wrap div', () => {
+    const wrapper = shallow(<Slider {...props} classNameTrayWrap="tray-class-wrap" />);
+    expect(wrapper.find('.tray-class-wrap').exists()).toBe(true);
+  });
 });
