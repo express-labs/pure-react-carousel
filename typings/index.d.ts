@@ -1,6 +1,6 @@
-// Type definitions for pure-react-carousel 1.10.0
+// Type definitions for pure-react-carousel 1.12.0
 // Definitions by: Jedrzej Lewandowski <https://github.com/TheFullResolution>
-// TypeScript Version: 2.6.1
+// TypeScript Version: 2.7.2
 
 import * as React from 'react'
 import {
@@ -8,6 +8,7 @@ import {
   ButtonFirst,
   ButtonLast,
   ButtonNext,
+  ButtonPlay,
   Dot,
   DotGroup,
   Image,
@@ -23,6 +24,7 @@ interface CarouselState {
   readonly imageErrorCount: number
   readonly imageSuccessCount: number
   readonly lockOnWindowScroll: boolean
+  readonly masterSpinnerFinished: boolean
   readonly masterSpinnerThreshold: number
   readonly naturalSlideHeight: number
   readonly naturalSlideWidth: number
@@ -41,9 +43,12 @@ interface CarouselProviderProps {
   readonly currentSlide?: CarouselState['currentSlide']
   readonly disableAnimation?: CarouselState['disableAnimation']
   readonly hasMasterSpinner?: CarouselState['hasMasterSpinner']
+  readonly interval?: number
+  readonly isPlaying?: boolean
   readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
   readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
   readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
+  readonly playDirection?: 'forward'|'backward'
   readonly orientation?: CarouselState['orientation']
   readonly step?: CarouselState['step']
   readonly tag?: string
@@ -70,8 +75,10 @@ type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
 declare const CarouselProvider: CarouselProviderInterface
 
 export interface CarouselInjectedProps {
-  readonly setStoreState: (state: CarouselState) => void
-  readonly unsubscribeAllMasterSpinner: () => void
+  readonly carouselStore: {
+    readonly setStoreState: (state: CarouselState) => void
+    readonly unsubscribeAllMasterSpinner: () => void
+  }
 }
 
 // Diff / Omit taken from https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-311923766
@@ -123,6 +130,7 @@ export {
   ButtonFirst,
   ButtonLast,
   ButtonNext,
+  ButtonPlay,
   CarouselProvider,
   Dot,
   DotGroup,
