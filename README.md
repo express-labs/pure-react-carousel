@@ -28,6 +28,11 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
     * [&lt;Dot /&gt;](#dot-)
     * [&lt;DotGroup /&gt;](#dotgroup-)
     * [&lt;Image /&gt;](#image-)
+    * [&lt;ButtonBack /&gt;](#buttonback-)
+    * [&lt;ButtonNext /&gt;](#buttonnext-)
+    * [&lt;ButtonFirst /&gt;](#buttonfirst-)
+    * [&lt;ButtonLast /&gt;](#buttonlast-)
+    * [&lt;ButtonPlay /&gt;](#buttonplay-)
     * [WithStore() Higher Order Component](#withstore-higher-order-component)
   * [TypeScript usage](#typescript-usage)
     * [WithStore() Higher Order Component](#withstore-higher-order-component-1)
@@ -162,14 +167,18 @@ Any remaining props not consumed by the component are passed directly to the roo
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string |
 | currentSlide | number | 0 | No | &lt;Slide \> to display on initial render. The indexing of &lt;Slide /> components starts with 0. |
 | hasMasterSpinner | bool | false | No | When true, a spinner will cover &lt;Slider /> component until all &lt;Image \> and &lt;ImageWithZoom \> are done loading images.  If there are no &lt;Image /> or &lt;ImageWithZoom> components, the spinner will spin until this property is set to false |
+| interval | number | 5000 | No | Number of milliseconds to wait when the auto slideshow is active |
+| isPlaying | bool | false | No | Setting this to true starts an auto slideshow. After "interval" milliseconds, the slider will move by "step" slides either forward or backwards depending on the value of "playDirection". |
 | lockOnWindowScroll | bool | false | No | When set to true, scrolling of the carousel slides are disabled while the browser window is scrolling |
 | **naturalSlideHeight** | number | | **Yes** | The natural height of each <\Slide > component. ** |
 | **naturalSlideWidth** | number | | **Yes** | The natural width of each <\Slide > component. ** |
 | orientation | string | "horizontal" | No | Possible values are "horizontal" and "vertical".  Let's you have a horizontal or vertical carousel. |
+| playDirection | ['forward'&#124;'backward' ] | 'forward' | No | The direction for the auto slideshow |
 | step | number | 1 | No | The number of slides to move when pressing the &lt;ButtonBack /> and &lt;ButtonNext /> buttons.|
 | tag | string | 'div' | No | The HTML element to use for the provider. |
 | **totalSlides** | number |  | **Yes** | Always set this to match the total number of &lt;Slide > components in your carousel |
 | touchEnabled | boolean | true | No | Set to true to enable touch events |
+| dragEnabled | boolean | true | No | Set to true to enable mouse dragging events |
 | visibleSlides | number | 1 | No | The number of slides to show at once.  This number should be <= totalSlides |
 
 #### The CarouselProvider component creates the following pseudo HTML by default:
@@ -299,6 +308,99 @@ A compound component that creates a bunch of Dot's automatically for you.
 | **src** | **string** | | **Yes** | **URL of the image** |
 | tag | string | "img" | No | The element that will receive the image. Another option might be to set this to "div". Any tag besides "img" will result in the image being loaded as the css background-image for that tag. |
 
+### &lt;ButtonBack />
+A button for moving the slider backwards. Backwards on a horizontal carousel means "move to the left".  Backwards on a vertical carousel means "move to the top".  The slider will traverse an amount of slides determined by the step property of CarouselProvider.
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
+| disabled | [boolean&#124;null] | null | No | Null means ButtonBack will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
+| onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+
+#### The ButtonBack component creates the following pseudo HTML by default:
+
+```HTML
+<button class="carousel__back-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+  [props.children]
+</button>
+```
+
+### &lt;ButtonNext />
+A button for moving the slider forwards. Forwards on a horizontal carousel means "move to the right".  Backwards on a vertical carousel means "move to the bottom".  The slider will traverse an amount of slides determined by the step property of CarouselProvider.
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
+| disabled | [boolean&#124;null] | null | No | Null means ButtonNext will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
+| onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+
+#### The ButtonNext component creates the following pseudo HTML by default:
+
+```HTML
+<button class="carousel__next-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+  [props.children]
+</button>
+```
+
+### &lt;ButtonFirst />
+Moves the slider to the beginning of the slides.
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
+| disabled | [boolean&#124;null] | null | No | Null means ButtonFirst will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
+| onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+
+#### The ButtonFirst component creates the following pseudo HTML by default:
+
+```HTML
+<button class="carousel__first-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+  [props.children]
+</button>
+```
+
+### &lt;ButtonLast />
+Moves the slider to the end of the slides (totalSlides - visibleSlides).
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
+| disabled | [boolean&#124;null] | null | No | Null means ButtonLast will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
+| onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+
+#### The ButtonLast component creates the following pseudo HTML by default:
+
+```HTML
+<button class="carousel__last-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+  [props.children]
+</button>
+```
+
+### &lt;ButtonPlay />
+Pressing this button causes the slides to automatically advance by CarouselProvider's step property after an interval determined by CarouselProvider's interval property.
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| children | [string&#124;node] | null | No | Children is a special React property.  Content wrapped by ButtonPlay will appear AFTER the content of childrenPaused and childrenPlaying |
+| childrenPaused | [string&#124;node] | null | No | Content to display when the slide show is paused. |
+| childrenPlaying | [string&#124;node] | null | No | Content to display when the slide show is playing |
+| className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
+| disabled | [boolean&#124;null] | null | No | Null means ButtonPlay will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
+| onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+
+#### The ButtonPlay component creates the following pseudo HTML by default:
+
+```HTML
+<button class="carousel__play-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+  [props.childrenPaused]
+  [props.childrenPlaying]
+  [props.children]
+</button>
+```
 
 ### WithStore() Higher Order Component
 
@@ -350,6 +452,7 @@ Here's more pseudocode.  I've listed a bunch of properties that exist in the Car
     step: state.step,
     totalSlides: state.totalSlides,
     touchEnabled: state.touchEnabled,
+    dragEnabled: state.dragEnabled,
     visibleSlides: state.visibleSlides,
   }));
 ```
@@ -415,12 +518,15 @@ interface CarouselState {
   readonly step: number
   readonly totalSlides: number
   readonly touchEnabled: boolean
+  readonly dragEnabled: boolean
   readonly visibleSlides: number
 }
 
 export interface CarouselInjectedProps {
-  readonly setStoreState: (state: CarouselState) => void
-  readonly unsubscribeAllMasterSpinner: () => void
+  readonly carouselStore: {
+    readonly setStoreState: (state: CarouselState) => void
+    readonly unsubscribeAllMasterSpinner: () => void
+  }
 }
 ```
 

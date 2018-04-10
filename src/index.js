@@ -2,6 +2,7 @@ export { default as ButtonBack } from './ButtonBack';
 export { default as ButtonFirst } from './ButtonFirst';
 export { default as ButtonNext } from './ButtonNext';
 export { default as ButtonLast } from './ButtonLast';
+export { default as ButtonPlay } from './ButtonPlay';
 export { default as CarouselProvider } from './CarouselProvider';
 export { default as Dot } from './Dot';
 export { default as DotGroup } from './DotGroup';

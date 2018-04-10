@@ -37,6 +37,7 @@ export const CarouselPropTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
+  direction: PropTypes.oneOf(['forward', 'backward']),
   height: (props, propName) => {
     const prop = props[propName];
     if (props.orientation === 'vertical' && (prop === null || typeof prop !== 'number')) {

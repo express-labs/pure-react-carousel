@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ButtonBack, ButtonFirst, ButtonLast, ButtonNext,
+  ButtonBack, ButtonFirst, ButtonLast, ButtonNext, ButtonPlay,
   CarouselProvider, DotGroup, ImageWithZoom, Slide, Slider,
 } from '../../../';
 
@@ -8,24 +8,16 @@ import s from '../../style.css';
 
 export default () => (
   <CarouselProvider
-    visibleSlides={1}
+    visibleSlides={2}
     totalSlides={6}
-    step={1}
+    step={2}
     naturalSlideWidth={400}
     naturalSlideHeight={500}
     hasMasterSpinner
-    lockOnWindowScroll
+    currentSlide={0}
+    isPlaying
   >
-    <h1 className={s.headline}>Carousel (lockOnWindowScroll set to TRUE)</h1>
-    <p>
-      - When scrolling the browser, up and down, horizontal scrollers will not scroll horizontally.
-    </p>
-    <p>
-      - When scrolling the browser, left and right, vertical scrollers will not scroll vertically.
-    </p>
-    <p>
-      - This spinner will go away after all the images have loaded.<br />
-    </p>
+    <h1 className={s.headline}>Horizontal Carousel Auto Play</h1>
     <Slider className={s.slider}>
       <Slide index={0}>
         <ImageWithZoom src="./media/img01.jpeg" />
@@ -46,6 +38,10 @@ export default () => (
         <ImageWithZoom src="./media/img06.jpeg" />
       </Slide>
     </Slider>
+    <ButtonPlay
+      childrenPlaying="Pause"
+      childrenPaused="Play"
+    />
     <ButtonFirst>First</ButtonFirst>
     <ButtonBack>Back</ButtonBack>
     <ButtonNext>Next</ButtonNext>
