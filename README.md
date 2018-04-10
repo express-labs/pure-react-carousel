@@ -197,7 +197,7 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the Slider needs to wrap other components and/or JSX |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | classNameAnimation| [string&#124;null] | null | No |Optional className string. The slider uses the css transform property, applying translateX to move the slider tray east and west for a horizontal slider, and translateY to move the slider north and south for a vertical slider.   The actual animation is the result of applying a CSS3 transition effect.  If you supply your own classNameAnimation class, the default transition is disabled and ONLY the transitions specified by the classNameAnimation class are applied. Learn more about [CSS3 transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions). |
 | classNameTray | [string&#124;null] | null | No | Optional className string that is applied to the Slider's tray. The "tray" is the DOM element that contains the slides. The type of DOM element is specified by the trayTag property |
@@ -257,7 +257,7 @@ A Dot component is a HTML button.  Dots directly correlate to slides.  Clicking 
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the Dot component needs to wrap other components and/or JSX |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means Dot will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
@@ -313,7 +313,7 @@ A button for moving the slider backwards. Backwards on a horizontal carousel mea
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the ButtonnBack component needs to wrap other components and/or JSX |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonBack will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
@@ -331,7 +331,7 @@ A button for moving the slider forwards. Forwards on a horizontal carousel means
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the ButtonNext component needs to wrap other components and/or JSX |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonNext will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
@@ -349,7 +349,7 @@ Moves the slider to the beginning of the slides.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the ButtonFirst component needs to wrap other components and/or JSX |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonFirst will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
@@ -367,7 +367,7 @@ Moves the slider to the end of the slides (totalSlides - visibleSlides).
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other components and/or JSX |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the ButtonLast component needs to wrap other components and/or JSX |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonLast will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
