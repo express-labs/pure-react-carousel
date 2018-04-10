@@ -34,6 +34,7 @@ interface CarouselState {
   readonly step: number
   readonly totalSlides: number
   readonly touchEnabled: boolean
+  readonly dragEnabled: boolean
   readonly visibleSlides: number
 }
 
@@ -54,6 +55,7 @@ interface CarouselProviderProps {
   readonly tag?: string
   readonly totalSlides: CarouselState['totalSlides']
   readonly touchEnabled?: CarouselState['touchEnabled']
+  readonly dragEnabled?: CarouselState['dragEnabled']
   readonly visibleSlides?: CarouselState['visibleSlides']
 }
 

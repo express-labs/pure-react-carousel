@@ -158,6 +158,7 @@ export default {
       step: 2,
       totalSlides: 5,
       touchEnabled: true,
+      dragEnabled: true,
       visibleSlides: 2,
       lockOnWindowScroll: false,
     },
