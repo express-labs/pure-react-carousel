@@ -4,6 +4,7 @@ import WithStore from '../Store/WithStore';
 export default WithStore(Slider, state => ({
   currentSlide: state.currentSlide,
   disableAnimation: state.disableAnimation,
+  dragEnabled: state.dragEnabled,
   hasMasterSpinner: state.hasMasterSpinner,
   interval: state.interval,
   isPlaying: state.isPlaying,
@@ -18,6 +19,5 @@ export default WithStore(Slider, state => ({
   step: state.step,
   totalSlides: state.totalSlides,
   touchEnabled: state.touchEnabled,
-  dragEnabled: state.dragEnabled,
   visibleSlides: state.visibleSlides,
 }));

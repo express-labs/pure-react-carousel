@@ -11,6 +11,7 @@ const Slider = class Slider extends React.Component {
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disableAnimation: PropTypes.bool.isRequired,
+    dragEnabled: PropTypes.bool.isRequired,
     hasMasterSpinner: PropTypes.bool.isRequired,
     interval: PropTypes.number.isRequired,
     isPlaying: PropTypes.bool.isRequired,
@@ -28,7 +29,6 @@ const Slider = class Slider extends React.Component {
     tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
     touchEnabled: PropTypes.bool.isRequired,
-    dragEnabled: PropTypes.bool.isRequired,
     trayTag: PropTypes.string,
     visibleSlides: PropTypes.number,
   }
@@ -111,8 +111,8 @@ const Slider = class Slider extends React.Component {
   onDragStart(screenX, screenY, touchDrag, mouseDrag) {
     this.props.carouselStore.setStoreState({
       isPlaying: false,
-    });   
-    
+    });
+
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     if (this.props.orientation === 'vertical') {
@@ -130,7 +130,7 @@ const Slider = class Slider extends React.Component {
 
   onDragMove(screenX, screenY) {
     window.cancelAnimationFrame.call(window, this.moveTimer);
-    
+
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState({
         deltaX: screenX - this.state.startX,
@@ -141,7 +141,6 @@ const Slider = class Slider extends React.Component {
   }
 
   onDragEnd() {
-
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     this.computeCurrentSlide();
@@ -357,6 +356,7 @@ const Slider = class Slider extends React.Component {
       className,
       currentSlide,
       disableAnimation,
+      dragEnabled,
       hasMasterSpinner,
       interval,
       isPlaying,

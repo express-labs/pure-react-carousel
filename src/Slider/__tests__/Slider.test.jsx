@@ -431,7 +431,7 @@ describe('<Slider />', () => {
     const instance = wrapper.instance();
     instance.playBackward();
     expect(props.carouselStore.state.currentSlide).toBe(3);
-
+  });
 
   it('should not change isBeingMouseDragged on mousedown event when dragging is disabled', () => {
     const wrapper = shallow(<Slider {...props} dragEnabled={false} />);
