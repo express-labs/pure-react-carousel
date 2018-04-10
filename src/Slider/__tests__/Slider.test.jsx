@@ -31,9 +31,12 @@ global.window = global;
 let raf = 0;
 window.requestAnimationFrame = (r) => {
   r();
-  return (raf += 1);
+  raf += 1;
+  return raf;
 };
 window.cancelAnimationFrame = jest.fn().mockImplementation(() => {});
+
+jest.useFakeTimers();
 
 describe('<Slider />', () => {
   let props;
@@ -252,10 +255,15 @@ describe('<Slider />', () => {
     expect(wrapper.state('isBeingTouchDragged')).toBe(true);
   });
   // skipping this test for now v1.8.1
+  // note: getting closer - 4/4/2018
   xit('should still have state.isBeingTouchDragged === true a touch ended but there are still more touches left', () => {
+    const handleOnTouchEnd = jest.spyOn(Slider.prototype, 'handleOnTouchEnd');
     const wrapper = shallow(<Slider {...props} />);
     const instance = wrapper.instance();
-    const handleOnTouchEnd = jest.spyOn(instance, 'handleOnTouchEnd');
+    instance.sliderTrayElement = {
+      clientWidth: 500,
+      clientHeight: 100,
+    };
     wrapper.setState({
       isBeingTouchDragged: true,
     });
@@ -264,6 +272,8 @@ describe('<Slider />', () => {
     wrapper.update();
     expect(handleOnTouchEnd).toHaveBeenCalledTimes(1);
     expect(wrapper.state('isBeingTouchDragged')).toBe(true);
+    handleOnTouchEnd.mockReset();
+    handleOnTouchEnd.mockRestore();
   });
   it('should call handleOnTouchCancel when a touch is canceled', () => {
     const wrapper = shallow(<Slider {...props} />);
@@ -354,6 +364,73 @@ describe('<Slider />', () => {
     instance.computeCurrentSlide = () => {};
     instance.endTouchMove();
     expect(instance.isDocumentScrolling).toBe(null);
+  });
+  it('should start playing the slideshow after mounting after a delay of props.interval if props.isPlay is true', () => {
+    const playForward = jest.spyOn(Slider.prototype, 'playForward');
+    const wrapper = shallow(<Slider {...props} isPlaying />);
+    const instance = wrapper.instance();
+    jest.runTimersToTime(props.interval);
+    expect(instance.interval).not.toBe(null);
+    expect(playForward).toHaveBeenCalledTimes(1);
+    playForward.mockReset();
+    playForward.mockRestore();
+  });
+  it('should stop playing the slideshow if the isPlaying prop is changed to false', () => {
+    const wrapper = shallow(<Slider {...props} isPlaying />);
+    const instance = wrapper.instance();
+    expect(instance.interval).not.toBe(null);
+    wrapper.setProps({ isPlaying: false });
+    expect(instance.interval).toBe(null);
+  });
+  it('should start playing the slideshow if the isPlaying prop is changed to true', () => {
+    const play = jest.spyOn(Slider.prototype, 'play');
+    const wrapper = shallow(<Slider {...props} />);
+    const instance = wrapper.instance();
+    expect(instance.interval).toBe(null);
+    wrapper.setProps({ isPlaying: true });
+    expect(instance.interval).not.toBe(null);
+    expect(play).toHaveBeenCalledTimes(1);
+    play.mockReset();
+    play.mockRestore();
+  });
+  it('should start playing the slideshow backwards after prop.interval milliseconds if prop.isPlaying is true and prop.playDirection is backward', () => {
+    const wrapper = shallow(<Slider {...props} playDirection="backward" />);
+    const instance = wrapper.instance();
+    const playBackward = jest.spyOn(instance, 'playBackward');
+    expect(instance.interval).toBe(null);
+    wrapper.setProps({ isPlaying: true });
+    jest.runTimersToTime(props.interval);
+    expect(instance.interval).not.toBe(null);
+    expect(playBackward).toHaveBeenCalledTimes(1);
+  });
+  it('playForward() should increment the currentSlide by value of step', () => {
+    const wrapper = shallow(<Slider {...props} />);
+    const instance = wrapper.instance();
+    instance.playForward();
+    expect(props.carouselStore.state.currentSlide).toBe(2);
+  });
+  it('playForward() should jump to slide 0 if at the end of the slides.', () => {
+    props.carouselStore.state.currentSlide = 3;
+    const wrapper = shallow(<Slider {...props} currentSlide={3} />);
+    expect(props.carouselStore.state.currentSlide).toBe(3);
+    const instance = wrapper.instance();
+    instance.playForward();
+    expect(props.carouselStore.state.currentSlide).toBe(0);
+  });
+  it('playBackward() should derement the currentSlide by value of step', () => {
+    props.carouselStore.state.currentSlide = 4;
+    const wrapper = shallow(<Slider {...props} currentSlide={4} />);
+    expect(props.carouselStore.state.currentSlide).toBe(4);
+    const instance = wrapper.instance();
+    instance.playBackward();
+    expect(props.carouselStore.state.currentSlide).toBe(2);
+  });
+  it('playBackward() should jump to totalSlides - visibleSlides (end of the slides) if at the start of slides.', () => {
+    const wrapper = shallow(<Slider {...props} />);
+    expect(props.carouselStore.state.currentSlide).toBe(0);
+    const instance = wrapper.instance();
+    instance.playBackward();
+    expect(props.carouselStore.state.currentSlide).toBe(3);
   });
 
   it('should not change isBeingMouseDragged on mousedown event when dragging is disabled', () => {

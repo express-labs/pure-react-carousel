@@ -11,10 +11,13 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     currentSlide: PropTypes.number,
     disableAnimation: PropTypes.bool,
     hasMasterSpinner: PropTypes.bool,
+    interval: PropTypes.number,
+    isPlaying: PropTypes.bool,
     lockOnWindowScroll: PropTypes.bool,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
     orientation: CarouselPropTypes.orientation,
+    playDirection: CarouselPropTypes.direction,
     step: PropTypes.number,
     tag: PropTypes.string,
     totalSlides: PropTypes.number.isRequired,
@@ -28,8 +31,11 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     currentSlide: 0,
     disableAnimation: false,
     hasMasterSpinner: false,
+    interval: 5000,
+    isPlaying: false,
     lockOnWindowScroll: false,
     orientation: 'horizontal',
+    playDirection: 'forward',
     step: 1,
     tag: 'div',
     touchEnabled: true,
@@ -49,11 +55,14 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       hasMasterSpinner: props.hasMasterSpinner,
       imageErrorCount: 0,
       imageSuccessCount: 0,
+      interval: props.interval,
+      isPlaying: props.isPlaying,
       lockOnWindowScroll: props.lockOnWindowScroll,
       masterSpinnerThreshold: 0,
       naturalSlideHeight: props.naturalSlideHeight,
       naturalSlideWidth: props.naturalSlideWidth,
       orientation: props.orientation,
+      playDirection: props.playDirection,
       slideSize: slideSize(props.totalSlides, props.visibleSlides),
       slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
       step: props.step,
@@ -76,10 +85,13 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     [
       'disableAnimation',
       'hasMasterSpinner',
+      'interval',
+      'isPlaying',
       'naturalSlideHeight',
       'naturalSlideWidth',
       'lockOnWindowScroll',
       'orientation',
+      'playDirection',
       'step',
       'totalSlides',
       'touchEnabled',
@@ -101,6 +113,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
 
     if (isNewCurrentSlide && !isAnimationDisabled) {
       newStoreState.disableAnimation = true;
+
+      // TODO: better way to do this.  Timers suck.
       window.clearTimeout(this.disableAnimationTimer);
       this.disableAnimationTimer = window.setTimeout(() => {
         this.carouselStore.setStoreState({

@@ -50,7 +50,7 @@ class DevelopmentApp extends React.Component {
           <option value="6">Simple Carousel with vertically alligned nav buttons</option>
           <option value="7">Simple Carousel with react-redux</option>
           <option value="8">Horizontal Carousel (With lockOnWindowScroll set to TRUE)</option>
-          <option value="9">Carousel (With linked images)</option>
+          <option value="9">Horizontal Carousel Auto Play</option>
         </select>
         <hr />
         { (this.state.value === '0' || this.state.value === '1') && (

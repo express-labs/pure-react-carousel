@@ -1,9 +1,11 @@
 /* eslint {'import/no-named-as-default': 0, 'import/no-named-as-default-member': 0} */
+import React from 'react';
 
 import ButtonBack from '../ButtonBack/ButtonBack';
 import ButtonFirst from '../ButtonFirst/ButtonFirst';
 import ButtonLast from '../ButtonLast/ButtonLast';
 import ButtonNext from '../ButtonNext/ButtonNext';
+import ButtonPlay from '../ButtonPlay/ButtonPlay';
 import CarouselProvider from '../CarouselProvider/CarouselProvider';
 import Dot from '../Dot/Dot';
 import DotGroup from '../DotGroup/DotGroup';
@@ -60,6 +62,18 @@ export default {
       carouselStore: new Store({}),
       totalSlides: 3,
       visibleSlides: 2,
+    },
+  },
+  ButtonPlay: {
+    component: ButtonPlay,
+    props: {
+      carouselStore: new Store({
+        isPlaying: false,
+      }),
+      children: <span className="children">Sup?</span>,
+      childrenPause: <span className="play">Play</span>,
+      childrenPlay: <span className="pause">Pause</span>,
+      isPlaying: false,
     },
   },
   CarouselProvider: {
@@ -126,23 +140,28 @@ export default {
   Slider: {
     component: Slider,
     props: {
+      carouselStore: new Store({
+        currentSlide: 0,
+      }),
       children: 'hello',
       currentSlide: 0,
+      disableAnimation: false,
+      dragEnabled: true,
       hasMasterSpinner: false,
+      interval: 5000,
+      isPlaying: false,
+      lockOnWindowScroll: false,
       masterSpinnerFinished: false,
       naturalSlideHeight: 100,
       naturalSlideWidth: 100,
       orientation: 'horizontal',
-      slideTraySize: 250,
+      playDirection: 'forward',
       slideSize: 50,
-      carouselStore: new Store({
-        currentSlide: 0,
-      }),
+      slideTraySize: 250,
+      step: 2,
       totalSlides: 5,
       touchEnabled: true,
-      dragEnabled: true,
       visibleSlides: 2,
-      lockOnWindowScroll: false,
     },
   },
   Spinner: {

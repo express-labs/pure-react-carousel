@@ -99,9 +99,13 @@ declare const Dot: DotInterface
 interface ButtonNextProps {
   readonly children: React.ReactChild
   readonly className?: string
-  readonly onClick?: () => void
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
 type ButtonNextInterface = React.ComponentClass<ButtonNextProps>
+/**
+ * A button for moving the slider forwards. Forwards on a horizontal carousel means "move to the right". Backwards on a vertical carousel means "move to the bottom". The slider will traverse an amount of slides determined by the step property of CarouselProvider.
+ */
 declare const ButtonNext: ButtonNextInterface
 
 
@@ -109,9 +113,13 @@ declare const ButtonNext: ButtonNextInterface
 interface ButtonBackProps {
   readonly children: React.ReactChild
   readonly className?: string
-  readonly onClick?: () => void
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
 type ButtonBackInterface = React.ComponentClass<ButtonBackProps>
+/**
+ * A button for moving the slider backwards. Backwards on a horizontal carousel means "move to the left". Backwards on a vertical carousel means "move to the top". The slider will traverse an amount of slides determined by the step property of CarouselProvider.
+ */
 declare const ButtonBack: ButtonBackInterface
 
 
@@ -119,9 +127,13 @@ declare const ButtonBack: ButtonBackInterface
 interface ButtonLastProps {
   readonly children: React.ReactChild
   readonly className?: string
-  readonly onClick?: () => void
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
 type ButtonLastInterface = React.ComponentClass<ButtonLastProps>
+/**
+ * Moves the slider to the end of the slides (totalSlides - visibleSlides).
+ */
 declare const ButtonLast: ButtonLastInterface
 
 
@@ -129,17 +141,35 @@ declare const ButtonLast: ButtonLastInterface
 interface ButtonFirstProps {
   readonly children: React.ReactChild
   readonly className?: string
-  readonly onClick?: () => void
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
 type ButtonFirstInterface = React.ComponentClass<ButtonFirstProps>
+/**
+ * Moves the slider to the beginning of the slides.
+ */
 declare const ButtonFirst: ButtonLastInterface
 
+
+
+interface ButtonPlayProps {
+  readonly childrenPaused?: React.ReactNode
+  readonly childrenPlaying?: React.ReactNode
+  readonly disabled?: boolean
+  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
+}
+type ButtonPlayInterface = React.ComponentClass<ButtonPlayProps>
+/**
+ * Pressing this button causes the slides to automatically advance by CarouselProvider's step property after an interval determined by CarouselProvider's interval property.
+ */
+declare const ButtonPlay: ButtonPlayInterface
 
 export {
   ButtonBack,
   ButtonFirst,
   ButtonLast,
   ButtonNext,
+  ButtonPlay,
   Dot,
   DotGroup,
   Image,

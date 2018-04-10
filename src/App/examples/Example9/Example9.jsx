@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-  ButtonBack, ButtonFirst, ButtonLast, ButtonNext,
-  CarouselProvider, DotGroup, Image, Slide, Slider,
+  ButtonBack, ButtonFirst, ButtonLast, ButtonNext, ButtonPlay,
+  CarouselProvider, DotGroup, ImageWithZoom, Slide, Slider,
 } from '../../../';
 
 import s from '../../style.css';
@@ -14,46 +14,34 @@ export default () => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
     hasMasterSpinner
+    currentSlide={0}
+    isPlaying
   >
-    <h1 className={s.headline}>Carousel (With linked images)</h1>
-    <p>
-      - This spinner will go away after all the images have loaded.<br />
-    </p>
-    <p>
-      - The linked images should be clickable when not dragging.<br />
-    </p>
+    <h1 className={s.headline}>Horizontal Carousel Auto Play</h1>
     <Slider className={s.slider}>
       <Slide index={0}>
-        <a href="https://github.com/express-labs/pure-react-carousel" target="_blank" rel="noopener noreferrer">
-          <Image src="./media/img01.jpeg" />
-        </a>
+        <ImageWithZoom src="./media/img01.jpeg" />
       </Slide>
       <Slide index={1}>
-        <a href="https://github.com/express-labs/pure-react-carousel" target="_blank" rel="noopener noreferrer">
-          <Image src="./media/img02.jpeg" />
-        </a>
+        <ImageWithZoom src="./media/img02.jpeg" />
       </Slide>
       <Slide index={2}>
-        <a href="https://github.com/express-labs/pure-react-carousel" target="_blank" rel="noopener noreferrer">
-          <Image src="./media/img03.jpeg" />
-        </a>
+        <ImageWithZoom src="./media/img03.jpeg" />
       </Slide>
       <Slide index={3}>
-        <a href="https://github.com/express-labs/pure-react-carousel" target="_blank" rel="noopener noreferrer">
-          <Image src="./media/img04.jpeg" />
-        </a>
+        <ImageWithZoom src="./media/img04.jpeg" />
       </Slide>
       <Slide index={4}>
-        <a href="https://github.com/express-labs/pure-react-carousel" target="_blank" rel="noopener noreferrer">
-          <Image src="./media/img05.jpeg" />
-        </a>
+        <ImageWithZoom src="./media/img05.jpeg" />
       </Slide>
       <Slide index={5}>
-        <a href="https://github.com/express-labs/pure-react-carousel" target="_blank" rel="noopener noreferrer">
-          <Image src="./media/img06.jpeg" />
-        </a>
+        <ImageWithZoom src="./media/img06.jpeg" />
       </Slide>
     </Slider>
+    <ButtonPlay
+      childrenPlaying="Pause"
+      childrenPaused="Play"
+    />
     <ButtonFirst>First</ButtonFirst>
     <ButtonBack>Back</ButtonBack>
     <ButtonNext>Next</ButtonNext>

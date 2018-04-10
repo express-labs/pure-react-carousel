@@ -10,7 +10,7 @@ export default () => (
   <CarouselProvider
     visibleSlides={1}
     totalSlides={6}
-    step={3}
+    step={1}
     naturalSlideWidth={400}
     naturalSlideHeight={500}
     hasMasterSpinner
