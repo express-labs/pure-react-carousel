@@ -26,12 +26,15 @@
 }
 
 .sliderTray {
-  transition: transform 500ms;
-  transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1.000); /* easeInOutCubic */
   display: block;
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.sliderAnimation {
+  transition: transform 500ms;
+  transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1.000); /* easeInOutCubic */
 }
 
 .masterSpinnerContainer {
