@@ -110,28 +110,11 @@ describe('<Slider />', () => {
     // need to call mount() because there are refs that need to be created.  That only happens on when mounted.
     const wrapper = mount(<Slider {...props} orientation="vertical" />);
     const instance = wrapper.instance();
-    instance.sliderTrayElement = {
-      clientWidth: 100,
-      clientHeight: 100,
-    };
+
     wrapper.find('.sliderTray').simulate('touchstart', touch100);
-    wrapper.update();
-
-    // Enzyme doesn't yet call componentDidUpdate().  They are working on adding this feature.
-    // so, we have to manually simulate this.
-    let prevProps = wrapper.props();
     wrapper.setProps({ isPageScrollLocked: true });
-    instance.componentDidUpdate(prevProps);
-
     wrapper.find('.sliderTray').simulate('touchend');
-    wrapper.update();
-
-    // Enzyme doesn't yet call componentDidUpdate().  They are working on adding this feature.
-    // so, we have to manually simulate this.
-    prevProps = wrapper.props();
     wrapper.setProps({ isPageScrollLocked: false });
-    instance.componentDidUpdate(prevProps);
-
     expect(global.document.documentElement.style.overflow).toBe('scroll');
     expect(instance.originalOverflow).toBe(null);
   });
@@ -662,6 +645,13 @@ describe('<Slider />', () => {
     expect(instance.scrollParent).toEqual(null);
   });
   it('unlockScroll() should NOT set scrollParent style if there is no scrollParent', () => {
+    const wrapper = mount(<Slider {...props} />);
+    const instance = wrapper.instance();
+    instance.sliderTrayElement = null;
+    instance.unlockScroll();
+    expect(instance.scrollParent).toEqual(null);
+  });
+  it('unlockScroll() should set scrollParent style if there is a scrollParent', () => {
     const wrapper = mount(<Slider {...props} />);
     const instance = wrapper.instance();
     instance.sliderTrayElement = null;
