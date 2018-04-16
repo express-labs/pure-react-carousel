@@ -156,10 +156,10 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       touch => this.tpCache[touch.identifier],
     ).slice(0, 2);
 
-    const clientRect = ev.target.getBoundingClientRect();
-
     if (touches.length === 2) {
       ev.stopPropagation();
+
+      const clientRect = ev.target.getBoundingClientRect();
 
       const id0 = touches[0].identifier;
       const id1 = touches[1].identifier;
