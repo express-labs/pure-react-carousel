@@ -73,32 +73,53 @@ describe('<Slider />', () => {
     expect(wrapper.state('startX')).toBe(100);
     expect(wrapper.state('startY')).toBe(100);
   });
-  it('should set carouselStore the document\'s original overflow value on a touchStart event and set the document overflow to hidden.', () => {
-    global.document.documentElement.style.overflow = 'bob';
+  it('given the document has vertical scroll bars, it should set carouselStore the document\'s original overflow value on a touchStart event and set the document overflow to hidden.', () => {
+    global.document.documentElement.style.overflow = 'scroll';
     touch100.preventDefault.mockReset();
     touch100.stopPropagation.mockReset();
-    const wrapper = shallow(<Slider {...props} orientation="vertical" />);
+
+    // have to call mount() because we need refs to be set up.  That only happens when mounted.
+    const wrapper = mount(<Slider {...props} orientation="vertical" />);
     const instance = wrapper.instance();
     wrapper.find('.sliderTray').simulate('touchstart', touch100);
-    expect(instance.originalOverflow).toBe('bob');
+
+    // Enzyme doesn't yet call componentDidUpdate().  They are working on adding this feature.
+    // so, we have to manually simulate this.
+    const prevProps = wrapper.props();
+    wrapper.setProps({ isPageScrollLocked: true });
+    instance.componentDidUpdate(prevProps);
+
+    expect(instance.originalOverflow).toBe('scroll');
     expect(global.document.documentElement.style.overflow).toBe('hidden');
     expect(touch100.preventDefault).toHaveBeenCalledTimes(1);
     expect(touch100.stopPropagation).toHaveBeenCalledTimes(1);
     global.document.documentElement.style.overflow = '';
   });
   it('should recarouselStore the document\'s original overflow value and set originalOverflow to null on a vertical carousel touchEnd', () => {
-    global.document.documentElement.style.overflow = 'bob';
-    const wrapper = shallow(<Slider {...props} orientation="vertical" />);
+    global.document.documentElement.style.overflow = 'scroll';
+
+    // need to call mount() because there are refs that need to be created.  That only happens on when mounted.
+    const wrapper = mount(<Slider {...props} orientation="vertical" />);
     const instance = wrapper.instance();
-    instance.sliderTrayElement = {
-      clientWidth: 100,
-      clientHeight: 100,
-    };
     wrapper.find('.sliderTray').simulate('touchstart', touch100);
     wrapper.update();
+
+    // Enzyme doesn't yet call componentDidUpdate().  They are working on adding this feature.
+    // so, we have to manually simulate this.
+    let prevProps = wrapper.props();
+    wrapper.setProps({ isPageScrollLocked: true });
+    instance.componentDidUpdate(prevProps);
+
     wrapper.find('.sliderTray').simulate('touchend');
     wrapper.update();
-    expect(global.document.documentElement.style.overflow).toBe('bob');
+
+    // Enzyme doesn't yet call componentDidUpdate().  They are working on adding this feature.
+    // so, we have to manually simulate this.
+    prevProps = wrapper.props();
+    wrapper.setProps({ isPageScrollLocked: false });
+    instance.componentDidUpdate(prevProps);
+
+    expect(global.document.documentElement.style.overflow).toBe('scroll');
     expect(instance.originalOverflow).toBe(null);
   });
   it('should update deltaX and deltaY when isBeingTouchDragged', () => {
@@ -562,5 +583,15 @@ describe('<Slider />', () => {
 
     expect(wrapper.state('deltaX')).toBe(0);
     expect(wrapper.state('deltaY')).toBe(0);
+  });
+  it('lockScroll() should NOT set scrollParent style if there is no scrollParent', () => {
+    // patch for missing SVGElement in jsDom.  Supposedly is fixed in newer versions of jsDom.
+    if (!global.SVGElement) global.SVGElement = global.Element;
+
+    const wrapper = mount(<Slider {...props} />);
+    const instance = wrapper.instance();
+    instance.sliderTrayElement = null;
+    instance.lockScroll();
+    expect(instance.scrollParent).toEqual(null);
   });
 });

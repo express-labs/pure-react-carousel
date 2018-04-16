@@ -12,13 +12,16 @@
   bottom: 0;
   right: 0;
   opacity: 0;
-  transition: opacity 300ms, transform 300ms;
   cursor: zoom-in;
+  transition: opacity 300ms, transform 300ms;
 }
 
 .hover {
   opacity: 1;
-  transform: scale(2);
+}
+
+.zoom {
+  opacity: 1;
 }
 
 .loading {

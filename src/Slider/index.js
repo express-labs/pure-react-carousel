@@ -7,6 +7,7 @@ export default WithStore(Slider, state => ({
   dragEnabled: state.dragEnabled,
   hasMasterSpinner: state.hasMasterSpinner,
   interval: state.interval,
+  isPageScrollLocked: state.isPageScrollLocked,
   isPlaying: state.isPlaying,
   lockOnWindowScroll: state.lockOnWindowScroll,
   masterSpinnerFinished: state.masterSpinnerFinished,
