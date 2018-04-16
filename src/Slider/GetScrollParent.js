@@ -38,7 +38,6 @@ export default class GetScrollParent {
 
   scrollParent(_node) {
     const ps = this.parents(_node.parentNode, []);
-
     for (let i = 0; i < ps.length; i += 1) {
       if (GetScrollParent.scroll(ps[i])) {
         return ps[i];
