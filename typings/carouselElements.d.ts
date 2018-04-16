@@ -3,6 +3,9 @@ import * as React from 'react'
 interface SliderProps {
   readonly children: React.ReactNode
   readonly className?: string
+  readonly classNameAnimation?: string
+  readonly classNameTray?: string
+  readonly classNameTrayWrap?: string
   readonly onMasterSpinner?: () => void
   readonly style?: {}
   readonly trayTag?: string

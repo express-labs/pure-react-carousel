@@ -36,6 +36,9 @@ window.requestAnimationFrame = (r) => {
 };
 window.cancelAnimationFrame = jest.fn().mockImplementation(() => {});
 
+// patch for missing SVGElement in jsDom.  Supposedly is fixed in newer versions of jsDom.
+if (!global.SVGElement) global.SVGElement = global.Element;
+
 jest.useFakeTimers();
 
 describe('<Slider />', () => {
@@ -43,10 +46,12 @@ describe('<Slider />', () => {
   beforeEach(() => {
     props = clone(components.Slider.props);
   });
+
   it('should render', () => {
     const wrapper = shallow(<Slider {...props} />);
     expect(wrapper.exists()).toBe(true);
   });
+
   it('componentWillUnmount should cancel any animation frame and null out moveTimer', () => {
     window.cancelAnimationFrame.mockReset();
     const wrapper = shallow(<Slider {...props} />);
@@ -57,6 +62,7 @@ describe('<Slider />', () => {
     expect(cancelAnimationFrame.mock.calls[0][0]).toBe('I be a timer');
     expect(instance.moveTimer).toBe(null);
   });
+
   it('should not update the state if touched and touchEnabled is false', () => {
     const wrapper = shallow(<Slider {...props} touchEnabled={false} />);
     expect(wrapper.state('isBeingTouchDragged')).toBe(false);
@@ -64,6 +70,7 @@ describe('<Slider />', () => {
     wrapper.update();
     expect(wrapper.state('isBeingTouchDragged')).toBe(false);
   });
+
   it('should change state values when slider tray is touched', () => {
     const wrapper = shallow(<Slider {...props} />);
     expect(wrapper.state('isBeingTouchDragged')).toBe(false);
@@ -73,6 +80,7 @@ describe('<Slider />', () => {
     expect(wrapper.state('startX')).toBe(100);
     expect(wrapper.state('startY')).toBe(100);
   });
+
   it('given the document has vertical scroll bars, it should set carouselStore the document\'s original overflow value on a touchStart event and set the document overflow to hidden.', () => {
     global.document.documentElement.style.overflow = 'scroll';
     touch100.preventDefault.mockReset();
@@ -95,12 +103,17 @@ describe('<Slider />', () => {
     expect(touch100.stopPropagation).toHaveBeenCalledTimes(1);
     global.document.documentElement.style.overflow = '';
   });
+
   it('should recarouselStore the document\'s original overflow value and set originalOverflow to null on a vertical carousel touchEnd', () => {
     global.document.documentElement.style.overflow = 'scroll';
 
     // need to call mount() because there are refs that need to be created.  That only happens on when mounted.
     const wrapper = mount(<Slider {...props} orientation="vertical" />);
     const instance = wrapper.instance();
+    instance.sliderTrayElement = {
+      clientWidth: 100,
+      clientHeight: 100,
+    };
     wrapper.find('.sliderTray').simulate('touchstart', touch100);
     wrapper.update();
 
@@ -122,6 +135,7 @@ describe('<Slider />', () => {
     expect(global.document.documentElement.style.overflow).toBe('scroll');
     expect(instance.originalOverflow).toBe(null);
   });
+
   it('should update deltaX and deltaY when isBeingTouchDragged', () => {
     const wrapper = shallow(<Slider {...props} />);
     expect(wrapper.state('startX')).toBe(0);
@@ -130,6 +144,7 @@ describe('<Slider />', () => {
     expect(wrapper.state('deltaX')).toBe(100);
     expect(wrapper.state('deltaY')).toBe(100);
   });
+
   it('touchmove should not alter state if touchEnabled is false', () => {
     const wrapper = shallow(<Slider {...props} touchEnabled={false} />);
     expect(wrapper.state('startX')).toBe(0);
@@ -138,6 +153,7 @@ describe('<Slider />', () => {
     expect(wrapper.state('deltaX')).toBe(0);
     expect(wrapper.state('deltaY')).toBe(0);
   });
+
   it('touchmove should not alter state if props.lockOnWindowScroll and this.isDocumentScrolling are both true', () => {
     const wrapper = shallow(<Slider {...props} lockOnWindowScroll />);
     const instance = wrapper.instance();
@@ -148,12 +164,14 @@ describe('<Slider />', () => {
     expect(wrapper.state('deltaX')).toBe(0);
     expect(wrapper.state('deltaY')).toBe(0);
   });
+
   it('should not set this.isDocumentScrolling to true if touchEnabled is false', () => {
     const wrapper = shallow(<Slider {...props} touchEnabled={false} />);
     const instance = wrapper.instance();
     instance.handleDocumentScroll();
     expect(instance.isDocumentScrolling).toBe(null);
   });
+
   it('should assign the correct vertical css classes when orientation="vertical"', () => {
     const wrapper = shallow(<Slider {...props} orientation="vertical" />);
     expect(wrapper.find('.carousel__slider').hasClass('verticalSlider')).toBe(true);
@@ -163,6 +181,7 @@ describe('<Slider />', () => {
     expect(wrapper.find('.carousel__slider-tray-wrapper').hasClass('verticalSlideTrayWrap')).toBe(true);
     expect(wrapper.find('.carousel__slider-tray-wrapper').hasClass('carousel__slider-tray-wrap--vertical')).toBe(true);
   });
+
   it('Slider.slideSizeInPx should return 100 given the test conditions (horizontal)', () => {
     expect(Slider.slideSizeInPx(
       'horizontal',
@@ -171,6 +190,7 @@ describe('<Slider />', () => {
       4,
     )).toBe(100);
   });
+
   it('Slider.slideSizeInPx should return 100 given the test conditions (vertical)', () => {
     expect(Slider.slideSizeInPx(
       'vertical',
@@ -179,6 +199,7 @@ describe('<Slider />', () => {
       4,
     )).toBe(100);
   });
+
   it('Slider.slidesMoved should return 0 given the test conditions (horizontal)', () => {
     expect(Slider.slidesMoved(
       'horizontal',
@@ -187,6 +208,7 @@ describe('<Slider />', () => {
       100,
     )).toBe(0);
   });
+
   it('Slider.slidesMoved should return -1 given the test conditions (horizontal)', () => {
     expect(Slider.slidesMoved(
       'horizontal',
@@ -195,6 +217,7 @@ describe('<Slider />', () => {
       100,
     )).toBe(-1);
   });
+
   it('Slider.slidesMoved should return 0 given the test conditions (vertical)', () => {
     expect(Slider.slidesMoved(
       'vertical',
@@ -203,6 +226,7 @@ describe('<Slider />', () => {
       100,
     )).toBe(0);
   });
+
   it('Slider.slidesMoved should return -1 given the test conditions (vertical)', () => {
     expect(Slider.slidesMoved(
       'vertical',
@@ -211,6 +235,7 @@ describe('<Slider />', () => {
       100,
     )).toBe(-1);
   });
+
   it('Should move the slider to slide 2 (index 1 since slide numbering starts at 0) on touchend given the test conditions', () => {
     const wrapper = mount(<Slider {...props} />);
     expect(wrapper.prop('naturalSlideHeight')).toBe(100);
@@ -230,6 +255,7 @@ describe('<Slider />', () => {
     wrapper.find('.sliderTray').simulate('touchend', { targetTouches: [] });
     expect(props.carouselStore.state.currentSlide).toBe(1);
   });
+
   it('Should keep the slider on slide 0 on touchend when dragging the slider past the start of the slide show.', () => {
     const wrapper = mount(<Slider {...props} />);
     const instance = wrapper.instance();
@@ -245,6 +271,7 @@ describe('<Slider />', () => {
     wrapper.find('.sliderTray').simulate('touchend', { targetTouches: [] });
     expect(props.carouselStore.state.currentSlide).toBe(0);
   });
+
   it('Should move the slider to totalSlides - visibleSlides - 1 when dragging past the last slide.', () => {
     const wrapper = mount(<Slider {...props} />);
     const instance = wrapper.instance();
@@ -260,6 +287,7 @@ describe('<Slider />', () => {
     wrapper.find('.sliderTray').simulate('touchend', { targetTouches: [] });
     expect(props.carouselStore.state.currentSlide).toBe(3);
   });
+
   it('should not change the state at all when touchEnd and touchEnabled prop is false', () => {
     const wrapper = shallow(<Slider {...props} touchEnabled={false} />);
     // nonsense values to test that slider state is not reset on touchend
@@ -296,6 +324,7 @@ describe('<Slider />', () => {
     handleOnTouchEnd.mockReset();
     handleOnTouchEnd.mockRestore();
   });
+
   it('should call handleOnTouchCancel when a touch is canceled', () => {
     const wrapper = shallow(<Slider {...props} />);
     const instance = wrapper.instance();
@@ -311,16 +340,19 @@ describe('<Slider />', () => {
     expect(handleOnTouchCancel).toHaveBeenCalledTimes(1);
     expect(wrapper.state('isBeingTouchDragged')).toBe(false);
   });
+
   it('should show a spinner if the carousel was just inserted in the DOM but the carousel slides are still being added', () => {
     const wrapper = shallow(<Slider {...props} hasMasterSpinner />);
     expect(wrapper.find('.masterSpinnerContainer').length).toBe(1);
     expect(wrapper.find('.carousel__master-spinner-container').length).toBe(1);
   });
+
   it('should call any supplied onMasterSpinner function when the masterSpinner is showing.', () => {
     const onMasterSpinner = jest.fn();
     shallow(<Slider {...props} hasMasterSpinner onMasterSpinner={onMasterSpinner} />);
     expect(onMasterSpinner).toHaveBeenCalledTimes(1);
   });
+
   it('should move the slider to slide 1 from slide 0 when pressing the left arrow', () => {
     const carouselStore = new Store({
       currentSlide: 1,
@@ -330,6 +362,7 @@ describe('<Slider />', () => {
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 37 });
     expect(carouselStore.state.currentSlide).toBe(0);
   });
+
   it('should NOT move the slider lower than zero when left arrow is pressed', () => {
     const carouselStore = new Store({
       currentSlide: 0,
@@ -339,12 +372,14 @@ describe('<Slider />', () => {
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 37 });
     expect(carouselStore.state.currentSlide).toBe(0);
   });
+
   it('should move the slider to slide 0 from slide 1 when pressing the right arrow', () => {
     const wrapper = mount(<Slider {...props} />);
     expect(wrapper.prop('carouselStore').state.currentSlide).toBe(0);
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
     expect(wrapper.prop('carouselStore').state.currentSlide).toBe(1);
   });
+
   it('should not move the slider from 3 to 4 since !(currentslide < (totalSlides - visibleSlides)', () => {
     const carouselStore = new Store({
       currentSlide: 3,
@@ -354,14 +389,17 @@ describe('<Slider />', () => {
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
     expect(wrapper.prop('carouselStore').state.currentSlide).toBe(3);
   });
+
   it('the .carousel__slider should have a default tabIndex of 0', () => {
     const wrapper = shallow(<Slider {...props} />);
     expect(wrapper.find('.carousel__slider').prop('tabIndex')).toBe(0);
   });
+
   it('override the default tabIndex for .carousel__slider if a tabIndex prop is passed to this component', () => {
     const wrapper = shallow(<Slider {...props} tabIndex={-1} />);
     expect(wrapper.find('.carousel__slider').prop('tabIndex')).toBe(-1);
   });
+
   it('should not call this.focus() if totalSlides <= visibleSlides', () => {
     const wrapper = shallow(<Slider {...props} totalSlides={2} visibleSlides={2} />);
     const instance = wrapper.instance();
@@ -370,6 +408,7 @@ describe('<Slider />', () => {
     wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
     expect(focus).toHaveBeenCalledTimes(0);
   });
+
   it('endTouchMove should set this.isDocumentScrolling to false if props.lockOnWindowScroll is true', () => {
     const wrapper = shallow(<Slider {...props} lockOnWindowScroll />);
     const instance = wrapper.instance();
@@ -379,6 +418,7 @@ describe('<Slider />', () => {
     instance.endTouchMove();
     expect(instance.isDocumentScrolling).toBe(false);
   });
+
   it('endTouchMove should NOT set this.isDocumentScrolling to false if props.lockOnWindowScroll is FALSE', () => {
     const wrapper = shallow(<Slider {...props} />);
     const instance = wrapper.instance();
@@ -386,6 +426,29 @@ describe('<Slider />', () => {
     instance.endTouchMove();
     expect(instance.isDocumentScrolling).toBe(null);
   });
+
+  it('should not supply the default css transitions if classNameAnimation property is not null', () => {
+    const wrapper = shallow(<Slider {...props} classNameAnimation="my-animation" />);
+    expect(wrapper.find('.sliderAnimation').exists()).toBe(false);
+    expect(wrapper.find('.my-animation').exists()).toBe(true);
+  });
+
+  it('should supply the default css transitions if classNameAnimation property null', () => {
+    const wrapper = shallow(<Slider {...props} />);
+    expect(wrapper.find('.sliderAnimation').exists()).toBe(true);
+    expect(wrapper.find('.my-animation').exists()).toBe(false);
+  });
+
+  it('should apply the classNameTray class to the tray', () => {
+    const wrapper = shallow(<Slider {...props} classNameTray="tray-class" />);
+    expect(wrapper.find('.tray-class').exists()).toBe(true);
+  });
+
+  it('should apply the classNameTrayWrap class to the tray wrap div', () => {
+    const wrapper = shallow(<Slider {...props} classNameTrayWrap="tray-class-wrap" />);
+    expect(wrapper.find('.tray-class-wrap').exists()).toBe(true);
+  });
+
   it('should start playing the slideshow after mounting after a delay of props.interval if props.isPlay is true', () => {
     const playForward = jest.spyOn(Slider.prototype, 'playForward');
     const wrapper = shallow(<Slider {...props} isPlaying />);
@@ -396,6 +459,7 @@ describe('<Slider />', () => {
     playForward.mockReset();
     playForward.mockRestore();
   });
+
   it('should stop playing the slideshow if the isPlaying prop is changed to false', () => {
     const wrapper = shallow(<Slider {...props} isPlaying />);
     const instance = wrapper.instance();
@@ -403,6 +467,7 @@ describe('<Slider />', () => {
     wrapper.setProps({ isPlaying: false });
     expect(instance.interval).toBe(null);
   });
+
   it('should start playing the slideshow if the isPlaying prop is changed to true', () => {
     const play = jest.spyOn(Slider.prototype, 'play');
     const wrapper = shallow(<Slider {...props} />);
@@ -414,6 +479,7 @@ describe('<Slider />', () => {
     play.mockReset();
     play.mockRestore();
   });
+
   it('should start playing the slideshow backwards after prop.interval milliseconds if prop.isPlaying is true and prop.playDirection is backward', () => {
     const wrapper = shallow(<Slider {...props} playDirection="backward" />);
     const instance = wrapper.instance();
@@ -424,12 +490,14 @@ describe('<Slider />', () => {
     expect(instance.interval).not.toBe(null);
     expect(playBackward).toHaveBeenCalledTimes(1);
   });
+
   it('playForward() should increment the currentSlide by value of step', () => {
     const wrapper = shallow(<Slider {...props} />);
     const instance = wrapper.instance();
     instance.playForward();
     expect(props.carouselStore.state.currentSlide).toBe(2);
   });
+
   it('playForward() should jump to slide 0 if at the end of the slides.', () => {
     props.carouselStore.state.currentSlide = 3;
     const wrapper = shallow(<Slider {...props} currentSlide={3} />);
@@ -438,6 +506,7 @@ describe('<Slider />', () => {
     instance.playForward();
     expect(props.carouselStore.state.currentSlide).toBe(0);
   });
+
   it('playBackward() should derement the currentSlide by value of step', () => {
     props.carouselStore.state.currentSlide = 4;
     const wrapper = shallow(<Slider {...props} currentSlide={4} />);
@@ -446,6 +515,7 @@ describe('<Slider />', () => {
     instance.playBackward();
     expect(props.carouselStore.state.currentSlide).toBe(2);
   });
+
   it('playBackward() should jump to totalSlides - visibleSlides (end of the slides) if at the start of slides.', () => {
     const wrapper = shallow(<Slider {...props} />);
     expect(props.carouselStore.state.currentSlide).toBe(0);
@@ -585,13 +655,17 @@ describe('<Slider />', () => {
     expect(wrapper.state('deltaY')).toBe(0);
   });
   it('lockScroll() should NOT set scrollParent style if there is no scrollParent', () => {
-    // patch for missing SVGElement in jsDom.  Supposedly is fixed in newer versions of jsDom.
-    if (!global.SVGElement) global.SVGElement = global.Element;
-
     const wrapper = mount(<Slider {...props} />);
     const instance = wrapper.instance();
     instance.sliderTrayElement = null;
     instance.lockScroll();
+    expect(instance.scrollParent).toEqual(null);
+  });
+  it('unlockScroll() should NOT set scrollParent style if there is no scrollParent', () => {
+    const wrapper = mount(<Slider {...props} />);
+    const instance = wrapper.instance();
+    instance.sliderTrayElement = null;
+    instance.unlockScroll();
     expect(instance.scrollParent).toEqual(null);
   });
 });

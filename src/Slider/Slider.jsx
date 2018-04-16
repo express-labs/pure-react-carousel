@@ -10,6 +10,9 @@ const Slider = class Slider extends React.Component {
     carouselStore: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
+    classNameAnimation: PropTypes.string,
+    classNameTray: PropTypes.string,
+    classNameTrayWrap: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disableAnimation: PropTypes.bool.isRequired,
     dragEnabled: PropTypes.bool.isRequired,
@@ -36,7 +39,11 @@ const Slider = class Slider extends React.Component {
   }
 
   static defaultProps = {
-    className: '',
+    className: null,
+    classNameAnimation: null,
+    classNameTray: null,
+    classNameTrayWrap: null,
+    disableAnimation: false,
     height: null,
     onMasterSpinner: null,
     style: {},
@@ -396,6 +403,9 @@ const Slider = class Slider extends React.Component {
       carouselStore,
       children,
       className,
+      classNameAnimation,
+      classNameTray,
+      classNameTrayWrap,
       currentSlide,
       disableAnimation,
       dragEnabled,
@@ -463,13 +473,16 @@ const Slider = class Slider extends React.Component {
       'carousel__slider-tray-wrapper',
       orientation === 'vertical' ? s.verticalSlideTrayWrap : s.horizontalTrayWrap,
       orientation === 'vertical' ? 'carousel__slider-tray-wrap--vertical' : 'carousel__slider-tray-wrap--horizontal',
+      classNameTrayWrap,
     ]);
 
     const trayClasses = cn([
       s.sliderTray,
+      classNameAnimation || s.sliderAnimation,
       'carousel__slider-tray',
       orientation === 'vertical' ? s.verticalTray : s.horizontalTray,
       orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal',
+      classNameTray,
     ]);
 
     const newTabIndex = tabIndex !== null ? tabIndex : 0;
