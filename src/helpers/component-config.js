@@ -121,6 +121,7 @@ export default {
   ImageWithZoom: {
     component: ImageWithZoom,
     props: {
+      carouselStore: new Store({}),
       src: 'bob.jpg',
     },
   },
@@ -149,6 +150,7 @@ export default {
       dragEnabled: true,
       hasMasterSpinner: false,
       interval: 5000,
+      isPageScrollLocked: false,
       isPlaying: false,
       lockOnWindowScroll: false,
       masterSpinnerFinished: false,

@@ -1,3 +1,5 @@
 import ImageWithZoom from './ImageWithZoom';
 
-export default ImageWithZoom;
+import WithStore from '../Store/WithStore';
+
+export default WithStore(ImageWithZoom, () => ({}));

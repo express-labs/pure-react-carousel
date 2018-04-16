@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Spinner } from '../';
-import { CarouselPropTypes, cn, pct } from '../helpers';
+import GetScrollParent from './GetScrollParent';
+import { CarouselPropTypes, cn, pct, boundedRange } from '../helpers';
 import s from './slider.css';
 
 const Slider = class Slider extends React.Component {
@@ -17,6 +18,7 @@ const Slider = class Slider extends React.Component {
     dragEnabled: PropTypes.bool.isRequired,
     hasMasterSpinner: PropTypes.bool.isRequired,
     interval: PropTypes.number.isRequired,
+    isPageScrollLocked: PropTypes.bool.isRequired,
     isPlaying: PropTypes.bool.isRequired,
     lockOnWindowScroll: PropTypes.bool.isRequired,
     masterSpinnerFinished: PropTypes.bool.isRequired,
@@ -66,6 +68,7 @@ const Slider = class Slider extends React.Component {
 
   constructor() {
     super();
+    this.getSliderRef = this.getSliderRef.bind(this);
     this.handleDocumentScroll = this.handleDocumentScroll.bind(this);
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
 
@@ -95,6 +98,7 @@ const Slider = class Slider extends React.Component {
     this.isDocumentScrolling = null;
     this.moveTimer = null;
     this.originalOverflow = null;
+    this.scrollParent = null;
   }
 
   componentDidMount() {
@@ -102,9 +106,11 @@ const Slider = class Slider extends React.Component {
     if (this.props.isPlaying) this.play();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.isPlaying && !nextProps.isPlaying) this.stop();
-    if (!this.props.isPlaying && nextProps.isPlaying) this.play();
+  componentDidUpdate(prevProps) {
+    if (!prevProps.isPlaying && this.props.isPlaying) this.play();
+    if (prevProps.isPlaying && !this.props.isPlaying) this.stop();
+    if (!prevProps.isPageScrollLocked && this.props.isPageScrollLocked) this.lockScroll();
+    if (prevProps.isPageScrollLocked && !this.props.isPageScrollLocked) this.unlockScroll();
   }
 
   componentWillUnmount() {
@@ -123,8 +129,9 @@ const Slider = class Slider extends React.Component {
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     if (this.props.orientation === 'vertical') {
-      this.originalOverflow = this.originalOverflow || document.documentElement.style.overflow;
-      document.documentElement.style.overflow = 'hidden';
+      this.props.carouselStore.setStoreState({
+        isPageScrollLocked: true,
+      });
     }
 
     this.setState({
@@ -136,8 +143,6 @@ const Slider = class Slider extends React.Component {
   }
 
   onDragMove(screenX, screenY) {
-    window.cancelAnimationFrame.call(window, this.moveTimer);
-
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState({
         deltaX: screenX - this.state.startX,
@@ -153,8 +158,9 @@ const Slider = class Slider extends React.Component {
     this.computeCurrentSlide();
 
     if (this.props.orientation === 'vertical') {
-      document.documentElement.style.overflow = this.originalOverflow;
-      this.originalOverflow = null;
+      this.props.carouselStore.setStoreState({
+        isPageScrollLocked: false,
+      });
     }
 
     this.setState({
@@ -166,6 +172,10 @@ const Slider = class Slider extends React.Component {
     });
 
     this.isDocumentScrolling = this.props.lockOnWindowScroll ? false : null;
+  }
+
+  getSliderRef(el) {
+    this.sliderTrayElement = el;
   }
 
   handleOnMouseDown(ev) {
@@ -290,6 +300,34 @@ const Slider = class Slider extends React.Component {
     this.interval = null;
   }
 
+  /**
+   * Find the first anscestor dom element that has a scroll bar and sets it's overflow to hidden.
+   * this prevents the ancestor from scrolling while the user is doing the pinch-zoom gesture
+   * on their touch-enabled device.
+   * @return {void}
+   */
+  lockScroll() {
+    const getScrollParent = new GetScrollParent();
+    this.scrollParent = getScrollParent.getScrollParent(this.sliderTrayElement);
+    if (this.scrollParent) {
+      this.originalOverflow = this.originalOverflow || this.scrollParent.style.overflow;
+      this.scrollParent.style.overflow = 'hidden';
+    }
+  }
+
+  /**
+   * Restores the original overflow for the ancestor dom element that had scroll bars. This is
+   * called when the user releases the pinch-zoom gesture on their touch-enabled device.
+   * @return {void}
+   */
+  unlockScroll() {
+    if (this.scrollParent) {
+      this.scrollParent.style.overflow = this.originalOverflow;
+      this.originalOverflow = null;
+      this.scrollParent = null;
+    }
+  }
+
   computeCurrentSlide() {
     const slideSizeInPx = Slider.slideSizeInPx(
       this.props.orientation,
@@ -309,12 +347,14 @@ const Slider = class Slider extends React.Component {
       this.props.totalSlides, this.props.visibleSlides,
     );
 
-    let newCurrentSlide = this.props.currentSlide + slidesMoved;
-    newCurrentSlide = Math.max(0, newCurrentSlide);
-    newCurrentSlide = Math.min(maxSlide, newCurrentSlide);
+    const currentSlide = boundedRange({
+      min: 0,
+      max: maxSlide,
+      x: (this.props.currentSlide + slidesMoved),
+    });
 
     this.props.carouselStore.setStoreState({
-      currentSlide: newCurrentSlide,
+      currentSlide,
     });
   }
 
@@ -369,6 +409,7 @@ const Slider = class Slider extends React.Component {
       dragEnabled,
       hasMasterSpinner,
       interval,
+      isPageScrollLocked,
       isPlaying,
       lockOnWindowScroll,
       masterSpinnerFinished,
@@ -459,7 +500,7 @@ const Slider = class Slider extends React.Component {
       >
         <div className={trayWrapClasses} style={trayWrapStyle}>
           <TrayTag
-            ref={(el) => { this.sliderTrayElement = el; }}
+            ref={this.getSliderRef}
             className={trayClasses}
             style={trayStyle}
             onTouchStart={this.handleOnTouchStart}
