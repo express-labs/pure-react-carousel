@@ -8,6 +8,8 @@ const Slide = class Slide extends React.PureComponent {
     carouselStore: PropTypes.object,
     children: CarouselPropTypes.children,
     className: PropTypes.string,
+    classNameHidden: PropTypes.string,
+    classNameVisible: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     index: PropTypes.number.isRequired,
     innerClassName: PropTypes.string,
@@ -29,6 +31,8 @@ const Slide = class Slide extends React.PureComponent {
     carouselStore: null,
     children: null,
     className: null,
+    classNameHidden: null,
+    classNameVisible: null,
     innerClassName: null,
     innerTag: 'div',
     onBlur: null,
@@ -79,9 +83,26 @@ const Slide = class Slide extends React.PureComponent {
 
   render() {
     const {
-      carouselStore, children, className, currentSlide, index, innerClassName, innerTag: InnerTag,
-      naturalSlideHeight, naturalSlideWidth, onBlur, onFocus, orientation, slideSize, style,
-      tabIndex, tag: Tag, totalSlides, visibleSlides,
+      carouselStore,
+      children,
+      className,
+      classNameHidden,
+      classNameVisible,
+      currentSlide,
+      index,
+      innerClassName,
+      innerTag: InnerTag,
+      naturalSlideHeight,
+      naturalSlideWidth,
+      onBlur,
+      onFocus,
+      orientation,
+      slideSize,
+      style,
+      tabIndex,
+      tag: Tag,
+      totalSlides,
+      visibleSlides,
       ...props
     } = this.props;
 
@@ -97,11 +118,17 @@ const Slide = class Slide extends React.PureComponent {
 
     const newStyle = Object.assign({}, tempStyle, style);
 
+    const isVisible = this.isVisible();
+
     const newClassName = cn([
       s.slide,
       orientation === 'horizontal' && s.slideHorizontal,
       'carousel__slide',
       this.state.focused && 'carousel__slide--focused',
+      isVisible && classNameVisible,
+      isVisible && 'carousel__slide--visible',
+      !isVisible && classNameHidden,
+      !isVisible && 'carousel__slide--hidden',
       className,
     ]);
 

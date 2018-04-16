@@ -73,6 +73,42 @@ describe('<Slide />', () => {
     ));
     expect(wrapper.find('.slide').prop('tabIndex')).toBe(-1);
   });
+  it('should apply any supplied classes to hidden slides', () => {
+    const wrapper = shallow((
+      <Slide
+        classNameHidden="i-be-hidden"
+        classNameVisible="i-be-visible"
+        currentSlide={1}
+        index={0}
+        naturalSlideHeight={400}
+        naturalSlideWidth={300}
+        orientation="horizontal"
+        slideSize={25}
+        totalSlides={6}
+        visibleSlides={2}
+      />
+    ));
+    expect(wrapper.find('.slide').hasClass('i-be-hidden')).toBe(true);
+    expect(wrapper.find('.slide').hasClass('carousel__slide--hidden')).toBe(true);
+  });
+  it('should apply any supplied classes to visible slides', () => {
+    const wrapper = shallow((
+      <Slide
+        classNameHidden="i-be-hidden"
+        classNameVisible="i-be-visible"
+        currentSlide={0}
+        index={0}
+        naturalSlideHeight={400}
+        naturalSlideWidth={300}
+        orientation="horizontal"
+        slideSize={25}
+        totalSlides={6}
+        visibleSlides={2}
+      />
+    ));
+    expect(wrapper.find('.slide').hasClass('i-be-visible')).toBe(true);
+    expect(wrapper.find('.slide').hasClass('carousel__slide--visible')).toBe(true);
+  });
   it('should have a tabIndex of -1 if the slide is not visible within the slideTray (index >= currentSlide + visibleSlides)', () => {
     const wrapper = shallow((
       <Slide

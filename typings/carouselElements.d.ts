@@ -20,6 +20,8 @@ declare const Slider: SliderInterface
 
 interface SlideProps {
   readonly className?: string
+  readonly classNameHidden?: string
+  readonly classNameVisible?: string
   readonly index: number
   readonly innerClassName?: string
   readonly innerTag?: string
