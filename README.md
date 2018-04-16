@@ -234,6 +234,8 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
+| classNameHidden | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string when the slide is not visible. |
+| classNameVisible | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string when the slide is visible. |
 | **index** | number | | **Yes** | You must consecutively number the &lt;Slide > components in order starting with zero. |
 | innerClassName | [string&#124;null] | null | No | Optional className string that will be appended to an internal HTML element created by the Component. Best to just use Chrome Dev Tools to inspect the demo app or check the source code for &lt;Slide /> |
 | innerTag | string | 'div' | No | The inner HTML element for each Slide. |
@@ -244,7 +246,7 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 
 #### The Slide component creates the following pseudo HTML by default:
 ```HTML
-<props.tag|li class="carousel__slide [carousel__slide--focused] [props.className]" tabIndex="[props.tabIndex]" aria-hidden="[computed internally]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
+<props.tag|li class="carousel__slide [carousel__slide--focused] [props.className] [props.classNameVisible|props.classNameHidden] [carousel__slide--hidden|carousel__slide--visible]" tabIndex="[props.tabIndex]" aria-hidden="[computed internally]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
   <props.innerTag|div class="carousel__inner-slide [props.innerClassName]">
     [props.children]
     <div class="carousel__slide-focus-ring" />
