@@ -134,6 +134,7 @@ export {
   ButtonNext,
   ButtonPlay,
   CarouselProvider,
+  CarouselState,
   Dot,
   DotGroup,
   Image,
