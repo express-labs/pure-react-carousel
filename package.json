@@ -102,9 +102,9 @@
       "\\.(css|scss)$": "identity-obj-proxy"
     },
     "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/dev/",
-      "/dist/"
+      "<rootDir>/node_modules/",
+      "<rootDir>/dev/",
+      "<rootDir>/dist/"
     ],
     "testMatch": [
       "**/__tests__/**.test.js?(x)"
