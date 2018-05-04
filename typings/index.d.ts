@@ -78,7 +78,7 @@ declare const CarouselProvider: CarouselProviderInterface
 
 export interface CarouselInjectedProps {
   readonly carouselStore: {
-    readonly setStoreState: (state: CarouselState) => void
+    readonly setStoreState: (state: Partial<CarouselState>) => void
     readonly unsubscribeAllMasterSpinner: () => void
   }
 }
@@ -134,6 +134,7 @@ export {
   ButtonNext,
   ButtonPlay,
   CarouselProvider,
+  CarouselState,
   Dot,
   DotGroup,
   Image,
