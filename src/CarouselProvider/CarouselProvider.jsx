@@ -86,6 +86,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     const newStoreState = {};
 
     [
+      'currentSlide',
       'disableAnimation',
       'hasMasterSpinner',
       'interval',
@@ -107,12 +108,13 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     });
 
     const { currentSlide, disableAnimation } = this.carouselStore.getStoreState();
-    const isNewCurrentSlide = currentSlide !== nextProps.currentSlide;
-    const isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
 
-    if (isNewCurrentSlide) {
-      newStoreState.currentSlide = nextProps.currentSlide;
-    }
+    const isNewCurrentSlide = (
+      Object.prototype.hasOwnProperty.call(newStoreState, 'currentSlide') &&
+      currentSlide !== nextProps.currentSlide
+    );
+
+    const isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
 
     if (isNewCurrentSlide && !isAnimationDisabled) {
       newStoreState.disableAnimation = true;
