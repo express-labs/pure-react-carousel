@@ -62,6 +62,16 @@ describe('<CarouselProvider />', () => {
     const end = clone(instance.carouselStore.state);
     expect(start).toEqual(end);
   });
+  it('should not reset the currentSlide or disableAnimation values when unrelated props change', () => {
+    const wrapper = shallow(<CarouselProvider {...props} data-foo={1} />);
+    const instance = wrapper.instance();
+    instance.carouselStore.setStoreState({ currentSlide: 2 });
+    const start = clone(instance.carouselStore.state);
+    wrapper.setProps({ naturalSlideWidth: 300 });
+    const end = clone(instance.carouselStore.state);
+    expect(start.currentSlide).toEqual(end.currentSlide);
+    expect(start.disableAnimation).toEqual(end.disableAnimation);
+  });
   it('should set disable animation to false if we updated currentSlide and animationDisabled is false', () => {
     const wrapper = mount((
       <CarouselProvider
