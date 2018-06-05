@@ -467,7 +467,7 @@ More pseudocode.
 
 ```javascript
   import React from 'react';
-  import { WithProvider } from 'pure-react-carousel';
+  import { WithStore } from 'pure-react-carousel';
 
   class YourComponentHere extends React.Component {
     // ... stuff
