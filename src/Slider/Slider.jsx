@@ -15,6 +15,7 @@ const Slider = class Slider extends React.Component {
     classNameTrayWrap: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disableAnimation: PropTypes.bool.isRequired,
+    disableKeyboard: PropTypes.bool.isRequired,
     dragEnabled: PropTypes.bool.isRequired,
     hasMasterSpinner: PropTypes.bool.isRequired,
     interval: PropTypes.number.isRequired,
@@ -44,6 +45,7 @@ const Slider = class Slider extends React.Component {
     classNameTray: null,
     classNameTrayWrap: null,
     disableAnimation: false,
+    disableKeyboard: false,
     height: null,
     onMasterSpinner: null,
     style: {},
@@ -245,10 +247,10 @@ const Slider = class Slider extends React.Component {
 
   handleOnKeyDown(ev) {
     const { keyCode } = ev;
-    const { carouselStore, currentSlide, totalSlides, visibleSlides } = this.props;
+    const { carouselStore, currentSlide, disableKeyboard, totalSlides, visibleSlides } = this.props;
     const newStoreState = {};
 
-    if (totalSlides <= visibleSlides) return;
+    if ((disableKeyboard === true) || (totalSlides <= visibleSlides)) return;
 
     // left arrow
     if (keyCode === 37) {
@@ -406,6 +408,7 @@ const Slider = class Slider extends React.Component {
       classNameTrayWrap,
       currentSlide,
       disableAnimation,
+      disableKeyboard,
       dragEnabled,
       hasMasterSpinner,
       interval,

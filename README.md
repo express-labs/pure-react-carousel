@@ -507,6 +507,7 @@ Following the documentation above, only props save to use are exposed:
 interface CarouselState {
   readonly currentSlide: number
   readonly disableAnimation: boolean
+  readonly disableKeyboard: boolean
   readonly hasMasterSpinner: boolean
   readonly imageErrorCount: number
   readonly imageSuccessCount: number

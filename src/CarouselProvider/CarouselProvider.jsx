@@ -10,6 +10,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     className: PropTypes.string,
     currentSlide: PropTypes.number,
     disableAnimation: PropTypes.bool,
+    disableKeyboard: PropTypes.bool,
     hasMasterSpinner: PropTypes.bool,
     interval: PropTypes.number,
     isPageScrollLocked: PropTypes.bool,
@@ -27,10 +28,15 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     visibleSlides: PropTypes.number,
   }
 
+  static childContextTypes = {
+    carouselStore: PropTypes.object,
+  }
+
   static defaultProps = {
     className: null,
     currentSlide: 0,
     disableAnimation: false,
+    disableKeyboard: false,
     hasMasterSpinner: false,
     interval: 5000,
     isPageScrollLocked: false,
@@ -45,15 +51,12 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     visibleSlides: 1,
   }
 
-  static childContextTypes = {
-    carouselStore: PropTypes.object,
-  }
-
   constructor(props, context) {
     super(props, context);
     const options = {
       currentSlide: props.currentSlide,
       disableAnimation: props.disableAnimation,
+      disableKeyboard: props.disableKeyboard,
       hasMasterSpinner: props.hasMasterSpinner,
       imageErrorCount: 0,
       imageSuccessCount: 0,
@@ -88,6 +91,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     [
       'currentSlide',
       'disableAnimation',
+      'disableKeyboard',
       'hasMasterSpinner',
       'interval',
       'isPlaying',

@@ -4,6 +4,7 @@ import WithStore from '../Store/WithStore';
 export default WithStore(Slider, state => ({
   currentSlide: state.currentSlide,
   disableAnimation: state.disableAnimation,
+  disableKeyboard: state.disableKeyboard,
   dragEnabled: state.dragEnabled,
   hasMasterSpinner: state.hasMasterSpinner,
   interval: state.interval,
