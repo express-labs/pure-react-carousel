@@ -2,7 +2,7 @@
 // Definitions by: Jedrzej Lewandowski <https://github.com/TheFullResolution>
 // TypeScript Version: 2.7.2
 
-import * as React from 'react'
+import * as React from 'react';
 import {
   ButtonBack,
   ButtonFirst,
@@ -14,52 +14,52 @@ import {
   Image,
   ImageWithZoom,
   Slide,
-  Slider
-} from './carouselElements.d'
+  Slider,
+} from './carouselElements.d';
 
 interface CarouselState {
-  readonly currentSlide: number
-  readonly disableAnimation: boolean
-  readonly hasMasterSpinner: boolean
-  readonly imageErrorCount: number
-  readonly imageSuccessCount: number
-  readonly lockOnWindowScroll: boolean
-  readonly masterSpinnerFinished: boolean
-  readonly masterSpinnerThreshold: number
-  readonly naturalSlideHeight: number
-  readonly naturalSlideWidth: number
-  readonly orientation: 'horizontal' | 'vertical'
-  readonly slideSize: number
-  readonly slideTraySize: number
-  readonly step: number
-  readonly totalSlides: number
-  readonly touchEnabled: boolean
-  readonly dragEnabled: boolean
-  readonly visibleSlides: number
+  readonly currentSlide: number;
+  readonly disableAnimation: boolean;
+  readonly hasMasterSpinner: boolean;
+  readonly imageErrorCount: number;
+  readonly imageSuccessCount: number;
+  readonly lockOnWindowScroll: boolean;
+  readonly masterSpinnerFinished: boolean;
+  readonly masterSpinnerThreshold: number;
+  readonly naturalSlideHeight: number;
+  readonly naturalSlideWidth: number;
+  readonly orientation: 'horizontal' | 'vertical';
+  readonly slideSize: number;
+  readonly slideTraySize: number;
+  readonly step: number;
+  readonly totalSlides: number;
+  readonly touchEnabled: boolean;
+  readonly dragEnabled: boolean;
+  readonly visibleSlides: number;
 }
 
 interface CarouselProviderProps {
-  readonly children: React.ReactNode
-  readonly className?: string
-  readonly currentSlide?: CarouselState['currentSlide']
-  readonly disableAnimation?: CarouselState['disableAnimation']
-  readonly hasMasterSpinner?: CarouselState['hasMasterSpinner']
-  readonly interval?: number
-  readonly isPlaying?: boolean
-  readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
-  readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
-  readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
-  readonly playDirection?: 'forward'|'backward'
-  readonly orientation?: CarouselState['orientation']
-  readonly step?: CarouselState['step']
-  readonly tag?: string
-  readonly totalSlides: CarouselState['totalSlides']
-  readonly touchEnabled?: CarouselState['touchEnabled']
-  readonly dragEnabled?: CarouselState['dragEnabled']
-  readonly visibleSlides?: CarouselState['visibleSlides']
+  readonly children: React.ReactNode;
+  readonly className?: string;
+  readonly currentSlide?: CarouselState['currentSlide'];
+  readonly disableAnimation?: CarouselState['disableAnimation'];
+  readonly hasMasterSpinner?: CarouselState['hasMasterSpinner'];
+  readonly interval?: number;
+  readonly isPlaying?: boolean;
+  readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll'];
+  readonly naturalSlideHeight: CarouselState['naturalSlideHeight'];
+  readonly naturalSlideWidth: CarouselState['naturalSlideWidth'];
+  readonly playDirection?: 'forward' | 'backward';
+  readonly orientation?: CarouselState['orientation'];
+  readonly step?: CarouselState['step'];
+  readonly tag?: string;
+  readonly totalSlides: CarouselState['totalSlides'];
+  readonly touchEnabled?: CarouselState['touchEnabled'];
+  readonly dragEnabled?: CarouselState['dragEnabled'];
+  readonly visibleSlides?: CarouselState['visibleSlides'];
 }
 
-type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
+type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>;
 /**
  * CarouselProvider allows the other carousel components to communicate with each other.
  *
@@ -74,37 +74,35 @@ type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
  *
  * The CarouselProvider must also have children.
  */
-declare const CarouselProvider: CarouselProviderInterface
+declare const CarouselProvider: CarouselProviderInterface;
 
 export interface CarouselInjectedProps {
   readonly carouselStore: {
-    readonly setStoreState: (state: Partial<CarouselState>) => void
-    readonly unsubscribeAllMasterSpinner: () => void
-  }
+    readonly setStoreState: (state: Partial<CarouselState>) => void;
+    readonly unsubscribeAllMasterSpinner: () => void;
+  };
 }
 
 // Diff / Omit taken from https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-311923766
 type Diff<T extends string, U extends string> = ({ [P in T]: P } &
-  { [P in U]: never } & { readonly [x: string]: never })[T]
-type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>
+  { [P in U]: never } & { readonly [x: string]: never })[T];
+type Omit<T, K extends keyof T> = Pick<T, Diff<Extract<keyof T, string>, Extract<K, string>>>;
 
-type MapStateToProps<TStateProps> = (state: CarouselState) => TStateProps
+type MapStateToProps<TStateProps> = (state: CarouselState) => TStateProps;
 
 interface WithStoreInterface {
-  <CustomProps extends CarouselInjectedProps>(
-    component: React.ComponentClass<CustomProps>
-  ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> & {
-    readonly WrappedComponent: React.ComponentClass<CustomProps>
-  }
+  <CustomProps extends CarouselInjectedProps>(component: React.ComponentClass<CustomProps>): React.ComponentClass<
+    Omit<CustomProps, keyof CarouselInjectedProps>
+  > & {
+    readonly WrappedComponent: React.ComponentClass<CustomProps>;
+  };
 
   <CustomProps extends CarouselInjectedProps, CustomStateProps>(
     component: React.ComponentClass<CustomProps & CustomStateProps>,
-    state: MapStateToProps<CustomStateProps>
+    state: MapStateToProps<CustomStateProps>,
   ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> & {
-    readonly WrappedComponent: React.ComponentClass<
-      CustomProps & CustomStateProps
-    >
-  }
+    readonly WrappedComponent: React.ComponentClass<CustomProps & CustomStateProps>;
+  };
 }
 /**
  * Use this HOC to pass CarouselProvider state properties as props to a component.
@@ -125,7 +123,7 @@ interface WithStoreInterface {
  *  It is a "map state to props" function that you must create.
  *
  */
-declare const WithStore: WithStoreInterface
+declare const WithStore: WithStoreInterface;
 
 export {
   ButtonBack,
@@ -141,5 +139,5 @@ export {
   ImageWithZoom,
   Slide,
   Slider,
-  WithStore
-}
+  WithStore,
+};
