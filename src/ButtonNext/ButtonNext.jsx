@@ -22,11 +22,6 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     onClick: null,
   }
 
-  static setDisabled(disabled, currentSlide, visibleSlides, totalSlides) {
-    if (disabled !== null) return disabled;
-    if (currentSlide >= (totalSlides - visibleSlides)) return true;
-    return false;
-  }
 
   constructor(props) {
     super(props);
@@ -41,17 +36,23 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     };
   }
 
-  // TODO: get tests for this to work again
-  /* istanbul ignore next */
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      disabled: ButtonNext.setDisabled(
-        nextProps.disabled,
-        nextProps.currentSlide,
-        nextProps.visibleSlides,
-        nextProps.totalSlides,
-      ),
-    });
+  static setDisabled(disabled, currentSlide, visibleSlides, totalSlides) {
+    if (disabled !== null) return disabled;
+    if (currentSlide >= (totalSlides - visibleSlides)) return true;
+    return false;
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const disabled = ButtonNext.setDisabled(
+      nextProps.disabled,
+      nextProps.currentSlide,
+      nextProps.visibleSlides,
+      nextProps.totalSlides,
+    );
+    if (prevState.disabled !== disabled) {
+      return ({ disabled });
+    }
+    return null;
   }
 
   handleOnClick(ev) {

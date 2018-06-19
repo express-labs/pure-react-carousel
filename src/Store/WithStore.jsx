@@ -13,22 +13,19 @@ export default function WithStore(
       children: CarouselPropTypes.children,
     }
 
-    static defaultProps = {
-      children: null,
-    }
-
     static contextTypes = {
       carouselStore: propTypes.object,
+    }
+
+    static defaultProps = {
+      children: null,
     }
 
     constructor(props, context) {
       super(props, context);
       this.state = mapStateToProps({ ...context.carouselStore.state });
       this.updateStateProps = this.updateStateProps.bind(this);
-    }
-
-    componentWillMount() {
-      this.context.carouselStore.subscribe(this.updateStateProps);
+      context.carouselStore.subscribe(this.updateStateProps);
     }
 
     shouldComponentUpdate(nextProps, nextState) {

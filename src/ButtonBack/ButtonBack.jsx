@@ -14,16 +14,11 @@ export default class ButtonBack extends React.Component {
     step: PropTypes.number.isRequired,
   };
 
+
   static defaultProps = {
     className: null,
     disabled: null,
     onClick: null,
-  }
-
-  static setDisabled(disabled, currentSlide) {
-    if (disabled !== null) return disabled;
-    if (currentSlide === 0) return true;
-    return false;
   }
 
   constructor(props) {
@@ -34,12 +29,18 @@ export default class ButtonBack extends React.Component {
     };
   }
 
-  // TODO: get tests for this to work again
-  /* istanbul ignore next */
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      disabled: ButtonBack.setDisabled(nextProps.disabled, nextProps.currentSlide),
-    });
+  static setDisabled(disabled, currentSlide) {
+    if (disabled !== null) return disabled;
+    if (currentSlide === 0) return true;
+    return false;
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const disabled = ButtonBack.setDisabled(nextProps.disabled, nextProps.currentSlide);
+    if (prevState.disabled !== disabled) {
+      return { disabled };
+    }
+    return null;
   }
 
   handleOnClick(ev) {

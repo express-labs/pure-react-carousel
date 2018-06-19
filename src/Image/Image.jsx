@@ -4,6 +4,18 @@ import { CarouselPropTypes, cn, LOADING, SUCCESS, ERROR } from '../helpers';
 import s from './Image.css';
 
 class Image extends React.Component {
+  static subscribeMasterSpinner(props) {
+    if (props.hasMasterSpinner) {
+      props.carouselStore.subscribeMasterSpinner(props.src);
+    }
+  }
+
+  static unsubscribeMasterSpinner(props) {
+    if (props.hasMasterSpinner) {
+      props.carouselStore.unsubscribeMasterSpinner(props.src);
+    }
+  }
+
   static propTypes = {
     alt: PropTypes.string,
     carouselStore: PropTypes.object.isRequired,
@@ -34,18 +46,6 @@ class Image extends React.Component {
     tag: 'img',
   }
 
-  static subscribeMasterSpinner(props) {
-    if (props.hasMasterSpinner) {
-      props.carouselStore.subscribeMasterSpinner(props.src);
-    }
-  }
-
-  static unsubscribeMasterSpinner(props) {
-    if (props.hasMasterSpinner) {
-      props.carouselStore.unsubscribeMasterSpinner(props.src);
-    }
-  }
-
   constructor(props) {
     super(props);
     this.state = { imageStatus: LOADING };
@@ -59,10 +59,10 @@ class Image extends React.Component {
     this.initImage();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.src !== this.props.src) {
-      Image.unsubscribeMasterSpinner(this.props);
-      Image.subscribeMasterSpinner(nextProps);
+  componentDidUpdate(prevProps) {
+    if (prevProps.src !== this.props.src) {
+      Image.unsubscribeMasterSpinner(prevProps);
+      Image.subscribeMasterSpinner(this.props);
       this.initImage();
     }
   }

@@ -6,6 +6,20 @@ import { CarouselPropTypes, cn, pct, boundedRange } from '../helpers';
 import s from './slider.css';
 
 const Slider = class Slider extends React.Component {
+  static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
+    return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
+  }
+
+  static slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
+    const threshold = 0.1;
+    const bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
+    const smallDrag = (Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= (slideSizeInPx * threshold)) ? 1 : 0;
+    if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
+      return Math.max(smallDrag, bigDrag);
+    }
+    return -Math.max(bigDrag, smallDrag);
+  }
+
   static propTypes = {
     carouselStore: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,
@@ -52,20 +66,6 @@ const Slider = class Slider extends React.Component {
     tabIndex: null,
     trayTag: 'ul',
     visibleSlides: 1,
-  }
-
-  static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
-    return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
-  }
-
-  static slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
-    const threshold = 0.1;
-    const bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
-    const smallDrag = (Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= (slideSizeInPx * threshold)) ? 1 : 0;
-    if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
-      return Math.max(smallDrag, bigDrag);
-    }
-    return -Math.max(bigDrag, smallDrag);
   }
 
   constructor() {

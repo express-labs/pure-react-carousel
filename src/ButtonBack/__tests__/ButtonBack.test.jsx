@@ -13,7 +13,7 @@ configure({ adapter: new Adapter() });
 describe('<ButtonBack />', () => {
   it('should render', () => {
     const wrapper = shallow(
-      <ButtonBack currentSlide={1} step={1} carouselStore={{}}>Hello</ButtonBack>
+      <ButtonBack currentSlide={1} step={1} carouselStore={{}}>Hello</ButtonBack>,
     );
     expect(wrapper.exists()).toBe(true);
   });
@@ -26,6 +26,18 @@ describe('<ButtonBack />', () => {
       >Hello</ButtonBack>,
     );
     expect(wrapper.prop('disabled')).toBe(true);
+  });
+  it('getDerivedStateFromProps() should update state if the disabled prop changes', () => {
+    const wrapper = shallow(
+      <ButtonBack
+        currentSlide={1}
+        step={1}
+        carouselStore={{}}
+      >Hello</ButtonBack>,
+    );
+    expect(wrapper.state('disabled')).toBe(false);
+    wrapper.setProps({ disabled: true });
+    expect(wrapper.state('disabled')).toBe(true);
   });
   it('should be disabled if the disabled prop is set manually, regardless of currentSlide', () => {
     const wrapper = shallow(

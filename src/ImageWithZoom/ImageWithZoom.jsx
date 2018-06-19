@@ -9,19 +9,6 @@ const MOUSE_SCALE = 2;
 const MAX_TOUCH_SCALE = 3;
 
 const ImageWithZoom = class ImageWithZoom extends React.Component {
-  static propTypes = {
-    // alt: PropTypes.string,
-    carouselStore: PropTypes.object.isRequired,
-    src: PropTypes.string.isRequired,
-    tag: PropTypes.string,
-    isPinchZoomEnabled: PropTypes.bool,
-  }
-
-  static defaultProps = {
-    isPinchZoomEnabled: true,
-    tag: 'div',
-  }
-
   /**
    * Find the midpoint between two touches.
    * @param  {number} x1 Touch #1 x coordinate.
@@ -49,6 +36,19 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
   static distanceBetweenTwoTouches({ x1, y1, x2, y2 }) {
     // hint: make a right triangle that joins the two points.  The distance is the hypotenuce.
     return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
+  }
+
+  static propTypes = {
+    // alt: PropTypes.string,
+    carouselStore: PropTypes.object.isRequired,
+    src: PropTypes.string.isRequired,
+    tag: PropTypes.string,
+    isPinchZoomEnabled: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    isPinchZoomEnabled: true,
+    tag: 'div',
   }
 
   constructor() {

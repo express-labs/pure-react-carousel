@@ -55,6 +55,12 @@ describe('<ButtonNext />', () => {
     const wrapper = shallow(<ButtonNext {...props} disabled />);
     expect(wrapper.prop('disabled')).toBe(true);
   });
+  it('getDerivedStateFromProps() should update state if the disabled prop changes', () => {
+    const wrapper = shallow(<ButtonNext {...props} disabled />);
+    expect(wrapper.state('disabled')).toBe(true);
+    wrapper.setProps({ disabled: false });
+    expect(wrapper.state('disabled')).toBe(false);
+  });
   it('should add the value of step from currentSlide when clicked.', () => {
     const carouselStore = new Store({
       currentSlide: 0,
@@ -104,7 +110,9 @@ describe('<ButtonNext />', () => {
     expect(instance.carouselStore.state.currentSlide).toBe(4);
     wrapper.find('button').simulate('click');
     wrapper.update();
-    expect(instance.carouselStore.state.currentSlide).toBe(newProps.totalSlides - newProps.visibleSlides);
+    expect(
+      instance.carouselStore.state.currentSlide).toBe(newProps.totalSlides - newProps.visibleSlides,
+    );
     expect(wrapper.find('button').prop('disabled')).toBe(true);
   });
 });
