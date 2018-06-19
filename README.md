@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
-Created by
+Created by  
 [![Express Logo](/dev/media/express-logo.svg)](http://www.express.com)
 
 # pure-react-carousel
