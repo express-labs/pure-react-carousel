@@ -3,7 +3,7 @@
 
 # pure-react-carousel
 
-![Express Logo](https://www.express.com/content/dam/logos-fonts/logos/express/express-logo.svg)
+![Express Logo](/dev/media/express-logo.svg)
  
 A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.
 
