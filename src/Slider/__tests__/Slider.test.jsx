@@ -373,6 +373,28 @@ describe('<Slider />', () => {
     expect(wrapper.prop('carouselStore').state.currentSlide).toBe(3);
   });
 
+  it('should not move the slider from 0 to 1 if right arrow is pressed and keyboard is disabled', () => {
+    const carouselStore = new Store({
+      currentSlide: 0,
+      disableKeyboard: true,
+    });
+    const wrapper = mount(<Slider {...props} currentSlide={0} disableKeyboard carouselStore={carouselStore} />);
+    expect(wrapper.prop('carouselStore').state.currentSlide).toBe(0);
+    wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 39 });
+    expect(wrapper.prop('carouselStore').state.currentSlide).toBe(0);
+  });
+
+  it('should not move the slider from 1 to 0 if left arrow is pressed and keyboard is disabled', () => {
+    const carouselStore = new Store({
+      currentSlide: 1,
+      disableKeyboard: true,
+    });
+    const wrapper = mount(<Slider {...props} currentSlide={1} disableKeyboard carouselStore={carouselStore} />);
+    expect(wrapper.prop('carouselStore').state.currentSlide).toBe(1);
+    wrapper.find('.carousel__slider').simulate('keydown', { keyCode: 37 });
+    expect(wrapper.prop('carouselStore').state.currentSlide).toBe(1);
+  });
+
   it('the .carousel__slider should have a default tabIndex of 0', () => {
     const wrapper = shallow(<Slider {...props} />);
     expect(wrapper.find('.carousel__slider').prop('tabIndex')).toBe(0);

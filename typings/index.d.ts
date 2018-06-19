@@ -20,6 +20,7 @@ import {
 interface CarouselState {
   readonly currentSlide: number
   readonly disableAnimation: boolean
+  readonly disableKeyboard: boolean
   readonly hasMasterSpinner: boolean
   readonly imageErrorCount: number
   readonly imageSuccessCount: number
@@ -43,6 +44,7 @@ interface CarouselProviderProps {
   readonly className?: string
   readonly currentSlide?: CarouselState['currentSlide']
   readonly disableAnimation?: CarouselState['disableAnimation']
+  readonly disableKeyboard?: CarouselState['disableKeyboard']
   readonly hasMasterSpinner?: CarouselState['hasMasterSpinner']
   readonly interval?: number
   readonly isPlaying?: boolean

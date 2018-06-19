@@ -147,6 +147,7 @@ export default {
       children: 'hello',
       currentSlide: 0,
       disableAnimation: false,
+      disableKeyboard: false,
       dragEnabled: true,
       hasMasterSpinner: false,
       interval: 5000,
