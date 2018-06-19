@@ -1,9 +1,11 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
+Created by
+[![Express Logo](/dev/media/express-logo.svg)](http://www.express.com)
+
 # pure-react-carousel
 
-![Express Logo](/dev/media/express-logo.svg)
  
 A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.
 
