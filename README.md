@@ -506,7 +506,7 @@ In case of provided components, it is pretty straightforward. Simply import them
 
 ### WithStore() Higher Order Component
 
-Following the documentation above, only props save to use are exposed:
+Following the documentation above, only props safe to use are exposed:
 
 ```TypeScript
 interface CarouselState {
