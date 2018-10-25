@@ -6,6 +6,7 @@ interface SliderProps {
   readonly classNameAnimation?: string
   readonly classNameTray?: string
   readonly classNameTrayWrap?: string
+  readonly moveThreshold?: number,
   readonly onMasterSpinner?: () => void
   readonly style?: {}
   readonly trayTag?: string
