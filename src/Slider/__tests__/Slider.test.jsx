@@ -185,6 +185,7 @@ describe('<Slider />', () => {
 
   it('Slider.slidesMoved should return 0 given the test conditions (horizontal)', () => {
     expect(Slider.slidesMoved(
+      0.1,
       'horizontal',
       9,
       0,
@@ -194,6 +195,7 @@ describe('<Slider />', () => {
 
   it('Slider.slidesMoved should return -1 given the test conditions (horizontal)', () => {
     expect(Slider.slidesMoved(
+      0.1,
       'horizontal',
       10,
       0,
@@ -203,6 +205,7 @@ describe('<Slider />', () => {
 
   it('Slider.slidesMoved should return 0 given the test conditions (vertical)', () => {
     expect(Slider.slidesMoved(
+      0.1,
       'vertical',
       0,
       9,
@@ -212,6 +215,7 @@ describe('<Slider />', () => {
 
   it('Slider.slidesMoved should return -1 given the test conditions (vertical)', () => {
     expect(Slider.slidesMoved(
+      0.1,
       'vertical',
       0,
       10,

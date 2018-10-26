@@ -23,6 +23,7 @@ const Slider = class Slider extends React.Component {
     isPlaying: PropTypes.bool.isRequired,
     lockOnWindowScroll: PropTypes.bool.isRequired,
     masterSpinnerFinished: PropTypes.bool.isRequired,
+    moveThreshold: PropTypes.number,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
     onMasterSpinner: PropTypes.func,
@@ -47,6 +48,7 @@ const Slider = class Slider extends React.Component {
     disableAnimation: false,
     disableKeyboard: false,
     height: null,
+    moveThreshold: 0.1,
     onMasterSpinner: null,
     style: {},
     tabIndex: null,
@@ -58,8 +60,7 @@ const Slider = class Slider extends React.Component {
     return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
   }
 
-  static slidesMoved(orientation, deltaX, deltaY, slideSizeInPx) {
-    const threshold = 0.1;
+  static slidesMoved(threshold, orientation, deltaX, deltaY, slideSizeInPx) {
     const bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
     const smallDrag = (Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= (slideSizeInPx * threshold)) ? 1 : 0;
     if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
@@ -339,6 +340,7 @@ const Slider = class Slider extends React.Component {
     );
 
     const slidesMoved = Slider.slidesMoved(
+      this.props.moveThreshold,
       this.props.orientation,
       this.state.deltaX,
       this.state.deltaY,
@@ -416,6 +418,7 @@ const Slider = class Slider extends React.Component {
       isPlaying,
       lockOnWindowScroll,
       masterSpinnerFinished,
+      moveThreshold,
       naturalSlideHeight,
       naturalSlideWidth,
       onMasterSpinner,
