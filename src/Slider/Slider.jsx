@@ -23,7 +23,7 @@ const Slider = class Slider extends React.Component {
     isPlaying: PropTypes.bool.isRequired,
     lockOnWindowScroll: PropTypes.bool.isRequired,
     masterSpinnerFinished: PropTypes.bool.isRequired,
-    moveThreshold: PropTypes.number.isRequired,
+    moveThreshold: PropTypes.number,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
     onMasterSpinner: PropTypes.func,
