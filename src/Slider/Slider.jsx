@@ -91,13 +91,13 @@ const Slider = class Slider extends React.Component {
       deltaY: 0,
       startX: 0,
       startY: 0,
-      isDocumentScrolling: null,
       isBeingTouchDragged: false,
       isBeingMouseDragged: false,
       mouseIsMoving: false,
     };
 
     this.interval = null;
+    this.scrollStopTimer = null;
     this.isDocumentScrolling = null;
     this.moveTimer = null;
     this.originalOverflow = null;
@@ -105,7 +105,9 @@ const Slider = class Slider extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleDocumentScroll);
+    if (this.props.lockOnWindowScroll) {
+      window.addEventListener('scroll', this.handleDocumentScroll, false);
+    }
     if (this.props.isPlaying) this.play();
   }
 
@@ -222,6 +224,10 @@ const Slider = class Slider extends React.Component {
   handleDocumentScroll() {
     if (!this.props.touchEnabled) return;
     this.isDocumentScrolling = true;
+    window.clearTimeout(this.scrollStopTimer);
+    this.scrollStopTimer = window.setTimeout(() => {
+      this.isDocumentScrolling = false;
+    }, 66);
   }
 
   handleOnTouchMove(ev) {
