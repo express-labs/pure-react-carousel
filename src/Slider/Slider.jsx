@@ -121,6 +121,8 @@ const Slider = class Slider extends React.Component {
   componentWillUnmount() {
     document.documentElement.removeEventListener('scroll', this.handleDocumentScroll);
     window.cancelAnimationFrame.call(window, this.moveTimer);
+    window.clearTimeout(this.scrollStopTimer);
+    this.scrollStopTimer = null;
     this.stop();
     this.moveTimer = null;
     this.isDocumentScrolling = null;
