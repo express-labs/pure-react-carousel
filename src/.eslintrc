@@ -1,6 +1,12 @@
 {
   "root": true,
   "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "ecmaFeatures": {
+      "jsx": true
+    },
+  },
   "env": {
     "browser": true,
     "es6": true
@@ -13,10 +19,7 @@
   "extends": [
     "airbnb"
   ],
-  "ecmaFeatures": {
-    "experimentalObjectRestSpread": true,
-    "jsx": true
-  },
+
   "plugins": [
     "react",
     "jsx-a11y"
