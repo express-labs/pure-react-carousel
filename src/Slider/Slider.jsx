@@ -49,7 +49,6 @@ const Slider = class Slider extends React.Component {
     classNameTrayWrap: null,
     disableAnimation: false,
     disableKeyboard: false,
-    height: null,
     moveThreshold: 0.1,
     onMasterSpinner: null,
     style: {},

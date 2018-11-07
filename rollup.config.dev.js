@@ -9,17 +9,8 @@ import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
 
-// postcss plugins
-// import simplevars from 'postcss-simple-vars';
-// import postcssPresetEnv from 'postcss-preset-env';
-// import cssnano from 'cssnano';
-// import postcssImport from 'postcss-import';
-// import postcssModules from 'postcss-modules';
-
 var pkg = require('./package.json');
 var cache;
-
-// const cssExportMap = {};
 
 export default {
   input: 'src/app.js',
@@ -38,19 +29,14 @@ export default {
   ])),
   plugins: [
     postcss({
-      modules: true,
+      modules: {
+        // customize the name of the css classes that are created
+        generateScopedName: '[local]___[hash:base64:5]',
+      },
       sourceMap: 'inline', // true, "inline" or false
       extract: 'dev/style.css',
       extensions: ['.css', '.scss'],
-      // plugins: [
-      //   postcssImport(),
-      //   simplevars(),
-      //   postcssPresetEnv({ stage: 3 }),
-      //   // cssnano(),
-      // ],
-      // getExport (id) {
-      //   return cssExportMap[id];
-      // },
+      minimize: true,
     }),
     resolve({
       module: true,
@@ -84,6 +70,7 @@ export default {
     }),
     // eslint({
     //   exclude: [
+    //     '**/*.scss',
     //     '**/*.css',
     //     'node_modules/**'
     //   ]

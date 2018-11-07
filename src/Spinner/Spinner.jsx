@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { cn } from '../helpers';
-import s from './Spinner.css';
+import s from './Spinner.scss';
 
 const Spinner = class Spinner extends React.PureComponent {
   static propTypes = {
