@@ -6,7 +6,7 @@ import components from '../../helpers/component-config';
 import ButtonNext from '../ButtonNext';
 import Store from '../../Store/Store';
 import CarouselProvider from '../../CarouselProvider/CarouselProvider';
-import ButtonNextWithStore from '../';
+import ButtonNextWithStore from '..';
 
 configure({ adapter: new Adapter() });
 

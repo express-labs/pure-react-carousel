@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import clone from 'clone';
-import CarouselProvider from '../';
+import CarouselProvider from '..';
 import components from '../../helpers/component-config';
 
 configure({ adapter: new Adapter() });
@@ -31,7 +31,9 @@ describe('<CarouselProvider />', () => {
       <CarouselProvider
         {...props}
         orientation="vertical"
-      >Hello</CarouselProvider>
+      >
+Hello
+      </CarouselProvider>
     ));
     const instance = wrapper.instance();
     expect(instance.getStore()).toBe(instance.carouselStore);
@@ -76,7 +78,9 @@ describe('<CarouselProvider />', () => {
     const wrapper = mount((
       <CarouselProvider
         {...props}
-      >Hello</CarouselProvider>
+      >
+Hello
+      </CarouselProvider>
     ));
     wrapper.setProps({ currentSlide: 1 });
     expect(wrapper.instance().getStore().state.disableAnimation).toBe(true);

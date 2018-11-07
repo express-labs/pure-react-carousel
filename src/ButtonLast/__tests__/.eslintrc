@@ -1,6 +1,4 @@
 {
   "root": true,
-  "extends": [
-    "mrb3k-jest"
-  ]
+  "extends": "mrb3k-jest"
 }
