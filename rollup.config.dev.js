@@ -1,6 +1,6 @@
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
-// import { eslint } from 'rollup-plugin-eslint';
+import { eslint } from 'rollup-plugin-eslint';
 import livereload from 'rollup-plugin-livereload';
 import omit from 'object.omit';
 import path from 'path';
@@ -68,13 +68,13 @@ export default {
         'node_modules/react-redux/node_modules/react-is/index.js': ['isValidElementType'],
       }
     }),
-    // eslint({
-    //   exclude: [
-    //     '**/*.scss',
-    //     '**/*.css',
-    //     'node_modules/**'
-    //   ]
-    // }),
+    eslint({
+      exclude: [
+        '**/*.scss',
+        '**/*.css',
+        'node_modules/**'
+      ]
+    }),
     babel({
       exclude: [
         'node_modules/**',
