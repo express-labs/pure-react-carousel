@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Spinner } from '../';
+import Spinner from '../Spinner';
 import GetScrollParent from './GetScrollParent';
-import { CarouselPropTypes, cn, pct, boundedRange } from '../helpers';
+import {
+  CarouselPropTypes, cn, pct, boundedRange,
+} from '../helpers';
 import s from './slider.css';
 
 const Slider = class Slider extends React.Component {
@@ -14,8 +16,8 @@ const Slider = class Slider extends React.Component {
     classNameTray: PropTypes.string,
     classNameTrayWrap: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
-    disableAnimation: PropTypes.bool.isRequired,
-    disableKeyboard: PropTypes.bool.isRequired,
+    disableAnimation: PropTypes.bool,
+    disableKeyboard: PropTypes.bool,
     dragEnabled: PropTypes.bool.isRequired,
     hasMasterSpinner: PropTypes.bool.isRequired,
     interval: PropTypes.number.isRequired,
@@ -151,11 +153,11 @@ const Slider = class Slider extends React.Component {
 
   onDragMove(screenX, screenY) {
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
-      this.setState({
-        deltaX: screenX - this.state.startX,
-        deltaY: screenY - this.state.startY,
-        mouseIsMoving: this.state.isBeingMouseDragged,
-      });
+      this.setState(state => ({
+        deltaX: screenX - state.startX,
+        deltaY: screenY - state.startY,
+        mouseIsMoving: state.isBeingMouseDragged,
+      }));
     });
   }
 
@@ -234,8 +236,8 @@ const Slider = class Slider extends React.Component {
 
   handleOnTouchMove(ev) {
     if (
-      !this.props.touchEnabled ||
-      (this.props.lockOnWindowScroll && this.isDocumentScrolling)
+      !this.props.touchEnabled
+      || (this.props.lockOnWindowScroll && this.isDocumentScrolling)
     ) return;
 
     window.cancelAnimationFrame.call(window, this.moveTimer);
@@ -245,7 +247,9 @@ const Slider = class Slider extends React.Component {
   }
 
   forward() {
-    const { currentSlide, step, totalSlides, visibleSlides } = this.props;
+    const {
+      currentSlide, step, totalSlides, visibleSlides,
+    } = this.props;
     return Math.min(currentSlide + step, totalSlides - visibleSlides);
   }
 
@@ -256,7 +260,9 @@ const Slider = class Slider extends React.Component {
 
   handleOnKeyDown(ev) {
     const { keyCode } = ev;
-    const { carouselStore, currentSlide, disableKeyboard, totalSlides, visibleSlides } = this.props;
+    const {
+      carouselStore, currentSlide, disableKeyboard, totalSlides, visibleSlides,
+    } = this.props;
     const newStoreState = {};
 
     if ((disableKeyboard === true) || (totalSlides <= visibleSlides)) return;
@@ -293,7 +299,9 @@ const Slider = class Slider extends React.Component {
   }
 
   playBackward() {
-    const { carouselStore, currentSlide, totalSlides, visibleSlides } = this.props;
+    const {
+      carouselStore, currentSlide, totalSlides, visibleSlides,
+    } = this.props;
     carouselStore.setStoreState({
       currentSlide: (
         this.backward() === currentSlide ? totalSlides - visibleSlides : this.backward()

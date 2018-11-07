@@ -2,9 +2,9 @@ import React from 'react';
 import {
   ButtonBack, ButtonFirst, ButtonLast, ButtonNext,
   CarouselProvider, DotGroup, ImageWithZoom, Slide, Slider,
-} from '../../../';
+} from '../../..';
 
-import s from '../../style.css';
+import s from '../../style.scss';
 
 export default () => (
   <CarouselProvider
@@ -24,7 +24,8 @@ export default () => (
       - When scrolling the browser, left and right, vertical scrollers will not scroll vertically.
     </p>
     <p>
-      - This spinner will go away after all the images have loaded.<br />
+      - This spinner will go away after all the images have loaded.
+      <br />
     </p>
     <Slider className={s.slider}>
       <Slide index={0}>

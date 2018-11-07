@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CarouselPropTypes, cn } from '../helpers';
-import s from './ButtonBack.css';
+import s from './ButtonBack.scss';
 
 export default class ButtonBack extends React.Component {
   static propTypes = {
@@ -43,7 +43,9 @@ export default class ButtonBack extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { carouselStore, currentSlide, onClick, step } = this.props;
+    const {
+      carouselStore, currentSlide, onClick, step,
+    } = this.props;
     const newCurrentSlide = Math.max(
       currentSlide - step,
       0,
@@ -66,12 +68,15 @@ export default class ButtonBack extends React.Component {
 
     return (
       <button
+        type="button"
         aria-label="previous"
         className={newClassName}
         onClick={this.handleOnClick}
         disabled={this.state.disabled}
         {...props}
-      >{this.props.children}</button>
+      >
+        {this.props.children}
+      </button>
     );
   }
 }

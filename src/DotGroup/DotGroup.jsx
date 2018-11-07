@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dot } from '../';
+import Dot from '../Dot';
 import { CarouselPropTypes, cn } from '../helpers';
 import s from './DotGroup.css';
 
@@ -27,9 +27,11 @@ const DotGroup = class DotGroup extends React.Component {
     for (let i = 0; i < totalSlides; i += 1) {
       const selected = i >= currentSlide && i < (currentSlide + visibleSlides);
       const slide = i >= totalSlides - visibleSlides ? totalSlides - visibleSlides : i;
-      dots.push(<Dot key={i} slide={slide} selected={selected} disabled={selected}>
-        <span className={cn['carousel__dot-group-dot']}>{this.props.dotNumbers && i + 1}</span>
-      </Dot>);
+      dots.push(
+        <Dot key={i} slide={slide} selected={selected} disabled={selected}>
+          <span className={cn['carousel__dot-group-dot']}>{this.props.dotNumbers && i + 1}</span>
+        </Dot>,
+      );
     }
     return dots;
   }

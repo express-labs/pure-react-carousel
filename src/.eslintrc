@@ -27,6 +27,7 @@
   "rules": {
     "import/no-extraneous-dependencies": ["error", { "peerDependencies": true }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "react/forbid-prop-types": "off"
+    "react/forbid-prop-types": "off",
+    "react/destructuring-assignment": [0, "never"],
   }
 }

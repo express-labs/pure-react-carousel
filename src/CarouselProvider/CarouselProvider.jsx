@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import omit from 'object.omit';
-import { Store } from '../';
-import { CarouselPropTypes, slideSize, slideTraySize, cn } from '../helpers';
+import Store from '../Store/Store';
+import {
+  CarouselPropTypes, slideSize, slideTraySize, cn,
+} from '../helpers';
 
 const CarouselProvider = class CarouselProvider extends React.Component {
   static propTypes = {
@@ -114,8 +115,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     const { currentSlide, disableAnimation } = this.carouselStore.getStoreState();
 
     const isNewCurrentSlide = (
-      Object.prototype.hasOwnProperty.call(newStoreState, 'currentSlide') &&
-      currentSlide !== nextProps.currentSlide
+      Object.prototype.hasOwnProperty.call(newStoreState, 'currentSlide')
+      && currentSlide !== nextProps.currentSlide
     );
 
     const isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
@@ -133,8 +134,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     }
 
     if (
-      this.props.totalSlides !== nextProps.totalSlides ||
-      this.props.visibleSlides !== nextProps.visibleSlides
+      this.props.totalSlides !== nextProps.totalSlides
+      || this.props.visibleSlides !== nextProps.visibleSlides
     ) {
       newStoreState.slideSize = slideSize(nextProps.totalSlides, nextProps.visibleSlides);
       newStoreState.slideTraySize = slideTraySize(nextProps.totalSlides, nextProps.visibleSlides);
@@ -160,8 +161,30 @@ const CarouselProvider = class CarouselProvider extends React.Component {
   }
 
   render() {
-    const { tag: Tag } = this.props;
-    const filteredProps = omit(this.props, Object.keys(CarouselProvider.propTypes));
+    const {
+      children,
+      className,
+      currentSlide,
+      disableAnimation,
+      disableKeyboard,
+      hasMasterSpinner,
+      interval,
+      isPageScrollLocked,
+      isPlaying,
+      lockOnWindowScroll,
+      naturalSlideHeight,
+      naturalSlideWidth,
+      orientation,
+      playDirection,
+      step,
+      tag: Tag,
+      totalSlides,
+      touchEnabled,
+      dragEnabled,
+      visibleSlides,
+      ...filteredProps
+    } = this.props;
+
     const newClassName = cn([
       'carousel',
       this.props.className,

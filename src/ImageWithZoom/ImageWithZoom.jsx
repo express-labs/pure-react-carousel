@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Image, Spinner } from '../';
+import Image from '../Image';
+import Spinner from '../Spinner';
 import { boundedRange, cn, pct } from '../helpers';
 import s from './ImageWithZoom.css';
 
@@ -30,7 +31,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
    * @param  {number} y2 Touch #2 y coordinate.
    * @return {Object}    An object describing the midpoint as two properties: x and y.
    */
-  static midpointBetweenTwoTouches({ x1, y1, x2, y2 }) {
+  static midpointBetweenTwoTouches({
+    x1, y1, x2, y2,
+  }) {
     // hint: make the two points the diameter of a circle. The center of the circle is the midpoint.
     return {
       x: (x1 + x2) / 2,
@@ -46,7 +49,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
    * @param  {number} y2 Touch #2 y coordinate.
    * @return {number}    The distance.
    */
-  static distanceBetweenTwoTouches({ x1, y1, x2, y2 }) {
+  static distanceBetweenTwoTouches({
+    x1, y1, x2, y2,
+  }) {
     // hint: make a right triangle that joins the two points.  The distance is the hypotenuce.
     return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
   }
@@ -142,9 +147,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     // once zoom is on, it's only off if they stop touching everything.  This is done because
     // sometimes one of the two fingers doesn't move enough to register as a touch point and
     // it will start scrolling the carousel, which made for a jerky experience.
-    this.setState({
-      isZooming: this.state.isZooming || Object.keys(this.tpCache).length > 1,
-    });
+    this.setState(state => ({
+      isZooming: state.isZooming || Object.keys(this.tpCache).length > 1,
+    }));
   }
 
   handleOnTouchMove(ev) {
@@ -207,18 +212,18 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
         max: 100,
         x: ((end.cy - clientRect.top) / clientRect.height) * 100,
       }));
-      const scale = boundedRange({
+      const scale = state => boundedRange({
         min: 1,
         max: MAX_TOUCH_SCALE,
-        x: (this.state.scale + ((end.distance - start.distance) / 100)),
+        x: (state.scale + ((end.distance - start.distance) / 100)),
       });
 
-      this.setState({
-        isZooming: scale !== 1,
-        scale,
+      this.setState(state => ({
+        isZooming: scale(state) !== 1,
+        scale: scale(state),
         x,
         y,
-      });
+      }));
     }
   }
 
@@ -295,7 +300,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
           src={src}
           style={overlayStyle}
           isBgImage
+          onFocus={this.handleOnMouseOver}
           onMouseOver={this.handleOnMouseOver}
+          onBlur={this.handleOnMouseOut}
           onMouseOut={this.handleOnMouseOut}
           onMouseMove={this.handleOnMouseMove}
           onTouchStart={this.handleOnTouchStart}

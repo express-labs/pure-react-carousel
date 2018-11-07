@@ -1,6 +1,6 @@
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
-import { eslint } from 'rollup-plugin-eslint';
+// import { eslint } from 'rollup-plugin-eslint';
 import livereload from 'rollup-plugin-livereload';
 import omit from 'object.omit';
 import path from 'path';
@@ -11,15 +11,15 @@ import serve from 'rollup-plugin-serve';
 
 // postcss plugins
 import simplevars from 'postcss-simple-vars';
-import cssnext from 'postcss-cssnext';
+import postcssPresetEnv from 'postcss-preset-env';
 import cssnano from 'cssnano';
 import postcssImport from 'postcss-import';
-import postcssModules from 'postcss-modules';
+// import postcssModules from 'postcss-modules';
 
 var pkg = require('./package.json');
 var cache;
 
-const cssExportMap = {};
+// const cssExportMap = {};
 
 export default {
   input: 'src/app.js',
@@ -38,25 +38,18 @@ export default {
   ])),
   plugins: [
     postcss({
+      modules: true,
       sourceMap: 'inline', // true, "inline" or false
-      extract : 'dev/style.css',
-      extensions: ['.css'],
-      plugins: [
-        postcssImport(),
-        simplevars(),
-        cssnext({
-          warnForDuplicates: false,
-        }),
-        postcssModules({
-          getJSON (id, exportTokens) {
-            cssExportMap[id] = exportTokens;
-          }
-        }),
-        cssnano(),
-      ],
-      getExport (id) {
-        return cssExportMap[id];
-      },
+      extract: 'dev/style.css',
+      // plugins: [
+      //   postcssImport(),
+      //   simplevars(),
+      //   postcssPresetEnv({ stage: 3 }),
+      //   // cssnano(),
+      // ],
+      // getExport (id) {
+      //   return cssExportMap[id];
+      // },
     }),
     resolve({
       module: true,
@@ -77,16 +70,23 @@ export default {
         'node_modules/process-es6/**'
       ],
       namedExports: {
-        'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createElement'],
-        'node_modules/react-dom/index.js': ['render']
+        'node_modules/react/index.js': [
+          'Children',
+          'Component',
+          'Fragment',
+          'PureComponent',
+          'createElement',
+        ],
+        'node_modules/react-dom/index.js': ['render'],
+        'node_modules/react-redux/node_modules/react-is/index.js': ['isValidElementType'],
       }
     }),
-    eslint({
-      exclude: [
-        '**/*.css',
-        'node_modules/**'
-      ]
-    }),
+    // eslint({
+    //   exclude: [
+    //     '**/*.css',
+    //     'node_modules/**'
+    //   ]
+    // }),
     babel({
       exclude: [
         'node_modules/**',

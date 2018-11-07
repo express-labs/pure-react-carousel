@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CarouselPropTypes, cn } from '../helpers';
-import s from './ButtonNext.css';
+import s from './ButtonNext.scss';
 
 const ButtonNext = class ButtonNext extends React.PureComponent {
   static propTypes = {
@@ -55,7 +55,9 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
   }
 
   handleOnClick(ev) {
-    const { currentSlide, onClick, step, carouselStore } = this.props;
+    const {
+      currentSlide, onClick, step, carouselStore,
+    } = this.props;
     const maxSlide = this.props.totalSlides - this.props.visibleSlides;
     const newCurrentSlide = Math.min(
       (currentSlide + step),
@@ -80,12 +82,15 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
 
     return (
       <button
+        type="button"
         aria-label="next"
         className={newClassName}
         onClick={this.handleOnClick}
         disabled={this.state.disabled}
         {...props}
-      >{this.props.children}</button>
+      >
+        {this.props.children}
+      </button>
     );
   }
 };

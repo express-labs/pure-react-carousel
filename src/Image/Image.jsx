@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CarouselPropTypes, cn, LOADING, SUCCESS, ERROR } from '../helpers';
+import {
+  CarouselPropTypes, cn, LOADING, SUCCESS, ERROR,
+} from '../helpers';
 import s from './Image.css';
 
 class Image extends React.Component {
@@ -24,7 +26,6 @@ class Image extends React.Component {
     alt: '',
     children: null,
     className: null,
-    height: null,
     isBgImage: false,
     onError: null,
     onLoad: null,
@@ -90,7 +91,7 @@ class Image extends React.Component {
     // up into some other methods.
     /* istanbul ignore if  */
     if (this.image.readyState || this.image.complete) {
-      const src = this.image.src;
+      const { src } = this.image;
       this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
       this.image.src = src;
     }

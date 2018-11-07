@@ -2,9 +2,9 @@ import React from 'react';
 import {
   ButtonBack, ButtonFirst, ButtonLast, ButtonNext,
   CarouselProvider, DotGroup, ImageWithZoom, Slide, Slider,
-} from '../../../';
+} from '../../..';
 
-import s from '../../style.css';
+import s from '../../style.scss';
 
 export default () => (
   <CarouselProvider

@@ -6,7 +6,7 @@ import {
   DotGroup,
   Slide,
   Slider,
-} from '../../../';
+} from '../../..';
 import SlideComponent from './SlideComponent';
 import s from './Example7.css';
 

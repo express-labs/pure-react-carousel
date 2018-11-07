@@ -54,6 +54,7 @@ const ButtonPlay = class ButtonPlay extends React.PureComponent {
 
     return (
       <button
+        type="button"
         aria-label="play"
         className={newClassName}
         onClick={this.handleOnClick}

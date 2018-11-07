@@ -4,7 +4,6 @@ import s from './SliderComponent.css';
 
 
 export default class SlideComponent extends React.Component {
-
   static propTypes = {
     count: PropTypes.number.isRequired,
     setIncrement: PropTypes.func.isRequired,
@@ -36,10 +35,13 @@ export default class SlideComponent extends React.Component {
       <div className={s.container}>
         <div>{this.props.children}</div>
         <div>
-          <p>Count: { this.props.count }</p>
           <p>
-            <button onClick={this.handleDecrement}>-1</button>
-            <button onClick={this.handleIncrement}>+1</button>
+            Count:
+            { this.props.count }
+          </p>
+          <p>
+            <button type="button" onClick={this.handleDecrement}>-1</button>
+            <button type="button" onClick={this.handleIncrement}>+1</button>
           </p>
         </div>
       </div>
