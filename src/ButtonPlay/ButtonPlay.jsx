@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { cn } from '../helpers';
-import s from './ButtonPlay.css';
+import s from './ButtonPlay.scss';
 
 const ButtonPlay = class ButtonPlay extends React.PureComponent {
   static propTypes = {

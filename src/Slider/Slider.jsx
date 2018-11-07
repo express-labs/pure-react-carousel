@@ -5,7 +5,7 @@ import GetScrollParent from './GetScrollParent';
 import {
   CarouselPropTypes, cn, pct, boundedRange,
 } from '../helpers';
-import s from './slider.css';
+import s from './Slider.scss';
 
 const Slider = class Slider extends React.Component {
   static propTypes = {

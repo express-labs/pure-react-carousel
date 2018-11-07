@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dot from '../Dot';
 import { CarouselPropTypes, cn } from '../helpers';
-import s from './DotGroup.css';
+import s from './DotGroup.scss';
 
 const DotGroup = class DotGroup extends React.Component {
   static propTypes = {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   CarouselPropTypes, cn, LOADING, SUCCESS, ERROR,
 } from '../helpers';
-import s from './Image.css';
+import s from './Image.scss';
 
 class Image extends React.Component {
   static propTypes = {

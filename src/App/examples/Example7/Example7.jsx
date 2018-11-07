@@ -8,7 +8,7 @@ import {
   Slider,
 } from '../../..';
 import SlideComponent from './SlideComponent';
-import s from './Example7.css';
+import s from './Example7.scss';
 
 export default () => (
   <CarouselProvider

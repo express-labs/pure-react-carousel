@@ -10,10 +10,10 @@ import resolve from 'rollup-plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
 
 // postcss plugins
-import simplevars from 'postcss-simple-vars';
-import postcssPresetEnv from 'postcss-preset-env';
-import cssnano from 'cssnano';
-import postcssImport from 'postcss-import';
+// import simplevars from 'postcss-simple-vars';
+// import postcssPresetEnv from 'postcss-preset-env';
+// import cssnano from 'cssnano';
+// import postcssImport from 'postcss-import';
 // import postcssModules from 'postcss-modules';
 
 var pkg = require('./package.json');
@@ -41,6 +41,7 @@ export default {
       modules: true,
       sourceMap: 'inline', // true, "inline" or false
       extract: 'dev/style.css',
+      extensions: ['.css', '.scss'],
       // plugins: [
       //   postcssImport(),
       //   simplevars(),

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Image from '../Image';
 import Spinner from '../Spinner';
 import { boundedRange, cn, pct } from '../helpers';
-import s from './ImageWithZoom.css';
+import s from './ImageWithZoom.scss';
 
 const MOUSE_SCALE = 2;
 
