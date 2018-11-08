@@ -16,9 +16,9 @@ export default {
   input: 'src/app.js',
   cache: cache,
   output: {
-    name: 'pureReactCarousel',
     file: 'dev/script/index.umd.js',
     format: 'umd',
+    name: 'pureReactCarousel',
     sourcemap: true,
     sourcemapFile: path.resolve('dev/main.umd.js'),
   },
@@ -29,24 +29,24 @@ export default {
   ])),
   plugins: [
     postcss({
+      extensions: ['.css', '.scss'],
+      extract: 'dev/style.css',
+      minimize: true,
       modules: {
         // customize the name of the css classes that are created
         generateScopedName: '[local]___[hash:base64:5]',
       },
       sourceMap: 'inline', // true, "inline" or false
-      extract: 'dev/style.css',
-      extensions: ['.css', '.scss'],
-      minimize: true,
     }),
     resolve({
-      module: true,
-      jsnext: true,
-      main: true,
       browser: true,
-      extensions: ['.js', '.jsx'],
       customResolveOptions: {
         moduleDirectory: 'node_modules'
-      }
+      },
+      extensions: ['.js', '.jsx'],
+      jsnext: true,
+      main: true,
+      module: true
     }),
     replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
     commonjs({
