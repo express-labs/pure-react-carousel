@@ -609,6 +609,6 @@ const DecoratedComponent = WithStore(InjectedComponent)
 I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.
 
 ## Dev Workflow
-- `npm run dev` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload<br><br>
+- `npm start` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload<br><br>
 - `npm run build` compiles commonjs and ES modules and places them in the dist directory<br><br>
 - `npm test` runs test using Jest + Enzyme.
