@@ -6,7 +6,7 @@ Created by
 
 # pure-react-carousel
 
- 
+
 A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.
 
 My goal was to create a 100% ReactJS carousel that doesn't try to impose structure or styles that need to be defeated in order to match your site's design standards. Are you tired of fighting some other developer's CSS or DOM structure?  If so, this carousel is for you.
@@ -170,7 +170,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | -------- | ---- | ------- | -------- | ------- |
 | **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other Carousel components and JSX |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string |
-| currentSlide | number | 0 | No | &lt;Slide \> to display on initial render. The indexing of &lt;Slide /> components starts with 0. |
+| currentSlide | number | 0 | No | &lt;Slide \> to display ONLY when CarouselProvider mounts. The indexing of &lt;Slide /> components starts with 0.  This is a poorly named variable and will be deprecated in a future version. |
 | hasMasterSpinner | bool | false | No | When true, a spinner will cover &lt;Slider /> component until all &lt;Image \> and &lt;ImageWithZoom \> are done loading images.  If there are no &lt;Image /> or &lt;ImageWithZoom> components, the spinner will spin until this property is set to false |
 | interval | number | 5000 | No | Number of milliseconds to wait when the auto slideshow is active |
 | isPlaying | bool | false | No | Setting this to true starts an auto slideshow. After "interval" milliseconds, the slider will move by "step" slides either forward or backwards depending on the value of "playDirection". |
