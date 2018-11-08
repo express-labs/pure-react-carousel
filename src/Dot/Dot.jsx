@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CarouselPropTypes, cn } from '../helpers';
-import s from './Dot.css';
+import s from './Dot.scss';
 
 const Dot = class Dot extends React.Component {
   static propTypes = {
@@ -30,7 +30,9 @@ const Dot = class Dot extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { carouselStore, onClick, slide, totalSlides, visibleSlides } = this.props;
+    const {
+      carouselStore, onClick, slide, totalSlides, visibleSlides,
+    } = this.props;
     const newSlide = slide >= totalSlides - visibleSlides ? totalSlides - visibleSlides : slide;
 
     carouselStore.setStoreState({
@@ -59,11 +61,14 @@ const Dot = class Dot extends React.Component {
 
     return (
       <button
+        type="button"
         onClick={this.handleOnClick}
         className={newClassName}
         disabled={newDisabled}
         {...props}
-      >{this.props.children}</button>
+      >
+        {this.props.children}
+      </button>
     );
   }
 };

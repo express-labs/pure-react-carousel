@@ -7,9 +7,9 @@ import {
   ImageWithZoom,
   Slide,
   Slider,
-} from '../../../';
+} from '../../..';
 
-import s from './Example6.css';
+import s from './Example6.scss';
 
 export default () => (
   <CarouselProvider

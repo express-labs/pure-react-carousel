@@ -1,6 +1,6 @@
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
-import eslint from 'rollup-plugin-eslint';
+import { eslint } from 'rollup-plugin-eslint';
 import livereload from 'rollup-plugin-livereload';
 import omit from 'object.omit';
 import path from 'path';
@@ -9,25 +9,16 @@ import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
 
-// postcss plugins
-import simplevars from 'postcss-simple-vars';
-import cssnext from 'postcss-cssnext';
-import cssnano from 'cssnano';
-import postcssImport from 'postcss-import';
-import postcssModules from 'postcss-modules';
-
 var pkg = require('./package.json');
 var cache;
-
-const cssExportMap = {};
 
 export default {
   input: 'src/app.js',
   cache: cache,
   output: {
-    name: 'pureReactCarousel',
     file: 'dev/script/index.umd.js',
     format: 'umd',
+    name: 'pureReactCarousel',
     sourcemap: true,
     sourcemapFile: path.resolve('dev/main.umd.js'),
   },
@@ -38,35 +29,24 @@ export default {
   ])),
   plugins: [
     postcss({
-      sourceMap: 'inline', // true, "inline" or false
-      extract : 'dev/style.css',
-      extensions: ['.css'],
-      plugins: [
-        postcssImport(),
-        simplevars(),
-        cssnext({
-          warnForDuplicates: false,
-        }),
-        postcssModules({
-          getJSON (id, exportTokens) {
-            cssExportMap[id] = exportTokens;
-          }
-        }),
-        cssnano(),
-      ],
-      getExport (id) {
-        return cssExportMap[id];
+      extensions: ['.css', '.scss'],
+      extract: 'dev/style.css',
+      minimize: true,
+      modules: {
+        // customize the name of the css classes that are created
+        generateScopedName: '[local]___[hash:base64:5]',
       },
+      sourceMap: 'inline', // true, "inline" or false
     }),
     resolve({
-      module: true,
-      jsnext: true,
-      main: true,
       browser: true,
-      extensions: ['.js', '.jsx'],
       customResolveOptions: {
         moduleDirectory: 'node_modules'
-      }
+      },
+      extensions: ['.js', '.jsx'],
+      jsnext: true,
+      main: true,
+      module: true
     }),
     replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
     commonjs({
@@ -77,12 +57,20 @@ export default {
         'node_modules/process-es6/**'
       ],
       namedExports: {
-        'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createElement'],
-        'node_modules/react-dom/index.js': ['render']
+        'node_modules/react/index.js': [
+          'Children',
+          'Component',
+          'Fragment',
+          'PureComponent',
+          'createElement',
+        ],
+        'node_modules/react-dom/index.js': ['render'],
+        'node_modules/react-redux/node_modules/react-is/index.js': ['isValidElementType'],
       }
     }),
     eslint({
       exclude: [
+        '**/*.scss',
         '**/*.css',
         'node_modules/**'
       ]

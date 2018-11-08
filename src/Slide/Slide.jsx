@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CarouselPropTypes, cn, pct } from '../helpers';
-import s from './slide.css';
+import s from './Slide.scss';
 
 const Slide = class Slide extends React.PureComponent {
   static propTypes = {

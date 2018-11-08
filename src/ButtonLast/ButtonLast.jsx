@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import s from './ButtonLast.css';
+import s from './ButtonLast.scss';
 import { CarouselPropTypes, cn } from '../helpers';
 
 const ButtonLast = class ButtonLast extends React.Component {
@@ -27,7 +27,9 @@ const ButtonLast = class ButtonLast extends React.Component {
   }
 
   handleOnClick(ev) {
-    const { carouselStore, onClick, totalSlides, visibleSlides } = this.props;
+    const {
+      carouselStore, onClick, totalSlides, visibleSlides,
+    } = this.props;
     carouselStore.setStoreState({
       currentSlide: totalSlides - visibleSlides,
     }, onClick !== null && onClick.call(this, ev));
@@ -49,12 +51,15 @@ const ButtonLast = class ButtonLast extends React.Component {
 
     return (
       <button
+        type="button"
         aria-label="last"
         className={newClassName}
         onClick={this.handleOnClick}
         disabled={newDisabled}
         {...props}
-      >{this.props.children}</button>
+      >
+        {this.props.children}
+      </button>
     );
   }
 };

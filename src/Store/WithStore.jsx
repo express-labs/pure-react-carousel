@@ -60,7 +60,9 @@ export default function WithStore(
             unsubscribeAllMasterSpinner: this.context.carouselStore.unsubscribeAllMasterSpinner,
             unsubscribeMasterSpinner: this.context.carouselStore.unsubscribeMasterSpinner,
           }}
-        >{this.props.children}</WrappedComponent>);
+        >
+          {this.props.children}
+        </WrappedComponent>);
     }
   }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import s from './ButtonFirst.css';
+import s from './ButtonFirst.scss';
 import { CarouselPropTypes, cn } from '../helpers';
 
 const ButtonFirst = class ButtonFirst extends React.Component {
@@ -47,12 +47,15 @@ const ButtonFirst = class ButtonFirst extends React.Component {
 
     return (
       <button
+        type="button"
         aria-label="first"
         className={newClassName}
         onClick={this.handleOnClick}
         disabled={newDisabled}
         {...props}
-      >{this.props.children}</button>
+      >
+        {this.props.children}
+      </button>
     );
   }
 };

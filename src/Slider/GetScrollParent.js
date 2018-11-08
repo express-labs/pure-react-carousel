@@ -9,16 +9,15 @@
  * const parent = new GetScrollParent(element);
  */
 export default class GetScrollParent {
-
   static style(_node, prop) {
     return getComputedStyle(_node, null).getPropertyValue(prop);
   }
 
   static overflow(_node) {
     return (
-      GetScrollParent.style(_node, 'overflow') +
-      GetScrollParent.style(_node, 'overflow-y') +
-      GetScrollParent.style(_node, 'overflow-x')
+      GetScrollParent.style(_node, 'overflow')
+      + GetScrollParent.style(_node, 'overflow-y')
+      + GetScrollParent.style(_node, 'overflow-x')
     );
   }
 

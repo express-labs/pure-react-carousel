@@ -4,8 +4,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import ButtonBack from '../ButtonBack';
 
 import Store from '../../Store/Store';
-import { CarouselProvider } from '../../';
-import ButtonBackWithStore from '../';
+import { CarouselProvider } from '../..';
+import ButtonBackWithStore from '..';
 
 configure({ adapter: new Adapter() });
 
@@ -13,7 +13,7 @@ configure({ adapter: new Adapter() });
 describe('<ButtonBack />', () => {
   it('should render', () => {
     const wrapper = shallow(
-      <ButtonBack currentSlide={1} step={1} carouselStore={{}}>Hello</ButtonBack>
+      <ButtonBack currentSlide={1} step={1} carouselStore={{}}>Hello</ButtonBack>,
     );
     expect(wrapper.exists()).toBe(true);
   });
@@ -23,7 +23,9 @@ describe('<ButtonBack />', () => {
         currentSlide={0}
         step={1}
         carouselStore={{}}
-      >Hello</ButtonBack>,
+      >
+      Hello
+      </ButtonBack>,
     );
     expect(wrapper.prop('disabled')).toBe(true);
   });
@@ -34,7 +36,9 @@ describe('<ButtonBack />', () => {
         step={1}
         carouselStore={{}}
         disabled
-      >Hello</ButtonBack>,
+      >
+      Hello
+      </ButtonBack>,
     );
     expect(wrapper.prop('disabled')).toBe(true);
   });
@@ -49,7 +53,9 @@ describe('<ButtonBack />', () => {
         currentSlide={4}
         step={3}
         carouselStore={mockStore}
-      >Hello</ButtonBack>,
+      >
+      Hello
+      </ButtonBack>,
     );
     wrapper.find('button').simulate('click');
     expect(mockStore.getStoreState().currentSlide).toBe(1);
@@ -68,7 +74,9 @@ describe('<ButtonBack />', () => {
         step={3}
         carouselStore={mockStore}
         onClick={mockOnClick}
-      >Hello</ButtonBack>,
+      >
+      Hello
+      </ButtonBack>,
     );
     wrapper.find('button').simulate('click');
     expect(mockOnClick.mock.calls.length).toBe(1);
@@ -99,7 +107,9 @@ describe('<ButtonBack />', () => {
         step={3}
         carouselStore={{}}
         className="bob"
-      >Hello</ButtonBack>,
+      >
+      Hello
+      </ButtonBack>,
     );
     const classes = wrapper.find('button').prop('className').split(' ');
     expect(classes[0]).toEqual('buttonBack');
@@ -113,7 +123,9 @@ describe('<ButtonBack />', () => {
         step={3}
         carouselStore={{}}
         foo="bar"
-      >Hello</ButtonBack>,
+      >
+      Hello
+      </ButtonBack>,
     );
     expect(wrapper.find('button').prop('foo')).toEqual('bar');
   });
