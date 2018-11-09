@@ -126,6 +126,20 @@ describe('<ImageWithZoom />', () => {
     beforeEach(() => {
       props = clone(components.ImageWithZoom.props);
     });
+    it('should use the "src" prop for the regular and zoomed image if optional prop srcZoomed is NOT provided ', () => {
+      const wrapper = shallow((
+        <ImageWithZoom {...props} />
+      ));
+      expect(wrapper.find('.carousel__zoom-image').prop('src')).toBe('bob.jpg');
+      expect(wrapper.find('.carousel__zoom-image-overlay').prop('src')).toBe('bob.jpg');
+    });
+    it('should use the "srcZoomed" prop for the zoomed image if optional prop srcZoomed is provided ', () => {
+      const wrapper = shallow((
+        <ImageWithZoom {...props} srcZoomed="fred.jpg" />
+      ));
+      expect(wrapper.find('.carousel__zoom-image').prop('src')).toBe('bob.jpg');
+      expect(wrapper.find('.carousel__zoom-image-overlay').prop('src')).toBe('fred.jpg');
+    });
     it('should properly set state for x y when mouse moving', () => {
       const wrapper = shallow((
         <ImageWithZoom {...props} />

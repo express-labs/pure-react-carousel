@@ -15,6 +15,7 @@
   ],
   "scripts": {
     "test": "BABEL_ENV=test jest --no-cache",
+    "test:watch": "BABEL_ENV=test jest --watch",
     "start": "NODE_ENV=development rollup -w -c rollup.config.dev.js",
     "lint": "eslint . --ext .js --ext .jsx",
     "lint:fix": "eslint ./src --fix --ext .js --ext .jsx",
