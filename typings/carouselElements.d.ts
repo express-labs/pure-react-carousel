@@ -46,6 +46,7 @@ declare const Slide: SlideInterface
 
 interface ImageWithZoomProps {
   readonly src: string
+  readonly srcZoomed?: string
   readonly tag?: string
 }
 type ImageWithZoomInterface = React.ComponentClass<ImageWithZoomProps>

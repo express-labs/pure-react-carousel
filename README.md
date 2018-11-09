@@ -611,4 +611,6 @@ I promise to add docs for every component.  In the meantime, feel free to downlo
 ## Dev Workflow
 - `npm start` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload<br><br>
 - `npm run build` compiles commonjs and ES modules and places them in the dist directory<br><br>
-- `npm test` runs test using Jest + Enzyme.
+- `npm test` runs unit and integration tests using Jest + Enzyme.  Also does coverage reporting.<br><br>
+- `npm lint` runs linting tests using eslint & airbnb linting.<br><br>
+- `npm test:watch` same as `npm test` but it will watch for updates and auto-run tests. Does not do coverage reporting.<br><br>

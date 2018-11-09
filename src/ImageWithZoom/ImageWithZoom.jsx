@@ -14,12 +14,14 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     // alt: PropTypes.string,
     carouselStore: PropTypes.object.isRequired,
     src: PropTypes.string.isRequired,
+    srcZoomed: PropTypes.string,
     tag: PropTypes.string,
     isPinchZoomEnabled: PropTypes.bool,
   }
 
   static defaultProps = {
     isPinchZoomEnabled: true,
+    srcZoomed: null,
     tag: 'div',
   }
 
@@ -261,6 +263,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       isPinchZoomEnabled,
       tag: Tag,
       src,
+      srcZoomed,
       ...filteredProps
     } = this.props;
 
@@ -297,7 +300,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
         <Image
           className={overlayClassName}
           tag="div"
-          src={src}
+          src={srcZoomed || src}
           style={overlayStyle}
           isBgImage
           onFocus={this.handleOnMouseOver}
