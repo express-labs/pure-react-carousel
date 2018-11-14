@@ -62,20 +62,25 @@ const Slider = class Slider extends React.Component {
   }
 
   static slidesMoved(threshold, orientation, deltaX, deltaY, slideSizeInPx) {
-    const bigDrag = Math.abs(Math.round((orientation === 'horizontal' ? deltaX : deltaY) / slideSizeInPx));
-    const smallDrag = (Math.abs(orientation === 'horizontal' ? deltaX : deltaY) >= (slideSizeInPx * threshold)) ? 1 : 0;
-    if ((orientation === 'horizontal' ? deltaX : deltaY) < 0) {
+    const delta = orientation === 'horizontal' ? deltaX : deltaY;
+    const bigDrag = Math.abs(Math.round(delta / slideSizeInPx));
+    const smallDrag = (Math.abs(delta) >= (slideSizeInPx * threshold)) ? 1 : 0;
+    if (delta < 0) {
       return Math.max(smallDrag, bigDrag);
     }
-    return -Math.max(bigDrag, smallDrag);
+    return -Math.max(smallDrag, bigDrag);
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
     this.getSliderRef = this.getSliderRef.bind(this);
     this.handleDocumentScroll = this.handleDocumentScroll.bind(this);
+    this.handleOnClickCapture = this.handleOnClickCapture.bind(this);
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
-
+    this.handleOnMouseDown = this.handleOnMouseDown.bind(this);
+    this.handleOnMouseMove = this.handleOnMouseMove.bind(this);
+    this.handleOnMouseUp = this.handleOnMouseUp.bind(this);
     this.handleOnTouchCancel = this.handleOnTouchCancel.bind(this);
     this.handleOnTouchEnd = this.handleOnTouchEnd.bind(this);
     this.handleOnTouchMove = this.handleOnTouchMove.bind(this);
@@ -83,32 +88,32 @@ const Slider = class Slider extends React.Component {
     this.playBackward = this.playBackward.bind(this);
     this.playForward = this.playForward.bind(this);
 
-    this.handleOnMouseDown = this.handleOnMouseDown.bind(this);
-    this.handleOnMouseMove = this.handleOnMouseMove.bind(this);
-    this.handleOnMouseClick = this.handleOnMouseClick.bind(this);
-
     this.state = {
+      cancelNextClick: false,
       deltaX: 0,
       deltaY: 0,
+      isBeingMouseDragged: false,
+      isBeingTouchDragged: false,
       startX: 0,
       startY: 0,
-      isBeingTouchDragged: false,
-      isBeingMouseDragged: false,
-      mouseIsMoving: false,
     };
 
     this.interval = null;
-    this.scrollStopTimer = null;
     this.isDocumentScrolling = null;
     this.moveTimer = null;
     this.originalOverflow = null;
     this.scrollParent = null;
+    this.scrollStopTimer = null;
   }
 
   componentDidMount() {
     if (this.props.lockOnWindowScroll) {
       window.addEventListener('scroll', this.handleDocumentScroll, false);
     }
+    document.documentElement.addEventListener('mouseleave', this.handleOnMouseUp, false);
+    document.documentElement.addEventListener('mousemove', this.handleOnMouseMove, false);
+    document.documentElement.addEventListener('mouseup', this.handleOnMouseUp, false);
+
     if (this.props.isPlaying) this.play();
   }
 
@@ -120,16 +125,37 @@ const Slider = class Slider extends React.Component {
   }
 
   componentWillUnmount() {
-    document.documentElement.removeEventListener('scroll', this.handleDocumentScroll);
+    document.documentElement.removeEventListener('mouseleave', this.handleOnMouseUp, false);
+    document.documentElement.removeEventListener('mousemove', this.handleOnMouseMove, false);
+    document.documentElement.removeEventListener('mouseup', this.handleOnMouseUp, false);
+    window.removeEventListener('scroll', this.handleDocumentScroll, false);
+
+    this.stop();
     window.cancelAnimationFrame.call(window, this.moveTimer);
     window.clearTimeout(this.scrollStopTimer);
-    this.scrollStopTimer = null;
-    this.stop();
-    this.moveTimer = null;
+
     this.isDocumentScrolling = null;
+    this.moveTimer = null;
+    this.scrollStopTimer = null;
   }
 
-  onDragStart(screenX, screenY, touchDrag, mouseDrag) {
+  // NOTE: These are the order of touch and mouse events
+  // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
+  //
+  // 1) touchstart
+  // 2) Zero or more touchmove events, depending on movement of the finger(s)
+  // 3) touchend
+  // 4) mousemove
+  // 5) mousedown
+  // 6) mouseup
+  // 7) click
+
+  onDragStart({
+    screenX,
+    screenY,
+    touchDrag = false,
+    mouseDrag = false,
+  }) {
     this.props.carouselStore.setStoreState({
       isPlaying: false,
     });
@@ -155,7 +181,6 @@ const Slider = class Slider extends React.Component {
       this.setState(state => ({
         deltaX: screenX - state.startX,
         deltaY: screenY - state.startY,
-        mouseIsMoving: state.isBeingMouseDragged,
       }));
     });
   }
@@ -176,7 +201,6 @@ const Slider = class Slider extends React.Component {
       deltaY: 0,
       isBeingTouchDragged: false,
       isBeingMouseDragged: false,
-      mouseIsMoving: false,
     });
 
     this.isDocumentScrolling = this.props.lockOnWindowScroll ? false : null;
@@ -188,28 +212,32 @@ const Slider = class Slider extends React.Component {
 
   handleOnMouseDown(ev) {
     if (!this.props.dragEnabled) return;
-
     ev.preventDefault();
-    this.onDragStart(ev.screenX, ev.screenY, false, true);
+    this.onDragStart({
+      screenX: ev.screenX,
+      screenY: ev.screenY,
+      mouseDrag: true,
+    });
   }
 
   handleOnMouseMove(ev) {
-    if (!this.props.dragEnabled || !this.state.isBeingMouseDragged) return;
-
+    if (!this.state.isBeingMouseDragged) return;
+    this.setState({ cancelNextClick: true });
     ev.preventDefault();
-    ev.persist();
-
     this.onDragMove(ev.screenX, ev.screenY);
   }
 
-  handleOnMouseClick(ev) {
-    if (!this.props.dragEnabled || !this.state.isBeingMouseDragged) return;
-
-    if (this.state.mouseIsMoving) {
-      ev.preventDefault();
-    }
-
+  handleOnMouseUp(ev) {
+    if (!this.state.isBeingMouseDragged) return;
+    ev.preventDefault();
     this.onDragEnd();
+  }
+
+  handleOnClickCapture(ev) {
+    if (!this.state.cancelNextClick) return;
+    ev.stopPropagation();
+    ev.preventDefault();
+    this.setState({ cancelNextClick: false });
   }
 
   handleOnTouchStart(ev) {
@@ -221,7 +249,11 @@ const Slider = class Slider extends React.Component {
     }
 
     const touch = ev.targetTouches[0];
-    this.onDragStart(touch.screenX, touch.screenY, true, false);
+    this.onDragStart({
+      screenX: touch.screenX,
+      screenY: touch.screenY,
+      touchDrag: true,
+    });
   }
 
   handleDocumentScroll() {
@@ -529,8 +561,7 @@ const Slider = class Slider extends React.Component {
             onTouchEnd={this.handleOnTouchEnd}
             onTouchCancel={this.handleOnTouchCancel}
             onMouseDown={this.handleOnMouseDown}
-            onMouseMove={this.handleOnMouseMove}
-            onClick={this.handleOnMouseClick}
+            onClickCapture={this.handleOnClickCapture}
           >
             {children}
           </TrayTag>
