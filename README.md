@@ -212,7 +212,7 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 | classNameTrayWrap | [string&#124;null] | null | No | Optional className string that is applied to a div that surrounds the Slider's tray |
 | moveThreshold | number | 0.1 | No | Threshold to control the drag distance that triggers a scroll to the next or previous slide. (slide width or height * moveThreshold = drag pixel distance required to scroll) |
 | onMasterSpinner | [function&#124;null] | null | No | Optional callback function that is called when the Master Spinner is visible.  Requires that &lt;CarouselProvider /> set hasMasterSpinner to true |
-| spinner | function | null | No |  inline JSX to render your own custom spinner.  Example `() => <MyCustomSpinnerComponent />`
+| spinner | function | null | No |  Optional inline JSX (aka "render props") to render your own custom spinner.  Example `() => <MyCustomSpinnerComponent />`  If left blank, the default spinner is used. |
 | style | object | {} | No | Optional css styles to add to the Slider.  Note: internal css properties take precedence over any styles specified in the styles object |
 | trayTag | string | 'ul' | No | The HTML tag to used for the tray (the thing that holds all the slides and moves the slides back and forth.) |
 
