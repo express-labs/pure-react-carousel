@@ -13,6 +13,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
   static propTypes = {
     // alt: PropTypes.string,
     carouselStore: PropTypes.object.isRequired,
+    spinner: PropTypes.func,
     src: PropTypes.string.isRequired,
     srcZoomed: PropTypes.string,
     tag: PropTypes.string,
@@ -21,6 +22,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
   static defaultProps = {
     isPinchZoomEnabled: true,
+    spinner: null,
     srcZoomed: null,
     tag: 'div',
   }
@@ -58,8 +60,8 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     // state changes that require a re-render
     this.state = {
@@ -244,11 +246,13 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
   renderLoading() {
     if (this.state.isImageLoading) {
+      const { spinner } = this.props;
       return (
         <div
           className={cn([s.imageLoadingSpinnerContainer, 'carousel__image-loading-spinner-container'])}
         >
-          <Spinner />
+          { spinner && spinner() }
+          { !spinner && <Spinner />}
         </div>
       );
     }
@@ -261,9 +265,10 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     const {
       carouselStore,
       isPinchZoomEnabled,
-      tag: Tag,
+      spinner,
       src,
       srcZoomed,
+      tag: Tag,
       ...filteredProps
     } = this.props;
 

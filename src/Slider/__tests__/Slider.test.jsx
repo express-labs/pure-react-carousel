@@ -318,6 +318,39 @@ describe('<Slider />', () => {
         expect(ev.stopPropagation).toHaveBeenCalledTimes(1);
       });
     });
+    describe('renderMasterSpinner', () => {
+      it('should render a custom spinner if supplied', () => {
+        const instance = new Slider({
+          hasMasterSpinner: true,
+          masterSpinnerFinished: false,
+          spinner: () => <div className="custom-spinner" />,
+        });
+        const wrapper = shallow(instance.renderMasterSpinner());
+        expect(wrapper.find('.custom-spinner').exists()).toBe(true);
+      });
+      it('should render a the default spinner if no custom spinner was supplied', () => {
+        const instance = new Slider({
+          hasMasterSpinner: true,
+          masterSpinnerFinished: false,
+        });
+        const wrapper = shallow(instance.renderMasterSpinner());
+        expect(wrapper.find('Spinner').exists()).toBe(true);
+      });
+      it('should return null if hasMasterSpinner is false', () => {
+        const instance = new Slider({
+          hasMasterSpinner: false,
+          masterSpinnerFinished: false,
+        });
+        expect(instance.renderMasterSpinner()).toBe(null);
+      });
+      it('should return null if masterSpinnerFinished is true', () => {
+        const instance = new Slider({
+          hasMasterSpinner: true,
+          masterSpinnerFinished: true,
+        });
+        expect(instance.renderMasterSpinner()).toBe(null);
+      });
+    });
   });
   describe('integration tests', () => {
     let props;
