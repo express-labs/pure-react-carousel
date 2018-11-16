@@ -23,6 +23,9 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
 - Supports ES6 and commonjs.
 - Has 100% test coverage. Solid!
 
+### ghpage
+https://express-labs.github.io/pure-react-carousel/
+
 # Table of contents
   * [🛠 Tutorial](#-tutorial)
   * [Component Properties (props)](#component-properties-props)
