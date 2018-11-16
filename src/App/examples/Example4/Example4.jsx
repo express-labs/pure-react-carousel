@@ -22,7 +22,7 @@ export default () => (
     naturalSlideHeight={500}
     step={2}
   >
-    <h1 className={s.headline}>Vertical Carousel (With Master Loading Spinner)</h1>
+    <h2 className={s.headline}>Vertical Carousel (With Master Loading Spinner)</h2>
     <p>
       This is a vertical carousel.
     </p>

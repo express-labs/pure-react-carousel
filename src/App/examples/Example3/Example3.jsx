@@ -21,7 +21,7 @@ export default () => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
   >
-    <h1 className={s.headline}>Carousel (Just One Image)</h1>
+    <h2 className={s.headline}>Carousel (Just One Image)</h2>
     <p>Single image</p>
     <Slider className={s.slider}>
       <Slide tag="a" index={0}>

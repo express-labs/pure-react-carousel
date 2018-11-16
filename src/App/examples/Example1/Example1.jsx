@@ -15,7 +15,7 @@ export default () => (
     naturalSlideHeight={500}
     hasMasterSpinner
   >
-    <h1 className={s.headline}>Carousel (With Master Loading Spinner)</h1>
+    <h2 className={s.headline}>Carousel (With Master Loading Spinner)</h2>
     <p>
       This spinner will go away after all the images have loaded. You might want to use
       Chrome dev tools to throttle the network connection so you can see the spinner.

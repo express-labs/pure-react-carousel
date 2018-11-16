@@ -21,7 +21,7 @@ export default () => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
   >
-    <h1 className={s.headline}>Carousel (With Individual Spinners)</h1>
+    <h2 className={s.headline}>Carousel (With Individual Spinners)</h2>
     <p>
       Each ImageWithZoom component has it&apos;s own spinner. You might want to use Chrome
       dev tools to throttle the network connection so you can see the spinners.
