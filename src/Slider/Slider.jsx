@@ -33,6 +33,7 @@ const Slider = class Slider extends React.Component {
     playDirection: CarouselPropTypes.direction.isRequired,
     slideSize: PropTypes.number.isRequired,
     slideTraySize: PropTypes.number.isRequired,
+    spinner: PropTypes.func,
     step: PropTypes.number.isRequired,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
@@ -51,6 +52,7 @@ const Slider = class Slider extends React.Component {
     disableKeyboard: false,
     moveThreshold: 0.1,
     onMasterSpinner: null,
+    spinner: null,
     style: {},
     tabIndex: null,
     trayTag: 'ul',
@@ -427,7 +429,7 @@ const Slider = class Slider extends React.Component {
   }
 
   renderMasterSpinner() {
-    const { hasMasterSpinner, masterSpinnerFinished } = this.props;
+    const { hasMasterSpinner, masterSpinnerFinished, spinner } = this.props;
 
     if (hasMasterSpinner && (!masterSpinnerFinished)) {
       if (typeof this.props.onMasterSpinner === 'function') this.props.onMasterSpinner();
@@ -439,7 +441,8 @@ const Slider = class Slider extends React.Component {
             'carousel__master-spinner-container',
           ])}
         >
-          <Spinner />
+          {spinner && spinner()}
+          {!spinner && <Spinner />}
         </div>
       );
     }
@@ -473,6 +476,7 @@ const Slider = class Slider extends React.Component {
       playDirection,
       slideSize,
       slideTraySize,
+      spinner,
       style,
       tabIndex,
       totalSlides,

@@ -39,6 +39,7 @@
   },
   "homepage": "https://github.com/express-labs/pure-react-carousel#readme",
   "devDependencies": {
+    "@types/react": "^16.7.6",
     "acorn": "^6.0.4",
     "babel-eslint": "^10.0.1",
     "babel-plugin-transform-class-properties": "^6.24.1",

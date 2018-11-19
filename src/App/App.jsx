@@ -9,6 +9,7 @@ import {
   Example7,
   Example8,
   Example9,
+  Example10,
 } from './examples';
 import s from './style.scss';
 
@@ -193,6 +194,14 @@ class DevelopmentApp extends React.Component {
                   <Example9 />
                 </section>
               )}
+
+              { (value === '0' || value === '10') && (
+                <section id="example--10">
+                  <hr />
+                  <Example10 />
+                </section>
+              )}
+
             </div>
           </div>
         </div>
