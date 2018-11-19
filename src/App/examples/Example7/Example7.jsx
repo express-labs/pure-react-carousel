@@ -18,7 +18,7 @@ export default () => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
   >
-    <h1 className={s.headline}>Simple Carousel With React Redux</h1>
+    <h2 className={s.headline}>Simple Carousel With React Redux</h2>
     <p>
       The slides in this example use components that utilize React-Redux to track a counter value.
       This example demonstraits that the context used by Pure React Carousel won&apos;t interfere

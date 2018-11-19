@@ -17,7 +17,7 @@ export default () => (
     currentSlide={0}
     isPlaying
   >
-    <h1 className={s.headline}>Horizontal Carousel Auto Play</h1>
+    <h2 className={s.headline}>Horizontal Carousel Auto Play</h2>
     <Slider className={s.slider}>
       <Slide index={0}>
         <ImageWithZoom src="./media/img01.jpeg" />

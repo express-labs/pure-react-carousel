@@ -2,6 +2,7 @@ import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import { eslint } from 'rollup-plugin-eslint';
 import livereload from 'rollup-plugin-livereload';
+import image from 'rollup-plugin-img';
 import omit from 'object.omit';
 import path from 'path';
 import postcss from 'rollup-plugin-postcss';
@@ -28,6 +29,9 @@ export default {
     'react-dom'
   ])),
   plugins: [
+    image({
+      limit: 10000
+    }),
     postcss({
       extensions: ['.css', '.scss'],
       extract: 'dev/style.css',

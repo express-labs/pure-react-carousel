@@ -20,7 +20,7 @@ export default () => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
   >
-    <h1 className={s.headline}>Horizontal Carousel (With Master Loading Spinner)</h1>
+    <h2 className={s.headline}>Horizontal Carousel (With Master Loading Spinner)</h2>
     <p>
       Horizontal Carouisel with regular, non-zooming images and dotNumbers on the Dot
       Group.

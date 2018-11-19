@@ -16,7 +16,7 @@ export default () => (
     hasMasterSpinner
     lockOnWindowScroll
   >
-    <h1 className={s.headline}>Carousel (lockOnWindowScroll set to TRUE)</h1>
+    <h2 className={s.headline}>Carousel (lockOnWindowScroll set to TRUE)</h2>
     <p>
       - When scrolling the browser, up and down, horizontal scrollers will not scroll horizontally.
     </p>
