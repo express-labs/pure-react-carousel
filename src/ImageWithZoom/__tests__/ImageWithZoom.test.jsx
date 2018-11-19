@@ -57,6 +57,29 @@ const touchEnd = {
 
 
 describe('<ImageWithZoom />', () => {
+  describe('unit tests', () => {
+    describe('renderLoading', () => {
+      it('should render a custom spinner if supplied', () => {
+        const instance = new ImageWithZoom({
+          spinner: () => <div className="custom-spinner" />,
+        });
+        instance.state.isImageLoading = true;
+        const wrapper = shallow(instance.renderLoading());
+        expect(wrapper.find('.custom-spinner').exists()).toBe(true);
+      });
+      it('should render a the default spinner if no custom spinner was supplied', () => {
+        const instance = new ImageWithZoom({});
+        instance.state.isImageLoading = true;
+        const wrapper = shallow(instance.renderLoading());
+        expect(wrapper.find('Spinner').exists()).toBe(true);
+      });
+      it('should return null if imageIsLoading is false', () => {
+        const instance = new ImageWithZoom({});
+        instance.state.isImageLoading = false;
+        expect(instance.renderLoading()).toBe(null);
+      });
+    });
+  });
   describe('integration tests', () => {
     let wrapper;
     let imageWithZoom;

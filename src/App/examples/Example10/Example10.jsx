@@ -4,7 +4,11 @@ import {
   CarouselProvider, DotGroup, ImageWithZoom, Slide, Slider,
 } from '../../..';
 
+import CustomSpinner from './CustomSpinner';
+
+
 import s from '../../style.scss';
+
 
 export default () => (
   <CarouselProvider
@@ -15,14 +19,13 @@ export default () => (
     naturalSlideHeight={500}
     hasMasterSpinner
   >
-    <h2 className={s.headline}>Carousel (With Master Loading Spinner)</h2>
+    <h1 className={s.headline}>Carousel (Custom Spinner)</h1>
     <p>
-      This spinner will go away after all the images have loaded. You might want to use
-      Chrome dev tools to throttle the network connection so you can see the spinner.
+      This uses a customized spinner.
     </p>
-    <Slider className={s.slider}>
+    <Slider className={s.slider} spinner={() => <CustomSpinner />}>
       <Slide index={0}>
-        <ImageWithZoom src="./media/img01.jpeg" />
+        <ImageWithZoom src="./media/img01.jpeg" spinner={() => <CustomSpinner />} />
       </Slide>
       <Slide index={1}>
         <ImageWithZoom src="./media/img02.jpeg" />

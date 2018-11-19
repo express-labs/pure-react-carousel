@@ -7,3 +7,4 @@ export { default as Example6 } from './Example6';
 export { default as Example7 } from './Example7';
 export { default as Example8 } from './Example8';
 export { default as Example9 } from './Example9';
+export { default as Example10 } from './Example10';

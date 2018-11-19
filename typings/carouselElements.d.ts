@@ -9,6 +9,7 @@ interface SliderProps {
   readonly moveThreshold?: number,
   readonly onMasterSpinner?: () => void
   readonly style?: {}
+  readonly spinner?: () => void
   readonly trayTag?: string
 }
 type SliderInterface = React.ComponentClass<SliderProps>
