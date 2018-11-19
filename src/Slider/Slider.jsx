@@ -552,7 +552,6 @@ const Slider = class Slider extends React.Component {
         style={sliderStyle}
         tabIndex={newTabIndex}
         onKeyDown={this.handleOnKeyDown}
-        role="listbox"
         {...props}
       >
         <div className={trayWrapClasses} style={trayWrapStyle}>
