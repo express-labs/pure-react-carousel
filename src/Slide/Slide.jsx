@@ -145,7 +145,8 @@ const Slide = class Slide extends React.PureComponent {
       <Tag
         ref={(el) => { this.tagRef = el; }}
         tabIndex={newTabIndex}
-        aria-hidden={!this.isVisible()}
+        aria-selected={this.isVisible()}
+        role="option"
         onFocus={this.handleOnFocus}
         onBlur={this.handleOnBlur}
         className={newClassName}
