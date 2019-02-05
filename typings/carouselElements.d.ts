@@ -183,5 +183,16 @@ export {
   Image,
   ImageWithZoom,
   Slide,
-  Slider
+  Slider,
+  SliderProps,
+  SlideProps,
+  ImageWithZoomProps,
+  ImageProps,
+  DotGroupProps,
+  DotProps,
+  ButtonBackProps,
+  ButtonNextInterface,
+  ButtonLastProps,
+  ButtonFirstProps,
+  ButtonPlayProps
 }
