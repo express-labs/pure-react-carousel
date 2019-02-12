@@ -544,6 +544,9 @@ const Slider = class Slider extends React.Component {
 
     // console.log(Object.assign({}, trayStyle), new Date());
 
+    // remove `step` from Slider div, since it isn't a valid html attribute
+    const { step, ...rest } = props;
+
     return (
       <div
         ref={(el) => { this.sliderElement = el; }}
@@ -553,7 +556,7 @@ const Slider = class Slider extends React.Component {
         tabIndex={newTabIndex}
         onKeyDown={this.handleOnKeyDown}
         role="listbox"
-        {...props}
+        {...rest}
       >
         <div className={trayWrapClasses} style={trayWrapStyle}>
           <TrayTag
