@@ -14,7 +14,18 @@ import {
   Image,
   ImageWithZoom,
   Slide,
-  Slider
+  Slider,
+  SliderProps,
+  SlideProps,
+  ImageWithZoomProps,
+  ImageProps,
+  DotGroupProps,
+  DotProps,
+  ButtonBackProps,
+  ButtonNextInterface,
+  ButtonLastProps,
+  ButtonFirstProps,
+  ButtonPlayProps
 } from './carouselElements.d'
 
 interface CarouselState {
@@ -143,5 +154,16 @@ export {
   ImageWithZoom,
   Slide,
   Slider,
-  WithStore
+  WithStore,
+  SliderProps,
+  SlideProps,
+  ImageWithZoomProps,
+  ImageProps,
+  DotGroupProps,
+  DotProps,
+  ButtonBackProps,
+  ButtonNextInterface,
+  ButtonLastProps,
+  ButtonFirstProps,
+  ButtonPlayProps
 }
