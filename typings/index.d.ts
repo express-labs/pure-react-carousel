@@ -44,6 +44,7 @@ interface CarouselState {
   readonly slideSize: number
   readonly slideTraySize: number
   readonly step: number
+  readonly dragStep: number
   readonly totalSlides: number
   readonly touchEnabled: boolean
   readonly dragEnabled: boolean
@@ -65,6 +66,7 @@ interface CarouselProviderProps {
   readonly playDirection?: 'forward'|'backward'
   readonly orientation?: CarouselState['orientation']
   readonly step?: CarouselState['step']
+  readonly dragStep?: CarouselState['dragStep']
   readonly tag?: string
   readonly totalSlides: CarouselState['totalSlides']
   readonly touchEnabled?: CarouselState['touchEnabled']
