@@ -62,7 +62,8 @@ export default function WithStore(
           }}
         >
           {this.props.children}
-        </WrappedComponent>);
+        </WrappedComponent>
+      );
     }
   }
 
