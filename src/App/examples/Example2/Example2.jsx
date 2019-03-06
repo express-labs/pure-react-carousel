@@ -18,6 +18,7 @@ export default () => (
     visibleSlides={2}
     totalSlides={6}
     step={2}
+    dragStep={2}
     naturalSlideWidth={400}
     naturalSlideHeight={500}
   >

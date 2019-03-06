@@ -35,6 +35,7 @@ const Slider = class Slider extends React.Component {
     slideTraySize: PropTypes.number.isRequired,
     spinner: PropTypes.func,
     step: PropTypes.number.isRequired,
+    dragStep: PropTypes.number,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
@@ -57,16 +58,17 @@ const Slider = class Slider extends React.Component {
     tabIndex: null,
     trayTag: 'ul',
     visibleSlides: 1,
+    dragStep: 1,
   }
 
   static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
     return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
   }
 
-  static slidesMoved(threshold, orientation, deltaX, deltaY, slideSizeInPx) {
+  static slidesMoved(threshold, orientation, deltaX, deltaY, slideSizeInPx, dragStep) {
     const delta = orientation === 'horizontal' ? deltaX : deltaY;
     const bigDrag = Math.abs(Math.round(delta / slideSizeInPx));
-    const smallDrag = (Math.abs(delta) >= (slideSizeInPx * threshold)) ? 1 : 0;
+    const smallDrag = (Math.abs(delta) >= (slideSizeInPx * threshold)) ? dragStep : 0;
     if (delta < 0) {
       return Math.max(smallDrag, bigDrag);
     }
@@ -394,6 +396,7 @@ const Slider = class Slider extends React.Component {
       this.state.deltaX,
       this.state.deltaY,
       slideSizeInPx,
+      this.props.dragStep,
     );
 
     const maxSlide = this.props.totalSlides - Math.min(
