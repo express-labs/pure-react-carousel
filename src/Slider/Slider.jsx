@@ -547,8 +547,8 @@ const Slider = class Slider extends React.Component {
 
     // console.log(Object.assign({}, trayStyle), new Date());
 
-    // remove `step` from Slider div, since it isn't a valid html attribute
-    const { step, ...rest } = props;
+    // remove `dragStep` and `step` from Slider div, since it isn't a valid html attribute
+    const { dragStep, step, ...rest } = props;
 
     return (
       <div
