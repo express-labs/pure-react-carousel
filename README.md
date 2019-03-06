@@ -183,7 +183,8 @@ Any remaining props not consumed by the component are passed directly to the roo
 | orientation | string | "horizontal" | No | Possible values are "horizontal" and "vertical".  Let's you have a horizontal or vertical carousel. |
 | playDirection | ['forward'&#124;'backward' ] | 'forward' | No | The direction for the auto slideshow |
 | step | number | 1 | No | The number of slides to move when pressing the &lt;ButtonBack /> and &lt;ButtonNext /> buttons.|
-| tag | string | 'div' | No | The HTML element to use for the provider. |
+| dragStep | number | 1 | No | The number of slides to move when performing a short touch drag.|
+| tag | string | 'div' | No | The HTML element to use for the provider. |`
 | **totalSlides** | number |  | **Yes** | Always set this to match the total number of &lt;Slide > components in your carousel |
 | touchEnabled | boolean | true | No | Set to true to enable touch events |
 | dragEnabled | boolean | true | No | Set to true to enable mouse dragging events |
@@ -462,6 +463,7 @@ Here's more pseudocode.  I've listed a bunch of properties that exist in the Car
     slideSize: state.slideSize,
     slideTraySize: state.slideTraySize
     step: state.step,
+    dragStep: state.dragStep,
     totalSlides: state.totalSlides,
     touchEnabled: state.touchEnabled,
     dragEnabled: state.dragEnabled,
@@ -529,6 +531,7 @@ interface CarouselState {
   readonly slideSize: number
   readonly slideTraySize: number
   readonly step: number
+  readonly dragStep: number
   readonly totalSlides: number
   readonly touchEnabled: boolean
   readonly dragEnabled: boolean
