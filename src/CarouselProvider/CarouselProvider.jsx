@@ -105,6 +105,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       'orientation',
       'playDirection',
       'step',
+      'dragStep',
       'totalSlides',
       'touchEnabled',
       'dragEnabled',
