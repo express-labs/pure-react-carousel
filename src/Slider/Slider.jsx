@@ -509,7 +509,7 @@ const Slider = class Slider extends React.Component {
 
     // slider tray
     const trayStyle = {};
-    const trans = pct(slideSize * currentSlide * -1);
+    const trans = pct(slideSize * Math.min(currentSlide, totalSlides - visibleSlides) * -1);
 
     if (this.state.isBeingTouchDragged || this.state.isBeingMouseDragged || disableAnimation) {
       trayStyle.transition = 'none';
