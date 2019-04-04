@@ -70,6 +70,7 @@ const Slide = class Slide extends React.PureComponent {
   }
 
   handleOnClick() {
+    console.log(this.props);
     const { index, onClick } = this.props;
     console.log('BO');
     onClick.call(this, index);
