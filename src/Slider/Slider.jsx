@@ -42,6 +42,7 @@ const Slider = class Slider extends React.Component {
     touchEnabled: PropTypes.bool.isRequired,
     trayTag: PropTypes.string,
     visibleSlides: PropTypes.number,
+    onAfterDrag: PropTypes.func
   }
 
   static defaultProps = {
@@ -59,6 +60,7 @@ const Slider = class Slider extends React.Component {
     trayTag: 'ul',
     visibleSlides: 1,
     dragStep: 1,
+    onAfterDrag: null
   }
 
   static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
@@ -412,6 +414,7 @@ const Slider = class Slider extends React.Component {
     this.props.carouselStore.setStoreState({
       currentSlide,
     });
+    onAfterDrag.call(this, currentSlide);
   }
 
   focus() {
