@@ -70,14 +70,19 @@ const Slide = class Slide extends React.PureComponent {
   }
 
   handleOnClick() {
-    const { carouselStore, index, onClick, totalSlides, visibleSlides } = this.props;
+    const {
+      carouselStore,
+      index,
+      onClick,
+      totalSlides,
+      visibleSlides,
+    } = this.props;
     if (totalSlides - index <= visibleSlides) {
-      onClick !== null && onClick.call(this, index);
-    }
-    else {
+      if (onClick !== null) { onClick.call(this, index); }
+    } else {
       carouselStore.setStoreState({
         currentSlide: index,
-      }, onClick !== null && onClick.call(this, index))
+      }, onClick !== null && onClick.call(this, index));
     }
   }
 
