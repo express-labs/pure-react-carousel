@@ -71,6 +71,7 @@ const Slide = class Slide extends React.PureComponent {
 
   handleOnClick() {
     const { index, onClick } = this.props;
+    console.log(this.innerTagRef)
     onClick.call(this, index);
   }
 
