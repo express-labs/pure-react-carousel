@@ -161,7 +161,6 @@ const Slide = class Slide extends React.PureComponent {
         role="option"
         onFocus={this.handleOnFocus}
         onBlur={this.handleOnBlur}
-        onClick={this.handleOnClick}
         className={newClassName}
         style={newStyle}
         {...props}
@@ -169,6 +168,7 @@ const Slide = class Slide extends React.PureComponent {
         <InnerTag
           ref={(el) => { this.innerTagRef = el; }}
           className={newInnerClassName}
+          onClick={this.handleOnClick}
         >
           {this.props.children}
           {this.renderFocusRing()}
