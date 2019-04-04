@@ -11,7 +11,7 @@ interface SliderProps {
   readonly style?: {}
   readonly spinner?: () => void
   readonly trayTag?: string,
-  onAfterDrag: (n: number) => void
+  readonly onAfterDrag?: (n: number) => void
 }
 type SliderInterface = React.ComponentClass<SliderProps>
 /**
