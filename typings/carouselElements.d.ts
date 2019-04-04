@@ -108,7 +108,7 @@ interface ButtonNextProps {
   readonly children: React.ReactChild
   readonly className?: string
   readonly disabled?: boolean
-  readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
+  readonly onClick?: (n: number) => void
 }
 type ButtonNextInterface = React.ComponentClass<ButtonNextProps>
 /**
