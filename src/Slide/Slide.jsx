@@ -45,6 +45,7 @@ const Slide = class Slide extends React.PureComponent {
   constructor(props) {
     super(props);
     this.handleOnFocus = this.handleOnFocus.bind(this);
+    this.handleOnClick = this.handleOnClick.bind(this);
     this.handleOnBlur = this.handleOnBlur.bind(this);
     this.state = {
       focused: false,
