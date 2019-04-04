@@ -66,6 +66,13 @@ const Slide = class Slide extends React.PureComponent {
     });
   }
 
+  handleOnClick() {
+    const { carouselStore, index } = this.props;
+    carouselStore.setStoreState({
+      currentSlide: index,
+    });
+  }
+
   handleOnBlur(ev) {
     const { onBlur } = this.props;
 
@@ -149,7 +156,7 @@ const Slide = class Slide extends React.PureComponent {
         role="option"
         onFocus={this.handleOnFocus}
         onBlur={this.handleOnBlur}
-        onClick={() => console.log('HELLO')}
+        onClick={this.handleOnClick}
         className={newClassName}
         style={newStyle}
         {...props}
