@@ -70,10 +70,7 @@ const Slide = class Slide extends React.PureComponent {
   }
 
   handleOnClick() {
-    console.log('ciao');
-    console.log(this.props);
     const { index, onClick } = this.props;
-    console.log('BO');
     onClick.call(this, index);
   }
 
@@ -151,7 +148,6 @@ const Slide = class Slide extends React.PureComponent {
 
     const defaultTabIndex = this.isVisible() ? 0 : -1;
     const newTabIndex = typeof tabIndex === 'number' ? tabIndex : defaultTabIndex;
-    console.log(this.props);
 
     return (
       <Tag
