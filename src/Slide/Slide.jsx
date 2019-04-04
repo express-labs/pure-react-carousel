@@ -69,7 +69,8 @@ const Slide = class Slide extends React.PureComponent {
     });
   }
 
-  handleOnClick() {
+  handleOnClick(ev) {
+    ev.preventDefault();
     const { index, onClick } = this.props;
     onClick.call(this, index);
   }
