@@ -488,7 +488,8 @@ const Slider = class Slider extends React.Component {
       totalSlides,
       touchEnabled,
       trayTag: TrayTag,
-      visibleSlides,
+			visibleSlides,
+			onAfterDrag,
       ...props
     } = this.props;
 
