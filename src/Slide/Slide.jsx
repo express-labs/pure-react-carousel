@@ -71,7 +71,7 @@ const Slide = class Slide extends React.PureComponent {
 
   handleOnClick() {
     const { index, onClick } = this.props;
-    onClick.call(this, index);
+    if (onClick !== null) { onClick.call(this, index); }
   }
 
   handleOnBlur(ev) {

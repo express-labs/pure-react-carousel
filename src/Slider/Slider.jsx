@@ -414,7 +414,7 @@ const Slider = class Slider extends React.Component {
     this.props.carouselStore.setStoreState({
       currentSlide,
     });
-    this.props.onAfterDrag && this.props.onAfterDrag.call(this, currentSlide);
+    if (this.props.onAfterDrag !== null) { this.props.onAfterDrag.call(this, currentSlide); }
   }
 
   focus() {
