@@ -28,7 +28,7 @@ interface SlideProps {
   readonly innerClassName?: string
   readonly innerTag?: string
   readonly onBlur?: () => void
-  readonly onClick?: (n: number) => void
+  readonly afterClick?: (n: number) => void
   readonly onFocus?: () => void
   readonly tabIndex?: number
   readonly tag?: string
@@ -109,7 +109,7 @@ interface ButtonNextProps {
   readonly children: React.ReactChild
   readonly className?: string
   readonly disabled?: boolean
-  readonly onClick?: (n: number) => void
+  readonly afterClick?: (n: number) => void
 }
 type ButtonNextInterface = React.ComponentClass<ButtonNextProps>
 /**
@@ -123,7 +123,7 @@ interface ButtonBackProps {
   readonly children: React.ReactChild
   readonly className?: string
   readonly disabled?: boolean
-  readonly onClick?: (n: number) => void
+  readonly afterClick?: (n: number) => void
 }
 type ButtonBackInterface = React.ComponentClass<ButtonBackProps>
 /**
