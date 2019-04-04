@@ -149,6 +149,7 @@ const Slide = class Slide extends React.PureComponent {
         role="option"
         onFocus={this.handleOnFocus}
         onBlur={this.handleOnBlur}
+        onClick={() => console.log('HELLO')}
         className={newClassName}
         style={newStyle}
         {...props}

@@ -42,7 +42,7 @@ export default class ButtonBack extends React.Component {
     });
   }
 
-  handleOnClick(ev) {
+  handleOnClick() {
     const {
       carouselStore, currentSlide, onClick, step,
     } = this.props;
@@ -52,7 +52,7 @@ export default class ButtonBack extends React.Component {
     );
     carouselStore.setStoreState({
       currentSlide: newCurrentSlide,
-    }, onClick !== null && onClick.call(this, ev));
+    }, onClick !== null && onClick.call(this, newCurrentSlide));
   }
 
   render() {
