@@ -28,6 +28,7 @@ interface SlideProps {
   readonly innerClassName?: string
   readonly innerTag?: string
   readonly onBlur?: () => void
+  readonly onClick?: (n: number) => void
   readonly onFocus?: () => void
   readonly tabIndex?: number
   readonly tag?: string

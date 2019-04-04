@@ -17,6 +17,7 @@ const Slide = class Slide extends React.PureComponent {
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
     onBlur: PropTypes.func,
+    onClick: PropTypes.func,
     onFocus: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
     slideSize: PropTypes.number.isRequired,
@@ -36,6 +37,7 @@ const Slide = class Slide extends React.PureComponent {
     innerClassName: null,
     innerTag: 'div',
     onBlur: null,
+    onClick: null,
     onFocus: null,
     style: {},
     tabIndex: null,
@@ -68,10 +70,8 @@ const Slide = class Slide extends React.PureComponent {
   }
 
   handleOnClick() {
-    const { carouselStore, index } = this.props;
-    carouselStore.setStoreState({
-      currentSlide: index,
-    });
+    const { index, onClick } = this.props;
+    onClick.call(this, index);
   }
 
   handleOnBlur(ev) {
