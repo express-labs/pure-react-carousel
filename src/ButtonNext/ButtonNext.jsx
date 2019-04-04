@@ -54,7 +54,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     });
   }
 
-  handleOnClick(ev) {
+  handleOnClick() {
     const {
       currentSlide, onClick, step, carouselStore,
     } = this.props;
@@ -65,7 +65,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     );
     carouselStore.setStoreState({
       currentSlide: newCurrentSlide,
-    }, onClick !== null && onClick.call(this, ev));
+    }, onClick !== null && onClick.call(this, newCurrentSlide));
   }
 
   render() {
