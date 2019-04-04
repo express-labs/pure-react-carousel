@@ -58,11 +58,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     const {
       currentSlide, onClick, step, carouselStore,
     } = this.props;
-    const maxSlide = this.props.totalSlides - this.props.visibleSlides;
-    const newCurrentSlide = Math.min(
-      (currentSlide + step),
-      maxSlide,
-    );
+    const newCurrentSlide = currentSlide + step;
     carouselStore.setStoreState({
       currentSlide: newCurrentSlide,
     }, onClick !== null && onClick.call(this, newCurrentSlide));
