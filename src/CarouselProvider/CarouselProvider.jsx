@@ -116,26 +116,26 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       }
     });
 
-    const { currentSlide, disableAnimation } = this.carouselStore.getStoreState();
+    // const { currentSlide, disableAnimation } = this.carouselStore.getStoreState();
 
-    const isNewCurrentSlide = (
-      Object.prototype.hasOwnProperty.call(newStoreState, 'currentSlide')
-      && currentSlide !== nextProps.currentSlide
-    );
+    // const isNewCurrentSlide = (
+    //   Object.prototype.hasOwnProperty.call(newStoreState, 'currentSlide')
+    //   && currentSlide !== nextProps.currentSlide
+    // );
 
-    const isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
+    // const isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
 
-    if (isNewCurrentSlide && !isAnimationDisabled) {
-      newStoreState.disableAnimation = true;
+    // if (isNewCurrentSlide && !isAnimationDisabled) {
+    //   newStoreState.disableAnimation = true;
 
-      // TODO: better way to do this.  Timers suck.
-      window.clearTimeout(this.disableAnimationTimer);
-      this.disableAnimationTimer = window.setTimeout(() => {
-        this.carouselStore.setStoreState({
-          disableAnimation: false,
-        });
-      }, 160);
-    }
+    //   // TODO: better way to do this.  Timers suck.
+    //   window.clearTimeout(this.disableAnimationTimer);
+    //   this.disableAnimationTimer = window.setTimeout(() => {
+    //     this.carouselStore.setStoreState({
+    //       disableAnimation: false,
+    //     });
+    //   }, 160);
+    // }
 
     if (
       this.props.totalSlides !== nextProps.totalSlides
