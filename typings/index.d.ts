@@ -79,7 +79,7 @@ type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
  * CarouselProvider allows the other carousel components to communicate with each other.
  *
  * The only required properties are:
- * the orientation, naturalSlideWidth, and naturalSlideHeight.
+ * the totalSlides, naturalSlideWidth, and naturalSlideHeight.
  *
  * The naturalSlideWidth and naturalSlideHeight are used
  * to create an aspect ratio for each slide.
@@ -149,7 +149,7 @@ export {
   ButtonNext,
   ButtonPlay,
   CarouselProvider,
-  CarouselState,
+  CarouselProviderProps,
   Dot,
   DotGroup,
   Image,
