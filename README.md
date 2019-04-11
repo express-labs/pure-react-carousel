@@ -461,7 +461,7 @@ Here's more pseudocode.  I've listed a bunch of properties that exist in the Car
     naturalSlideWidth: state.naturalSlideWidth,
     orientation: state.orientation,
     slideSize: state.slideSize,
-    slideTraySize: state.slideTraySize
+    slideTraySize: state.slideTraySize,
     step: state.step,
     dragStep: state.dragStep,
     totalSlides: state.totalSlides,
