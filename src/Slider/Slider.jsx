@@ -93,6 +93,7 @@ const Slider = class Slider extends React.Component {
     this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
     this.playBackward = this.playBackward.bind(this);
     this.playForward = this.playForward.bind(this);
+    this.callCallback = this.callCallback.bind(this);
 
     this.state = {
       cancelNextClick: false,
