@@ -299,7 +299,7 @@ describe('<Slider />', () => {
         expect(instance.onDragEnd).toHaveBeenCalledTimes(1);
       });
     });
-    describe('handleOnClickCapture', () => {
+    describe('handleOnClickCapture()', () => {
       it('should return undefined if state.cancelNextClick is false', () => {
         const instance = new Slider({});
         expect(instance.handleOnClickCapture()).toBe(undefined);
@@ -318,7 +318,7 @@ describe('<Slider />', () => {
         expect(ev.stopPropagation).toHaveBeenCalledTimes(1);
       });
     });
-    describe('renderMasterSpinner', () => {
+    describe('renderMasterSpinner()', () => {
       it('should render a custom spinner if supplied', () => {
         const instance = new Slider({
           hasMasterSpinner: true,
@@ -349,6 +349,30 @@ describe('<Slider />', () => {
           masterSpinnerFinished: true,
         });
         expect(instance.renderMasterSpinner()).toBe(null);
+      });
+    });
+    describe('callCallBack()', () => {
+      it('should return undefined if trayProps is undefined', () => {
+        const instance = new Slider({});
+        const retval = instance.callCallback('fakeEventProp', {});
+        expect(typeof retval).toBe('undefined');
+      });
+      it('should return undefined if trayProps exists but no callback prop exists', () => {
+        const instance = new Slider({
+          trayProps: { billy: jest.fn() },
+        });
+        const retval = instance.callCallback('fakeEventProp', {});
+        expect(typeof retval).toBe('undefined');
+      });
+      it('should call the callback and persist the event', () => {
+        const billy = jest.fn();
+        const persist = jest.fn();
+        const instance = new Slider({
+          trayProps: { billy },
+        });
+        instance.callCallback('billy', { persist });
+        expect(billy).toHaveBeenCalled();
+        expect(persist).toHaveBeenCalled();
       });
     });
   });
