@@ -19,6 +19,7 @@ const Slider = class Slider extends React.Component {
     disableAnimation: PropTypes.bool,
     disableKeyboard: PropTypes.bool,
     dragEnabled: PropTypes.bool.isRequired,
+    dragStep: PropTypes.number,
     hasMasterSpinner: PropTypes.bool.isRequired,
     interval: PropTypes.number.isRequired,
     isPageScrollLocked: PropTypes.bool.isRequired,
@@ -28,14 +29,21 @@ const Slider = class Slider extends React.Component {
     moveThreshold: PropTypes.number,
     naturalSlideHeight: PropTypes.number.isRequired,
     naturalSlideWidth: PropTypes.number.isRequired,
+    onKeyDown: PropTypes.func,
     onMasterSpinner: PropTypes.func,
+    onMouseDown: PropTypes.func,
+    onMouseMove: PropTypes.func,
+    onMouseUp: PropTypes.func,
+    onTouchCancel: PropTypes.func,
+    onTouchEnd: PropTypes.func,
+    onTouchMove: PropTypes.func,
+    onTouchStart: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
     playDirection: CarouselPropTypes.direction.isRequired,
     slideSize: PropTypes.number.isRequired,
     slideTraySize: PropTypes.number.isRequired,
     spinner: PropTypes.func,
     step: PropTypes.number.isRequired,
-    dragStep: PropTypes.number,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
@@ -51,14 +59,22 @@ const Slider = class Slider extends React.Component {
     classNameTrayWrap: null,
     disableAnimation: false,
     disableKeyboard: false,
+    dragStep: 1,
     moveThreshold: 0.1,
+    onKeyDown: null,
     onMasterSpinner: null,
+    onMouseDown: null,
+    onMouseMove: null,
+    onMouseUp: null,
+    onTouchCancel: null,
+    onTouchEnd: null,
+    onTouchMove: null,
+    onTouchStart: null,
     spinner: null,
     style: {},
     tabIndex: null,
     trayTag: 'ul',
     visibleSlides: 1,
-    dragStep: 1,
   }
 
   static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
@@ -214,27 +230,50 @@ const Slider = class Slider extends React.Component {
     this.sliderTrayElement = el;
   }
 
+  isFunction(propName) {
+    return typeof this.props[propName] === 'function';
+  }
+
+  callCallback(propName, ev) {
+    if (this.isFunction(propName)) {
+      ev.persist();
+      this.props[propName](ev);
+    }
+  }
+
   handleOnMouseDown(ev) {
-    if (!this.props.dragEnabled) return;
+    if (!this.props.dragEnabled) {
+      this.callCallback('onMouseDown', ev);
+      return;
+    }
     ev.preventDefault();
     this.onDragStart({
       screenX: ev.screenX,
       screenY: ev.screenY,
       mouseDrag: true,
     });
+    this.callCallback('onMouseDown', ev);
   }
 
   handleOnMouseMove(ev) {
-    if (!this.state.isBeingMouseDragged) return;
+    if (!this.state.isBeingMouseDragged) {
+      this.callCallback('onMouseMove', ev);
+      return;
+    }
     this.setState({ cancelNextClick: true });
     ev.preventDefault();
     this.onDragMove(ev.screenX, ev.screenY);
+    this.callCallback('onMouseMove', ev);
   }
 
   handleOnMouseUp(ev) {
-    if (!this.state.isBeingMouseDragged) return;
+    if (!this.state.isBeingMouseDragged) {
+      this.callCallback('onMouseUp', ev);
+      return;
+    }
     ev.preventDefault();
     this.onDragEnd();
+    this.callCallback('onMouseUp', ev);
   }
 
   handleOnClickCapture(ev) {
@@ -245,9 +284,13 @@ const Slider = class Slider extends React.Component {
   }
 
   handleOnTouchStart(ev) {
-    if (!this.props.touchEnabled) return;
+    const { touchEnabled, orientation } = this.props;
+    if (!touchEnabled) {
+      this.callCallback('onTouchStart', ev);
+      return;
+    }
 
-    if (this.props.orientation === 'vertical') {
+    if (orientation === 'vertical') {
       ev.preventDefault();
       ev.stopPropagation();
     }
@@ -258,6 +301,7 @@ const Slider = class Slider extends React.Component {
       screenY: touch.screenY,
       touchDrag: true,
     });
+    this.callCallback('onTouchStart', ev);
   }
 
   handleDocumentScroll() {
@@ -270,15 +314,20 @@ const Slider = class Slider extends React.Component {
   }
 
   handleOnTouchMove(ev) {
+    const { touchEnabled, lockOnWindowScroll } = this.props;
     if (
-      !this.props.touchEnabled
-      || (this.props.lockOnWindowScroll && this.isDocumentScrolling)
-    ) return;
+      !touchEnabled
+      || (lockOnWindowScroll && this.isDocumentScrolling)
+    ) {
+      this.callCallback('onTouchMove', ev);
+      return;
+    }
 
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
     this.onDragMove(touch.screenX, touch.screenY);
+    this.callCallback('onTouchMove', ev);
   }
 
   forward() {
@@ -300,7 +349,10 @@ const Slider = class Slider extends React.Component {
     } = this.props;
     const newStoreState = {};
 
-    if ((disableKeyboard === true) || (totalSlides <= visibleSlides)) return;
+    if ((disableKeyboard === true) || (totalSlides <= visibleSlides)) {
+      this.callCallback('onKeyDown', ev);
+      return;
+    }
 
     // left arrow
     if (keyCode === 37) {
@@ -324,6 +376,8 @@ const Slider = class Slider extends React.Component {
     }
 
     carouselStore.setStoreState(newStoreState);
+
+    this.callCallback('onKeyDown', ev);
   }
 
   playForward() {
@@ -418,12 +472,14 @@ const Slider = class Slider extends React.Component {
     this.sliderElement.focus();
   }
 
-  handleOnTouchEnd() {
+  handleOnTouchEnd(ev) {
     this.endTouchMove();
+    this.callCallback('onTouchEnd', ev);
   }
 
-  handleOnTouchCancel() {
+  handleOnTouchCancel(ev) {
     this.endTouchMove();
+    this.callCallback('onTouchCancel', ev);
   }
 
   endTouchMove() {
