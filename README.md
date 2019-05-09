@@ -59,7 +59,7 @@ Let's make a simple carousel with three slides, a next button, and a back button
   ```JSX
   import React from 'react';
   import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
-  ```  
+  ```
 
 3. Using Webpack or Rollup?  Does your Webpack config have a loader for "css" files?  If so, import the css as well.
 
@@ -67,7 +67,7 @@ Let's make a simple carousel with three slides, a next button, and a back button
   import React from 'react';
   import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
   import 'pure-react-carousel/dist/react-carousel.es.css';
-  ```   
+  ```
 
 4. Put a CarouselProvider component in your code.  This allows the other carousel components to communicate with each other.  The only required properties are the orientation, naturalSlideWidth, and naturalSlideHeight.  The naturalSlideWidth and naturalSlideHeight are used to create an aspect ratio for each slide.  Since the carousel is responsive by default, it will stretch to fill in the width of it's parent container.  The CarouselProvider must also have children.  We'll add the children in the next step.
 
@@ -129,7 +129,7 @@ Let's make a simple carousel with three slides, a next button, and a back button
           naturalSlideWidth={100}
           naturalSlideHeight={125}
           totalSlides={3}
-        >        
+        >
           <Slider>
             <Slide index={0}>I am the first Slide.</Slide>
             <Slide index={1}>I am the second Slide.</Slide>
@@ -144,9 +144,9 @@ Let's make a simple carousel with three slides, a next button, and a back button
   ```
 
 
-That's it. You have a super basic Carousel.  
+That's it. You have a super basic Carousel.
 
-There are other components you can add, like ButtonFirst, ButtonLast, an Image component, and even an ImageWithZoom component that zooms on mouse hover or finger tap.  
+There are other components you can add, like ButtonFirst, ButtonLast, an Image component, and even an ImageWithZoom component that zooms on mouse hover or finger tap.
 
 Obviously, you can customize the heck out of the layout.  If you need to bury your Slider component in 18 parent divs, go for it.  It will still do it's job.  Feel free to add the className property to any of the Components to further customize your carousel.  Or, hook into the many BEM named default CSS class names built into the carousel components.
 
@@ -215,6 +215,7 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 | onMasterSpinner | [function&#124;null] | null | No | Optional callback function that is called when the Master Spinner is visible.  Requires that &lt;CarouselProvider /> set hasMasterSpinner to true |
 | spinner | function | null | No |  Optional inline JSX (aka "render props") to render your own custom spinner.  Example `() => <MyCustomSpinnerComponent />`  If left blank, the default spinner is used. |
 | style | object | {} | No | Optional css styles to add to the Slider.  Note: internal css properties take precedence over any styles specified in the styles object |
+| trayProps | object | {} | No | Any props you want to attach to the slider tray with the exception of className and style. The className prop is handled via classNameTray prop above.  Style is used internally. Any event handlers like onMouseDown or others are called after any of our internal event handlers. |
 | trayTag | string | 'ul' | No | The HTML tag to used for the tray (the thing that holds all the slides and moves the slides back and forth.) |
 
 #### The Slider component creates the following pseudo HTML by default.
@@ -428,7 +429,7 @@ Use this HOC to pass CarouselProvider state properties as props to a component. 
 </CarouselProvider>
 ```
 
-WithStore has two arguments:  
+WithStore has two arguments:
 
 `WithStore([component], [mapstateToProps])`
 

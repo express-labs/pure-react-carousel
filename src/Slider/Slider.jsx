@@ -19,6 +19,7 @@ const Slider = class Slider extends React.Component {
     disableAnimation: PropTypes.bool,
     disableKeyboard: PropTypes.bool,
     dragEnabled: PropTypes.bool.isRequired,
+    dragStep: PropTypes.number,
     hasMasterSpinner: PropTypes.bool.isRequired,
     interval: PropTypes.number.isRequired,
     isPageScrollLocked: PropTypes.bool.isRequired,
@@ -35,11 +36,11 @@ const Slider = class Slider extends React.Component {
     slideTraySize: PropTypes.number.isRequired,
     spinner: PropTypes.func,
     step: PropTypes.number.isRequired,
-    dragStep: PropTypes.number,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
     touchEnabled: PropTypes.bool.isRequired,
+    trayProps: PropTypes.shape({}),
     trayTag: PropTypes.string,
     visibleSlides: PropTypes.number,
   }
@@ -51,14 +52,15 @@ const Slider = class Slider extends React.Component {
     classNameTrayWrap: null,
     disableAnimation: false,
     disableKeyboard: false,
+    dragStep: 1,
     moveThreshold: 0.1,
     onMasterSpinner: null,
     spinner: null,
     style: {},
     tabIndex: null,
+    trayProps: {},
     trayTag: 'ul',
     visibleSlides: 1,
-    dragStep: 1,
   }
 
   static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
@@ -91,6 +93,7 @@ const Slider = class Slider extends React.Component {
     this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
     this.playBackward = this.playBackward.bind(this);
     this.playForward = this.playForward.bind(this);
+    this.callCallback = this.callCallback.bind(this);
 
     this.state = {
       cancelNextClick: false,
@@ -214,14 +217,26 @@ const Slider = class Slider extends React.Component {
     this.sliderTrayElement = el;
   }
 
+  callCallback(propName, ev) {
+    const { trayProps } = this.props;
+    if (trayProps && typeof trayProps[propName] === 'function') {
+      ev.persist();
+      trayProps[propName](ev);
+    }
+  }
+
   handleOnMouseDown(ev) {
-    if (!this.props.dragEnabled) return;
+    if (!this.props.dragEnabled) {
+      this.callCallback('onMouseDown', ev);
+      return;
+    }
     ev.preventDefault();
     this.onDragStart({
       screenX: ev.screenX,
       screenY: ev.screenY,
       mouseDrag: true,
     });
+    this.callCallback('onMouseDown', ev);
   }
 
   handleOnMouseMove(ev) {
@@ -238,14 +253,21 @@ const Slider = class Slider extends React.Component {
   }
 
   handleOnClickCapture(ev) {
-    if (!this.state.cancelNextClick) return;
+    if (!this.state.cancelNextClick) {
+      this.callCallback('onClickCapture', ev);
+      return;
+    }
     ev.stopPropagation();
     ev.preventDefault();
     this.setState({ cancelNextClick: false });
+    this.callCallback('onClickCapture', ev);
   }
 
   handleOnTouchStart(ev) {
-    if (!this.props.touchEnabled) return;
+    if (!this.props.touchEnabled) {
+      this.callCallback('onTouchStart', ev);
+      return;
+    }
 
     if (this.props.orientation === 'vertical') {
       ev.preventDefault();
@@ -258,6 +280,7 @@ const Slider = class Slider extends React.Component {
       screenY: touch.screenY,
       touchDrag: true,
     });
+    this.callCallback('onTouchStart', ev);
   }
 
   handleDocumentScroll() {
@@ -273,12 +296,16 @@ const Slider = class Slider extends React.Component {
     if (
       !this.props.touchEnabled
       || (this.props.lockOnWindowScroll && this.isDocumentScrolling)
-    ) return;
+    ) {
+      this.callCallback('onTouchMove', ev);
+      return;
+    }
 
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
     this.onDragMove(touch.screenX, touch.screenY);
+    this.callCallback('onTouchMove', ev);
   }
 
   forward() {
@@ -418,12 +445,14 @@ const Slider = class Slider extends React.Component {
     this.sliderElement.focus();
   }
 
-  handleOnTouchEnd() {
+  handleOnTouchEnd(ev) {
     this.endTouchMove();
+    this.callCallback('onTouchEnd', ev);
   }
 
-  handleOnTouchCancel() {
+  handleOnTouchCancel(ev) {
     this.endTouchMove();
+    this.callCallback('onTouchCancel', ev);
   }
 
   endTouchMove() {
@@ -484,6 +513,7 @@ const Slider = class Slider extends React.Component {
       tabIndex,
       totalSlides,
       touchEnabled,
+      trayProps,
       trayTag: TrayTag,
       visibleSlides,
       ...props
@@ -550,6 +580,23 @@ const Slider = class Slider extends React.Component {
     // remove `dragStep` and `step` from Slider div, since it isn't a valid html attribute
     const { dragStep, step, ...rest } = props;
 
+    // filter out some tray props before passing them in.  We will process event handlers in the
+    // trayProps object as callbacks to OUR event handlers.  Ref is needed by us. Style and
+    // className are in the main props.  Can't merge them into trayProps without causing a breaking
+    // change.
+    const {
+      className: ignoreClassName,
+      onClickCapture,
+      onMouseDown,
+      onTouchCancel,
+      onTouchEnd,
+      onTouchMove,
+      onTouchStart,
+      ref: ignoreRef,
+      style: ignoreStyle,
+      ...filteredTrayProps
+    } = trayProps;
+
     return (
       <div
         ref={(el) => { this.sliderElement = el; }}
@@ -572,6 +619,7 @@ const Slider = class Slider extends React.Component {
             onTouchCancel={this.handleOnTouchCancel}
             onMouseDown={this.handleOnMouseDown}
             onClickCapture={this.handleOnClickCapture}
+            {...filteredTrayProps}
           >
             {children}
           </TrayTag>
