@@ -2,7 +2,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
 Created by  
-[![Express Logo](/dev/media/express-logo.svg)](http://www.express.com)
+[![Express Logo](https://raw.github.com/express-labs/pure-react-carousel/master/dev/media/express-logo.svg?sanitize=true)](http://www.express.com)
 
 # pure-react-carousel
 
