@@ -13,18 +13,23 @@ const DotGroup = class DotGroup extends React.Component {
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
     dotNumbers: PropTypes.bool,
-    disableDots: PropTypes.bool
+    disableDots: PropTypes.bool,
   }
 
   static defaultProps = {
     children: null,
     className: null,
     dotNumbers: false,
-    disableDots: false
+    disableDots: false,
   }
 
   renderDots() {
-    const { currentSlide, totalSlides, visibleSlides, disableDots } = this.props;
+    const {
+      currentSlide,
+      totalSlides,
+      visibleSlides,
+      disableDots,
+    } = this.props;
     const dots = [];
     for (let i = 0; i < totalSlides; i += 1) {
       const selected = i >= currentSlide && i < (currentSlide + visibleSlides);
