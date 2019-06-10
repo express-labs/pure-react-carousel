@@ -13,22 +13,24 @@ const DotGroup = class DotGroup extends React.Component {
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
     dotNumbers: PropTypes.bool,
+    disableDots: PropTypes.bool
   }
 
   static defaultProps = {
     children: null,
     className: null,
     dotNumbers: false,
+    disableDots: false
   }
 
   renderDots() {
-    const { currentSlide, totalSlides, visibleSlides } = this.props;
+    const { currentSlide, totalSlides, visibleSlides, disableDots } = this.props;
     const dots = [];
     for (let i = 0; i < totalSlides; i += 1) {
       const selected = i >= currentSlide && i < (currentSlide + visibleSlides);
       const slide = i >= totalSlides - visibleSlides ? totalSlides - visibleSlides : i;
       dots.push(
-        <Dot key={i} slide={slide} selected={selected} disabled={selected}>
+        <Dot key={i} slide={slide} selected={selected} disabled={disableDots ? selected : false}>
           <span className={cn['carousel__dot-group-dot']}>{this.props.dotNumbers && i + 1}</span>
         </Dot>,
       );
