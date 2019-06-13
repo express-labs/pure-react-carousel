@@ -45,7 +45,14 @@ const DotGroup = class DotGroup extends React.Component {
 
   render() {
     const {
-      carouselStore, children, className, currentSlide, dotNumbers, totalSlides, visibleSlides,
+      carouselStore,
+      children,
+      className,
+      currentSlide,
+      dotNumbers,
+      totalSlides,
+      visibleSlides,
+      disableDots,
       ...props
     } = this.props;
 
