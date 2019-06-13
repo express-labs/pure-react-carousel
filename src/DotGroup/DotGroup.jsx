@@ -14,6 +14,7 @@ const DotGroup = class DotGroup extends React.Component {
     visibleSlides: PropTypes.number.isRequired,
     dotNumbers: PropTypes.bool,
     disableDots: PropTypes.bool,
+    onlyOneDot: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -21,6 +22,7 @@ const DotGroup = class DotGroup extends React.Component {
     className: null,
     dotNumbers: false,
     disableDots: false,
+    onlyOneDot: false,
   }
 
   renderDots() {
@@ -29,10 +31,13 @@ const DotGroup = class DotGroup extends React.Component {
       totalSlides,
       visibleSlides,
       disableDots,
+      onlyOneDot,
     } = this.props;
     const dots = [];
     for (let i = 0; i < totalSlides; i += 1) {
-      const selected = i >= currentSlide && i < (currentSlide + visibleSlides);
+      const multipleSelected = i >= currentSlide && i < (currentSlide + visibleSlides);
+      const singleSelected = i === currentSlide;
+      const selected = onlyOneDot ? singleSelected : multipleSelected;
       const slide = i >= totalSlides - visibleSlides ? totalSlides - visibleSlides : i;
       dots.push(
         <Dot key={i} slide={slide} selected={selected} disabled={disableDots ? selected : false}>
@@ -53,6 +58,7 @@ const DotGroup = class DotGroup extends React.Component {
       totalSlides,
       visibleSlides,
       disableDots,
+      onlyOneDot,
       ...props
     } = this.props;
 
