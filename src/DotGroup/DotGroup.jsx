@@ -13,32 +13,51 @@ const DotGroup = class DotGroup extends React.Component {
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
     dotNumbers: PropTypes.bool,
+    disableActiveDots: PropTypes.bool,
+    showAsSelectedForCurrentSlideOnly: PropTypes.bool,
   }
 
   static defaultProps = {
     children: null,
     className: null,
     dotNumbers: false,
+    disableActiveDots: true,
+    showAsSelectedForCurrentSlideOnly: false
   }
 
   renderDots() {
-    const { currentSlide, totalSlides, visibleSlides } = this.props;
+    const {
+      currentSlide,
+      totalSlides,
+      visibleSlides,
+      disableActiveDots,
+      showAsSelectedForCurrentSlideOnly,
+    } = this.props;
     const dots = [];
     for (let i = 0; i < totalSlides; i += 1) {
-      const selected = i >= currentSlide && i < (currentSlide + visibleSlides);
+      const multipleSelected = i >= currentSlide && i < (currentSlide + visibleSlides);
+      const singleSelected = i === currentSlide;
+      const selected = showAsSelectedForCurrentSlideOnly ? singleSelected : multipleSelected;
       const slide = i >= totalSlides - visibleSlides ? totalSlides - visibleSlides : i;
       dots.push(
-        <Dot key={i} slide={slide} selected={selected} disabled={selected}>
+        <Dot key={i} slide={slide} selected={selected} disabled={disableActiveDots ? selected : false}>
           <span className={cn['carousel__dot-group-dot']}>{this.props.dotNumbers && i + 1}</span>
         </Dot>,
       );
     }
     return dots;
-  }
 
   render() {
     const {
-      carouselStore, children, className, currentSlide, dotNumbers, totalSlides, visibleSlides,
+      carouselStore, 
+      children, 
+      className, 
+      currentSlide, 
+      dotNumbers, 
+      totalSlides, 
+      visibleSlides, 
+      disableActiveDots,
+      showAsSelectedForCurrentSlideOnly,
       ...props
     } = this.props;
 
