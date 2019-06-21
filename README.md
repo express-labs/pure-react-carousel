@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
-Created by  
+Created by
 [![Express Logo](https://raw.github.com/express-labs/pure-react-carousel/master/dev/media/express-logo.svg?sanitize=true)](http://www.express.com)
 
 # pure-react-carousel
@@ -293,6 +293,8 @@ A compound component that creates a bunch of Dot's automatically for you.
 | children | [string&#124;node&#124;null] | null | No | Any JSX wrapped by this component will appear AFTER the dots. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | dotNumbers | boolean | false | No | Setting to true automatically adds text numbers the dot buttons starting at 1. |
+| disableActiveDots | boolean | true | No | Setting to true make all dots, including active dots, enabled. |
+| showAsSelectedForCurrentSlideOnly | boolean | false | No | Setting to true show only the current slide dot as selected. |
 
 #### The DotGroup component creates the following pseudo HTML by default:
 
