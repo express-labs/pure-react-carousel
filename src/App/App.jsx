@@ -14,10 +14,6 @@ import {
 } from './examples';
 import s from './style.scss';
 
-// function demoClick(ev) {
-//   console.log('ev', Object.assign({}, ev));
-// }
-
 class DevelopmentApp extends React.Component {
   constructor() {
     super();

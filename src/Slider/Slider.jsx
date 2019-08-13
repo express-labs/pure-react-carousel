@@ -257,7 +257,6 @@ const Slider = class Slider extends React.Component {
       this.callCallback('onClickCapture', ev);
       return;
     }
-    // ev.stopPropagation();
     ev.preventDefault();
     this.setState({ cancelNextClick: false });
     this.callCallback('onClickCapture', ev);
@@ -271,7 +270,6 @@ const Slider = class Slider extends React.Component {
 
     if (this.props.orientation === 'vertical') {
       ev.preventDefault();
-      // ev.stopPropagation();
     }
 
     const touch = ev.targetTouches[0];
@@ -332,7 +330,6 @@ const Slider = class Slider extends React.Component {
     // left arrow
     if (keyCode === 37) {
       ev.preventDefault();
-      // ev.stopPropagation();
       this.focus();
       newStoreState.currentSlide = Math.max(0, currentSlide - 1);
       newStoreState.isPlaying = false;
@@ -341,7 +338,6 @@ const Slider = class Slider extends React.Component {
     // right arrow
     if (keyCode === 39) {
       ev.preventDefault();
-      // ev.stopPropagation();
       this.focus();
       newStoreState.currentSlide = Math.min(
         totalSlides - visibleSlides,
@@ -574,8 +570,6 @@ const Slider = class Slider extends React.Component {
     ]);
 
     const newTabIndex = tabIndex !== null ? tabIndex : 0;
-
-    // console.log(Object.assign({}, trayStyle), new Date());
 
     // remove `dragStep` and `step` from Slider div, since it isn't a valid html attribute
     const { dragStep, step, ...rest } = props;
