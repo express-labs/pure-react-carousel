@@ -238,7 +238,7 @@ describe('<Slider />', () => {
         const ev = {
           preventDefault: jest.fn(),
         };
-        instance.onDragMove = jest.fn();
+        instance.fakeOnDragMove = jest.fn();
         instance.setState = jest.fn();
         instance.handleOnMouseMove(ev);
         expect(ev.preventDefault).toHaveBeenCalledTimes(1);
@@ -249,13 +249,13 @@ describe('<Slider />', () => {
         const ev = {
           preventDefault: jest.fn(),
         };
-        instance.onDragMove = jest.fn();
+        instance.fakeOnDragMove = jest.fn();
         instance.setState = jest.fn();
         instance.handleOnMouseMove(ev);
         expect(instance.setState).toHaveBeenCalledTimes(1);
         expect(instance.setState).toHaveBeenCalledWith({ cancelNextClick: true });
       });
-      it('should call onDragMove and pass it the event screen x and y values', () => {
+      it('should call fakeOnDragMove and pass it the event screen x and y values', () => {
         const instance = new Slider({});
         instance.state.isBeingMouseDragged = true;
         const ev = {
@@ -263,11 +263,11 @@ describe('<Slider />', () => {
           screenX: 1,
           screenY: 2,
         };
-        instance.onDragMove = jest.fn();
+        instance.fakeOnDragMove = jest.fn();
         instance.setState = jest.fn();
         instance.handleOnMouseMove(ev);
-        expect(instance.onDragMove).toHaveBeenCalledTimes(1);
-        expect(instance.onDragMove).toHaveBeenCalledWith(1, 2);
+        expect(instance.fakeOnDragMove).toHaveBeenCalledTimes(1);
+        expect(instance.fakeOnDragMove).toHaveBeenCalledWith(1, 2);
       });
     });
     describe('onMouseUp()', () => {
@@ -282,11 +282,11 @@ describe('<Slider />', () => {
         const ev = {
           preventDefault: jest.fn(),
         };
-        instance.onDragEnd = jest.fn();
+        instance.fakeOnDragEnd = jest.fn();
         instance.handleOnMouseUp(ev);
         expect(ev.preventDefault).toHaveBeenCalledTimes(1);
       });
-      it('should call onDragEnd and pass it the event screen x and y values', () => {
+      it('should call fakeOnDragEnd and pass it the event screen x and y values', () => {
         const instance = new Slider({});
         instance.state.isBeingMouseDragged = true;
         const ev = {
@@ -294,9 +294,9 @@ describe('<Slider />', () => {
           screenX: 1,
           screenY: 2,
         };
-        instance.onDragEnd = jest.fn();
+        instance.fakeOnDragEnd = jest.fn();
         instance.handleOnMouseUp(ev);
-        expect(instance.onDragEnd).toHaveBeenCalledTimes(1);
+        expect(instance.fakeOnDragEnd).toHaveBeenCalledTimes(1);
       });
     });
     describe('handleOnClickCapture()', () => {
