@@ -10,9 +10,9 @@ import {
   Example8,
   Example9,
   Example10,
+  Example11,
 } from './examples';
 import s from './style.scss';
-
 
 // function demoClick(ev) {
 //   console.log('ev', Object.assign({}, ev));
@@ -43,18 +43,24 @@ class DevelopmentApp extends React.Component {
             <div className={s.firstSlideCenterHoriz}>
               <h1 className={s.heroHeadline}>Pure React Carousel</h1>
               <p className={s.heroText}>
-                Pure React Carousel is a suite of unopinionated React components that a
-                developer can use to create robust carousels with almost no limits on DOM structure
-                or styling.
+                Pure React Carousel is a suite of unopinionated React components that a developer
+                can use to create robust carousels with almost no limits on DOM structure or
+                styling.
               </p>
               <p className={s.heroText}>
                 If you&apos;re tired of fighting some other developer&apos;s CSS and DOM structure,
                 this carousel is for you.
               </p>
               <ul className={s.heroList}>
-                <li><a href="#un">What is &quot;unopinionated?&quot;</a></li>
-                <li><a href="#rw">Real World Example</a></li>
-                <li><a href="#de">Demo Examples</a></li>
+                <li>
+                  <a href="#un">What is &quot;unopinionated?&quot;</a>
+                </li>
+                <li>
+                  <a href="#rw">Real World Example</a>
+                </li>
+                <li>
+                  <a href="#de">Demo Examples</a>
+                </li>
                 <li>
                   <a href="https://github.com/express-labs/pure-react-carousel">
                     Documentation
@@ -68,7 +74,9 @@ class DevelopmentApp extends React.Component {
                     </svg>
                   </a>
                 </li>
-                <li><a href="#el">Express Labs</a></li>
+                <li>
+                  <a href="#el">Express Labs</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -82,25 +90,37 @@ class DevelopmentApp extends React.Component {
           </p>
           <p>
             The components in Pure React Carousel provide the bare-minimum of styling and javascript
-            required to function correctly as a carousel. Just like using table HTML tags
-            will give you a bare-bones table that you will need to style, Pure React Carousel
-            requires that you provide additional styles and optional javascript in order to meet
-            your project&apos;s specific functionality and branding requirements.
+            required to function correctly as a carousel. Just like using table HTML tags will give
+            you a bare-bones table that you will need to style, Pure React Carousel requires that
+            you provide additional styles and optional javascript in order to meet your
+            project&apos;s specific functionality and branding requirements.
           </p>
           <p>
-            The benefit of Pure React Carousel is that our components are focused on one task:
-            being an WCAG accessible carousel.  Besides that, our goal is to get out of your way.
+            The benefit of Pure React Carousel is that our components are focused on one task: being
+            an WCAG accessible carousel. Besides that, our goal is to get out of your way.
           </p>
         </div>
         <div id="rw" className={s.examples}>
           <div className={s.examplesInnerCenter}>
             <h2 className={s.headline}>Real World Example</h2>
             <p>
-              Here are two examples of what can be acheived with Pure React Carousel. This is how
-              we use the suite of components on the Express.com website.
+              Here are two examples of what can be acheived with Pure React Carousel. This is how we
+              use the suite of components on the Express.com website.
             </p>
-            <p><img className={s.responsiveImg} src="./media/pdp-women.gif" alt="example of pure react carousel on the product detail page for a dress on Express.com" /></p>
-            <p><img className={s.responsiveImg} src="./media/pdp-men.gif" alt="example of pure react carousel on the product detail page for a shirt on Express.com" /></p>
+            <p>
+              <img
+                className={s.responsiveImg}
+                src="./media/pdp-women.gif"
+                alt="example of pure react carousel on the product detail page for a dress on Express.com"
+              />
+            </p>
+            <p>
+              <img
+                className={s.responsiveImg}
+                src="./media/pdp-men.gif"
+                alt="example of pure react carousel on the product detail page for a shirt on Express.com"
+              />
+            </p>
           </div>
         </div>
         <div id="de" className={s.examplesDemo}>
@@ -108,10 +128,10 @@ class DevelopmentApp extends React.Component {
             <h2 className={s.headline}>Default Carousel Examples</h2>
             <h3 className={s.headline}>Why are these examples so... ugly?</h3>
             <p>
-              These examples are completely un-styled.  Pure React Carousel does not come with
-              styles that must be defeated in order to match your organization&apos;s branding.  So,
-              to distract you from the seeming lack of finess, most of our examples
-              involve pictures of cats!
+              These examples are completely un-styled. Pure React Carousel does not come with styles
+              that must be defeated in order to match your organization&apos;s branding. So, to
+              distract you from the seeming lack of finess, most of our examples involve pictures of
+              cats!
             </p>
             <p>
               <label>
@@ -125,83 +145,93 @@ class DevelopmentApp extends React.Component {
                   <option value="5">Horizontal Carousel (With Master Loading Spinner)</option>
                   <option value="6">Simple Carousel with vertically alligned nav buttons</option>
                   <option value="7">Simple Carousel with react-redux</option>
-                  <option value="8">Horizontal Carousel (With lockOnWindowScroll set to TRUE)</option>
+                  <option value="8">
+                    Horizontal Carousel (With lockOnWindowScroll set to TRUE)
+                  </option>
                   <option value="9">Horizontal Carousel Auto Play</option>
+                  <option value="10">Carousel with custom spinner component.</option>
+                  <option value="11">Simple carousel with event callbacks on Slider.</option>
                 </select>
               </label>
             </p>
 
             <div className={s.example}>
-              { (value === '0' || value === '1') && (
+              {(value === '0' || value === '1') && (
                 <section id="example--1">
                   <hr />
                   <Example1 />
                 </section>
               )}
 
-              { (value === '0' || value === '2') && (
+              {(value === '0' || value === '2') && (
                 <section id="example--2">
                   <hr />
                   <Example2 />
                 </section>
               )}
 
-              { (value === '0' || value === '3') && (
+              {(value === '0' || value === '3') && (
                 <section id="example--3">
                   <hr />
                   <Example3 />
                 </section>
               )}
 
-              { (value === '0' || value === '4') && (
+              {(value === '0' || value === '4') && (
                 <section id="example--4">
                   <hr />
                   <Example4 />
                 </section>
               )}
 
-              { (value === '0' || value === '5') && (
+              {(value === '0' || value === '5') && (
                 <section id="example--5">
                   <hr />
                   <Example5 />
                 </section>
               )}
 
-              { (value === '0' || value === '6') && (
+              {(value === '0' || value === '6') && (
                 <section id="example--6">
                   <hr />
                   <Example6 />
                 </section>
               )}
 
-              { (value === '0' || value === '7') && (
+              {(value === '0' || value === '7') && (
                 <section id="example--7">
                   <hr />
                   <Example7 />
                 </section>
               )}
 
-              { (value === '0' || value === '8') && (
+              {(value === '0' || value === '8') && (
                 <section id="example--8">
                   <hr />
                   <Example8 />
                 </section>
               )}
 
-              { (value === '0' || value === '9') && (
+              {(value === '0' || value === '9') && (
                 <section id="example--9">
                   <hr />
                   <Example9 />
                 </section>
               )}
 
-              { (value === '0' || value === '10') && (
+              {(value === '0' || value === '10') && (
                 <section id="example--10">
                   <hr />
                   <Example10 />
                 </section>
               )}
 
+              {(value === '0' || value === '11') && (
+                <section id="example--11">
+                  <hr />
+                  <Example11 />
+                </section>
+              )}
             </div>
           </div>
         </div>
