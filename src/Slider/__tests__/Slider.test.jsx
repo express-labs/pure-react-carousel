@@ -304,7 +304,7 @@ describe('<Slider />', () => {
         const instance = new Slider({});
         expect(instance.handleOnClickCapture()).toBe(undefined);
       });
-      it('should call preventDefault, stopPropagation and set cancelNextClick to false', () => {
+      it('should call preventDefault and set cancelNextClick to false', () => {
         const instance = new Slider({});
         instance.state.cancelNextClick = true;
         instance.setState = jest.fn();
@@ -315,7 +315,7 @@ describe('<Slider />', () => {
         instance.handleOnClickCapture(ev);
         expect(instance.setState).toHaveBeenCalledWith({ cancelNextClick: false });
         expect(ev.preventDefault).toHaveBeenCalledTimes(1);
-        expect(ev.stopPropagation).toHaveBeenCalledTimes(1);
+        // expect(ev.stopPropagation).toHaveBeenCalledTimes(1);
       });
     });
     describe('renderMasterSpinner()', () => {
@@ -435,7 +435,7 @@ describe('<Slider />', () => {
       expect(instance.originalOverflow).toBe('scroll');
       expect(global.document.documentElement.style.overflow).toBe('hidden');
       expect(touch100.preventDefault).toHaveBeenCalledTimes(1);
-      expect(touch100.stopPropagation).toHaveBeenCalledTimes(1);
+      // expect(touch100.stopPropagation).toHaveBeenCalledTimes(1);
       global.document.documentElement.style.overflow = '';
     });
 

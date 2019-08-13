@@ -332,7 +332,7 @@ const Slider = class Slider extends React.Component {
     // left arrow
     if (keyCode === 37) {
       ev.preventDefault();
-      ev.stopPropagation();
+      // ev.stopPropagation();
       this.focus();
       newStoreState.currentSlide = Math.max(0, currentSlide - 1);
       newStoreState.isPlaying = false;
@@ -341,7 +341,7 @@ const Slider = class Slider extends React.Component {
     // right arrow
     if (keyCode === 39) {
       ev.preventDefault();
-      ev.stopPropagation();
+      // ev.stopPropagation();
       this.focus();
       newStoreState.currentSlide = Math.min(
         totalSlides - visibleSlides,
