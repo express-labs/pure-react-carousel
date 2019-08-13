@@ -40,7 +40,17 @@ const Slider = class Slider extends React.Component {
     tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
     touchEnabled: PropTypes.bool.isRequired,
-    trayProps: PropTypes.shape({}),
+    trayProps: PropTypes.shape({
+      className: PropTypes.string,
+      onClickCapture: PropTypes.func,
+      onMouseDown: PropTypes.func,
+      onTouchCancel: PropTypes.func,
+      onTouchEnd: PropTypes.func,
+      onTouchMove: PropTypes.func,
+      onTouchStart: PropTypes.func,
+      ref: PropTypes.shape({}),
+      style: PropTypes.string,
+    }),
     trayTag: PropTypes.string,
     visibleSlides: PropTypes.number,
   }
