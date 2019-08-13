@@ -183,7 +183,11 @@ const Slider = class Slider extends React.Component {
     });
   }
 
-  onDragMove(screenX, screenY) {
+  getSliderRef(el) {
+    this.sliderTrayElement = el;
+  }
+
+  fakeOnDragMove(screenX, screenY) {
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
         deltaX: screenX - state.startX,
@@ -192,7 +196,7 @@ const Slider = class Slider extends React.Component {
     });
   }
 
-  onDragEnd() {
+  fakeOnDragEnd() {
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     this.computeCurrentSlide();
@@ -211,10 +215,6 @@ const Slider = class Slider extends React.Component {
     });
 
     this.isDocumentScrolling = this.props.lockOnWindowScroll ? false : null;
-  }
-
-  getSliderRef(el) {
-    this.sliderTrayElement = el;
   }
 
   callCallback(propName, ev) {
@@ -243,13 +243,13 @@ const Slider = class Slider extends React.Component {
     if (!this.state.isBeingMouseDragged) return;
     this.setState({ cancelNextClick: true });
     ev.preventDefault();
-    this.onDragMove(ev.screenX, ev.screenY);
+    this.fakeOnDragMove(ev.screenX, ev.screenY);
   }
 
   handleOnMouseUp(ev) {
     if (!this.state.isBeingMouseDragged) return;
     ev.preventDefault();
-    this.onDragEnd();
+    this.fakeOnDragEnd();
   }
 
   handleOnClickCapture(ev) {
@@ -257,7 +257,7 @@ const Slider = class Slider extends React.Component {
       this.callCallback('onClickCapture', ev);
       return;
     }
-    ev.stopPropagation();
+    // ev.stopPropagation();
     ev.preventDefault();
     this.setState({ cancelNextClick: false });
     this.callCallback('onClickCapture', ev);
@@ -271,7 +271,7 @@ const Slider = class Slider extends React.Component {
 
     if (this.props.orientation === 'vertical') {
       ev.preventDefault();
-      ev.stopPropagation();
+      // ev.stopPropagation();
     }
 
     const touch = ev.targetTouches[0];
@@ -304,7 +304,7 @@ const Slider = class Slider extends React.Component {
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
-    this.onDragMove(touch.screenX, touch.screenY);
+    this.fakeOnDragMove(touch.screenX, touch.screenY);
     this.callCallback('onTouchMove', ev);
   }
 
@@ -457,7 +457,7 @@ const Slider = class Slider extends React.Component {
 
   endTouchMove() {
     if (!this.props.touchEnabled) return;
-    this.onDragEnd();
+    this.fakeOnDragEnd();
   }
 
   renderMasterSpinner() {
