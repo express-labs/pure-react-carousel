@@ -27315,8 +27315,13 @@
 	      });
 	    }
 	  }, {
-	    key: 'onDragMove',
-	    value: function onDragMove(screenX, screenY) {
+	    key: 'getSliderRef',
+	    value: function getSliderRef(el) {
+	      this.sliderTrayElement = el;
+	    }
+	  }, {
+	    key: 'fakeOnDragMove',
+	    value: function fakeOnDragMove(screenX, screenY) {
 	      var _this2 = this;
 
 	      this.moveTimer = window.requestAnimationFrame.call(window, function () {
@@ -27329,8 +27334,8 @@
 	      });
 	    }
 	  }, {
-	    key: 'onDragEnd',
-	    value: function onDragEnd() {
+	    key: 'fakeOnDragEnd',
+	    value: function fakeOnDragEnd() {
 	      window.cancelAnimationFrame.call(window, this.moveTimer);
 
 	      this.computeCurrentSlide();
@@ -27349,11 +27354,6 @@
 	      });
 
 	      this.isDocumentScrolling = this.props.lockOnWindowScroll ? false : null;
-	    }
-	  }, {
-	    key: 'getSliderRef',
-	    value: function getSliderRef(el) {
-	      this.sliderTrayElement = el;
 	    }
 	  }, {
 	    key: 'callCallback',
@@ -27386,14 +27386,14 @@
 	      if (!this.state.isBeingMouseDragged) return;
 	      this.setState({ cancelNextClick: true });
 	      ev.preventDefault();
-	      this.onDragMove(ev.screenX, ev.screenY);
+	      this.fakeOnDragMove(ev.screenX, ev.screenY);
 	    }
 	  }, {
 	    key: 'handleOnMouseUp',
 	    value: function handleOnMouseUp(ev) {
 	      if (!this.state.isBeingMouseDragged) return;
 	      ev.preventDefault();
-	      this.onDragEnd();
+	      this.fakeOnDragEnd();
 	    }
 	  }, {
 	    key: 'handleOnClickCapture',
@@ -27402,7 +27402,7 @@
 	        this.callCallback('onClickCapture', ev);
 	        return;
 	      }
-	      ev.stopPropagation();
+	      // ev.stopPropagation();
 	      ev.preventDefault();
 	      this.setState({ cancelNextClick: false });
 	      this.callCallback('onClickCapture', ev);
@@ -27417,7 +27417,7 @@
 
 	      if (this.props.orientation === 'vertical') {
 	        ev.preventDefault();
-	        ev.stopPropagation();
+	        // ev.stopPropagation();
 	      }
 
 	      var touch = ev.targetTouches[0];
@@ -27451,7 +27451,7 @@
 	      window.cancelAnimationFrame.call(window, this.moveTimer);
 
 	      var touch = ev.targetTouches[0];
-	      this.onDragMove(touch.screenX, touch.screenY);
+	      this.fakeOnDragMove(touch.screenX, touch.screenY);
 	      this.callCallback('onTouchMove', ev);
 	    }
 	  }, {
@@ -27492,7 +27492,7 @@
 	      // left arrow
 	      if (keyCode === 37) {
 	        ev.preventDefault();
-	        ev.stopPropagation();
+	        // ev.stopPropagation();
 	        this.focus();
 	        newStoreState.currentSlide = Math.max(0, currentSlide - 1);
 	        newStoreState.isPlaying = false;
@@ -27501,7 +27501,7 @@
 	      // right arrow
 	      if (keyCode === 39) {
 	        ev.preventDefault();
-	        ev.stopPropagation();
+	        // ev.stopPropagation();
 	        this.focus();
 	        newStoreState.currentSlide = Math.min(totalSlides - visibleSlides, currentSlide + 1);
 	        newStoreState.isPlaying = false;
@@ -27620,7 +27620,7 @@
 	    key: 'endTouchMove',
 	    value: function endTouchMove() {
 	      if (!this.props.touchEnabled) return;
-	      this.onDragEnd();
+	      this.fakeOnDragEnd();
 	    }
 	  }, {
 	    key: 'renderMasterSpinner',
@@ -30414,6 +30414,172 @@
 	  );
 	});
 
+	function eventLogger(ev) {
+	  // eslint-disable-next-line no-console
+	  console.log(ev.type, ev.target);
+	}
+
+	var Example11 = (function () {
+	  return react.createElement(
+	    CarouselProvider,
+	    {
+	      visibleSlides: 2,
+	      totalSlides: 6,
+	      naturalSlideWidth: 400,
+	      naturalSlideHeight: 500
+	    },
+	    react.createElement(
+	      'h2',
+	      { className: s$c.headline },
+	      'Carousel with custom event handlers.'
+	    ),
+	    react.createElement(
+	      'p',
+	      null,
+	      'Simple carousel with custom event handlers attachet to the',
+	      ' ',
+	      react.createElement(
+	        'code',
+	        null,
+	        '<Slider />'
+	      ),
+	      ' ',
+	      'component\'s',
+	      ' ',
+	      react.createElement(
+	        'code',
+	        null,
+	        'trayProps'
+	      ),
+	      ' ',
+	      'property. Open your browser devloper tools and look at the console log, then manipulate the carousel.'
+	    ),
+	    react.createElement(
+	      Slider$1,
+	      {
+	        className: s$c.slider,
+	        trayProps: {
+	          // clipboard events? Sure why not.
+	          onCopy: eventLogger,
+	          onCut: eventLogger,
+	          onPaste: eventLogger,
+
+	          // composition events
+	          onCompositionEnd: eventLogger,
+	          onCompositionStart: eventLogger,
+	          onCompositionUpdate: eventLogger,
+
+	          // keyboard events
+	          onKeyDown: eventLogger,
+	          onKeyPress: eventLogger,
+	          onKeyUp: eventLogger,
+
+	          // focus events,
+	          onFocus: eventLogger,
+	          onBlur: eventLogger,
+
+	          // form events,
+	          onChange: eventLogger,
+	          onInput: eventLogger,
+	          onInvalid: eventLogger,
+	          onSubmit: eventLogger,
+
+	          // mouse events
+	          onClick: eventLogger,
+	          onContextMenu: eventLogger,
+	          onDoubleClick: eventLogger,
+	          onDrag: eventLogger,
+	          onDragEnd: eventLogger,
+	          onDragEnter: eventLogger,
+	          onDragExit: eventLogger,
+	          onDragLeave: eventLogger,
+	          onDragOver: eventLogger,
+	          onDragStart: eventLogger,
+	          onDrop: eventLogger,
+	          onMouseDown: eventLogger,
+	          onMouseEnter: eventLogger,
+	          onMouseLeave: eventLogger,
+	          // onMouseMove: eventLogger,
+	          onMouseOut: eventLogger,
+	          onMouseOver: eventLogger,
+	          onMouseUp: eventLogger,
+
+	          // touch events
+	          onTouchCancel: eventLogger,
+	          onTouchEnd: eventLogger,
+	          // onTouchMove: eventLogger,
+	          onTouchStart: eventLogger,
+
+	          // pointer events
+	          onPointerDown: eventLogger,
+	          // onPointerMove: eventLogger,
+	          onPointerUp: eventLogger,
+	          onPointerCancel: eventLogger,
+	          onGotPointerCapture: eventLogger,
+	          onLostPointerCapture: eventLogger,
+	          onPointerEnter: eventLogger,
+	          onPointerLeave: eventLogger,
+	          onPointerOver: eventLogger,
+	          onPointerOut: eventLogger,
+
+	          draggable: true
+	        }
+	      },
+	      react.createElement(
+	        Slide$1,
+	        { tag: 'a', index: 0 },
+	        react.createElement(Image$1, { src: './media/img01.jpeg' })
+	      ),
+	      react.createElement(
+	        Slide$1,
+	        { tag: 'a', index: 1 },
+	        react.createElement(Image$1, { src: './media/img02.jpeg' })
+	      ),
+	      react.createElement(
+	        Slide$1,
+	        { tag: 'a', index: 2 },
+	        react.createElement(Image$1, { src: './media/img03.jpeg' })
+	      ),
+	      react.createElement(
+	        Slide$1,
+	        { tag: 'a', index: 3 },
+	        react.createElement(Image$1, { src: './media/img04.jpeg' })
+	      ),
+	      react.createElement(
+	        Slide$1,
+	        { tag: 'a', index: 4 },
+	        react.createElement(Image$1, { src: './media/img05.jpeg' })
+	      ),
+	      react.createElement(
+	        Slide$1,
+	        { tag: 'a', index: 5 },
+	        react.createElement(Image$1, { src: './media/img06.jpeg' })
+	      )
+	    ),
+	    react.createElement(
+	      ButtonFirst$1,
+	      null,
+	      'First'
+	    ),
+	    react.createElement(
+	      ButtonBack$1,
+	      null,
+	      'Back'
+	    ),
+	    react.createElement(
+	      ButtonNext$1,
+	      null,
+	      'Next'
+	    ),
+	    react.createElement(
+	      ButtonLast$1,
+	      null,
+	      'Last'
+	    ),
+	    react.createElement(DotGroup$1, { dotNumbers: true })
+	  );
+	});
+
 	// function demoClick(ev) {
 	//   console.log('ev', Object.assign({}, ev));
 	// }
@@ -30516,7 +30682,7 @@
 	                        className: s$c.externalLink,
 	                        xmlns: 'http://www.w3.org/2000/svg',
 	                        viewBox: '0 0 24 24',
-	                        preserveAspectRatio: 'xMidyMid meet'
+	                        preserveAspectRatio: 'xMidYMid meet'
 	                      },
 	                      react.createElement('path', { d: 'M5 3c-1.093 0-2 .907-2 2v14c0 1.093.907 2 2 2h14c1.093 0 2-.907 2-2v-7h-2v7H5V5h7V3H5zm9 0v2h3.586l-9.293 9.293 1.414 1.414L19 6.414V10h2V3h-7z' })
 	                    )
@@ -30556,7 +30722,7 @@
 	          react.createElement(
 	            'p',
 	            null,
-	            'The benefit of Pure React Carousel is that our components are focused on one task: being an WCAG accessible carousel.  Besides that, our goal is to get out of your way.'
+	            'The benefit of Pure React Carousel is that our components are focused on one task: being an WCAG accessible carousel. Besides that, our goal is to get out of your way.'
 	          )
 	        ),
 	        react.createElement(
@@ -30578,12 +30744,20 @@
 	            react.createElement(
 	              'p',
 	              null,
-	              react.createElement('img', { className: s$c.responsiveImg, src: './media/pdp-women.gif', alt: 'example of pure react carousel on the product detail page for a dress on Express.com' })
+	              react.createElement('img', {
+	                className: s$c.responsiveImg,
+	                src: './media/pdp-women.gif',
+	                alt: 'example of pure react carousel on the product detail page for a dress on Express.com'
+	              })
 	            ),
 	            react.createElement(
 	              'p',
 	              null,
-	              react.createElement('img', { className: s$c.responsiveImg, src: './media/pdp-men.gif', alt: 'example of pure react carousel on the product detail page for a shirt on Express.com' })
+	              react.createElement('img', {
+	                className: s$c.responsiveImg,
+	                src: './media/pdp-men.gif',
+	                alt: 'example of pure react carousel on the product detail page for a shirt on Express.com'
+	              })
 	            )
 	          )
 	        ),
@@ -30606,7 +30780,7 @@
 	            react.createElement(
 	              'p',
 	              null,
-	              'These examples are completely un-styled.  Pure React Carousel does not come with styles that must be defeated in order to match your organization\'s branding.  So, to distract you from the seeming lack of finess, most of our examples involve pictures of cats!'
+	              'These examples are completely un-styled. Pure React Carousel does not come with styles that must be defeated in order to match your organization\'s branding. So, to distract you from the seeming lack of finess, most of our examples involve pictures of cats!'
 	            ),
 	            react.createElement(
 	              'p',
@@ -30667,6 +30841,16 @@
 	                    'option',
 	                    { value: '9' },
 	                    'Horizontal Carousel Auto Play'
+	                  ),
+	                  react.createElement(
+	                    'option',
+	                    { value: '10' },
+	                    'Carousel with custom spinner component.'
+	                  ),
+	                  react.createElement(
+	                    'option',
+	                    { value: '11' },
+	                    'Simple carousel with event callbacks on Slider.'
 	                  )
 	                )
 	              )
@@ -30733,6 +30917,12 @@
 	                { id: 'example--10' },
 	                react.createElement('hr', null),
 	                react.createElement(Example10, null)
+	              ),
+	              (value === '0' || value === '11') && react.createElement(
+	                'section',
+	                { id: 'example--11' },
+	                react.createElement('hr', null),
+	                react.createElement(Example11, null)
 	              )
 	            )
 	          )
