@@ -167,7 +167,12 @@ const Slider = class Slider extends React.Component {
   // 6) mouseup
   // 7) click
 
-  onDragStart({
+  getSliderRef(el) {
+    this.sliderTrayElement = el;
+  }
+
+
+  fakeOnDragStart({
     screenX,
     screenY,
     touchDrag = false,
@@ -191,10 +196,6 @@ const Slider = class Slider extends React.Component {
       startX: screenX,
       startY: screenY,
     });
-  }
-
-  getSliderRef(el) {
-    this.sliderTrayElement = el;
   }
 
   fakeOnDragMove(screenX, screenY) {
@@ -241,7 +242,7 @@ const Slider = class Slider extends React.Component {
       return;
     }
     ev.preventDefault();
-    this.onDragStart({
+    this.fakeOnDragStart({
       screenX: ev.screenX,
       screenY: ev.screenY,
       mouseDrag: true,
@@ -283,7 +284,7 @@ const Slider = class Slider extends React.Component {
     }
 
     const touch = ev.targetTouches[0];
-    this.onDragStart({
+    this.fakeOnDragStart({
       screenX: touch.screenX,
       screenY: touch.screenY,
       touchDrag: true,
