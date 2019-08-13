@@ -238,7 +238,7 @@ describe('<Slider />', () => {
         const ev = {
           preventDefault: jest.fn(),
         };
-        instance.onDragMove = jest.fn();
+        instance.fakeOnDragMove = jest.fn();
         instance.setState = jest.fn();
         instance.handleOnMouseMove(ev);
         expect(ev.preventDefault).toHaveBeenCalledTimes(1);
@@ -249,13 +249,13 @@ describe('<Slider />', () => {
         const ev = {
           preventDefault: jest.fn(),
         };
-        instance.onDragMove = jest.fn();
+        instance.fakeOnDragMove = jest.fn();
         instance.setState = jest.fn();
         instance.handleOnMouseMove(ev);
         expect(instance.setState).toHaveBeenCalledTimes(1);
         expect(instance.setState).toHaveBeenCalledWith({ cancelNextClick: true });
       });
-      it('should call onDragMove and pass it the event screen x and y values', () => {
+      it('should call fakeOnDragMove and pass it the event screen x and y values', () => {
         const instance = new Slider({});
         instance.state.isBeingMouseDragged = true;
         const ev = {
@@ -263,11 +263,11 @@ describe('<Slider />', () => {
           screenX: 1,
           screenY: 2,
         };
-        instance.onDragMove = jest.fn();
+        instance.fakeOnDragMove = jest.fn();
         instance.setState = jest.fn();
         instance.handleOnMouseMove(ev);
-        expect(instance.onDragMove).toHaveBeenCalledTimes(1);
-        expect(instance.onDragMove).toHaveBeenCalledWith(1, 2);
+        expect(instance.fakeOnDragMove).toHaveBeenCalledTimes(1);
+        expect(instance.fakeOnDragMove).toHaveBeenCalledWith(1, 2);
       });
     });
     describe('onMouseUp()', () => {
@@ -282,11 +282,11 @@ describe('<Slider />', () => {
         const ev = {
           preventDefault: jest.fn(),
         };
-        instance.onDragEnd = jest.fn();
+        instance.fakeOnDragEnd = jest.fn();
         instance.handleOnMouseUp(ev);
         expect(ev.preventDefault).toHaveBeenCalledTimes(1);
       });
-      it('should call onDragEnd and pass it the event screen x and y values', () => {
+      it('should call fakeOnDragEnd and pass it the event screen x and y values', () => {
         const instance = new Slider({});
         instance.state.isBeingMouseDragged = true;
         const ev = {
@@ -294,9 +294,9 @@ describe('<Slider />', () => {
           screenX: 1,
           screenY: 2,
         };
-        instance.onDragEnd = jest.fn();
+        instance.fakeOnDragEnd = jest.fn();
         instance.handleOnMouseUp(ev);
-        expect(instance.onDragEnd).toHaveBeenCalledTimes(1);
+        expect(instance.fakeOnDragEnd).toHaveBeenCalledTimes(1);
       });
     });
     describe('handleOnClickCapture()', () => {
@@ -304,7 +304,7 @@ describe('<Slider />', () => {
         const instance = new Slider({});
         expect(instance.handleOnClickCapture()).toBe(undefined);
       });
-      it('should call preventDefault, stopPropagation and set cancelNextClick to false', () => {
+      it('should call preventDefault and set cancelNextClick to false', () => {
         const instance = new Slider({});
         instance.state.cancelNextClick = true;
         instance.setState = jest.fn();
@@ -315,7 +315,7 @@ describe('<Slider />', () => {
         instance.handleOnClickCapture(ev);
         expect(instance.setState).toHaveBeenCalledWith({ cancelNextClick: false });
         expect(ev.preventDefault).toHaveBeenCalledTimes(1);
-        expect(ev.stopPropagation).toHaveBeenCalledTimes(1);
+        // expect(ev.stopPropagation).toHaveBeenCalledTimes(1);
       });
     });
     describe('renderMasterSpinner()', () => {
@@ -435,7 +435,7 @@ describe('<Slider />', () => {
       expect(instance.originalOverflow).toBe('scroll');
       expect(global.document.documentElement.style.overflow).toBe('hidden');
       expect(touch100.preventDefault).toHaveBeenCalledTimes(1);
-      expect(touch100.stopPropagation).toHaveBeenCalledTimes(1);
+      // expect(touch100.stopPropagation).toHaveBeenCalledTimes(1);
       global.document.documentElement.style.overflow = '';
     });
 

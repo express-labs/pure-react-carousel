@@ -40,7 +40,17 @@ const Slider = class Slider extends React.Component {
     tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
     touchEnabled: PropTypes.bool.isRequired,
-    trayProps: PropTypes.shape({}),
+    trayProps: PropTypes.shape({
+      className: PropTypes.string,
+      onClickCapture: PropTypes.func,
+      onMouseDown: PropTypes.func,
+      onTouchCancel: PropTypes.func,
+      onTouchEnd: PropTypes.func,
+      onTouchMove: PropTypes.func,
+      onTouchStart: PropTypes.func,
+      ref: PropTypes.shape({}),
+      style: PropTypes.string,
+    }),
     trayTag: PropTypes.string,
     visibleSlides: PropTypes.number,
   }
@@ -157,7 +167,12 @@ const Slider = class Slider extends React.Component {
   // 6) mouseup
   // 7) click
 
-  onDragStart({
+  getSliderRef(el) {
+    this.sliderTrayElement = el;
+  }
+
+
+  fakeOnDragStart({
     screenX,
     screenY,
     touchDrag = false,
@@ -183,7 +198,7 @@ const Slider = class Slider extends React.Component {
     });
   }
 
-  onDragMove(screenX, screenY) {
+  fakeOnDragMove(screenX, screenY) {
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
         deltaX: screenX - state.startX,
@@ -192,7 +207,7 @@ const Slider = class Slider extends React.Component {
     });
   }
 
-  onDragEnd() {
+  fakeOnDragEnd() {
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     this.computeCurrentSlide();
@@ -213,10 +228,6 @@ const Slider = class Slider extends React.Component {
     this.isDocumentScrolling = this.props.lockOnWindowScroll ? false : null;
   }
 
-  getSliderRef(el) {
-    this.sliderTrayElement = el;
-  }
-
   callCallback(propName, ev) {
     const { trayProps } = this.props;
     if (trayProps && typeof trayProps[propName] === 'function') {
@@ -231,7 +242,7 @@ const Slider = class Slider extends React.Component {
       return;
     }
     ev.preventDefault();
-    this.onDragStart({
+    this.fakeOnDragStart({
       screenX: ev.screenX,
       screenY: ev.screenY,
       mouseDrag: true,
@@ -243,13 +254,13 @@ const Slider = class Slider extends React.Component {
     if (!this.state.isBeingMouseDragged) return;
     this.setState({ cancelNextClick: true });
     ev.preventDefault();
-    this.onDragMove(ev.screenX, ev.screenY);
+    this.fakeOnDragMove(ev.screenX, ev.screenY);
   }
 
   handleOnMouseUp(ev) {
     if (!this.state.isBeingMouseDragged) return;
     ev.preventDefault();
-    this.onDragEnd();
+    this.fakeOnDragEnd();
   }
 
   handleOnClickCapture(ev) {
@@ -257,7 +268,6 @@ const Slider = class Slider extends React.Component {
       this.callCallback('onClickCapture', ev);
       return;
     }
-    ev.stopPropagation();
     ev.preventDefault();
     this.setState({ cancelNextClick: false });
     this.callCallback('onClickCapture', ev);
@@ -271,11 +281,10 @@ const Slider = class Slider extends React.Component {
 
     if (this.props.orientation === 'vertical') {
       ev.preventDefault();
-      ev.stopPropagation();
     }
 
     const touch = ev.targetTouches[0];
-    this.onDragStart({
+    this.fakeOnDragStart({
       screenX: touch.screenX,
       screenY: touch.screenY,
       touchDrag: true,
@@ -304,7 +313,7 @@ const Slider = class Slider extends React.Component {
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
-    this.onDragMove(touch.screenX, touch.screenY);
+    this.fakeOnDragMove(touch.screenX, touch.screenY);
     this.callCallback('onTouchMove', ev);
   }
 
@@ -332,7 +341,6 @@ const Slider = class Slider extends React.Component {
     // left arrow
     if (keyCode === 37) {
       ev.preventDefault();
-      ev.stopPropagation();
       this.focus();
       newStoreState.currentSlide = Math.max(0, currentSlide - 1);
       newStoreState.isPlaying = false;
@@ -341,7 +349,6 @@ const Slider = class Slider extends React.Component {
     // right arrow
     if (keyCode === 39) {
       ev.preventDefault();
-      ev.stopPropagation();
       this.focus();
       newStoreState.currentSlide = Math.min(
         totalSlides - visibleSlides,
@@ -457,7 +464,7 @@ const Slider = class Slider extends React.Component {
 
   endTouchMove() {
     if (!this.props.touchEnabled) return;
-    this.onDragEnd();
+    this.fakeOnDragEnd();
   }
 
   renderMasterSpinner() {
@@ -574,8 +581,6 @@ const Slider = class Slider extends React.Component {
     ]);
 
     const newTabIndex = tabIndex !== null ? tabIndex : 0;
-
-    // console.log(Object.assign({}, trayStyle), new Date());
 
     // remove `dragStep` and `step` from Slider div, since it isn't a valid html attribute
     const { dragStep, step, ...rest } = props;
