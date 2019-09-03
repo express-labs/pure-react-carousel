@@ -72,7 +72,7 @@ describe('<Slider />', () => {
       it('should return 0 if the delta is 0', () => {
         expect(Slider.slidesMoved(20, 'horizontal', 0, 0, 100)).toBe(0);
       });
-      it('should return 1 if the delta is equal to the threshold', () => {
+      it('should return 0 if the delta is equal to the threshold', () => {
         expect(Slider.slidesMoved(20, 'horizontal', 20, 0, 100)).toBe(0);
       });
       it('should return -2 if the delta is greater than 2 slides but less than 2.5 slides', () => {

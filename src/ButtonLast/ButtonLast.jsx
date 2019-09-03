@@ -13,13 +13,13 @@ const ButtonLast = class ButtonLast extends React.Component {
     onClick: PropTypes.func,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
-  }
+  };
 
   static defaultProps = {
     className: null,
     disabled: null,
     onClick: null,
-  }
+  };
 
   constructor() {
     super();
@@ -30,24 +30,29 @@ const ButtonLast = class ButtonLast extends React.Component {
     const {
       carouselStore, onClick, totalSlides, visibleSlides,
     } = this.props;
-    carouselStore.setStoreState({
-      currentSlide: totalSlides - visibleSlides,
-    }, onClick !== null && onClick.call(this, ev));
+    carouselStore.setStoreState(
+      {
+        currentSlide: totalSlides - visibleSlides,
+      },
+      onClick !== null && onClick.call(this, ev),
+    );
   }
 
   render() {
     const {
-      carouselStore, className, currentSlide, disabled, onClick, totalSlides, visibleSlides,
+      carouselStore,
+      className,
+      currentSlide,
+      disabled,
+      onClick,
+      totalSlides,
+      visibleSlides,
       ...props
     } = this.props;
 
-    const newClassName = cn([
-      s.buttonLast,
-      'carousel__last-button',
-      className,
-    ]);
+    const newClassName = cn([s.buttonLast, 'carousel__last-button', className]);
 
-    const newDisabled = disabled !== null ? disabled : currentSlide >= totalSlides - visibleSlides;
+    const isDisabled = disabled !== null ? disabled : currentSlide >= totalSlides - visibleSlides;
 
     return (
       <button
@@ -55,7 +60,7 @@ const ButtonLast = class ButtonLast extends React.Component {
         aria-label="last"
         className={newClassName}
         onClick={this.handleOnClick}
-        disabled={newDisabled}
+        disabled={isDisabled}
         {...props}
       >
         {this.props.children}

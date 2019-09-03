@@ -4,9 +4,9 @@ import Adapter from 'enzyme-adapter-react-16';
 import clone from 'clone';
 import CarouselProvider from '..';
 import components from '../../helpers/component-config';
+import Slider from '../../Slider';
 
 configure({ adapter: new Adapter() });
-
 
 let props;
 
@@ -17,24 +17,17 @@ describe('<CarouselProvider />', () => {
     props = clone(components.CarouselProvider.props);
   });
   it('should render', () => {
-    const wrapper = shallow((
-      <CarouselProvider
-        {...props}
-      >
-        Hello
-      </CarouselProvider>
-    ));
+    const wrapper = shallow(
+      <CarouselProvider {...props}>Hello</CarouselProvider>,
+    );
     expect(wrapper.exists()).toBe(true);
   });
   it('utility function getStoreState should return the state', () => {
-    const wrapper = shallow((
-      <CarouselProvider
-        {...props}
-        orientation="vertical"
-      >
-Hello
-      </CarouselProvider>
-    ));
+    const wrapper = shallow(
+      <CarouselProvider {...props} orientation="vertical">
+        Hello
+      </CarouselProvider>,
+    );
     const instance = wrapper.instance();
     expect(instance.getStore()).toBe(instance.carouselStore);
   });
@@ -74,17 +67,26 @@ Hello
     expect(start.currentSlide).toEqual(end.currentSlide);
     expect(start.disableAnimation).toEqual(end.disableAnimation);
   });
-  it('should set disable animation to false if we updated currentSlide and animationDisabled is false', () => {
-    const wrapper = mount((
-      <CarouselProvider
-        {...props}
-      >
-Hello
-      </CarouselProvider>
-    ));
+  it('should set disableAnimation to true and privatUnDisableAnimation to true if we updated currentSlide prop on CarouselProvider component', async () => {
+    const wrapper = mount(
+      <CarouselProvider {...props}>Hello</CarouselProvider>,
+    );
     wrapper.setProps({ currentSlide: 1 });
     expect(wrapper.instance().getStore().state.disableAnimation).toBe(true);
-    jest.runAllTimers();
+    expect(wrapper.instance().getStore().state.privateUnDisableAnimation).toBe(
+      true,
+    );
+  });
+  it('The Slider component should reset disableAnimation to false and privatUnDisableAnimation to false if when Slider component is updated', async () => {
+    const wrapper = mount(
+      <CarouselProvider {...props}>
+        <Slider>Hello</Slider>
+      </CarouselProvider>,
+    );
+    wrapper.setProps({ currentSlide: 1 });
     expect(wrapper.instance().getStore().state.disableAnimation).toBe(false);
+    expect(wrapper.instance().getStore().state.privateUnDisableAnimation).toBe(
+      false,
+    );
   });
 });
