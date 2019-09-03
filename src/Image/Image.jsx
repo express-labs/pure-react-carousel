@@ -20,7 +20,7 @@ class Image extends React.Component {
     src: PropTypes.string.isRequired,
     style: PropTypes.object,
     tag: PropTypes.string,
-  }
+  };
 
   static defaultProps = {
     alt: '',
@@ -33,7 +33,7 @@ class Image extends React.Component {
     renderLoading: null,
     style: null,
     tag: 'img',
-  }
+  };
 
   static subscribeMasterSpinner(props) {
     if (props.hasMasterSpinner) {
@@ -60,10 +60,10 @@ class Image extends React.Component {
     this.initImage();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.src !== this.props.src) {
-      Image.unsubscribeMasterSpinner(this.props);
-      Image.subscribeMasterSpinner(nextProps);
+  componentDidUpdate(prevProps) {
+    if (prevProps.src !== this.props.src) {
+      Image.unsubscribeMasterSpinner(prevProps);
+      Image.subscribeMasterSpinner(this.props);
       this.initImage();
     }
   }
@@ -130,7 +130,11 @@ class Image extends React.Component {
       this.props.className,
     ]);
 
-    return <Tag className={newClassName} {...filteredProps}>{this.customRender('renderLoading')}</Tag>;
+    return (
+      <Tag className={newClassName} {...filteredProps}>
+        {this.customRender('renderLoading')}
+      </Tag>
+    );
   }
 
   renderError(filteredProps) {
@@ -145,7 +149,11 @@ class Image extends React.Component {
       this.props.className,
     ]);
 
-    return <Tag className={newClassName} {...filteredProps}>{this.customRender('renderError')}</Tag>;
+    return (
+      <Tag className={newClassName} {...filteredProps}>
+        {this.customRender('renderError')}
+      </Tag>
+    );
   }
 
   renderSuccess(filteredProps) {
@@ -180,8 +188,17 @@ class Image extends React.Component {
 
   render() {
     const {
-      carouselStore, children, className, hasMasterSpinner, isBgImage, onError, onLoad, renderError,
-      renderLoading, style, tag,
+      carouselStore,
+      children,
+      className,
+      hasMasterSpinner,
+      isBgImage,
+      onError,
+      onLoad,
+      renderError,
+      renderLoading,
+      style,
+      tag,
       ...filteredProps
     } = this.props;
 

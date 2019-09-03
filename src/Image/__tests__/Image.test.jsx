@@ -8,7 +8,6 @@ import Image from '../Image';
 
 configure({ adapter: new Adapter() });
 
-
 let props;
 
 describe('<Image />', () => {
@@ -42,12 +41,18 @@ describe('<Image />', () => {
   it('should call any passed-in onLoad after the image loads.', () => {
     const onLoad = jest.fn();
     expect(onLoad).not.toHaveBeenCalled();
-    mount(<Image {...props} onLoad={onLoad} />);
+    const wrapper = mount(<Image {...props} onLoad={onLoad} />);
+    const instance = wrapper.instance();
+    const event = new UIEvent('load');
+    // simulate load success
+    instance.image.dispatchEvent(event);
     expect(onLoad).toHaveBeenCalled();
   });
   it('should call any passed-in onError if an image load fails.', () => {
     const onError = jest.fn();
-    const wrapper = mount(<Image {...props} src="crap.junk" onError={onError} />);
+    const wrapper = mount(
+      <Image {...props} src="crap.junk" onError={onError} />,
+    );
     const instance = wrapper.instance();
     const event = new UIEvent('error');
     // simulate a load error
@@ -79,11 +84,15 @@ describe('<Image />', () => {
     // simulate a load error
     wrapper.setState({ imageStatus: 'error' });
     wrapper.update();
-    expect(wrapper.find('div').hasClass('carousel__image--with-background')).toBe(true);
+    expect(
+      wrapper.find('div').hasClass('carousel__image--with-background'),
+    ).toBe(true);
   });
   it('should render with class carousel__image--with-background when isBgImage prop is true', () => {
     const wrapper = mount(<Image {...props} tag="div" isBgImage />);
-    expect(wrapper.find('div').hasClass('carousel__image--with-background')).toBe(true);
+    expect(
+      wrapper.find('div').hasClass('carousel__image--with-background'),
+    ).toBe(true);
   });
   it('should throw an error if you try to use isBgImage on an img tag', () => {
     const mock = jest.fn();
@@ -95,13 +104,23 @@ describe('<Image />', () => {
   it('should call a custom renderLoading method if supplied as a prop', () => {
     const renderLoading = jest.fn(() => <span>Loading</span>);
     mount(<Image {...props} renderLoading={renderLoading} />);
-    expect(renderLoading).toHaveBeenCalledTimes(1);
+    expect(renderLoading).toHaveBeenCalled();
   });
   it('should call a custom renderError method if supplied as a prop and image load fails', () => {
     const renderError = jest.fn(() => <span>Error</span>);
     const wrapper = mount(<Image {...props} renderError={renderError} />);
     wrapper.setState({ imageStatus: ERROR });
-    expect(renderError).toHaveBeenCalledTimes(1);
+    expect(renderError).toHaveBeenCalled();
+  });
+  it('should call carouselStore.masterSpinnerSuccess if image load was a success and hasMasterSpinner is true', () => {
+    const masterSpinnerSuccess = jest.fn();
+    const wrapper = mount(<Image {...props} hasMasterSpinner />);
+    const instance = wrapper.instance();
+    const event = new UIEvent('load');
+    props.carouselStore.masterSpinnerSuccess = masterSpinnerSuccess;
+    // simulate a load success
+    instance.image.dispatchEvent(event);
+    expect(masterSpinnerSuccess).toHaveBeenCalledTimes(1);
   });
   it('should call carouselStore.masterSpinnerError if image load error and hasMasterSpinner was true', () => {
     const masterSpinnerError = jest.fn();
@@ -136,8 +155,26 @@ describe('<Image />', () => {
     // need to call mount to get initImage to fire.
     const wrapper = mount(<Image {...props} hasMasterSpinner />);
     const instance = wrapper.instance();
-    const spyRemoveEventListener = jest.spyOn(instance.image, 'removeEventListener');
+    const spyRemoveEventListener = jest.spyOn(
+      instance.image,
+      'removeEventListener',
+    );
     wrapper.unmount();
     expect(spyRemoveEventListener).toHaveBeenCalledTimes(2);
+  });
+  it('should attach the image to a div background if the supplied element is a div instead of the default img element', () => {
+    const wrapper = mount(
+      <Image {...props} tag="div" className="test" isBgImage />,
+    );
+    const instance = wrapper.instance();
+    const event = new UIEvent('load');
+    // simulate a load success
+    instance.image.dispatchEvent(event);
+    wrapper.update();
+    const div = wrapper.find('div.test');
+    expect(div.props().style).toEqual({
+      backgroundImage: 'url("bob.jpg")',
+      backgroundSize: 'cover',
+    });
   });
 });

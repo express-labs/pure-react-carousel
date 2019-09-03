@@ -11,23 +11,20 @@ export default function WithStore(
   class Wrapper extends React.Component {
     static propTypes = {
       children: CarouselPropTypes.children,
-    }
+    };
 
     static defaultProps = {
       children: null,
-    }
+    };
 
     static contextTypes = {
       carouselStore: propTypes.object,
-    }
+    };
 
     constructor(props, context) {
       super(props, context);
       this.state = mapStateToProps({ ...context.carouselStore.state });
       this.updateStateProps = this.updateStateProps.bind(this);
-    }
-
-    componentWillMount() {
       this.context.carouselStore.subscribe(this.updateStateProps);
     }
 
@@ -49,7 +46,9 @@ export default function WithStore(
 
       return (
         <WrappedComponent
-          ref={(el) => { this.instance = el; }} // allows access to refs in wrapped components.
+          ref={(el) => {
+            this.instance = el;
+          }} // allows access to refs in wrapped components.
           {...props}
           carouselStore={{
             getStoreState: this.context.carouselStore.getStoreState,

@@ -28,11 +28,11 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     touchEnabled: PropTypes.bool,
     dragEnabled: PropTypes.bool,
     visibleSlides: PropTypes.number,
-  }
+  };
 
   static childContextTypes = {
     carouselStore: PropTypes.object,
-  }
+  };
 
   static defaultProps = {
     className: null,
@@ -52,7 +52,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     touchEnabled: true,
     dragEnabled: true,
     visibleSlides: 1,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -72,6 +72,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       naturalSlideWidth: props.naturalSlideWidth,
       orientation: props.orientation,
       playDirection: props.playDirection,
+      privateUnDisableAnimation: false,
       slideSize: slideSize(props.totalSlides, props.visibleSlides),
       slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
       step: props.step,
@@ -82,18 +83,17 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       visibleSlides: props.visibleSlides,
     };
     this.carouselStore = new Store(options);
-    this.disableAnimationTimer = null;
   }
 
   getChildContext() {
     return { carouselStore: this.carouselStore };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const newStoreState = {};
 
     [
-      'currentSlide',
+      'currentSlide', // poorly named.  This is only slide that shows on MOUNT. deprecating soon.
       'disableAnimation',
       'disableKeyboard',
       'hasMasterSpinner',
@@ -111,38 +111,30 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       'dragEnabled',
       'visibleSlides',
     ].forEach((propName) => {
-      if (nextProps[propName] !== this.props[propName]) {
-        newStoreState[propName] = nextProps[propName];
+      if (prevProps[propName] !== this.props[propName]) {
+        newStoreState[propName] = this.props[propName];
       }
     });
 
-    const { currentSlide, disableAnimation } = this.carouselStore.getStoreState();
+    const isNewCurrentSlide = this.props.currentSlide !== prevProps.currentSlide;
 
-    const isNewCurrentSlide = (
-      Object.prototype.hasOwnProperty.call(newStoreState, 'currentSlide')
-      && currentSlide !== nextProps.currentSlide
-    );
+    // currentSlide, a poorly named variable that determines which slide show when carousel is
+    // mounted, has changed value.  We want to temporarily disable the css transition and just
+    // "jump" to the new "currentSlide"
 
-    const isAnimationDisabled = newStoreState.disableAnimation || disableAnimation;
-
-    if (isNewCurrentSlide && !isAnimationDisabled) {
+    // Disable the css animation, set a private flag to re-enable the animation.
+    if (isNewCurrentSlide && !this.props.disableAnimation) {
       newStoreState.disableAnimation = true;
-
-      // TODO: better way to do this.  Timers suck.
-      window.clearTimeout(this.disableAnimationTimer);
-      this.disableAnimationTimer = window.setTimeout(() => {
-        this.carouselStore.setStoreState({
-          disableAnimation: false,
-        });
-      }, 160);
+      newStoreState.privateUnDisableAnimation = true;
+      // Slider.jsx componentDidUpdate detects privateUnDisableAnimation to re-enable animation.
     }
 
     if (
-      this.props.totalSlides !== nextProps.totalSlides
-      || this.props.visibleSlides !== nextProps.visibleSlides
+      this.props.totalSlides !== prevProps.totalSlides
+      || this.props.visibleSlides !== prevProps.visibleSlides
     ) {
-      newStoreState.slideSize = slideSize(nextProps.totalSlides, nextProps.visibleSlides);
-      newStoreState.slideTraySize = slideTraySize(nextProps.totalSlides, nextProps.visibleSlides);
+      newStoreState.slideSize = slideSize(this.props.totalSlides, this.props.visibleSlides);
+      newStoreState.slideTraySize = slideTraySize(this.props.totalSlides, this.props.visibleSlides);
     }
 
     if (Object.keys(newStoreState).length > 0) {
@@ -152,7 +144,6 @@ const CarouselProvider = class CarouselProvider extends React.Component {
 
   componentWillUnmount() {
     this.carouselStore.unsubscribeAllMasterSpinner();
-    window.clearTimeout(this.disableAnimationTimer);
   }
 
   // Utility function for tests.
@@ -190,12 +181,13 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       ...filteredProps
     } = this.props;
 
-    const newClassName = cn([
-      'carousel',
-      this.props.className,
-    ]);
+    const newClassName = cn(['carousel', this.props.className]);
 
-    return <Tag className={newClassName} {...filteredProps}>{this.props.children}</Tag>;
+    return (
+      <Tag className={newClassName} {...filteredProps}>
+        {this.props.children}
+      </Tag>
+    );
   }
 };
 
