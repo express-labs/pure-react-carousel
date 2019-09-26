@@ -15,6 +15,7 @@ const DotGroup = class DotGroup extends React.Component {
     dotNumbers: PropTypes.bool,
     disableActiveDots: PropTypes.bool,
     showAsSelectedForCurrentSlideOnly: PropTypes.bool,
+    renderDots: PropTypes.func,
   }
 
   static defaultProps = {
@@ -23,6 +24,7 @@ const DotGroup = class DotGroup extends React.Component {
     dotNumbers: false,
     disableActiveDots: true,
     showAsSelectedForCurrentSlideOnly: false,
+    renderDots: null,
   }
 
   renderDots() {
@@ -32,7 +34,13 @@ const DotGroup = class DotGroup extends React.Component {
       visibleSlides,
       disableActiveDots,
       showAsSelectedForCurrentSlideOnly,
+      renderDots,
     } = this.props;
+
+    if (renderDots) {
+      return renderDots(this.props);
+    }
+
     const dots = [];
     for (let i = 0; i < totalSlides; i += 1) {
       const multipleSelected = i >= currentSlide && i < (currentSlide + visibleSlides);
@@ -64,6 +72,7 @@ const DotGroup = class DotGroup extends React.Component {
       visibleSlides,
       disableActiveDots,
       showAsSelectedForCurrentSlideOnly,
+      renderDots,
       ...props
     } = this.props;
 

@@ -295,6 +295,7 @@ A compound component that creates a bunch of Dot's automatically for you.
 | dotNumbers | boolean | false | No | Setting to true automatically adds text numbers the dot buttons starting at 1. |
 | disableActiveDots | boolean | true | No | Setting to true make all dots, including active dots, enabled. |
 | showAsSelectedForCurrentSlideOnly | boolean | false | No | Setting to true show only the current slide dot as selected. |
+| renderDots | function| null | No | It accpets `props` and overrides renderDots() in <DotGroup/>. |
 
 #### The DotGroup component creates the following pseudo HTML by default:
 
