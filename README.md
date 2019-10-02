@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
+[![All Contributors](https://img.shields.io/badge/all_contributors-19-orange.svg?style=flat-square)](#contributors-)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
 Created by
@@ -625,3 +626,44 @@ I promise to add docs for every component.  In the meantime, feel free to downlo
 - `npm test` runs unit and integration tests using Jest + Enzyme.  Also does coverage reporting.<br><br>
 - `npm lint` runs linting tests using eslint & airbnb linting.<br><br>
 - `npm test:watch` same as `npm test` but it will watch for updates and auto-run tests. Does not do coverage reporting.<br><br>
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/mrbinky3000"><img src="https://avatars1.githubusercontent.com/u/161068?v=4" width="100px;" alt="Matthew Toledo"/><br /><sub><b>Matthew Toledo</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=mrbinky3000" title="Code">💻</a> <a href="#design-mrbinky3000" title="Design">🎨</a> <a href="#review-mrbinky3000" title="Reviewed Pull Requests">👀</a> <a href="#ideas-mrbinky3000" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-mrbinky3000" title="Project Management">📆</a></td>
+    <td align="center"><a href="http://www.whoistimsteele.com"><img src="https://avatars0.githubusercontent.com/u/1490225?v=4" width="100px;" alt="Timothy Steele"/><br /><sub><b>Timothy Steele</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=tim-steele" title="Code">💻</a> <a href="#design-tim-steele" title="Design">🎨</a> <a href="#review-tim-steele" title="Reviewed Pull Requests">👀</a> <a href="#ideas-tim-steele" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-tim-steele" title="Project Management">📆</a></td>
+    <td align="center"><a href="http://www.thefullresolution.com/"><img src="https://avatars2.githubusercontent.com/u/11708648?v=4" width="100px;" alt="Jedrzej Lewandowski"/><br /><sub><b>Jedrzej Lewandowski</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=TheFullResolution" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/littlejustinh"><img src="https://avatars1.githubusercontent.com/u/7610833?v=4" width="100px;" alt="Justin Little"/><br /><sub><b>Justin Little</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=littlejustinh" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.paax.se/"><img src="https://avatars0.githubusercontent.com/u/3884281?v=4" width="100px;" alt="Christoffer Palm"/><br /><sub><b>Christoffer Palm</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=NormySan" title="Code">💻</a></td>
+    <td align="center"><a href="https://dylanpyle.com"><img src="https://avatars2.githubusercontent.com/u/806257?v=4" width="100px;" alt="Dylan Pyle"/><br /><sub><b>Dylan Pyle</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=dylanpyle" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/maps82"><img src="https://avatars1.githubusercontent.com/u/12223156?v=4" width="100px;" alt="Martin Schwier"/><br /><sub><b>Martin Schwier</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=maps82" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/arnaudambro"><img src="https://avatars0.githubusercontent.com/u/31724752?v=4" width="100px;" alt="Arnaud Ambroselli"/><br /><sub><b>Arnaud Ambroselli</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=arnaudambro" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/chungwong"><img src="https://avatars3.githubusercontent.com/u/1691249?v=4" width="100px;" alt="Chung"/><br /><sub><b>Chung</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=chungwong" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/fdionisi"><img src="https://avatars1.githubusercontent.com/u/8927326?v=4" width="100px;" alt="Federico Dionisi"/><br /><sub><b>Federico Dionisi</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=fdionisi" title="Code">💻</a></td>
+    <td align="center"><a href="https://kubajastrz.com"><img src="https://avatars0.githubusercontent.com/u/6443113?v=4" width="100px;" alt="Jakub Jastrzębski"/><br /><sub><b>Jakub Jastrzębski</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=KubaJastrz" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/jpdelima"><img src="https://avatars2.githubusercontent.com/u/7547716?v=4" width="100px;" alt="Jean-Paul Delimat"/><br /><sub><b>Jean-Paul Delimat</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=jpdelima" title="Code">💻</a></td>
+    <td align="center"><a href="https://atmarty.com/"><img src="https://avatars2.githubusercontent.com/u/7387001?v=4" width="100px;" alt="Martin"/><br /><sub><b>Martin</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=martinmckenna" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/perenstrom"><img src="https://avatars0.githubusercontent.com/u/765759?v=4" width="100px;" alt="Per Enström"/><br /><sub><b>Per Enström</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=perenstrom" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/serafinomb"><img src="https://avatars2.githubusercontent.com/u/4272911?v=4" width="100px;" alt="Serafino Messina"/><br /><sub><b>Serafino Messina</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=serafinomb" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/killia15"><img src="https://avatars2.githubusercontent.com/u/30830235?v=4" width="100px;" alt="Seth Killian"/><br /><sub><b>Seth Killian</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=killia15" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/timc13"><img src="https://avatars3.githubusercontent.com/u/74982?v=4" width="100px;" alt="Tim Chen"/><br /><sub><b>Tim Chen</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=timc13" title="Code">💻</a></td>
+    <td align="center"><a href="http://pleo.io"><img src="https://avatars3.githubusercontent.com/u/13701719?v=4" width="100px;" alt="Zoey Zou"/><br /><sub><b>Zoey Zou</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=zoeyzou" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/djshapiro"><img src="https://avatars0.githubusercontent.com/u/2005881?v=4" width="100px;" alt="djshapiro"/><br /><sub><b>djshapiro</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=djshapiro" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
