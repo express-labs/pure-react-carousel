@@ -1,14 +1,35 @@
+<div align="center">
+  <h1>Pure React Carousel</h1>
+  
+  <p>Created By</p>
+  <a href="http://www.express.com">
+    <img
+      height="27"
+      width="164"
+      alt="Express Logo"
+      src="https://raw.github.com/express-labs/pure-react-carousel/master/dev/media/express-logo.svg?sanitize=true"
+    />
+  </a>
+    
+  <p>A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.</p>
+  
+  [**See Some Examples**](https://express-labs.github.io/pure-react-carousel/)
+</div>
+
+<hr />
+
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
-[![All Contributors](https://img.shields.io/badge/all_contributors-19-orange.svg?style=flat-square)](#contributors-)
+[![version](https://img.shields.io/npm/v/pure-react-carousel.svg?style=flat-square)](https://www.npmjs.com/package/pure-react-carousel)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
+[![downloads](https://img.shields.io/npm/dm/pure-react-carousel.svg?style=flat-square)](http://www.npmtrends.com/pure-react-carousel)
+[![MIT License](https://img.shields.io/npm/l/pure-react-carousel.svg?style=flat-square)](https://github.com/express-labs/pure-react-carousel/blob/master/LICENSE)
 
-Created by
-[![Express Logo](https://raw.github.com/express-labs/pure-react-carousel/master/dev/media/express-logo.svg?sanitize=true)](http://www.express.com)
+[![All Contributors](https://img.shields.io/badge/all_contributors-19-orange.svg?style=flat-square)](#contributors-)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Code of Conduct](https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square)](https://github.com/express-labs/pure-react-carousel/blob/master/CODE_OF_CONDUCT.md)
 
-# pure-react-carousel
 
-
-A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.
+## Motivation
 
 My goal was to create a 100% ReactJS carousel that doesn't try to impose structure or styles that need to be defeated in order to match your site's design standards. Are you tired of fighting some other developer's CSS or DOM structure?  If so, this carousel is for you.
 
@@ -24,10 +45,7 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
 - Supports ES6 and commonjs.
 - Has 100% test coverage. Solid!
 
-### ghpage
-https://express-labs.github.io/pure-react-carousel/
-
-# Table of contents
+## Table of contents
   * [🛠 Tutorial](#-tutorial)
   * [Component Properties (props)](#component-properties-props)
   * [Components](#components)
