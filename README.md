@@ -647,7 +647,7 @@ I promise to add docs for every component.  In the meantime, feel free to downlo
 - `npm lint` runs linting tests using eslint & airbnb linting.<br><br>
 - `npm test:watch` same as `npm test` but it will watch for updates and auto-run tests. Does not do coverage reporting.<br><br>
 
-## Contributors ✨
+## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
