@@ -1,7 +1,8 @@
 <div align="center">
   <h1>Pure React Carousel</h1>
   
-  <span>Created By</span>
+  Created By
+  <br />
   <a href="http://www.express.com">
     <img
       height="27"
