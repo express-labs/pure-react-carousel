@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
 Created by
@@ -656,6 +656,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/perenstrom"><img src="https://avatars0.githubusercontent.com/u/765759?v=4" width="100px;" alt="Per Enström"/><br /><sub><b>Per Enström</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=perenstrom" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/serafinomb"><img src="https://avatars2.githubusercontent.com/u/4272911?v=4" width="100px;" alt="Serafino Messina"/><br /><sub><b>Serafino Messina</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=serafinomb" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/killia15"><img src="https://avatars2.githubusercontent.com/u/30830235?v=4" width="100px;" alt="Seth Killian"/><br /><sub><b>Seth Killian</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=killia15" title="Code">💻</a></td>
   </tr>
 </table>
 
