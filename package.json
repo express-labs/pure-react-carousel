@@ -18,6 +18,9 @@
     "accessible"
   ],
   "scripts": {
+    "commit": "git-cz",
+    "commit:add": "git add .",
+    "commit:all": "npm run commit:add && npm run commit",
     "test": "BABEL_ENV=test jest --no-cache",
     "test:coverage": "BABEL_ENV=test jest --coverage --no-cache",
     "test:watch": "BABEL_ENV=test jest --watch",
