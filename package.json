@@ -19,6 +19,7 @@
   ],
   "scripts": {
     "test": "BABEL_ENV=test jest --no-cache",
+    "test:coverage": "BABEL_ENV=test jest --coverage --no-cache",
     "test:watch": "BABEL_ENV=test jest --watch",
     "start": "NODE_ENV=development rollup -w -c rollup.config.dev.js",
     "lint": "eslint . --ext .js --ext .jsx --ignore-path .gitignore",
@@ -29,6 +30,8 @@
     "build:es": "NODE_ENV=production rollup -c rollup.config.es.js",
     "postbuild": "node postbuild.js",
     "build:watch": "watch 'npm run build' src",
+    "prepublishOnly": "npm run build",
+    "semantic-release": "semantic-release",
     "deploy": "gh-pages -d dev"
   },
   "typings": "typings/index.d.ts",
@@ -56,6 +59,8 @@
     "babel-eslint": "^10.0.3",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "clone": "^2.1.1",
+    "commitizen": "^3.0.7",
+    "cz-conventional-changelog": "^2.1.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "escape-string-regexp": "^1.0.5",
@@ -94,6 +99,7 @@
     "rollup-plugin-uglify": "^6.0.3",
     "rollup-plugin-uglify-es": "0.0.1",
     "rollup-watch": "^4.3.1",
+    "semantic-release": "^15.13.3",
     "uglify-es": "^3.3.5",
     "waait": "^1.0.5",
     "watch": "^1.0.2"
@@ -145,6 +151,20 @@
         "functions": 95,
         "lines": 95,
         "statements": 95
+      }
+    },
+    "release": {
+      "branch": "master",
+      "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        "@semantic-release/npm",
+        "@semantic-release/github"
+      ]
+    },
+    "config": {
+      "commitizen": {
+        "path": "./node_modules/cz-conventional-changelog"
       }
     },
     "setupFiles": [
