@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
 Created by
@@ -637,6 +637,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/mrbinky3000"><img src="https://avatars1.githubusercontent.com/u/161068?v=4" width="100px;" alt="Matthew Toledo"/><br /><sub><b>Matthew Toledo</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=mrbinky3000" title="Code">💻</a> <a href="#design-mrbinky3000" title="Design">🎨</a> <a href="#review-mrbinky3000" title="Reviewed Pull Requests">👀</a> <a href="#ideas-mrbinky3000" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-mrbinky3000" title="Project Management">📆</a></td>
+    <td align="center"><a href="http://www.whoistimsteele.com"><img src="https://avatars0.githubusercontent.com/u/1490225?v=4" width="100px;" alt="Timothy Steele"/><br /><sub><b>Timothy Steele</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=tim-steele" title="Code">💻</a> <a href="#design-tim-steele" title="Design">🎨</a> <a href="#review-tim-steele" title="Reviewed Pull Requests">👀</a> <a href="#ideas-tim-steele" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-tim-steele" title="Project Management">📆</a></td>
   </tr>
 </table>
 
