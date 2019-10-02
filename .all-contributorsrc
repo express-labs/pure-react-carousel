@@ -170,6 +170,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "timc13",
+      "name": "Tim Chen",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/74982?v=4",
+      "profile": "https://github.com/timc13",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
