@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
 Created by
@@ -647,6 +647,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/maps82"><img src="https://avatars1.githubusercontent.com/u/12223156?v=4" width="100px;" alt="Martin Schwier"/><br /><sub><b>Martin Schwier</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=maps82" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/arnaudambro"><img src="https://avatars0.githubusercontent.com/u/31724752?v=4" width="100px;" alt="Arnaud Ambroselli"/><br /><sub><b>Arnaud Ambroselli</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=arnaudambro" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/chungwong"><img src="https://avatars3.githubusercontent.com/u/1691249?v=4" width="100px;" alt="Chung"/><br /><sub><b>Chung</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=chungwong" title="Code">💻</a></td>
   </tr>
 </table>
 
