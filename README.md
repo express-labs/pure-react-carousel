@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Pure React Carousel</h1>
   
-  <p>Created By</p>
+  <span>Created By</span>
   <a href="http://www.express.com">
     <img
       height="27"
@@ -10,7 +10,7 @@
       src="https://raw.github.com/express-labs/pure-react-carousel/master/dev/media/express-logo.svg?sanitize=true"
     />
   </a>
-    
+  <br />
   <p>A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.</p>
   
   [**See Some Examples**](https://express-labs.github.io/pure-react-carousel/)
