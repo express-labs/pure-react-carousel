@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
 Created by
@@ -643,6 +643,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/littlejustinh"><img src="https://avatars1.githubusercontent.com/u/7610833?v=4" width="100px;" alt="Justin Little"/><br /><sub><b>Justin Little</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=littlejustinh" title="Code">💻</a></td>
     <td align="center"><a href="http://www.paax.se/"><img src="https://avatars0.githubusercontent.com/u/3884281?v=4" width="100px;" alt="Christoffer Palm"/><br /><sub><b>Christoffer Palm</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=NormySan" title="Code">💻</a></td>
     <td align="center"><a href="https://dylanpyle.com"><img src="https://avatars2.githubusercontent.com/u/806257?v=4" width="100px;" alt="Dylan Pyle"/><br /><sub><b>Dylan Pyle</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=dylanpyle" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/maps82"><img src="https://avatars1.githubusercontent.com/u/12223156?v=4" width="100px;" alt="Martin Schwier"/><br /><sub><b>Martin Schwier</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=maps82" title="Code">💻</a></td>
   </tr>
 </table>
 
