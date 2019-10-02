@@ -1,0 +1,28 @@
+{
+  "projectName": "pure-react-carousel",
+  "projectOwner": "express-labs",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "mrbinky3000",
+      "name": "Matthew Toledo",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/161068?v=4",
+      "profile": "https://github.com/mrbinky3000",
+      "contributions": [
+        "code",
+        "design",
+        "review",
+        "ideas",
+        "projectManagement"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
