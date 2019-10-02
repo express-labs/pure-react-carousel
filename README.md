@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/express-labs/pure-react-carousel.svg?branch=master)](https://travis-ci.org/express-labs/pure-react-carousel)
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 [![Known Vulnerabilities](https://snyk.io/test/github/express-labs/pure-react-carousel/badge.svg)](https://snyk.io/test/github/express-labs/pure-react-carousel)
 
 Created by
@@ -640,6 +640,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://www.whoistimsteele.com"><img src="https://avatars0.githubusercontent.com/u/1490225?v=4" width="100px;" alt="Timothy Steele"/><br /><sub><b>Timothy Steele</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=tim-steele" title="Code">💻</a> <a href="#design-tim-steele" title="Design">🎨</a> <a href="#review-tim-steele" title="Reviewed Pull Requests">👀</a> <a href="#ideas-tim-steele" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-tim-steele" title="Project Management">📆</a></td>
     <td align="center"><a href="http://www.thefullresolution.com/"><img src="https://avatars2.githubusercontent.com/u/11708648?v=4" width="100px;" alt="Jedrzej Lewandowski"/><br /><sub><b>Jedrzej Lewandowski</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=TheFullResolution" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/express-crowbot"><img src="https://avatars2.githubusercontent.com/u/38323435?v=4" width="100px;" alt="express-crowbot"/><br /><sub><b>express-crowbot</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=express-crowbot" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/littlejustinh"><img src="https://avatars1.githubusercontent.com/u/7610833?v=4" width="100px;" alt="Justin Little"/><br /><sub><b>Justin Little</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=littlejustinh" title="Code">💻</a></td>
   </tr>
 </table>
 
