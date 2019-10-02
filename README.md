@@ -66,6 +66,7 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
     * [WithStore() Higher Order Component](#withstore-higher-order-component-1)
     * [Examples](#examples)
   * [Dev Workflow](#dev-workflow)
+  * [Contributors](#contributors)
 
 ## 🛠 Tutorial
 Let's make a simple carousel with three slides, a next button, and a back button.
