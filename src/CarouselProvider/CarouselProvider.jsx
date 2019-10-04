@@ -12,8 +12,11 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     currentSlide: PropTypes.number,
     disableAnimation: PropTypes.bool,
     disableKeyboard: PropTypes.bool,
+    dragEnabled: PropTypes.bool,
+    dragStep: PropTypes.number,
     hasMasterSpinner: PropTypes.bool,
     interval: PropTypes.number,
+    infiniteLoop: CarouselPropTypes.infiniteLoop,
     isPageScrollLocked: PropTypes.bool,
     isPlaying: PropTypes.bool,
     lockOnWindowScroll: PropTypes.bool,
@@ -22,11 +25,9 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     orientation: CarouselPropTypes.orientation,
     playDirection: CarouselPropTypes.direction,
     step: PropTypes.number,
-    dragStep: PropTypes.number,
     tag: PropTypes.string,
     totalSlides: PropTypes.number.isRequired,
     touchEnabled: PropTypes.bool,
-    dragEnabled: PropTypes.bool,
     visibleSlides: PropTypes.number,
   };
 
@@ -39,31 +40,44 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     currentSlide: 0,
     disableAnimation: false,
     disableKeyboard: false,
+    dragEnabled: true,
+    dragStep: 1,
     hasMasterSpinner: false,
     interval: 5000,
+    infiniteLoop: 'off',
     isPageScrollLocked: false,
     isPlaying: false,
     lockOnWindowScroll: false,
     orientation: 'horizontal',
     playDirection: 'forward',
     step: 1,
-    dragStep: 1,
     tag: 'div',
     touchEnabled: true,
-    dragEnabled: true,
     visibleSlides: 1,
   };
 
   constructor(props, context) {
     super(props, context);
+
+    const realCurrentSlide = props.infiniteLoop === 'auto' || props.infiniteLoop === 'manual'
+      ? props.currentSlide + props.visibleSlides - 1
+      : props.currentSlide;
+
+    const realTotalSlides = props.infiniteLoop === 'auto'
+      ? props.totalSlides + (props.visibleSlides - 1) * 2
+      : props.totalSlides;
+
     const options = {
-      currentSlide: props.currentSlide,
+      currentSlide: realCurrentSlide,
       disableAnimation: props.disableAnimation,
       disableKeyboard: props.disableKeyboard,
+      dragEnabled: props.dragEnabled,
+      dragStep: props.dragStep,
       hasMasterSpinner: props.hasMasterSpinner,
       imageErrorCount: 0,
       imageSuccessCount: 0,
       interval: props.interval,
+      infiniteLoop: props.infiniteLoop,
       isPageScrollLocked: props.isPageScrollLocked,
       isPlaying: props.isPlaying,
       lockOnWindowScroll: props.lockOnWindowScroll,
@@ -76,10 +90,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       slideSize: slideSize(props.totalSlides, props.visibleSlides),
       slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
       step: props.step,
-      dragStep: props.dragStep,
-      totalSlides: props.totalSlides,
+      totalSlides: realTotalSlides,
       touchEnabled: props.touchEnabled,
-      dragEnabled: props.dragEnabled,
       visibleSlides: props.visibleSlides,
     };
     this.carouselStore = new Store(options);
@@ -96,19 +108,20 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       'currentSlide', // poorly named.  This is only slide that shows on MOUNT. deprecating soon.
       'disableAnimation',
       'disableKeyboard',
+      'dragEnabled',
+      'dragStep',
       'hasMasterSpinner',
       'interval',
+      'infiniteLoop',
       'isPlaying',
+      'lockOnWindowScroll',
       'naturalSlideHeight',
       'naturalSlideWidth',
-      'lockOnWindowScroll',
       'orientation',
       'playDirection',
       'step',
-      'dragStep',
       'totalSlides',
       'touchEnabled',
-      'dragEnabled',
       'visibleSlides',
     ].forEach((propName) => {
       if (prevProps[propName] !== this.props[propName]) {
@@ -162,8 +175,11 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       currentSlide,
       disableAnimation,
       disableKeyboard,
+      dragEnabled,
+      dragStep,
       hasMasterSpinner,
       interval,
+      infiniteLoop,
       isPageScrollLocked,
       isPlaying,
       lockOnWindowScroll,
@@ -172,11 +188,9 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       orientation,
       playDirection,
       step,
-      dragStep,
       tag: Tag,
       totalSlides,
       touchEnabled,
-      dragEnabled,
       visibleSlides,
       ...filteredProps
     } = this.props;

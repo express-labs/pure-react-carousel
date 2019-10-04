@@ -1,15 +1,19 @@
 import PropTypes from 'prop-types';
 
 export function cn(a) {
-  return a.map((b) => {
-    if (b === false) return null;
-    return b;
-  }).join(' ').replace(/\s+/g, ' ').trim();
+  return a
+    .map((b) => {
+      if (b === false) return null;
+      return b;
+    })
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export function randomHexColor() {
   // eslint-disable-next-line no-bitwise
-  return `#${(Math.random() * 0xFFFFFF << 0).toString(16)}`;
+  return `#${((Math.random() * 0xffffff) << 0).toString(16)}`;
 }
 
 export function slideUnit(visibleSlides = 1) {
@@ -20,8 +24,10 @@ export function slideSize(totalSlides, visibleSlides) {
   return ((100 / totalSlides) * visibleSlides) / visibleSlides;
 }
 
-export function slideTraySize(totalSlides, visibleSlides) {
-  return (100 * totalSlides) / visibleSlides;
+export function slideTraySize(totalSlides, visibleSlides, infiniteLoop = 'off') {
+  let duplicateSlides = 0;
+  if (infiniteLoop !== 'off') duplicateSlides = Math.ceil(visibleSlides / 2) * 2;
+  return (100 * (totalSlides + duplicateSlides)) / visibleSlides;
 }
 
 export function pct(num) {
@@ -33,15 +39,14 @@ export const SUCCESS = 'success';
 export const ERROR = 'error';
 
 export const CarouselPropTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
   direction: PropTypes.oneOf(['forward', 'backward']),
   height: (props, propName) => {
     const prop = props[propName];
     if (props.orientation === 'vertical' && (prop === null || typeof prop !== 'number')) {
-      return new Error(`Missing required property '${propName}' when orientation is vertical.  You must supply a number representing the height in pixels`);
+      return new Error(
+        `Missing required property '${propName}' when orientation is vertical.  You must supply a number representing the height in pixels`,
+      );
     }
     return null;
   },
@@ -49,10 +54,13 @@ export const CarouselPropTypes = {
   isBgImage: (props, propName) => {
     const value = props[propName];
     if (value === true && props.tag === 'img') {
-      return new Error(`HTML img elements should not have a backgroundImage.  Please use ${propName} for other block-level HTML tags, like div, a, section, etc...`);
+      return new Error(
+        `HTML img elements should not have a backgroundImage.  Please use ${propName} for other block-level HTML tags, like div, a, section, etc...`,
+      );
     }
     return null;
   },
+  infiniteLoop: PropTypes.oneOf(['off', 'manual', 'auto']),
 };
 
 /**
@@ -62,7 +70,4 @@ export const CarouselPropTypes = {
  * @param  {number} x   A value.
  * @return {number}     Either the original value, the minimum value, or the maximum value.
  */
-export const boundedRange = ({ min, max, x }) => Math.min(
-  max,
-  Math.max(min, x),
-);
+export const boundedRange = ({ min, max, x }) => Math.min(max, Math.max(min, x));

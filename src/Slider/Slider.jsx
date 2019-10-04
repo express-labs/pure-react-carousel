@@ -22,6 +22,7 @@ const Slider = class Slider extends React.Component {
     dragStep: PropTypes.number,
     hasMasterSpinner: PropTypes.bool.isRequired,
     interval: PropTypes.number.isRequired,
+    infiniteLoop: CarouselPropTypes.infiniteLoop.isRequired,
     isPageScrollLocked: PropTypes.bool.isRequired,
     isPlaying: PropTypes.bool.isRequired,
     lockOnWindowScroll: PropTypes.bool.isRequired,
@@ -333,7 +334,10 @@ const Slider = class Slider extends React.Component {
 
   forward() {
     const {
-      currentSlide, step, totalSlides, visibleSlides,
+      currentSlide,
+      step,
+      totalSlides,
+      visibleSlides,
     } = this.props;
     return Math.min(currentSlide + step, totalSlides - visibleSlides);
   }
