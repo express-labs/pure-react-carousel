@@ -14,13 +14,14 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     step: PropTypes.number.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
-    infinite: PropTypes.bool.isRequired,
+    infinite: PropTypes.bool,
   };
 
   static defaultProps = {
     className: null,
     disabled: null,
     onClick: null,
+    infinite: false,
   }
 
   static setDisabled(disabled, currentSlide, visibleSlides, totalSlides, infinite) {
@@ -83,7 +84,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
   render() {
     const {
       carouselStore, className, currentSlide, disabled, onClick, step, totalSlides, visibleSlides,
-      ...props
+      infinite, ...props
     } = this.props;
 
     const newClassName = cn([
