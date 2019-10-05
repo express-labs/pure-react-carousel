@@ -12,6 +12,9 @@ export default class ButtonBack extends React.Component {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     step: PropTypes.number.isRequired,
+    totalSlides: PropTypes.number.isRequired,
+    infinite: PropTypes.bool.isRequired,
+    visibleSlides: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -20,9 +23,9 @@ export default class ButtonBack extends React.Component {
     onClick: null,
   }
 
-  static setDisabled(disabled, currentSlide) {
+  static setDisabled(disabled, currentSlide, infinite) {
     if (disabled !== null) return disabled;
-    if (currentSlide === 0) return true;
+    if (currentSlide === 0 && !infinite) return true;
     return false;
   }
 
@@ -30,7 +33,7 @@ export default class ButtonBack extends React.Component {
     super(props);
     this.handleOnClick = this.handleOnClick.bind(this);
     this.state = {
-      disabled: ButtonBack.setDisabled(props.disabled, props.currentSlide),
+      disabled: ButtonBack.setDisabled(props.disabled, props.currentSlide, props.infinite),
     };
   }
 
@@ -38,20 +41,33 @@ export default class ButtonBack extends React.Component {
   /* istanbul ignore next */
   componentWillReceiveProps(nextProps) {
     this.setState({
-      disabled: ButtonBack.setDisabled(nextProps.disabled, nextProps.currentSlide),
+      disabled: ButtonBack.setDisabled(
+        nextProps.disabled,
+        nextProps.currentSlide,
+        nextProps.infinite,
+      ),
     });
   }
 
   handleOnClick(ev) {
     const {
-      carouselStore, currentSlide, onClick, step,
+      carouselStore, currentSlide, onClick, step, infinite, visibleSlides, totalSlides,
     } = this.props;
-    const newCurrentSlide = Math.max(
+
+    const maxSlide = totalSlides - visibleSlides;
+
+    let finalSlideState = Math.max(
       currentSlide - step,
       0,
     );
+
+    if (infinite) {
+      const isOnFirstSlide = currentSlide === 0;
+      finalSlideState = isOnFirstSlide ? maxSlide : finalSlideState;
+    }
+
     carouselStore.setStoreState({
-      currentSlide: newCurrentSlide,
+      currentSlide: finalSlideState,
     }, onClick !== null && onClick.call(this, ev));
   }
 

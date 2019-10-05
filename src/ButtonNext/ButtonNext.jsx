@@ -14,6 +14,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     step: PropTypes.number.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
+    infinite: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -22,9 +23,9 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     onClick: null,
   }
 
-  static setDisabled(disabled, currentSlide, visibleSlides, totalSlides) {
+  static setDisabled(disabled, currentSlide, visibleSlides, totalSlides, infinite) {
     if (disabled !== null) return disabled;
-    if (currentSlide >= (totalSlides - visibleSlides)) return true;
+    if (currentSlide >= (totalSlides - visibleSlides) && !infinite) return true;
     return false;
   }
 
@@ -37,6 +38,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
         props.currentSlide,
         props.visibleSlides,
         props.totalSlides,
+        props.infinite,
       ),
     };
   }
@@ -50,21 +52,31 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
         nextProps.currentSlide,
         nextProps.visibleSlides,
         nextProps.totalSlides,
+        nextProps.infinite,
       ),
     });
   }
 
   handleOnClick(ev) {
     const {
-      currentSlide, onClick, step, carouselStore,
+      currentSlide, onClick, step, carouselStore, infinite, totalSlides, visibleSlides,
     } = this.props;
-    const maxSlide = this.props.totalSlides - this.props.visibleSlides;
-    const newCurrentSlide = Math.min(
-      (currentSlide + step),
+
+    const maxSlide = totalSlides - visibleSlides;
+    const nextSlide = step + currentSlide;
+
+    let finalSlideState = Math.min(
+      nextSlide,
       maxSlide,
     );
+
+    if (infinite) {
+      const isOnLastSlide = maxSlide === currentSlide;
+      finalSlideState = isOnLastSlide ? 0 : finalSlideState;
+    }
+
     carouselStore.setStoreState({
-      currentSlide: newCurrentSlide,
+      currentSlide: finalSlideState,
     }, onClick !== null && onClick.call(this, ev));
   }
 
