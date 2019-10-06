@@ -12,17 +12,21 @@ export default class ButtonBack extends React.Component {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     step: PropTypes.number.isRequired,
+    totalSlides: PropTypes.number.isRequired,
+    visibleSlides: PropTypes.number.isRequired,
+    infinite: PropTypes.bool,
   };
 
   static defaultProps = {
     className: null,
     disabled: null,
     onClick: null,
+    infinite: false,
   };
 
-  static setDisabled(disabled, currentSlide) {
+  static setDisabled(disabled, currentSlide, infinite) {
     if (disabled !== null) return disabled;
-    if (currentSlide === 0) return true;
+    if (currentSlide === 0 && !infinite) return true;
     return false;
   }
 
@@ -33,9 +37,21 @@ export default class ButtonBack extends React.Component {
 
   handleOnClick(ev) {
     const {
-      carouselStore, currentSlide, onClick, step,
+      carouselStore, currentSlide, onClick, step, infinite, visibleSlides, totalSlides,
     } = this.props;
-    const newCurrentSlide = Math.max(currentSlide - step, 0);
+
+    const maxSlide = totalSlides - visibleSlides;
+
+    let newCurrentSlide = Math.max(
+      currentSlide - step,
+      0,
+    );
+
+    if (infinite) {
+      const isOnFirstSlide = currentSlide === 0;
+      newCurrentSlide = isOnFirstSlide ? maxSlide : newCurrentSlide;
+    }
+
     carouselStore.setStoreState(
       {
         currentSlide: newCurrentSlide,
@@ -52,11 +68,14 @@ export default class ButtonBack extends React.Component {
       disabled,
       onClick,
       step,
+      totalSlides,
+      visibleSlides,
+      infinite,
       ...props
     } = this.props;
 
     const newClassName = cn([s.buttonBack, 'carousel__back-button', className]);
-    const isDisabled = ButtonBack.setDisabled(this.props.disabled, this.props.currentSlide);
+    const isDisabled = ButtonBack.setDisabled(this.props.disabled, this.props.currentSlide, infinite);
 
     return (
       <button

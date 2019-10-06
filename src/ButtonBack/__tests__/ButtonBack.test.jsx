@@ -13,7 +13,9 @@ configure({ adapter: new Adapter() });
 describe('<ButtonBack />', () => {
   it('should render', () => {
     const wrapper = shallow(
-      <ButtonBack currentSlide={1} step={1} carouselStore={{}}>Hello</ButtonBack>,
+      <ButtonBack currentSlide={1} step={1} carouselStore={{}} totalSlides={10} visibleSlides={1}>
+        Hello
+      </ButtonBack>,
     );
     expect(wrapper.exists()).toBe(true);
   });
@@ -23,6 +25,8 @@ describe('<ButtonBack />', () => {
         currentSlide={0}
         step={1}
         carouselStore={{}}
+        totalSlides={10}
+        visibleSlides={1}
       >
       Hello
       </ButtonBack>,
@@ -35,6 +39,8 @@ describe('<ButtonBack />', () => {
         currentSlide={1}
         step={1}
         carouselStore={{}}
+        totalSlides={10}
+        visibleSlides={1}
         disabled
       >
       Hello
@@ -52,6 +58,8 @@ describe('<ButtonBack />', () => {
       <ButtonBack
         currentSlide={4}
         step={3}
+        totalSlides={10}
+        visibleSlides={1}
         carouselStore={mockStore}
       >
       Hello
@@ -59,6 +67,54 @@ describe('<ButtonBack />', () => {
     );
     wrapper.find('button').simulate('click');
     expect(mockStore.getStoreState().currentSlide).toBe(1);
+  });
+  it('should subract the value of step from currentSlide when clicked and infinite is true.', () => {
+    const mockStore = new Store({
+      currentSlide: 4,
+      step: 3,
+      totalSlides: 10,
+      visibleSlides: 3,
+    });
+
+    const wrapper = mount(
+      <ButtonBack
+        infinite
+        currentSlide={4}
+        step={3}
+        totalSlides={10}
+        visibleSlides={3}
+        carouselStore={mockStore}
+      >
+      back
+      </ButtonBack>,
+    );
+    expect(wrapper.find('button').prop('disabled')).toBe(false);
+    wrapper.find('button').simulate('click');
+    expect(mockStore.getStoreState().currentSlide).toBe(1);
+  });
+  it('should set the current slide to last if clicked when on the first slide if infinite is true.', () => {
+    const mockStore = new Store({
+      currentSlide: 0,
+      step: 3,
+      totalSlides: 10,
+      visibleSlides: 3,
+    });
+
+    const wrapper = mount(
+      <ButtonBack
+        infinite
+        currentSlide={0}
+        step={3}
+        totalSlides={10}
+        visibleSlides={3}
+        carouselStore={mockStore}
+      >
+      Back
+      </ButtonBack>,
+    );
+    expect(wrapper.find('button').prop('disabled')).toBe(false);
+    wrapper.find('button').simulate('click');
+    expect(mockStore.getStoreState().currentSlide).toBe(7);
   });
   it('should call an onClick function passed as a prop', () => {
     const mockStore = new Store({
@@ -74,6 +130,8 @@ describe('<ButtonBack />', () => {
         step={3}
         carouselStore={mockStore}
         onClick={mockOnClick}
+        totalSlides={10}
+        visibleSlides={1}
       >
       Hello
       </ButtonBack>,
@@ -106,6 +164,8 @@ describe('<ButtonBack />', () => {
         currentSlide={4}
         step={3}
         carouselStore={{}}
+        totalSlides={10}
+        visibleSlides={1}
         className="bob"
       >
       Hello
@@ -122,6 +182,8 @@ describe('<ButtonBack />', () => {
         currentSlide={4}
         step={3}
         carouselStore={{}}
+        totalSlides={10}
+        visibleSlides={1}
         foo="bar"
       >
       Hello

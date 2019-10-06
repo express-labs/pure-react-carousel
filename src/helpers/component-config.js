@@ -24,6 +24,8 @@ export default {
       currentSlide: 1,
       step: 1,
       carouselStore: new Store({}),
+      totalSlides: 3,
+      visibleSlides: 2,
     },
   },
   ButtonFirst: {

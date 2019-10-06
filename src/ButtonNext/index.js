@@ -6,4 +6,5 @@ export default WithStore(ButtonNext, state => ({
   step: state.step,
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
+  infinite: state.infinite,
 }));

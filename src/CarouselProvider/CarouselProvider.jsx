@@ -28,6 +28,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     touchEnabled: PropTypes.bool,
     dragEnabled: PropTypes.bool,
     visibleSlides: PropTypes.number,
+    infinite: PropTypes.bool,
   };
 
   static childContextTypes = {
@@ -52,6 +53,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     touchEnabled: true,
     dragEnabled: true,
     visibleSlides: 1,
+    infinite: false,
   };
 
   constructor(props, context) {
@@ -81,6 +83,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       touchEnabled: props.touchEnabled,
       dragEnabled: props.dragEnabled,
       visibleSlides: props.visibleSlides,
+      infinite: props.infinite,
     };
     this.carouselStore = new Store(options);
   }
@@ -178,6 +181,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       touchEnabled,
       dragEnabled,
       visibleSlides,
+      infinite,
       ...filteredProps
     } = this.props;
 
