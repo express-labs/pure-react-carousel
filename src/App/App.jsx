@@ -6,7 +6,7 @@ import {
   Example4,
   Example5,
   Example6,
-  Example7,
+  // Example7,
   Example8,
   Example9,
   Example10,
@@ -196,12 +196,12 @@ class DevelopmentApp extends React.Component {
                 </section>
               )}
 
-              {(value === '0' || value === '7') && (
+              {/* {(value === '0' || value === '7') && (
                 <section id="example--7">
                   <hr />
                   <Example7 />
                 </section>
-              )}
+              )} */}
 
               {(value === '0' || value === '8') && (
                 <section id="example--8">

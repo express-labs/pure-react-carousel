@@ -22,40 +22,17 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     disabled: null,
     onClick: null,
     infinite: false,
-  }
+  };
 
   static setDisabled(disabled, currentSlide, visibleSlides, totalSlides, infinite) {
     if (disabled !== null) return disabled;
-    if (currentSlide >= (totalSlides - visibleSlides) && !infinite) return true;
+    if (currentSlide >= totalSlides - visibleSlides && !infinite) return true;
     return false;
   }
 
   constructor(props) {
     super(props);
     this.handleOnClick = this.handleOnClick.bind(this);
-    this.state = {
-      disabled: ButtonNext.setDisabled(
-        props.disabled,
-        props.currentSlide,
-        props.visibleSlides,
-        props.totalSlides,
-        props.infinite,
-      ),
-    };
-  }
-
-  // TODO: get tests for this to work again
-  /* istanbul ignore next */
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      disabled: ButtonNext.setDisabled(
-        nextProps.disabled,
-        nextProps.currentSlide,
-        nextProps.visibleSlides,
-        nextProps.totalSlides,
-        nextProps.infinite,
-      ),
-    });
   }
 
   handleOnClick(ev) {
@@ -66,32 +43,40 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     const maxSlide = totalSlides - visibleSlides;
     const nextSlide = step + currentSlide;
 
-    let finalSlideState = Math.min(
+    let newCurrentSlide = Math.min(
       nextSlide,
       maxSlide,
     );
 
     if (infinite) {
       const isOnLastSlide = maxSlide === currentSlide;
-      finalSlideState = isOnLastSlide ? 0 : finalSlideState;
+      newCurrentSlide = isOnLastSlide ? 0 : newCurrentSlide;
     }
 
-    carouselStore.setStoreState({
-      currentSlide: finalSlideState,
-    }, onClick !== null && onClick.call(this, ev));
+    carouselStore.setStoreState(
+      {
+        currentSlide: newCurrentSlide,
+      },
+      onClick !== null && onClick.call(this, ev),
+    );
   }
 
   render() {
     const {
-      carouselStore, className, currentSlide, disabled, onClick, step, totalSlides, visibleSlides,
-      infinite, ...props
+      carouselStore,
+      className,
+      currentSlide,
+      disabled,
+      onClick,
+      step,
+      totalSlides,
+      visibleSlides,
+      infinite,
+      ...props
     } = this.props;
 
-    const newClassName = cn([
-      s.buttonNext,
-      'carousel__next-button',
-      className,
-    ]);
+    const newClassName = cn([s.buttonNext, 'carousel__next-button', className]);
+    const isDisabled = ButtonNext.setDisabled(disabled, currentSlide, visibleSlides, totalSlides);
 
     return (
       <button
@@ -99,7 +84,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
         aria-label="next"
         className={newClassName}
         onClick={this.handleOnClick}
-        disabled={this.state.disabled}
+        disabled={isDisabled}
         {...props}
       >
         {this.props.children}

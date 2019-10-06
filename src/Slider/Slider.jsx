@@ -32,6 +32,7 @@ const Slider = class Slider extends React.Component {
     onMasterSpinner: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
     playDirection: CarouselPropTypes.direction.isRequired,
+    privateUnDisableAnimation: PropTypes.bool,
     slideSize: PropTypes.number.isRequired,
     slideTraySize: PropTypes.number.isRequired,
     spinner: PropTypes.func,
@@ -65,6 +66,7 @@ const Slider = class Slider extends React.Component {
     dragStep: 1,
     moveThreshold: 0.1,
     onMasterSpinner: null,
+    privateUnDisableAnimation: false,
     spinner: null,
     style: {},
     tabIndex: null,
@@ -81,10 +83,12 @@ const Slider = class Slider extends React.Component {
     const delta = orientation === 'horizontal' ? deltaX : deltaY;
     const bigDrag = Math.abs(Math.round(delta / slideSizeInPx));
     const smallDrag = (Math.abs(delta) >= (slideSizeInPx * threshold)) ? dragStep : 0;
+    const moved = Math.max(smallDrag, bigDrag);
     if (delta < 0) {
-      return Math.max(smallDrag, bigDrag);
+      return moved;
     }
-    return -Math.max(smallDrag, bigDrag);
+    const retval = -moved;
+    return retval === 0 ? 0 : retval; // get rid of -0
   }
 
   constructor(props) {
@@ -139,6 +143,16 @@ const Slider = class Slider extends React.Component {
     if (prevProps.isPlaying && !this.props.isPlaying) this.stop();
     if (!prevProps.isPageScrollLocked && this.props.isPageScrollLocked) this.lockScroll();
     if (prevProps.isPageScrollLocked && !this.props.isPageScrollLocked) this.unlockScroll();
+    // Re-enable the css animation after currentSlide prop is changed in CarouselProvider
+    if (
+      prevProps.privateUnDisableAnimation === false
+      && this.props.privateUnDisableAnimation === true
+    ) {
+      this.props.carouselStore.setStoreState({
+        privateUnDisableAnimation: false,
+        disableAnimation: false,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -513,6 +527,7 @@ const Slider = class Slider extends React.Component {
       onMasterSpinner,
       orientation,
       playDirection,
+      privateUnDisableAnimation,
       slideSize,
       slideTraySize,
       spinner,

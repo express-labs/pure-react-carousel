@@ -57,3 +57,5 @@ coverage.json
 /templates/dev.ejs
 .DS_Store
 .npmrc
+
+/.idea

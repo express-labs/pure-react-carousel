@@ -49,12 +49,8 @@ const touchMove = {
 };
 
 const touchEnd = {
-  changedTouches: [
-    { identifier: 1 },
-    { identifier: 2 },
-  ],
+  changedTouches: [{ identifier: 1 }, { identifier: 2 }],
 };
-
 
 describe('<ImageWithZoom />', () => {
   describe('unit tests', () => {
@@ -79,6 +75,16 @@ describe('<ImageWithZoom />', () => {
         expect(instance.renderLoading()).toBe(null);
       });
     });
+    describe('handleImageComplete', () => {
+      it('should set state isImageLoading', () => {
+        const instance = new ImageWithZoom();
+        instance.setState = jest.fn();
+        instance.handleImageComplete();
+        expect(instance.setState).toHaveBeenCalledWith({
+          isImageLoading: false,
+        });
+      });
+    });
   });
   describe('integration tests', () => {
     let wrapper;
@@ -87,15 +93,15 @@ describe('<ImageWithZoom />', () => {
 
     beforeEach(() => {
       props = clone(components.ImageWithZoom.props);
-      wrapper = mount((
+      wrapper = mount(
         <CarouselProvider
           naturalSlideWidth={100}
           naturalSlideHeight={125}
           totalSlides={1}
         >
           <ImageWithZoom {...props} />
-        </CarouselProvider>
-      ));
+        </CarouselProvider>,
+      );
       imageWithZoom = wrapper.find(ImageWithZoom);
     });
     it('should render', () => {
@@ -103,45 +109,81 @@ describe('<ImageWithZoom />', () => {
     });
     it('should add hovering classes to the overlay when mouse is hovering', () => {
       expect(imageWithZoom.find('div.overlay').hasClass('hover')).toBe(false);
-      expect(imageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
+      expect(
+        imageWithZoom
+          .find('div.overlay')
+          .hasClass('carousel__zoom-image-overlay--hovering'),
+      ).toBe(false);
       imageWithZoom.find('Wrapper.overlay').simulate('mouseover');
 
       // enzyme 3.x wrappers are immutable, so we need to find stuff again after an update.
       const updatedImageWithZoom = wrapper.find(ImageWithZoom);
 
-      expect(updatedImageWithZoom.find('div.overlay').hasClass('hover')).toBe(true);
-      expect(updatedImageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(true);
+      expect(updatedImageWithZoom.find('div.overlay').hasClass('hover')).toBe(
+        true,
+      );
+      expect(
+        updatedImageWithZoom
+          .find('div.overlay')
+          .hasClass('carousel__zoom-image-overlay--hovering'),
+      ).toBe(true);
     });
     it('should remove hovering classes to the overlay when mouse is not hovering', () => {
       expect(wrapper.find('div.overlay').hasClass('hover')).toBe(false);
-      expect(wrapper.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
+      expect(
+        wrapper
+          .find('div.overlay')
+          .hasClass('carousel__zoom-image-overlay--hovering'),
+      ).toBe(false);
       wrapper.find('div.overlay').simulate('mouseover');
       wrapper.update();
       wrapper.find('div.overlay').simulate('mouseout');
       wrapper.update();
       expect(wrapper.find('div.overlay').hasClass('hover')).toBe(false);
-      expect(wrapper.find('div.overlay').hasClass('carousel__zoom-image-overlay--hovering')).toBe(false);
+      expect(
+        wrapper
+          .find('div.overlay')
+          .hasClass('carousel__zoom-image-overlay--hovering'),
+      ).toBe(false);
     });
     it('should add zooming classes to the overlay when mouse is zoooming', () => {
       expect(imageWithZoom.find('div.overlay').hasClass('zoom')).toBe(false);
-      expect(imageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--zooming')).toBe(false);
+      expect(
+        imageWithZoom
+          .find('div.overlay')
+          .hasClass('carousel__zoom-image-overlay--zooming'),
+      ).toBe(false);
       imageWithZoom.find('Wrapper.overlay').simulate('touchStart', touchStart);
       imageWithZoom.find('Wrapper.overlay').simulate('touchMove', touchMove);
 
       // enzyme 3.x wrappers are immutable, so we need to find stuff again after an update.
       const updatedImageWithZoom = wrapper.find(ImageWithZoom);
 
-      expect(updatedImageWithZoom.find('div.overlay').hasClass('zoom')).toBe(true);
-      expect(updatedImageWithZoom.find('div.overlay').hasClass('carousel__zoom-image-overlay--zooming')).toBe(true);
+      expect(updatedImageWithZoom.find('div.overlay').hasClass('zoom')).toBe(
+        true,
+      );
+      expect(
+        updatedImageWithZoom
+          .find('div.overlay')
+          .hasClass('carousel__zoom-image-overlay--zooming'),
+      ).toBe(true);
     });
     it('should remove zoooming classes to the overlay when mouse is not zoooming', () => {
       expect(wrapper.find('div.overlay').hasClass('zoom')).toBe(false);
-      expect(wrapper.find('div.overlay').hasClass('carousel__zoom-image-overlay--zooming')).toBe(false);
+      expect(
+        wrapper
+          .find('div.overlay')
+          .hasClass('carousel__zoom-image-overlay--zooming'),
+      ).toBe(false);
       wrapper.find('div.overlay').simulate('touchStart', touchStart);
       wrapper.find('div.overlay').simulate('touchMove', touchMove);
       wrapper.find('div.overlay').simulate('touchEnd', touchEnd);
       expect(wrapper.find('div.overlay').hasClass('zoom')).toBe(false);
-      expect(wrapper.find('div.overlay').hasClass('carousel__zoom-image-overlay--zooming')).toBe(false);
+      expect(
+        wrapper
+          .find('div.overlay')
+          .hasClass('carousel__zoom-image-overlay--zooming'),
+      ).toBe(false);
     });
   });
   describe('zoom tests', () => {
@@ -150,23 +192,23 @@ describe('<ImageWithZoom />', () => {
       props = clone(components.ImageWithZoom.props);
     });
     it('should use the "src" prop for the regular and zoomed image if optional prop srcZoomed is NOT provided ', () => {
-      const wrapper = shallow((
-        <ImageWithZoom {...props} />
-      ));
+      const wrapper = shallow(<ImageWithZoom {...props} />);
       expect(wrapper.find('.carousel__zoom-image').prop('src')).toBe('bob.jpg');
-      expect(wrapper.find('.carousel__zoom-image-overlay').prop('src')).toBe('bob.jpg');
+      expect(wrapper.find('.carousel__zoom-image-overlay').prop('src')).toBe(
+        'bob.jpg',
+      );
     });
     it('should use the "srcZoomed" prop for the zoomed image if optional prop srcZoomed is provided ', () => {
-      const wrapper = shallow((
-        <ImageWithZoom {...props} srcZoomed="fred.jpg" />
-      ));
+      const wrapper = shallow(
+        <ImageWithZoom {...props} srcZoomed="fred.jpg" />,
+      );
       expect(wrapper.find('.carousel__zoom-image').prop('src')).toBe('bob.jpg');
-      expect(wrapper.find('.carousel__zoom-image-overlay').prop('src')).toBe('fred.jpg');
+      expect(wrapper.find('.carousel__zoom-image-overlay').prop('src')).toBe(
+        'fred.jpg',
+      );
     });
     it('should properly set state for x y when mouse moving', () => {
-      const wrapper = shallow((
-        <ImageWithZoom {...props} />
-      ));
+      const wrapper = shallow(<ImageWithZoom {...props} />);
       expect(wrapper.state('x')).toBe(null);
       expect(wrapper.state('y')).toBe(null);
       wrapper.find('.overlay').simulate('mousemove', {
@@ -197,9 +239,7 @@ describe('<ImageWithZoom />', () => {
       expect(wrapper.state('y')).toBe('50%');
     });
     it('should properly set state for x y when touches are moving', () => {
-      const wrapper = shallow((
-        <ImageWithZoom {...props} />
-      ));
+      const wrapper = shallow(<ImageWithZoom {...props} />);
       expect(wrapper.state('x')).toBe(null);
       expect(wrapper.state('y')).toBe(null);
       wrapper.find('.overlay').simulate('touchstart', touchStart);
@@ -281,13 +321,17 @@ describe('<ImageWithZoom />', () => {
       });
     });
     it('should not add touches to tpCache if isPinchZoomEnabled is false', () => {
-      const wrapper = shallow(<ImageWithZoom {...props} isPinchZoomEnabled={false} />);
+      const wrapper = shallow(
+        <ImageWithZoom {...props} isPinchZoomEnabled={false} />,
+      );
       const instance = wrapper.instance();
       instance.handleOnTouchStart(touchStart);
       expect(instance.tpCache).toEqual({});
     });
     it('handleOnTouchMove should not call setState() if isZooming is false.', () => {
-      const wrapper = shallow(<ImageWithZoom {...props} isPinchZoomEnabled={false} />);
+      const wrapper = shallow(
+        <ImageWithZoom {...props} isPinchZoomEnabled={false} />,
+      );
       const instance = wrapper.instance();
       instance.state.isZooming = false;
       instance.setState = jest.fn();
@@ -300,11 +344,13 @@ describe('<ImageWithZoom />', () => {
       instance.state.isZooming = true;
       instance.setState = jest.fn();
       const myTouchMove = clone(touchMove);
-      myTouchMove.targetTouches = [{
-        identifier: 1,
-        clientX: 25,
-        clientY: 25,
-      }];
+      myTouchMove.targetTouches = [
+        {
+          identifier: 1,
+          clientX: 25,
+          clientY: 25,
+        },
+      ];
       instance.handleOnTouchMove(myTouchMove);
       expect(instance.setState).toHaveBeenCalledTimes(0);
     });
@@ -317,7 +363,9 @@ describe('<ImageWithZoom />', () => {
       expect(instance.setState.mock.calls[0][0]).toEqual({ isZooming: false });
     });
     it('handleOnTouchEnd should NOT call setState if isPinchZoomEnabled is FALSE', () => {
-      const wrapper = shallow(<ImageWithZoom {...props} isPinchZoomEnabled={false} />);
+      const wrapper = shallow(
+        <ImageWithZoom {...props} isPinchZoomEnabled={false} />,
+      );
       const instance = wrapper.instance();
       instance.setState = jest.fn();
       instance.handleOnTouchEnd(touchEnd);
@@ -338,9 +386,7 @@ describe('<ImageWithZoom />', () => {
         },
       };
       const myTouchEnd = {
-        changedTouches: [
-          { identifier: 1 },
-        ],
+        changedTouches: [{ identifier: 1 }],
       };
       instance.handleOnTouchEnd(myTouchEnd);
       expect(Object.keys(instance.tpCache).length).toBe(1);
