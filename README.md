@@ -659,6 +659,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://pleo.io"><img src="https://avatars3.githubusercontent.com/u/13701719?v=4" width="100px;" alt="Zoey Zou"/><br /><sub><b>Zoey Zou</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=zoeyzou" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/djshapiro"><img src="https://avatars0.githubusercontent.com/u/2005881?v=4" width="100px;" alt="djshapiro"/><br /><sub><b>djshapiro</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=djshapiro" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/bcarroll22"><img src="https://avatars2.githubusercontent.com/u/11020406?v=4" width="100px;" alt="Brandon Carroll"/><br /><sub><b>Brandon Carroll</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=bcarroll22" title="Code">💻</a> <a href="#maintenance-bcarroll22" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/jdconner"><img src="https://avatars2.githubusercontent.com/u/12697946?v=4" width="100px;" alt="Justin Conner"/><br /><sub><b>Justin Conner</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=jdconner" title="Code">💻</a></td>
   </tr>
 </table>
 
