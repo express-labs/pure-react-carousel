@@ -76,7 +76,13 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     } = this.props;
 
     const newClassName = cn([s.buttonNext, 'carousel__next-button', className]);
-    const isDisabled = ButtonNext.setDisabled(disabled, currentSlide, visibleSlides, totalSlides);
+    const isDisabled = ButtonNext.setDisabled(
+      disabled,
+      currentSlide,
+      visibleSlides,
+      totalSlides,
+      infinite,
+    );
 
     return (
       <button
