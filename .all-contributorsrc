@@ -198,6 +198,15 @@
         "code",
         "maintenance"
       ]
+    },
+    {
+      "login": "jdconner",
+      "name": "Justin Conner",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/12697946?v=4",
+      "profile": "https://github.com/jdconner",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
