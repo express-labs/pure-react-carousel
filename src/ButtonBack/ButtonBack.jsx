@@ -75,7 +75,11 @@ export default class ButtonBack extends React.Component {
     } = this.props;
 
     const newClassName = cn([s.buttonBack, 'carousel__back-button', className]);
-    const isDisabled = ButtonBack.setDisabled(this.props.disabled, this.props.currentSlide, infinite);
+    const isDisabled = ButtonBack.setDisabled(
+      this.props.disabled,
+      this.props.currentSlide,
+      infinite,
+    );
 
     return (
       <button
