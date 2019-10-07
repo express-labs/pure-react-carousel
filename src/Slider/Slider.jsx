@@ -563,6 +563,9 @@ const Slider = class Slider extends React.Component {
     const trayStyle = {};
     const trans = pct(slideSize * currentSlide * -1);
 
+    // TODO: handle "preJumpToSlide"
+    // Pre jump to slide should turn off animation, jump to slide x and then animate a transition.
+
     if (this.state.isBeingTouchDragged || this.state.isBeingMouseDragged || disableAnimation) {
       trayStyle.transition = 'none';
     }

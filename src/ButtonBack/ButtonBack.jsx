@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CarouselPropTypes, cn } from '../helpers';
+import { CarouselPropTypes, cn, move } from '../helpers';
 import s from './ButtonBack.scss';
 
 export default class ButtonBack extends React.Component {
@@ -12,6 +12,9 @@ export default class ButtonBack extends React.Component {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     step: PropTypes.number.isRequired,
+    infiniteLoop: CarouselPropTypes.infiniteLoop.isRequired,
+    totalSlides: PropTypes.number.isRequired,
+    visibleSlides: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -32,16 +35,37 @@ export default class ButtonBack extends React.Component {
   }
 
   handleOnClick(ev) {
+    // TODO: move all this logic to a central location to make it available to other components.
+    // then import it here.
     const {
-      carouselStore, currentSlide, onClick, step,
+      carouselStore,
+      currentSlide,
+      infiniteLoop,
+      onClick,
+      step,
+      totalSlides,
+      visibleSlides,
     } = this.props;
-    const newCurrentSlide = Math.max(currentSlide - step, 0);
-    carouselStore.setStoreState(
-      {
-        currentSlide: newCurrentSlide,
-      },
-      onClick !== null && onClick.call(this, ev),
-    );
+    if (infiniteLoop !== 'off') {
+      const nextLeftMostSlide = move(currentSlide - visibleSlides, -step, totalSlides);
+      const nextRightMostSlide = move(currentSlide, -step, totalSlides);
+      const originalSlidesEndAt = totalSlides - visibleSlides;
+      if (nextLeftMostSlide > nextRightMostSlide) {
+        const preJumpToSlide = originalSlidesEndAt + (nextLeftMostSlide - totalSlides);
+        carouselStore.setStoreState = {
+          // jump to this slide BEFORE the animation to give the illusion of infinite slides.
+          preJumpToSlide,
+        };
+      }
+    } else {
+      const newCurrentSlide = Math.max(currentSlide - step, 0);
+      carouselStore.setStoreState(
+        {
+          currentSlide: newCurrentSlide,
+        },
+        onClick !== null && onClick.call(this, ev),
+      );
+    }
   }
 
   render() {

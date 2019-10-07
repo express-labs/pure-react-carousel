@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CarouselPropTypes, cn } from '../helpers';
+import { CarouselPropTypes, cn, move } from '../helpers';
 import s from './ButtonNext.scss';
 
 const ButtonNext = class ButtonNext extends React.PureComponent {
@@ -10,6 +10,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
+    infiniteLoop: CarouselPropTypes.infiniteLoop.isRequired,
     onClick: PropTypes.func,
     step: PropTypes.number.isRequired,
     totalSlides: PropTypes.number.isRequired,
@@ -34,17 +35,39 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
   }
 
   handleOnClick(ev) {
+    // TODO: move all this logic to a central location to make it available to other components.
+    // then import it here.
     const {
-      currentSlide, onClick, step, carouselStore,
+      carouselStore,
+      currentSlide,
+      infiniteLoop,
+      onClick,
+      step,
+      totalSlides,
+      visibleSlides,
     } = this.props;
-    const maxSlide = this.props.totalSlides - this.props.visibleSlides;
-    const newCurrentSlide = Math.min(currentSlide + step, maxSlide);
-    carouselStore.setStoreState(
-      {
-        currentSlide: newCurrentSlide,
-      },
-      onClick !== null && onClick.call(this, ev),
-    );
+
+    if (infiniteLoop !== 'off') {
+      const nextLeftMostSlide = move(currentSlide, step, totalSlides);
+      const nextRightMostSlide = move(currentSlide + visibleSlides, step, totalSlides);
+      const originalSlidesStartAt = visibleSlides;
+      if (nextRightMostSlide < nextLeftMostSlide) {
+        const preJumpToSlide = originalSlidesStartAt - (nextRightMostSlide - visibleSlides);
+        carouselStore.setStoreState = {
+          // jump to this slide BEFORE the animation to give the illusion of infinite slides.
+          preJumpToSlide,
+        };
+      }
+    } else {
+      const maxSlide = totalSlides - visibleSlides;
+      const newCurrentSlide = Math.min(currentSlide + step, maxSlide);
+      carouselStore.setStoreState(
+        {
+          currentSlide: newCurrentSlide,
+        },
+        onClick !== null && onClick.call(this, ev),
+      );
+    }
   }
 
   render() {

@@ -34,6 +34,20 @@ export function pct(num) {
   return `${num}%`;
 }
 
+/**
+ * Compute a new position in a fixed set after advancing or retreating by a certain abount. In our
+ * case, compute a new slide in a fixed set of slides after clicking next or back buttons.
+ *
+ * @param {Integer} currentSlide The current slide index
+ * @param {Integer} step A value to advance or rewind when clicking button next or back respectively
+ * @param {Integer} totalSlides The total number of slides.
+ */
+export function move(currentSlide, step, totalSlides) {
+  const res = (currentSlide + step) % totalSlides;
+  if (res < 0) return totalSlides + res;
+  return res;
+}
+
 export const LOADING = 'loading';
 export const SUCCESS = 'success';
 export const ERROR = 'error';
