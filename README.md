@@ -663,6 +663,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/bcarroll22"><img src="https://avatars2.githubusercontent.com/u/11020406?v=4" width="100px;" alt="Brandon Carroll"/><br /><sub><b>Brandon Carroll</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=bcarroll22" title="Code">💻</a> <a href="#maintenance-bcarroll22" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://github.com/jdconner"><img src="https://avatars2.githubusercontent.com/u/12697946?v=4" width="100px;" alt="Justin Conner"/><br /><sub><b>Justin Conner</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=jdconner" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="http://stephane-klein.info"><img src="https://avatars3.githubusercontent.com/u/54498080?v=4" width="100px;" alt="Stéphane Klein"/><br /><sub><b>Stéphane Klein</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=stephane-klein" title="Documentation">📖</a></td>
+  </tr>
 </table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
