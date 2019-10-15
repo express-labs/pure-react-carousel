@@ -207,6 +207,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "stephane-klein",
+      "name": "Stéphane Klein",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/54498080?v=4",
+      "profile": "http://stephane-klein.info",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
