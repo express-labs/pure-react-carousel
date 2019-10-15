@@ -25,7 +25,8 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
 - Has 100% test coverage. Solid!
 
 ### ghpage
-https://express-labs.github.io/pure-react-carousel/
+
+https://express-labs.github.io/pure-react-carousel/ (source code example is in [`src/App/`](src/App/))
 
 # Table of contents
   * [🛠 Tutorial](#-tutorial)
