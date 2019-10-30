@@ -463,6 +463,21 @@ describe('<Slider />', () => {
       expect(wrapper.state('deltaY')).toBe(100);
     });
 
+    it('should handle not being given a touch event', () => {
+      const wrapper = shallow(<Slider {...props} />);
+      const noTouches = {
+        preventDefault: jest.fn(),
+        stopPropagation: jest.fn(),
+        targetTouches: [],
+      };
+
+      expect(wrapper.state('startX')).toBe(0);
+      expect(wrapper.state('startY')).toBe(0);
+      wrapper.find('.sliderTray').simulate('touchmove', noTouches);
+      expect(wrapper.state('deltaX')).toBe(0);
+      expect(wrapper.state('deltaY')).toBe(0);
+    });
+
     it('touchmove should not alter state if touchEnabled is false', () => {
       const wrapper = shallow(<Slider {...props} touchEnabled={false} />);
       expect(wrapper.state('startX')).toBe(0);
