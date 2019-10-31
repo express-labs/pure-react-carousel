@@ -38,7 +38,8 @@ const DotGroup = class DotGroup extends React.Component {
     } = this.props;
 
     if (renderDots) {
-      return renderDots(this.props);
+      const { renderDots: _, ...renderProps } = this.props;
+      return renderDots(renderProps);
     }
 
     const dots = [];
