@@ -665,6 +665,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="http://stephane-klein.info"><img src="https://avatars3.githubusercontent.com/u/54498080?v=4" width="100px;" alt="Stéphane Klein"/><br /><sub><b>Stéphane Klein</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=stephane-klein" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/kevynb"><img src="https://avatars1.githubusercontent.com/u/4941215?v=4" width="100px;" alt="Kevyn Bruyere"/><br /><sub><b>Kevyn Bruyere</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=kevynb" title="Code">💻</a></td>
   </tr>
 </table>
 
