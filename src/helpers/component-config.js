@@ -153,6 +153,7 @@ export default {
       dragEnabled: true,
       hasMasterSpinner: false,
       interval: 5000,
+      infinite: false,
       isPageScrollLocked: false,
       isPlaying: false,
       lockOnWindowScroll: false,

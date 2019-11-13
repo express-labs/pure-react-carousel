@@ -628,6 +628,42 @@ describe('<Slider />', () => {
       expect(props.carouselStore.state.currentSlide).toBe(3);
     });
 
+    it('Should set the slider to last set of visible slides on touchend when dragging the slider past the start of the slide show and infinite is set to true.', () => {
+      const wrapper = mount(<Slider {...props} infinite currentSlide={0} />);
+      const instance = wrapper.instance();
+      wrapper.setState({
+        deltaX: 1000,
+        deltaY: 0,
+      });
+      wrapper.update();
+      instance.sliderTrayElement = {
+        clientWidth: 500,
+        clientHeight: 100,
+      };
+      wrapper.find('.sliderTray').simulate('touchend', { targetTouches: [] });
+      expect(props.carouselStore.state.currentSlide).toBe(
+        props.totalSlides - props.visibleSlides,
+      );
+    });
+
+    it('Should set the slider to first set of visible slides on touchend when dragging the slider past the end of the last slide and infinite is set to true.', () => {
+      const wrapper = mount(
+        <Slider {...props} infinite currentSlide={props.totalSlides - 1} />,
+      );
+      const instance = wrapper.instance();
+      wrapper.setState({
+        deltaX: -1000,
+        deltaY: 0,
+      });
+      wrapper.update();
+      instance.sliderTrayElement = {
+        clientWidth: 500,
+        clientHeight: 100,
+      };
+      wrapper.find('.sliderTray').simulate('touchend', { targetTouches: [] });
+      expect(props.carouselStore.state.currentSlide).toBe(0);
+    });
+
     it('should not change the state at all when touchEnd and touchEnabled prop is false', () => {
       const wrapper = shallow(<Slider {...props} touchEnabled={false} />);
       // nonsense values to test that slider state is not reset on touchend

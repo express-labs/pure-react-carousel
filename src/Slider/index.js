@@ -8,6 +8,7 @@ export default WithStore(Slider, state => ({
   disableKeyboard: state.disableKeyboard,
   dragEnabled: state.dragEnabled,
   hasMasterSpinner: state.hasMasterSpinner,
+  infinite: state.infinite,
   interval: state.interval,
   isPageScrollLocked: state.isPageScrollLocked,
   isPlaying: state.isPlaying,

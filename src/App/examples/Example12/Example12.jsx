@@ -18,9 +18,10 @@ export default () => (
   >
     <h2 className={s.headline}>Infinite Carousel</h2>
     <p>
-      A carousel that returns to the first slide if the user clicks the Next button while on the
-      last slide and returns to the last slide if the user clicks the Back
-      button while on the first slide.
+      A carousel that returns to the first slide if the user clicks the Next
+      button while on the last slide and returns to the last slide if the user
+      clicks the Back button while on the first slide. Also behaves similarly
+      with swiping left on the first image or right on the last image.
     </p>
     <Slider className={s.slider}>
       <Slide index={0}>
