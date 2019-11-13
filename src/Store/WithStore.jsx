@@ -23,6 +23,9 @@ export default function WithStore(
       super(props, context);
       this.state = mapStateToProps({ ...context.state });
       this.updateStateProps = this.updateStateProps.bind(this);
+    }
+
+    componentDidMount() {
       this.context.subscribe(this.updateStateProps);
     }
 
