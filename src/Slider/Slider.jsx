@@ -613,8 +613,13 @@ const Slider = class Slider extends React.Component {
 
     const newTabIndex = tabIndex !== null ? tabIndex : 0;
 
-    // remove `dragStep` and `step` from Slider div, since it isn't a valid html attribute
-    const { dragStep, step, ...rest } = props;
+    // remove invalid div attributes
+    const {
+      dragStep,
+      step,
+      infinite,
+      ...rest
+    } = props;
 
     // filter out some tray props before passing them in.  We will process event handlers in the
     // trayProps object as callbacks to OUR event handlers.  Ref is needed by us. Style and
