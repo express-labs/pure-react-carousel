@@ -3,4 +3,4 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import DevelopmentApp from './App/App';
 
-ReactDOM.render(<DevelopmentApp />, document.getElementById('app'));
+ReactDOM.render(<React.StrictMode><DevelopmentApp /></React.StrictMode>, document.getElementById('app'));

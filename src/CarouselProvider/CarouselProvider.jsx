@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Context from './context';
 import Store from '../Store/Store';
 import {
   CarouselPropTypes, slideSize, slideTraySize, cn,
@@ -31,10 +32,6 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     infinite: PropTypes.bool,
   };
 
-  static childContextTypes = {
-    carouselStore: PropTypes.object,
-  };
-
   static defaultProps = {
     className: null,
     currentSlide: 0,
@@ -56,8 +53,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     infinite: false,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     const options = {
       currentSlide: props.currentSlide,
       disableAnimation: props.disableAnimation,
@@ -86,10 +83,6 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       infinite: props.infinite,
     };
     this.carouselStore = new Store(options);
-  }
-
-  getChildContext() {
-    return { carouselStore: this.carouselStore };
   }
 
   componentDidUpdate(prevProps) {
@@ -188,9 +181,11 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     const newClassName = cn(['carousel', this.props.className]);
 
     return (
-      <Tag className={newClassName} {...filteredProps}>
-        {this.props.children}
-      </Tag>
+      <Context.Provider value={this.carouselStore}>
+        <Tag className={newClassName} {...filteredProps}>
+          {this.props.children}
+        </Tag>
+      </Context.Provider>
     );
   }
 };
