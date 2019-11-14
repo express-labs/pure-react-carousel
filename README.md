@@ -667,6 +667,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://stephane-klein.info"><img src="https://avatars3.githubusercontent.com/u/54498080?v=4" width="100px;" alt="Stéphane Klein"/><br /><sub><b>Stéphane Klein</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=stephane-klein" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/kevynb"><img src="https://avatars1.githubusercontent.com/u/4941215?v=4" width="100px;" alt="Kevyn Bruyere"/><br /><sub><b>Kevyn Bruyere</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=kevynb" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/mariohoyos92"><img src="https://avatars1.githubusercontent.com/u/29843005?v=4" width="100px;" alt="Mario Hoyos"/><br /><sub><b>Mario Hoyos</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=mariohoyos92" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.nickrandall.com"><img src="https://avatars1.githubusercontent.com/u/1800460?v=4" width="100px;" alt="Nick Randall"/><br /><sub><b>Nick Randall</b></sub></a><br /><a href="#review-nicksrandall" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 
