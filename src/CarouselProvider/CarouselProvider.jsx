@@ -181,11 +181,11 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     const newClassName = cn(['carousel', this.props.className]);
 
     return (
-      <Context.Provider value={this.carouselStore}>
-        <Tag className={newClassName} {...filteredProps}>
+      <Tag className={newClassName} {...filteredProps}>
+        <Context.Provider value={this.carouselStore}>
           {this.props.children}
-        </Tag>
-      </Context.Provider>
+        </Context.Provider>
+      </Tag>
     );
   }
 };
