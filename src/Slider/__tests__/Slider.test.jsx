@@ -1047,5 +1047,13 @@ describe('<Slider />', () => {
       instance.unlockScroll();
       expect(instance.scrollParent).toEqual(null);
     });
+
+    it('should not pass invalid props to div', () => {
+      const wrapper = shallow(<Slider {...props} />);
+      const divProps = wrapper.closest('div').props();
+      expect(divProps.dragStep).toBeUndefined();
+      expect(divProps.step).toBeUndefined();
+      expect(divProps.infinite).toBeUndefined();
+    });
   });
 });
