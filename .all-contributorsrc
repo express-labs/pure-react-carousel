@@ -234,6 +234,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "nicksrandall",
+      "name": "Nick Randall",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1800460?v=4",
+      "profile": "http://www.nickrandall.com",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7
