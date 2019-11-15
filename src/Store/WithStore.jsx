@@ -1,14 +1,16 @@
 import React from 'react';
 import equal from 'equals';
 import deepMerge from 'deepmerge';
-import propTypes from 'prop-types';
 import { CarouselPropTypes } from '../helpers';
+import { CarouselContext } from '../CarouselProvider';
 
 export default function WithStore(
   WrappedComponent,
   /* istanbul ignore next */ mapStateToProps = () => ({}),
 ) {
   class Wrapper extends React.Component {
+    static contextType = CarouselContext
+
     static propTypes = {
       children: CarouselPropTypes.children,
     };
@@ -17,15 +19,14 @@ export default function WithStore(
       children: null,
     };
 
-    static contextTypes = {
-      carouselStore: propTypes.object,
-    };
-
     constructor(props, context) {
       super(props, context);
-      this.state = mapStateToProps({ ...context.carouselStore.state });
+      this.state = mapStateToProps({ ...context.state });
       this.updateStateProps = this.updateStateProps.bind(this);
-      this.context.carouselStore.subscribe(this.updateStateProps);
+    }
+
+    componentDidMount() {
+      this.context.subscribe(this.updateStateProps);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -34,11 +35,11 @@ export default function WithStore(
     }
 
     componentWillUnmount() {
-      this.context.carouselStore.unsubscribe(this.updateStateProps);
+      this.context.unsubscribe(this.updateStateProps);
     }
 
     updateStateProps() {
-      this.setState(mapStateToProps({ ...this.context.carouselStore.state }));
+      this.setState(mapStateToProps({ ...this.context.state }));
     }
 
     render() {
@@ -51,13 +52,13 @@ export default function WithStore(
           }} // allows access to refs in wrapped components.
           {...props}
           carouselStore={{
-            getStoreState: this.context.carouselStore.getStoreState,
-            masterSpinnerError: this.context.carouselStore.masterSpinnerError,
-            masterSpinnerSuccess: this.context.carouselStore.masterSpinnerSuccess,
-            setStoreState: this.context.carouselStore.setStoreState,
-            subscribeMasterSpinner: this.context.carouselStore.subscribeMasterSpinner,
-            unsubscribeAllMasterSpinner: this.context.carouselStore.unsubscribeAllMasterSpinner,
-            unsubscribeMasterSpinner: this.context.carouselStore.unsubscribeMasterSpinner,
+            getStoreState: this.context.getStoreState,
+            masterSpinnerError: this.context.masterSpinnerError,
+            masterSpinnerSuccess: this.context.masterSpinnerSuccess,
+            setStoreState: this.context.setStoreState,
+            subscribeMasterSpinner: this.context.subscribeMasterSpinner,
+            unsubscribeAllMasterSpinner: this.context.unsubscribeAllMasterSpinner,
+            unsubscribeMasterSpinner: this.context.unsubscribeMasterSpinner,
           }}
         >
           {this.props.children}
