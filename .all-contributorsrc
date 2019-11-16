@@ -234,6 +234,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mariohoyos92",
+      "name": "Mario Hoyos",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/29843005?v=4",
+      "profile": "https://github.com/mariohoyos92",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nicksrandall",
+      "name": "Nick Randall",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1800460?v=4",
+      "profile": "http://www.nickrandall.com",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "CarsonF",
+      "name": "Carson Full",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/932566?v=4",
+      "profile": "https://github.com/CarsonF",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
