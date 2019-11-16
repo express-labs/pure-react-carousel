@@ -227,6 +227,15 @@
       ]
     },
     {
+      "login": "shoeman22",
+      "name": "Andy Schuler",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/209510?v=4",
+      "profile": "https://github.com/shoeman22",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
       "login": "mariohoyos92",
       "name": "Mario Hoyos",
       "avatar_url": "https://avatars1.githubusercontent.com/u/29843005?v=4",
@@ -242,7 +251,9 @@
       "profile": "http://www.nickrandall.com",
       "contributions": [
         "review"
+      ]
     },
+    {
       "login": "CarsonF",
       "name": "Carson Full",
       "avatar_url": "https://avatars3.githubusercontent.com/u/932566?v=4",
