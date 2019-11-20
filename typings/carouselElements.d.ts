@@ -206,7 +206,7 @@ export {
   DotGroupProps,
   DotProps,
   ButtonBackProps,
-  ButtonNextInterface,
+  ButtonNextProps,
   ButtonLastProps,
   ButtonFirstProps,
   ButtonPlayProps
