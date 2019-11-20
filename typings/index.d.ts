@@ -22,7 +22,7 @@ import {
   DotGroupProps,
   DotProps,
   ButtonBackProps,
-  ButtonNextInterface,
+  ButtonNextProps,
   ButtonLastProps,
   ButtonFirstProps,
   ButtonPlayProps
@@ -166,7 +166,7 @@ export {
   DotGroupProps,
   DotProps,
   ButtonBackProps,
-  ButtonNextInterface,
+  ButtonNextProps,
   ButtonLastProps,
   ButtonFirstProps,
   ButtonPlayProps
