@@ -690,6 +690,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/mariohoyos92"><img src="https://avatars1.githubusercontent.com/u/29843005?v=4" width="100px;" alt="Mario Hoyos"/><br /><sub><b>Mario Hoyos</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=mariohoyos92" title="Code">💻</a></td>
     <td align="center"><a href="http://www.nickrandall.com"><img src="https://avatars1.githubusercontent.com/u/1800460?v=4" width="100px;" alt="Nick Randall"/><br /><sub><b>Nick Randall</b></sub></a><br /><a href="#review-nicksrandall" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/CarsonF"><img src="https://avatars3.githubusercontent.com/u/932566?v=4" width="100px;" alt="Carson Full"/><br /><sub><b>Carson Full</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=CarsonF" title="Code">💻</a></td>
+    <td align="center"><a href="https://pavelivanov.net"><img src="https://avatars3.githubusercontent.com/u/202422?v=4" width="100px;" alt="Pavel"/><br /><sub><b>Pavel</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=paveli" title="Code">💻</a></td>
   </tr>
 </table>
 
