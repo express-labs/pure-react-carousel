@@ -26,7 +26,7 @@
 [![downloads](https://img.shields.io/npm/dm/pure-react-carousel.svg?style=flat-square)](http://www.npmtrends.com/pure-react-carousel)
 [![MIT License](https://img.shields.io/npm/l/pure-react-carousel.svg?style=flat-square)](https://github.com/express-labs/pure-react-carousel/blob/master/LICENSE)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-29-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-29-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Code of Conduct](https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square)](https://github.com/express-labs/pure-react-carousel/blob/master/CODE_OF_CONDUCT.md)
 
