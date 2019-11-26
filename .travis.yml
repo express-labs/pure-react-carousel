@@ -19,4 +19,4 @@ jobs:
       if: branch = master AND type != pull_request
       node_js: 10
       script: npm run semantic-release
-      deploy: npm run deploy
+      after_success: npm run deploy
