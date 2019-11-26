@@ -14,17 +14,19 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     step: PropTypes.number.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
+    infinite: PropTypes.bool,
   };
 
   static defaultProps = {
     className: null,
     disabled: null,
     onClick: null,
+    infinite: false,
   };
 
-  static setDisabled(disabled, currentSlide, visibleSlides, totalSlides) {
+  static setDisabled(disabled, currentSlide, visibleSlides, totalSlides, infinite) {
     if (disabled !== null) return disabled;
-    if (currentSlide >= totalSlides - visibleSlides) return true;
+    if (currentSlide >= totalSlides - visibleSlides && !infinite) return true;
     return false;
   }
 
@@ -35,10 +37,22 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
 
   handleOnClick(ev) {
     const {
-      currentSlide, onClick, step, carouselStore,
+      currentSlide, onClick, step, carouselStore, infinite, totalSlides, visibleSlides,
     } = this.props;
-    const maxSlide = this.props.totalSlides - this.props.visibleSlides;
-    const newCurrentSlide = Math.min(currentSlide + step, maxSlide);
+
+    const maxSlide = totalSlides - visibleSlides;
+    const nextSlide = step + currentSlide;
+
+    let newCurrentSlide = Math.min(
+      nextSlide,
+      maxSlide,
+    );
+
+    if (infinite) {
+      const isOnLastSlide = maxSlide === currentSlide;
+      newCurrentSlide = isOnLastSlide ? 0 : newCurrentSlide;
+    }
+
     carouselStore.setStoreState(
       {
         currentSlide: newCurrentSlide,
@@ -57,11 +71,18 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
       step,
       totalSlides,
       visibleSlides,
+      infinite,
       ...props
     } = this.props;
 
     const newClassName = cn([s.buttonNext, 'carousel__next-button', className]);
-    const isDisabled = ButtonNext.setDisabled(disabled, currentSlide, visibleSlides, totalSlides);
+    const isDisabled = ButtonNext.setDisabled(
+      disabled,
+      currentSlide,
+      visibleSlides,
+      totalSlides,
+      infinite,
+    );
 
     return (
       <button

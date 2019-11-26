@@ -14,7 +14,8 @@
   <br />
   <p>A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.</p>
   
-  [**See Some Examples**](https://express-labs.github.io/pure-react-carousel/)
+  [**See Live Examples**](https://express-labs.github.io/pure-react-carousel/) | 
+  [See Example Code](src/App/examples)
 </div>
 
 <hr />
@@ -210,6 +211,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | touchEnabled | boolean | true | No | Set to true to enable touch events |
 | dragEnabled | boolean | true | No | Set to true to enable mouse dragging events |
 | visibleSlides | number | 1 | No | The number of slides to show at once.  This number should be <= totalSlides |
+| infinite | boolean | false | No | Should the carousel continue or stop at the beginning or end of the slides |
 
 #### The CarouselProvider component creates the following pseudo HTML by default:
 
@@ -652,8 +654,7 @@ I promise to add docs for every component.  In the meantime, feel free to downlo
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
+<!-- prettier-ignore -->
 <table>
   <tr>
     <td align="center"><a href="https://github.com/mrbinky3000"><img src="https://avatars1.githubusercontent.com/u/161068?v=4" width="100px;" alt="Matthew Toledo"/><br /><sub><b>Matthew Toledo</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=mrbinky3000" title="Code">💻</a> <a href="#design-mrbinky3000" title="Design">🎨</a> <a href="#review-mrbinky3000" title="Reviewed Pull Requests">👀</a> <a href="#ideas-mrbinky3000" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-mrbinky3000" title="Project Management">📆</a></td>
@@ -679,11 +680,19 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/timc13"><img src="https://avatars3.githubusercontent.com/u/74982?v=4" width="100px;" alt="Tim Chen"/><br /><sub><b>Tim Chen</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=timc13" title="Code">💻</a></td>
     <td align="center"><a href="http://pleo.io"><img src="https://avatars3.githubusercontent.com/u/13701719?v=4" width="100px;" alt="Zoey Zou"/><br /><sub><b>Zoey Zou</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=zoeyzou" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/djshapiro"><img src="https://avatars0.githubusercontent.com/u/2005881?v=4" width="100px;" alt="djshapiro"/><br /><sub><b>djshapiro</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=djshapiro" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/bcarroll22"><img src="https://avatars2.githubusercontent.com/u/11020406?v=4" width="100px;" alt="Brandon Carroll"/><br /><sub><b>Brandon Carroll</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=bcarroll22" title="Code">💻</a> <a href="#maintenance-bcarroll22" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/jdconner"><img src="https://avatars2.githubusercontent.com/u/12697946?v=4" width="100px;" alt="Justin Conner"/><br /><sub><b>Justin Conner</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=jdconner" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://stephane-klein.info"><img src="https://avatars3.githubusercontent.com/u/54498080?v=4" width="100px;" alt="Stéphane Klein"/><br /><sub><b>Stéphane Klein</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=stephane-klein" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/kevynb"><img src="https://avatars1.githubusercontent.com/u/4941215?v=4" width="100px;" alt="Kevyn Bruyere"/><br /><sub><b>Kevyn Bruyere</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=kevynb" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/shoeman22"><img src="https://avatars3.githubusercontent.com/u/209510?v=4" width="100px;" alt="Andy Schuler"/><br /><sub><b>Andy Schuler</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=shoeman22" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/mariohoyos92"><img src="https://avatars1.githubusercontent.com/u/29843005?v=4" width="100px;" alt="Mario Hoyos"/><br /><sub><b>Mario Hoyos</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=mariohoyos92" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.nickrandall.com"><img src="https://avatars1.githubusercontent.com/u/1800460?v=4" width="100px;" alt="Nick Randall"/><br /><sub><b>Nick Randall</b></sub></a><br /><a href="#review-nicksrandall" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/CarsonF"><img src="https://avatars3.githubusercontent.com/u/932566?v=4" width="100px;" alt="Carson Full"/><br /><sub><b>Carson Full</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=CarsonF" title="Code">💻</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

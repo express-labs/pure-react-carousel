@@ -76,6 +76,50 @@ describe('<ButtonNext />', () => {
     wrapper.update();
     expect(carouselStore.state.currentSlide).toBe(2);
   });
+  it('should add the value of step from currentSlide when clicked and infinite is true.', () => {
+    const carouselStore = new Store({
+      currentSlide: 0,
+      totalSlides: 7,
+      visibleSlides: 2,
+      step: 2,
+    });
+
+    const newProps = Object.assign({}, props, {
+      carouselStore,
+      currentSlide: 0,
+      totalSlides: 7,
+      visibleSlides: 2,
+      step: 2,
+    });
+
+    const wrapper = mount(<ButtonNext infinite {...newProps} />);
+    wrapper.find('button').simulate('click');
+    wrapper.update();
+    expect(carouselStore.state.currentSlide).toBe(2);
+  });
+  it('should set the current slide to first slide if clicked when on the last slide if infinite is true.', () => {
+    const mockStore = new Store({
+      currentSlide: 7,
+      step: 3,
+      totalSlides: 10,
+    });
+
+    const wrapper = mount(
+      <ButtonNext
+        infinite
+        currentSlide={7}
+        step={3}
+        totalSlides={10}
+        visibleSlides={3}
+        carouselStore={mockStore}
+      >
+      Next
+      </ButtonNext>,
+    );
+    expect(wrapper.find('button').prop('disabled')).toBe(false);
+    wrapper.find('button').simulate('click');
+    expect(mockStore.getStoreState().currentSlide).toBe(0);
+  });
   it('should call an onClick function passed as a prop', () => {
     const onClick = jest.fn();
     const newProps = Object.assign({}, props, { onClick, currentSlide: 0 });

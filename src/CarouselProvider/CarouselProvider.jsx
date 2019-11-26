@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Context from './context';
 import Store from '../Store/Store';
 import {
   CarouselPropTypes, slideSize, slideTraySize, cn,
@@ -28,10 +29,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     touchEnabled: PropTypes.bool,
     dragEnabled: PropTypes.bool,
     visibleSlides: PropTypes.number,
-  };
-
-  static childContextTypes = {
-    carouselStore: PropTypes.object,
+    infinite: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -52,10 +50,11 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     touchEnabled: true,
     dragEnabled: true,
     visibleSlides: 1,
+    infinite: false,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     const options = {
       currentSlide: props.currentSlide,
       disableAnimation: props.disableAnimation,
@@ -81,12 +80,9 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       touchEnabled: props.touchEnabled,
       dragEnabled: props.dragEnabled,
       visibleSlides: props.visibleSlides,
+      infinite: props.infinite,
     };
     this.carouselStore = new Store(options);
-  }
-
-  getChildContext() {
-    return { carouselStore: this.carouselStore };
   }
 
   componentDidUpdate(prevProps) {
@@ -178,6 +174,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       touchEnabled,
       dragEnabled,
       visibleSlides,
+      infinite,
       ...filteredProps
     } = this.props;
 
@@ -185,7 +182,9 @@ const CarouselProvider = class CarouselProvider extends React.Component {
 
     return (
       <Tag className={newClassName} {...filteredProps}>
-        {this.props.children}
+        <Context.Provider value={this.carouselStore}>
+          {this.props.children}
+        </Context.Provider>
       </Tag>
     );
   }

@@ -21,6 +21,7 @@ const Slider = class Slider extends React.Component {
     dragEnabled: PropTypes.bool.isRequired,
     dragStep: PropTypes.number,
     hasMasterSpinner: PropTypes.bool.isRequired,
+    infinite: PropTypes.bool,
     interval: PropTypes.number.isRequired,
     isPageScrollLocked: PropTypes.bool.isRequired,
     isPlaying: PropTypes.bool.isRequired,
@@ -64,6 +65,7 @@ const Slider = class Slider extends React.Component {
     disableAnimation: false,
     disableKeyboard: false,
     dragStep: 1,
+    infinite: false,
     moveThreshold: 0.1,
     onMasterSpinner: null,
     privateUnDisableAnimation: false,
@@ -327,8 +329,13 @@ const Slider = class Slider extends React.Component {
     window.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
-    this.fakeOnDragMove(touch.screenX, touch.screenY);
-    this.callCallback('onTouchMove', ev);
+    // TODO: This prevents an error case we were seeing internally, but long term we
+    //  should evaluate if there's something better we can do to ensure there's not
+    //  a different problem that we can address instead.
+    if (touch) {
+      this.fakeOnDragMove(touch.screenX, touch.screenY);
+      this.callCallback('onTouchMove', ev);
+    }
   }
 
   forward() {
@@ -451,11 +458,20 @@ const Slider = class Slider extends React.Component {
       this.props.totalSlides, this.props.visibleSlides,
     );
 
-    const currentSlide = boundedRange({
+    let currentSlide = boundedRange({
       min: 0,
       max: maxSlide,
       x: (this.props.currentSlide + slidesMoved),
     });
+
+    if (this.props.infinite) {
+      if (this.props.currentSlide >= maxSlide && slidesMoved > 0) {
+        currentSlide = 0;
+      }
+      if (this.props.currentSlide === 0 && slidesMoved < 0) {
+        currentSlide = maxSlide;
+      }
+    }
 
     this.props.carouselStore.setStoreState({
       currentSlide,
@@ -597,8 +613,13 @@ const Slider = class Slider extends React.Component {
 
     const newTabIndex = tabIndex !== null ? tabIndex : 0;
 
-    // remove `dragStep` and `step` from Slider div, since it isn't a valid html attribute
-    const { dragStep, step, ...rest } = props;
+    // remove invalid div attributes
+    const {
+      dragStep,
+      step,
+      infinite,
+      ...rest
+    } = props;
 
     // filter out some tray props before passing them in.  We will process event handlers in the
     // trayProps object as callbacks to OUR event handlers.  Ref is needed by us. Style and

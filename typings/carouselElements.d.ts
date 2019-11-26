@@ -75,11 +75,26 @@ type ImageInterface = React.ComponentClass<ImageProps>
 declare const Image: ImageInterface
 
 
+interface RenderDotsProps {
+  readonly currentSlide?: number,
+  readonly totalSlides?: number,
+  readonly visibleSlides?: number,
+  readonly disableActiveDots?: boolean,
+  readonly showAsSelectedForCurrentSlideOnly?: boolean,
+}
+
+type RenderDotsFunction = (props: RenderDotsProps) => void
 
 interface DotGroupProps {
   readonly children?: React.ReactNode
   readonly className?: string
   readonly dotNumbers?: boolean
+  readonly currentSlide?: number,
+  readonly totalSlides?: number,
+  readonly visibleSlides?: number,
+  readonly disableActiveDots?: boolean,
+  readonly showAsSelectedForCurrentSlideOnly?: boolean,
+  readonly renderDots?: RenderDotsFunction,
 }
 type DotGroupInterface = React.ComponentClass<DotGroupProps>
 /**
@@ -191,7 +206,7 @@ export {
   DotGroupProps,
   DotProps,
   ButtonBackProps,
-  ButtonNextInterface,
+  ButtonNextProps,
   ButtonLastProps,
   ButtonFirstProps,
   ButtonPlayProps

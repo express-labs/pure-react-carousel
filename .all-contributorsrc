@@ -188,6 +188,79 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "bcarroll22",
+      "name": "Brandon Carroll",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11020406?v=4",
+      "profile": "https://github.com/bcarroll22",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "jdconner",
+      "name": "Justin Conner",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/12697946?v=4",
+      "profile": "https://github.com/jdconner",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "stephane-klein",
+      "name": "Stéphane Klein",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/54498080?v=4",
+      "profile": "http://stephane-klein.info",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kevynb",
+      "name": "Kevyn Bruyere",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4941215?v=4",
+      "profile": "https://github.com/kevynb",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "shoeman22",
+      "name": "Andy Schuler",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/209510?v=4",
+      "profile": "https://github.com/shoeman22",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mariohoyos92",
+      "name": "Mario Hoyos",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/29843005?v=4",
+      "profile": "https://github.com/mariohoyos92",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nicksrandall",
+      "name": "Nick Randall",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1800460?v=4",
+      "profile": "http://www.nickrandall.com",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "CarsonF",
+      "name": "Carson Full",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/932566?v=4",
+      "profile": "https://github.com/CarsonF",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
