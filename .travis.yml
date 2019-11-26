@@ -10,7 +10,7 @@ node_js:
   - '10'
   - '12'
 install:
-  - npm ci
+  - npm i
   # as requested by the React team :)
   # https://reactjs.org/blog/2019/10/22/react-release-channels.html#using-the-next-channel-for-integration-testing
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then npm install react@next react-dom@next; fi
