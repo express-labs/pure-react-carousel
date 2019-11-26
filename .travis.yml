@@ -1,14 +1,12 @@
 sudo: false
 language: node_js
-cache:
-  directories:
-    - ~/.npm
+cache: npm
 notifications:
   email: false
 node_js:
-  - '8'
-  - '10'
-  - '12'
+  - 8
+  - 10
+  - 12
 install:
   - npm i
   # as requested by the React team :)
@@ -21,5 +19,5 @@ jobs:
   include:
     - stage: release
       if: branch = master AND type != pull_request
-      node_js: '10'
+      node_js: 10
       script: npm run semantic-release
