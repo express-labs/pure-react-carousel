@@ -692,6 +692,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/CarsonF"><img src="https://avatars3.githubusercontent.com/u/932566?v=4" width="100px;" alt="Carson Full"/><br /><sub><b>Carson Full</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=CarsonF" title="Code">💻</a></td>
     <td align="center"><a href="http://www.exile.lv"><img src="https://avatars1.githubusercontent.com/u/7768612?v=4" width="100px;" alt="Kristaps"/><br /><sub><b>Kristaps</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=Hetachi" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://pavelivanov.net"><img src="https://avatars3.githubusercontent.com/u/202422?v=4" width="100px;" alt="Pavel"/><br /><sub><b>Pavel</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=paveli" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
