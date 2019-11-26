@@ -61,6 +61,7 @@ const Dot = class Dot extends React.Component {
 
     return (
       <button
+        aria-label="slide dot"
         type="button"
         onClick={this.handleOnClick}
         className={newClassName}
