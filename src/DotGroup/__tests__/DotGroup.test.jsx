@@ -4,10 +4,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import clone from 'clone';
 import components from '../../helpers/component-config';
 import DotGroup from '../DotGroup';
-import Dot from '../../Dot';
 
 configure({ adapter: new Adapter() });
-
 
 let props;
 
@@ -60,16 +58,11 @@ describe('<DotGroup />', () => {
     expect(wrapper.children().at(2).prop('selected')).toEqual(true);
   });
   it('should render dots differently if renderDots is provided', () => {
-    const renderDots = (props) => {
-      const {
-        totalSlides,
-      } = props;
+    const renderDots = ({ totalSlides }) => {
       const dots = [];
 
       for (let i = 0; i < totalSlides; i += 1) {
-        dots.push(
-          <img key={i} src="data:," alt />
-        );
+        dots.push(<img key={i} src="data:," alt="" />);
       }
       return dots;
     };

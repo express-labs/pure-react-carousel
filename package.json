@@ -1,7 +1,7 @@
 {
   "name": "pure-react-carousel",
-  "version": "1.23.3",
-  "description": "A highly impartial suite of React components that can be assembled by the consumer to create a responsive, aria compliant, carousel with almost no limits on DOM structure or CSS styles. If you're tired of fighting some other developer's CSS and DOM structure, this carousel is for you.",
+  "version": "0.0.0-semantically-released",
+  "description": "A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
@@ -18,7 +18,11 @@
     "accessible"
   ],
   "scripts": {
+    "commit": "git-cz",
+    "commit:add": "git add .",
+    "commit:all": "npm run commit:add && npm run commit",
     "test": "BABEL_ENV=test jest --no-cache",
+    "test:coverage": "BABEL_ENV=test jest --coverage --no-cache",
     "test:watch": "BABEL_ENV=test jest --watch",
     "start": "NODE_ENV=development rollup -w -c rollup.config.dev.js",
     "lint": "eslint . --ext .js --ext .jsx --ignore-path .gitignore",
@@ -29,6 +33,8 @@
     "build:es": "NODE_ENV=production rollup -c rollup.config.es.js",
     "postbuild": "node postbuild.js",
     "build:watch": "watch 'npm run build' src",
+    "prepublishOnly": "npm run build",
+    "semantic-release": "semantic-release",
     "deploy": "gh-pages -d dev"
   },
   "typings": "typings/index.d.ts",
@@ -56,6 +62,8 @@
     "babel-eslint": "^10.0.3",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "clone": "^2.1.1",
+    "commitizen": "^3.0.7",
+    "cz-conventional-changelog": "^2.1.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "escape-string-regexp": "^1.0.5",
@@ -66,7 +74,7 @@
     "eslint-plugin-jest": "^22.0.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-node": "^8.0.0",
-    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-react": "7.14.3",
     "gh-pages": "^2.0.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",
@@ -94,6 +102,7 @@
     "rollup-plugin-uglify": "^6.0.3",
     "rollup-plugin-uglify-es": "0.0.1",
     "rollup-watch": "^4.3.1",
+    "semantic-release": "^15.13.3",
     "uglify-es": "^3.3.5",
     "waait": "^1.0.5",
     "watch": "^1.0.2"
@@ -152,6 +161,20 @@
     ],
     "testEnvironmentOptions": {
       "resources": "usable"
+    }
+  },
+  "release": {
+    "branch": "master",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
     }
   }
 }
