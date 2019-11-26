@@ -261,6 +261,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "paveli",
+      "name": "Pavel",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/202422?v=4",
+      "profile": "https://pavelivanov.net",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
