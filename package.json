@@ -35,7 +35,8 @@
     "build:watch": "watch 'npm run build' src",
     "prepublishOnly": "npm run build",
     "semantic-release": "semantic-release",
-    "deploy": "gh-pages -d dev"
+    "deploy": "gh-pages -d dev",
+    "true-level": "rm -rf ./node_modules ./.babel-cache; npm install"
   },
   "typings": "typings/index.d.ts",
   "repository": {
