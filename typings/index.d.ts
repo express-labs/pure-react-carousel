@@ -64,7 +64,7 @@ interface CarouselProviderProps {
   readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
   readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
   readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
-  readonly playDirection?: 'forward'|'backward'
+  readonly playDirection?: 'forward' | 'backward'
   readonly orientation?: CarouselState['orientation']
   readonly step?: CarouselState['step']
   readonly dragStep?: CarouselState['dragStep']
@@ -76,7 +76,7 @@ interface CarouselProviderProps {
   readonly infinite?: CarouselState['infinite']
 }
 
-type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
+type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps> | React.FC<CarouselInjectedProps>
 /**
  * CarouselProvider allows the other carousel components to communicate with each other.
  *
@@ -109,18 +109,18 @@ type MapStateToProps<TStateProps> = (state: CarouselState) => TStateProps
 
 interface WithStoreInterface {
   <CustomProps extends CarouselInjectedProps>(
-    component: React.ComponentClass<CustomProps>
-  ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> & {
-    readonly WrappedComponent: React.ComponentClass<CustomProps>
+    component: React.ComponentClass<CustomProps> | React.FC<CustomProps>
+  ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> | React.FC<Omit<CustomProps, keyof CarouselInjectedProps>> & {
+    readonly WrappedComponent: React.ComponentClass<CustomProps> | React.FC<CustomProps>
   }
 
   <CustomProps extends CarouselInjectedProps, CustomStateProps>(
-    component: React.ComponentClass<CustomProps & CustomStateProps>,
+    component: React.ComponentClass<CustomProps & CustomStateProps> | React.FC<CustomProps & CustomStateProps>,
     state: MapStateToProps<CustomStateProps>
-  ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> & {
+  ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> | React.FC<Omit<CustomProps, keyof CarouselInjectedProps>> & {
     readonly WrappedComponent: React.ComponentClass<
       CustomProps & CustomStateProps
-    >
+    > | React.FC<CustomProps & CustomStateProps>
   }
 }
 /**
