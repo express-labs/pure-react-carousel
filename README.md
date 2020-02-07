@@ -63,6 +63,7 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
     * [&lt;ButtonLast /&gt;](#buttonlast-)
     * [&lt;ButtonPlay /&gt;](#buttonplay-)
     * [WithStore() Higher Order Component](#withstore-higher-order-component)
+    * [Hooks and `useContext`](#hooks-and-usecontext)
   * [TypeScript usage](#typescript-usage)
     * [WithStore() Higher Order Component](#withstore-higher-order-component-1)
     * [Examples](#examples)
@@ -530,6 +531,32 @@ __subscribeMasterSpinner__: 💩 DON'T USE THIS.
 __unsubscribeMasterSpinner__: 🔥 DON'T USE THIS.
 
 __unsubscribeAllMasterSpinner__: Don't call this manually unless you have some sort of super-customized carousel. This is called internally once all `<Image hasMasterSpinner />` and all `<ImageWithZoom hasMasterSpinner />` components are finished loading their images.  Calling this directly will force a "success" state and the master spinner (the spinner that covers the entire carousel while loading) will turn off.
+
+### Hooks and `useContext`
+
+If you'd like to consume the context via hooks rather than using the HoC approach described above, the context is exported as `CarouselContext`.
+
+Note that you will likely need to subscribe/unsubscribe to changes in order to take advantage of the context.
+
+Example:
+
+```js
+import React, { useContext } from 'react';
+import { CarouselContext } from 'pure-react-carousel';
+
+export function MyComponentUsingContext() {
+  const carouselContext = useContext(CarouselContext);
+  const [currentSlide, setCurrentSlide] = useState(carouselContext.state.currentSlide);
+  useEffect(() => {
+    function onChange() {
+      setCurrentSlide(carouselContext.state.currentSlide);
+    }
+    carouselContext.subscribe(onChange);
+    return () => carouselContext.unsubscribe(onChange);
+  }, [carouselContext]);
+  return `The current slide is: ${currentSlide}`;
+}
+```
 
 ## TypeScript usage
 The current bundled Typescript definitions are mostly complete. Certain edge case could have been not accounted for! Pull requests to improve them are welcome and appreciated.
