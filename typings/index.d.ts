@@ -59,11 +59,11 @@ interface CarouselStoreInterface {
   readonly subscribe: (func: () => void) => void
   readonly unsubscribe: (func: () => void) => void
   readonly updateSubscribers: (cb?: (state: CarouselState) => void) => void
-  readonly subscribeMasterSpinner: (src) => void
-  readonly unsubscribeMasterSpinner: (src) => false | object
+  readonly subscribeMasterSpinner: (src: string) => void
+  readonly unsubscribeMasterSpinner: (src: string) => false | object
   readonly unsubscribeAllMasterSpinner: () => void
-  readonly masterSpinnerSuccess: (src) => void
-  readonly masterSpinnerError: (src) => void
+  readonly masterSpinnerSuccess: (src: string) => void
+  readonly masterSpinnerError: (src: string) => void
   readonly setMasterSpinnerFinished: () => void
   readonly isMasterSpinnerFinished: () => boolean
 }
