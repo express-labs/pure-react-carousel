@@ -263,7 +263,6 @@
       ]
     },
     {
-
       "login": "Hetachi",
       "name": "Kristaps",
       "avatar_url": "https://avatars1.githubusercontent.com/u/7768612?v=4",
@@ -280,7 +279,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "seleb",
+      "name": "Sean LeBlanc",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6496840?v=4",
+      "profile": "https://seans.site",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
