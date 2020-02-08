@@ -541,7 +541,7 @@ Note that you will likely need to subscribe/unsubscribe to changes in order to t
 Example:
 
 ```js
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { CarouselContext } from 'pure-react-carousel';
 
 export function MyComponentUsingContext() {
