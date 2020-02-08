@@ -52,6 +52,24 @@ interface CarouselState {
   readonly infinite: boolean
 }
 
+interface CarouselStoreInterface {
+  readonly state: CarouselState
+  readonly setStoreState: (state: Partial<CarouselState>) => void
+  readonly getStoreState: () => CarouselState
+  readonly subscribe: (func: () => void) => void
+  readonly unsubscribe: (func: () => void) => void
+  readonly updateSubscribers: (cb?: (state: CarouselState) => void) => void
+  readonly subscribeMasterSpinner: (src) => void
+  readonly unsubscribeMasterSpinner: (src) => false | object
+  readonly unsubscribeAllMasterSpinner: () => void
+  readonly masterSpinnerSuccess: (src) => void
+  readonly masterSpinnerError: (src) => void
+  readonly setMasterSpinnerFinished: () => void
+  readonly isMasterSpinnerFinished: () => boolean
+}
+
+declare const CarouselContext: React.Context<CarouselStoreInterface>
+
 interface CarouselProviderProps {
   readonly children: React.ReactNode
   readonly className?: string
@@ -94,10 +112,7 @@ type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
 declare const CarouselProvider: CarouselProviderInterface
 
 export interface CarouselInjectedProps {
-  readonly carouselStore: {
-    readonly setStoreState: (state: Partial<CarouselState>) => void
-    readonly unsubscribeAllMasterSpinner: () => void
-  }
+  readonly carouselStore: CarouselStoreInterface
 }
 
 // Diff / Omit taken from https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-311923766
@@ -150,6 +165,8 @@ export {
   ButtonLast,
   ButtonNext,
   ButtonPlay,
+  CarouselStoreInterface,
+  CarouselContext,
   CarouselProvider,
   CarouselProviderProps,
   Dot,
