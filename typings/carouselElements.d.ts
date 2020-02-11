@@ -31,6 +31,7 @@ interface SlideProps {
   readonly onFocus?: () => void
   readonly tabIndex?: number
   readonly tag?: string
+  readonly style?: {}
 }
 type SlideInterface = React.ComponentClass<SlideProps>
 /**
