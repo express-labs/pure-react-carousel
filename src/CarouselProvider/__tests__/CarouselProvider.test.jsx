@@ -49,6 +49,12 @@ describe('<CarouselProvider />', () => {
     expect(instance.carouselStore.state.slideSize).toBe(25);
     expect(instance.carouselStore.state.slideTraySize).toBe(200);
   });
+  it('should keep currentSlide within bounds of totalSlides', () => {
+    const wrapper = shallow(<CarouselProvider {...props} currentSlide={3} totalSlides={4} />);
+    const instance = wrapper.instance();
+    wrapper.setProps({ totalSlides: 3 });
+    expect(instance.carouselStore.state.currentSlide).toEqual(2);
+  });
   it('should not update the carouselStore if some prop we do not track changes', () => {
     const wrapper = shallow(<CarouselProvider {...props} data-foo={1} />);
     const instance = wrapper.instance();
@@ -58,7 +64,7 @@ describe('<CarouselProvider />', () => {
     expect(start).toEqual(end);
   });
   it('should not reset the currentSlide or disableAnimation values when unrelated props change', () => {
-    const wrapper = shallow(<CarouselProvider {...props} data-foo={1} />);
+    const wrapper = shallow(<CarouselProvider {...props} totalSlides={4} data-foo={1} />);
     const instance = wrapper.instance();
     instance.carouselStore.setStoreState({ currentSlide: 2 });
     const start = clone(instance.carouselStore.state);
