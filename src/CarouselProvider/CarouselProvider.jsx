@@ -133,6 +133,10 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       newStoreState.slideTraySize = slideTraySize(this.props.totalSlides, this.props.visibleSlides);
     }
 
+    if (this.carouselStore.state.currentSlide >= this.props.totalSlides) {
+      newStoreState.currentSlide = this.props.totalSlides - 1;
+    }
+
     if (Object.keys(newStoreState).length > 0) {
       this.carouselStore.setStoreState(newStoreState);
     }
