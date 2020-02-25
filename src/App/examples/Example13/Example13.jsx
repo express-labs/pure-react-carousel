@@ -8,42 +8,38 @@ import s from '../../style.scss';
 
 export default () => (
   <CarouselProvider
-    visibleSlides={3}
-    totalSlides={6}
-    step={3}
+    visibleSlides={2}
+    totalSlides={4}
+    step={1}
     naturalSlideWidth={400}
     naturalSlideHeight={500}
-    hasMasterSpinner
+    intrinsicAxisSize
   >
-    <h2 className={s.headline}>Carousel (With Master Loading Spinner)</h2>
-    <p>
-      This spinner will go away after all the images have loaded. You might want to use
-      Chrome dev tools to throttle the network connection so you can see the spinner.
-    </p>
+    <h2 className={s.headline}>With intrinsic axis dimension</h2>
+    <p></p>
     <Slider className={s.slider}>
       <Slide index={0}>
-        <ImageWithZoom src="./media/img01.jpeg" />
+        <h1>This is a test slide to demonstrate, how this affects height</h1>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
       </Slide>
       <Slide index={1}>
-        <ImageWithZoom src="./media/img02.jpeg" />
+        <h1>This is a test slide to demonstrate, how this affects height</h1>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <h1>This is a test slide to demonstrate, how this affects height</h1>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
       </Slide>
       <Slide index={2}>
-        <ImageWithZoom src="./media/img03.jpeg" />
+        <h1>This is a test slide to demonstrate, how this affects height</h1>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
       </Slide>
-      <Slide index={3}>
-        <ImageWithZoom src="./media/img04.jpeg" />
-      </Slide>
-      <Slide index={4}>
-        <ImageWithZoom src="./media/img05.jpeg" />
-      </Slide>
-      <Slide index={5}>
-        <ImageWithZoom src="./media/img06.jpeg" />
+      <Slide index={2}>
+        <h1>This is a test slide to demonstrate, how this affects height</h1>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
       </Slide>
     </Slider>
     <ButtonFirst>First</ButtonFirst>
     <ButtonBack>Back</ButtonBack>
     <ButtonNext>Next</ButtonNext>
     <ButtonLast>Last</ButtonLast>
-    <DotGroup />
   </CarouselProvider>
 );
