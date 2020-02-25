@@ -130,4 +130,16 @@ describe('<Slide />', () => {
     const wrapper = shallow(<Slide {...props} tabIndex={7} />);
     expect(wrapper.find('.slide').prop('tabIndex')).toBe(7);
   });
+  it('should correctly set styles, if variableHeight is set', () => {
+    // this is for testing only.
+    // eslint-disable-next-line jsx-a11y/tabindex-no-positive
+    const wrapper = shallow(<Slide {...props} variableHeight />);
+    const slideStyle = wrapper.find('.slide').prop('style');
+    expect(slideStyle.paddingBottom).toBe('unset');
+    expect(slideStyle.height).toBe('unset');
+    expect(slideStyle.position).toBe('unset');
+
+    const innerSlideStyle = wrapper.find('.carousel__inner-slide').prop('style');
+    expect(innerSlideStyle.position).toBe('unset');
+  });
 });

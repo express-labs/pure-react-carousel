@@ -25,6 +25,7 @@ const Slide = class Slide extends React.PureComponent {
     tag: PropTypes.string,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
+    variableHeight: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -40,6 +41,7 @@ const Slide = class Slide extends React.PureComponent {
     style: {},
     tabIndex: null,
     tag: 'li',
+    variableHeight: false,
   }
 
   constructor(props) {
@@ -103,6 +105,7 @@ const Slide = class Slide extends React.PureComponent {
       tag: Tag,
       totalSlides,
       visibleSlides,
+      variableHeight,
       ...props
     } = this.props;
 
@@ -114,6 +117,14 @@ const Slide = class Slide extends React.PureComponent {
     } else {
       tempStyle.width = pct(100);
       tempStyle.paddingBottom = pct((naturalSlideHeight * 100) / naturalSlideWidth);
+    }
+
+    const innerStyle = {};
+    if (variableHeight) {
+      tempStyle.height = 'unset';
+      tempStyle.position = 'unset';
+      tempStyle.paddingBottom = 'unset';
+      innerStyle.position = 'unset';
     }
 
     const newStyle = Object.assign({}, tempStyle, style);
@@ -156,6 +167,7 @@ const Slide = class Slide extends React.PureComponent {
         <InnerTag
           ref={(el) => { this.innerTagRef = el; }}
           className={newInnerClassName}
+          style={innerStyle}
         >
           {this.props.children}
           {this.renderFocusRing()}

@@ -95,4 +95,12 @@ describe('<CarouselProvider />', () => {
       false,
     );
   });
+  it('should correctly set store variable when using variableHeight ', async () => {
+    const wrapper = mount(
+        <CarouselProvider {...props} variableHeight>
+          test
+        </CarouselProvider>,
+    );
+    expect(wrapper.instance().getStore().state.variableHeight).toBe(true);
+  });
 });
