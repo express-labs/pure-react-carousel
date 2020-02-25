@@ -30,7 +30,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     dragEnabled: PropTypes.bool,
     visibleSlides: PropTypes.number,
     infinite: PropTypes.bool,
-    variableHeight: PropTypes.bool,
+    intrinsicAxisSize: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -52,7 +52,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     dragEnabled: true,
     visibleSlides: 1,
     infinite: false,
-    variableHeight: false,
+    intrinsicAxisSize: false,
   };
 
   constructor(props) {
@@ -83,7 +83,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       dragEnabled: props.dragEnabled,
       visibleSlides: props.visibleSlides,
       infinite: props.infinite,
-      variableHeight: props.variableHeight,
+      intrinsicAxisSize: props.intrinsicAxisSize,
     };
     this.carouselStore = new Store(options);
   }
@@ -182,7 +182,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       dragEnabled,
       visibleSlides,
       infinite,
-      variableHeight,
+      intrinsicAxisSize,
       ...filteredProps
     } = this.props;
 

@@ -554,6 +554,7 @@ const Slider = class Slider extends React.Component {
       trayProps,
       trayTag: TrayTag,
       visibleSlides,
+      intrinsicAxisSize,
       ...props
     } = this.props;
 

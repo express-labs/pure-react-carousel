@@ -95,12 +95,12 @@ describe('<CarouselProvider />', () => {
       false,
     );
   });
-  it('should correctly set store variable when using variableHeight ', async () => {
+  it('should correctly set store variable when using intrinsicAxisSize ', async () => {
     const wrapper = mount(
-      <CarouselProvider {...props} variableHeight>
+      <CarouselProvider {...props} intrinsicAxisSize>
           test
       </CarouselProvider>,
     );
-    expect(wrapper.instance().getStore().state.variableHeight).toBe(true);
+    expect(wrapper.instance().getStore().state.intrinsicAxisSize).toBe(true);
   });
 });

@@ -50,7 +50,7 @@ interface CarouselState {
   readonly dragEnabled: boolean
   readonly visibleSlides: number
   readonly infinite: boolean
-  readonly variableHeight: boolean
+  readonly intrinsicAxisSize: boolean
 }
 
 interface CarouselStoreInterface {
@@ -93,7 +93,7 @@ interface CarouselProviderProps {
   readonly dragEnabled?: CarouselState['dragEnabled']
   readonly visibleSlides?: CarouselState['visibleSlides']
   readonly infinite?: CarouselState['infinite']
-  readonly variableHeight?: CarouselState['variableHeight']
+  readonly intrinsicAxisSize?: CarouselState['intrinsicAxisSize']
 }
 
 type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>

@@ -25,7 +25,7 @@ const Slide = class Slide extends React.PureComponent {
     tag: PropTypes.string,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
-    variableHeight: PropTypes.bool,
+    intrinsicAxisSize: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -41,7 +41,7 @@ const Slide = class Slide extends React.PureComponent {
     style: {},
     tabIndex: null,
     tag: 'li',
-    variableHeight: false,
+    intrinsicAxisSize: false,
   }
 
   constructor(props) {
@@ -105,7 +105,7 @@ const Slide = class Slide extends React.PureComponent {
       tag: Tag,
       totalSlides,
       visibleSlides,
-      variableHeight,
+      intrinsicAxisSize,
       ...props
     } = this.props;
 

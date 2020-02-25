@@ -9,5 +9,5 @@ export default WithStore(Slide, state => ({
   slideSize: state.slideSize,
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
-  variableHeight: state.variableHeight,
+  intrinsicAxisSize: state.intrinsicAxisSize,
 }));

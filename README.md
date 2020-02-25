@@ -213,7 +213,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | dragEnabled | boolean | true | No | Set to true to enable mouse dragging events |
 | visibleSlides | number | 1 | No | The number of slides to show at once.  This number should be <= totalSlides |
 | infinite | boolean | false | No | Should the carousel continue or stop at the beginning or end of the slides |
-| variableHeight | boolean | false | No | Disables the enforced height ratio, and instead uses the intrinsic height of the slides | 
+| intrinsicAxisSize | boolean | false | No | Disables the enforced height ratio, and instead uses the intrinsic height of the slides | 
 
 #### The CarouselProvider component creates the following pseudo HTML by default:
 
