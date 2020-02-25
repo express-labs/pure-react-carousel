@@ -580,12 +580,19 @@ const Slider = class Slider extends React.Component {
       trayStyle.transition = 'none';
     }
 
+    if (intrinsicAxisSize) {
+      trayStyle.display = 'flex';
+      trayStyle.alignItems = 'stretch';
+    }
+
     if (orientation === 'vertical') {
       trayStyle.transform = `translateY(${trans}) translateY(${this.state.deltaY}px)`;
       trayStyle.width = pct(100);
+      trayStyle.flexDirection = 'column';
     } else {
       trayStyle.width = pct(slideTraySize);
       trayStyle.transform = `translateX(${trans}) translateX(${this.state.deltaX}px)`;
+      trayStyle.flexDirection = 'row';
     }
 
     const sliderClasses = cn([

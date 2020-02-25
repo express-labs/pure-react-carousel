@@ -120,8 +120,12 @@ const Slide = class Slide extends React.PureComponent {
     }
 
     const innerStyle = {};
-    if (variableHeight) {
-      tempStyle.height = 'unset';
+    if (intrinsicAxisSize) {
+      if (orientation === 'horizontal') {
+        tempStyle.height = 'unset';
+      } else {
+        tempStyle.width = 'unset';
+      }
       tempStyle.position = 'unset';
       tempStyle.paddingBottom = 'unset';
       innerStyle.position = 'unset';
