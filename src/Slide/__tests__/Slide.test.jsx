@@ -142,4 +142,16 @@ describe('<Slide />', () => {
     const innerSlideStyle = wrapper.find('.carousel__inner-slide').prop('style');
     expect(innerSlideStyle.position).toBe('unset');
   });
+  it('should correctly set styles, in vertical mode if intrinsicAxisSize is set', () => {
+    // this is for testing only.
+    // eslint-disable-next-line jsx-a11y/tabindex-no-positive
+    const wrapper = shallow(<Slide {...props} orientation="vertical" intrinsicAxisSize />);
+    const slideStyle = wrapper.find('.slide').prop('style');
+    expect(slideStyle.paddingBottom).toBe('unset');
+    expect(slideStyle.width).toBe('unset');
+    expect(slideStyle.position).toBe('unset');
+
+    const innerSlideStyle = wrapper.find('.carousel__inner-slide').prop('style');
+    expect(innerSlideStyle.position).toBe('unset');
+  });
 });

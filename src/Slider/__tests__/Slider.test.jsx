@@ -1055,5 +1055,11 @@ describe('<Slider />', () => {
       expect(divProps.step).toBeUndefined();
       expect(divProps.infinite).toBeUndefined();
     });
+    it('should correctly set styles, if intrinsicAxisSize is set', () => {
+      const wrapper = shallow(<Slider {...props} orientation="vertical" intrinsicAxisSize />);
+      const sliderStyle = wrapper.find('.sliderTray').prop('style');
+      expect(sliderStyle.display).toBe('flex');
+      expect(sliderStyle.alignItems).toBe('stretch');
+    });
   });
 });

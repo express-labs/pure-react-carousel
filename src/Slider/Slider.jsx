@@ -55,6 +55,7 @@ const Slider = class Slider extends React.Component {
     }),
     trayTag: PropTypes.string,
     visibleSlides: PropTypes.number,
+    intrinsicAxisSize: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -75,6 +76,7 @@ const Slider = class Slider extends React.Component {
     trayProps: {},
     trayTag: 'ul',
     visibleSlides: 1,
+    intrinsicAxisSize: false,
   }
 
   static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
