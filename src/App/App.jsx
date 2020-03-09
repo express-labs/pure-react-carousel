@@ -82,7 +82,7 @@ class DevelopmentApp extends React.Component {
           <h2 className={s.headline}>What is &quot;unopinionated?&quot;</h2>
           <p>
             The Pure React Carousel suite of React components is not a turn-key solution. Rather,
-            think of these as a set of new suite of HTML tags similar in realtionship to table tags
+            think of these as a set of new suite of HTML tags similar in relationship to table tags
             like table, tr, th, td, tbody, thead, tfoot.
           </p>
           <p>
@@ -101,7 +101,7 @@ class DevelopmentApp extends React.Component {
           <div className={s.examplesInnerCenter}>
             <h2 className={s.headline}>Real World Example</h2>
             <p>
-              Here are two examples of what can be acheived with Pure React Carousel. This is how we
+              Here are two examples of what can be achieved with Pure React Carousel. This is how we
               use the suite of components on the Express.com website.
             </p>
             <p>
@@ -127,7 +127,7 @@ class DevelopmentApp extends React.Component {
             <p>
               These examples are completely un-styled. Pure React Carousel does not come with styles
               that must be defeated in order to match your organization&apos;s branding. So, to
-              distract you from the seeming lack of finess, most of our examples involve pictures of
+              distract you from the seeming lack of finesse, most of our examples involve pictures of
               cats!
             </p>
             <p>

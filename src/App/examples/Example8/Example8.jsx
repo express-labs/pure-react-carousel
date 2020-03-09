@@ -18,10 +18,10 @@ export default () => (
   >
     <h2 className={s.headline}>Carousel (lockOnWindowScroll set to TRUE)</h2>
     <p>
-      - When scrolling the browser, up and down, horizontal scrollers will not scroll horizontally.
+      - When scrolling the browser, up and down, horizontal scrollbars will not scroll horizontally.
     </p>
     <p>
-      - When scrolling the browser, left and right, vertical scrollers will not scroll vertically.
+      - When scrolling the browser, left and right, vertical scrollbars will not scroll vertically.
     </p>
     <p>
       - This spinner will go away after all the images have loaded.
