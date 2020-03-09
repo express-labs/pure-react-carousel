@@ -127,8 +127,8 @@ class DevelopmentApp extends React.Component {
             <p>
               These examples are completely un-styled. Pure React Carousel does not come with styles
               that must be defeated in order to match your organization&apos;s branding. So, to
-              distract you from the seeming lack of finesse, most of our examples involve pictures of
-              cats!
+              distract you from the seeming lack of finesse, most of our examples involve pictures
+              of cats!
             </p>
             <p>
               <label>
