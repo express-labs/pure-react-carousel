@@ -73,7 +73,7 @@ describe('<CarouselProvider />', () => {
     expect(start.currentSlide).toEqual(end.currentSlide);
     expect(start.disableAnimation).toEqual(end.disableAnimation);
   });
-  it('should set disableAnimation to true and privatUnDisableAnimation to true if we updated currentSlide prop on CarouselProvider component', async () => {
+  it('should set disableAnimation to true and privateUnDisableAnimation to true if we updated currentSlide prop on CarouselProvider component', async () => {
     const wrapper = mount(
       <CarouselProvider {...props}>Hello</CarouselProvider>,
     );
@@ -83,7 +83,7 @@ describe('<CarouselProvider />', () => {
       true,
     );
   });
-  it('The Slider component should reset disableAnimation to false and privatUnDisableAnimation to false if when Slider component is updated', async () => {
+  it('The Slider component should reset disableAnimation to false and privateUnDisableAnimation to false if when Slider component is updated', async () => {
     const wrapper = mount(
       <CarouselProvider {...props}>
         <Slider>Hello</Slider>
@@ -103,7 +103,7 @@ describe('<CarouselProvider />', () => {
     );
     expect(wrapper.instance().getStore().state.isIntrinsicHeight).toBe(true);
   });
-  it('should throw an error, when tryng to use isIntrinsicHeight in vertical orientation', async () => {
+  it('should throw an error, when trying to use isIntrinsicHeight in vertical orientation', async () => {
     expect(() => shallow(
       <CarouselProvider {...props} isIntrinsicHeight orientation="vertical">
         test

@@ -140,7 +140,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     }
 
     if (this.carouselStore.state.currentSlide >= this.props.totalSlides) {
-      newStoreState.currentSlide = this.props.totalSlides - 1;
+      newStoreState.currentSlide = Math.max(this.props.totalSlides - 1, 0);
     }
 
     if (Object.keys(newStoreState).length > 0) {
