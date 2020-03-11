@@ -22,7 +22,7 @@ export default () => (
   >
     <h2 className={s.headline}>Horizontal Carousel (With Master Loading Spinner)</h2>
     <p>
-      Horizontal Carouisel with regular, non-zooming images and dotNumbers on the Dot
+      Horizontal Carousel with regular, non-zooming images and dotNumbers on the Dot
       Group.
     </p>
     <Slider className={s.slider}>

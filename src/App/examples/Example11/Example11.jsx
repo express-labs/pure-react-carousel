@@ -27,7 +27,7 @@ export default () => (
   >
     <h2 className={s.headline}>Carousel with custom event handlers.</h2>
     <p>
-      Simple carousel with custom event handlers attachet to the
+      Simple carousel with custom event handlers attached to the
       {' '}
       <code>&lt;Slider /&gt;</code>
       {' '}
@@ -35,7 +35,7 @@ export default () => (
       {' '}
       <code>trayProps</code>
       {' '}
-property. Open your browser devloper tools and look at
+      property. Open your browser developer tools and look at
       the console log, then manipulate the carousel.
     </p>
     <Slider

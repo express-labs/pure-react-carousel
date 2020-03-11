@@ -320,7 +320,7 @@ A compound component that creates a bunch of Dot's automatically for you.
 | dotNumbers | boolean | false | No | Setting to true automatically adds text numbers the dot buttons starting at 1. |
 | disableActiveDots | boolean | true | No | Setting to true make all dots, including active dots, enabled. |
 | showAsSelectedForCurrentSlideOnly | boolean | false | No | Setting to true show only the current slide dot as selected. |
-| renderDots | function| null | No | It accpets `props` and overrides renderDots() in <DotGroup/>. |
+| renderDots | function| null | No | It accepts `props` and overrides renderDots() in <DotGroup/>. |
 
 #### The DotGroup component creates the following pseudo HTML by default:
 
@@ -355,7 +355,7 @@ A button for moving the slider backwards. Backwards on a horizontal carousel mea
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the ButtonnBack component needs to wrap other components and/or JSX |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the ButtonBack component needs to wrap other components and/or JSX |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonBack will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |

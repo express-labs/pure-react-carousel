@@ -20,9 +20,9 @@ export default () => (
     naturalSlideHeight={500}
     hasMasterSpinner
   >
-    <h2 className={s.headline}>Simple Carousel with vertically alligned nav buttons</h2>
+    <h2 className={s.headline}>Simple Carousel with vertically aligned nav buttons</h2>
     <p>
-      Wrap the &lt;Slider /&gt;, &lt;ButtonBack /&gt;, &lt;ButonNext /&gt; components in a div with
+      Wrap the &lt;Slider /&gt;, &lt;ButtonBack /&gt;, &lt;ButtonNext /&gt; components in a div with
       relative positioning.  Add absolute positioning to the buttons.
     </p>
     <div className={s.container}>
