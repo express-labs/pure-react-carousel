@@ -55,6 +55,7 @@ const Slider = class Slider extends React.Component {
     }),
     trayTag: PropTypes.string,
     visibleSlides: PropTypes.number,
+    isIntrinsicHeight: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -75,6 +76,7 @@ const Slider = class Slider extends React.Component {
     trayProps: {},
     trayTag: 'ul',
     visibleSlides: 1,
+    isIntrinsicHeight: false,
   }
 
   static slideSizeInPx(orientation, sliderTrayWidth, sliderTrayHeight, totalSlides) {
@@ -554,6 +556,7 @@ const Slider = class Slider extends React.Component {
       trayProps,
       trayTag: TrayTag,
       visibleSlides,
+      isIntrinsicHeight,
       ...props
     } = this.props;
 
@@ -579,12 +582,19 @@ const Slider = class Slider extends React.Component {
       trayStyle.transition = 'none';
     }
 
+    if (isIntrinsicHeight) {
+      trayStyle.display = 'flex';
+      trayStyle.alignItems = 'stretch';
+    }
+
     if (orientation === 'vertical') {
       trayStyle.transform = `translateY(${trans}) translateY(${this.state.deltaY}px)`;
       trayStyle.width = pct(100);
+      trayStyle.flexDirection = 'column';
     } else {
       trayStyle.width = pct(slideTraySize);
       trayStyle.transform = `translateX(${trans}) translateX(${this.state.deltaX}px)`;
+      trayStyle.flexDirection = 'row';
     }
 
     const sliderClasses = cn([

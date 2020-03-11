@@ -9,4 +9,5 @@ export default WithStore(Slide, state => ({
   slideSize: state.slideSize,
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
+  isIntrinsicHeight: state.isIntrinsicHeight,
 }));

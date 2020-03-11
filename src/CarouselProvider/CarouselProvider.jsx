@@ -30,6 +30,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     dragEnabled: PropTypes.bool,
     visibleSlides: PropTypes.number,
     infinite: PropTypes.bool,
+    isIntrinsicHeight: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -51,10 +52,14 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     dragEnabled: true,
     visibleSlides: 1,
     infinite: false,
+    isIntrinsicHeight: false,
   };
 
   constructor(props) {
     super(props);
+    if (props.isIntrinsicHeight && props.orientation !== 'horizontal') {
+      throw Error('isIntrinsicHeight can only be used in "horizontal" orientation. See Readme for more information.');
+    }
     const options = {
       currentSlide: props.currentSlide,
       disableAnimation: props.disableAnimation,
@@ -81,6 +86,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       dragEnabled: props.dragEnabled,
       visibleSlides: props.visibleSlides,
       infinite: props.infinite,
+      isIntrinsicHeight: props.isIntrinsicHeight,
     };
     this.carouselStore = new Store(options);
   }
@@ -179,6 +185,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       dragEnabled,
       visibleSlides,
       infinite,
+      isIntrinsicHeight,
       ...filteredProps
     } = this.props;
 

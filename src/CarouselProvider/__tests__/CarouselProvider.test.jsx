@@ -95,4 +95,19 @@ describe('<CarouselProvider />', () => {
       false,
     );
   });
+  it('should correctly set store variable when using isIntrinsicHeight', async () => {
+    const wrapper = mount(
+      <CarouselProvider {...props} isIntrinsicHeight>
+          test
+      </CarouselProvider>,
+    );
+    expect(wrapper.instance().getStore().state.isIntrinsicHeight).toBe(true);
+  });
+  it('should throw an error, when tryng to use isIntrinsicHeight in vertical orientation', async () => {
+    expect(() => shallow(
+      <CarouselProvider {...props} isIntrinsicHeight orientation="vertical">
+        test
+      </CarouselProvider>,
+    )).toThrow(Error);
+  });
 });

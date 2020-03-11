@@ -12,6 +12,7 @@ import {
   Example10,
   Example11,
   Example12,
+  Example13,
 } from './examples';
 import s from './style.scss';
 
@@ -149,6 +150,7 @@ class DevelopmentApp extends React.Component {
                   <option value="10">Carousel with custom spinner component.</option>
                   <option value="11">Simple carousel with event callbacks on Slider.</option>
                   <option value="12">Infinite Carousel</option>
+                  <option value="13">Using Intrinsic Axis Dimension</option>
                 </select>
               </label>
             </p>
@@ -237,6 +239,14 @@ class DevelopmentApp extends React.Component {
                   <Example12 />
                 </section>
               )}
+
+              {(value === '0' || value === '13') && (
+              <section id="example--13">
+                <hr />
+                <Example13 />
+              </section>
+              )}
+
             </div>
           </div>
         </div>
