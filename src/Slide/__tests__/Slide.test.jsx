@@ -130,10 +130,10 @@ describe('<Slide />', () => {
     const wrapper = shallow(<Slide {...props} tabIndex={7} />);
     expect(wrapper.find('.slide').prop('tabIndex')).toBe(7);
   });
-  it('should correctly set styles, if intrinsicAxisSize is set', () => {
+  it('should correctly set styles, if isIntrinsicHeight is set', () => {
     // this is for testing only.
     // eslint-disable-next-line jsx-a11y/tabindex-no-positive
-    const wrapper = shallow(<Slide {...props} intrinsicAxisSize />);
+    const wrapper = shallow(<Slide {...props} isIntrinsicHeight />);
     const slideStyle = wrapper.find('.slide').prop('style');
     expect(slideStyle.paddingBottom).toBe('unset');
     expect(slideStyle.height).toBe('unset');
@@ -142,10 +142,10 @@ describe('<Slide />', () => {
     const innerSlideStyle = wrapper.find('.carousel__inner-slide').prop('style');
     expect(innerSlideStyle.position).toBe('unset');
   });
-  it('should correctly set styles, in vertical mode if intrinsicAxisSize is set', () => {
+  it('should correctly set styles, in vertical mode if isIntrinsicHeight is set', () => {
     // this is for testing only.
     // eslint-disable-next-line jsx-a11y/tabindex-no-positive
-    const wrapper = shallow(<Slide {...props} orientation="vertical" intrinsicAxisSize />);
+    const wrapper = shallow(<Slide {...props} orientation="vertical" isIntrinsicHeight />);
     const slideStyle = wrapper.find('.slide').prop('style');
     expect(slideStyle.paddingBottom).toBe('unset');
     expect(slideStyle.width).toBe('unset');

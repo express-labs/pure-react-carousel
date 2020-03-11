@@ -25,7 +25,7 @@ const Slide = class Slide extends React.PureComponent {
     tag: PropTypes.string,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
-    intrinsicAxisSize: PropTypes.bool,
+    isIntrinsicHeight: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -41,7 +41,7 @@ const Slide = class Slide extends React.PureComponent {
     style: {},
     tabIndex: null,
     tag: 'li',
-    intrinsicAxisSize: false,
+    isIntrinsicHeight: false,
   }
 
   constructor(props) {
@@ -105,7 +105,7 @@ const Slide = class Slide extends React.PureComponent {
       tag: Tag,
       totalSlides,
       visibleSlides,
-      intrinsicAxisSize,
+      isIntrinsicHeight,
       ...props
     } = this.props;
 
@@ -120,7 +120,7 @@ const Slide = class Slide extends React.PureComponent {
     }
 
     const innerStyle = {};
-    if (intrinsicAxisSize) {
+    if (isIntrinsicHeight) {
       if (orientation === 'horizontal') {
         tempStyle.height = 'unset';
       } else {

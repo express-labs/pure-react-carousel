@@ -25,5 +25,5 @@ export default WithStore(Slider, state => ({
   totalSlides: state.totalSlides,
   touchEnabled: state.touchEnabled,
   visibleSlides: state.visibleSlides,
-  intrinsicAxisSize: state.intrinsicAxisSize,
+  isIntrinsicHeight: state.isIntrinsicHeight,
 }));
