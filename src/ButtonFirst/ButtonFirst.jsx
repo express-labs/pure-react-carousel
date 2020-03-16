@@ -29,6 +29,7 @@ const ButtonFirst = class ButtonFirst extends React.Component {
     const { carouselStore, onClick } = this.props;
     carouselStore.setStoreState({
       currentSlide: 0,
+      isPlaying: false,
     }, onClick !== null && onClick.call(this, ev));
   }
 
