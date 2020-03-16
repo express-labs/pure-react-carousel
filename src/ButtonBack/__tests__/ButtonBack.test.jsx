@@ -202,7 +202,7 @@ describe('<ButtonBack />', () => {
         isPlaying
       >
         <ButtonBackWithStore>Hello</ButtonBackWithStore>
-      </CarouselProvider>
+      </CarouselProvider>,
     );
     wrapper.find('button').simulate('click');
     expect(wrapper.instance().getStore().state.isPlaying).toBe(false);

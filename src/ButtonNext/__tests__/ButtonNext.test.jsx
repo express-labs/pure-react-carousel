@@ -162,7 +162,7 @@ describe('<ButtonNext />', () => {
         isPlaying
       >
         <ButtonNextWithStore>Hello</ButtonNextWithStore>
-      </CarouselProvider>
+      </CarouselProvider>,
     );
     wrapper.find('button').simulate('click');
     expect(wrapper.instance().getStore().state.isPlaying).toBe(false);
