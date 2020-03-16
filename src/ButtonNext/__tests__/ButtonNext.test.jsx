@@ -151,4 +151,20 @@ describe('<ButtonNext />', () => {
     expect(instance.carouselStore.state.currentSlide).toBe(newProps.totalSlides - newProps.visibleSlides);
     expect(wrapper.find('button').prop('disabled')).toBe(true);
   });
+  it('should pause autoplay when clicked', () => {
+    const wrapper = mount(
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={3}
+        currentSlide={1}
+        step={3}
+        isPlaying
+      >
+        <ButtonNextWithStore>Hello</ButtonNextWithStore>
+      </CarouselProvider>
+    );
+    wrapper.find('button').simulate('click');
+    expect(wrapper.instance().getStore().state.isPlaying).toBe(false);
+  });
 });

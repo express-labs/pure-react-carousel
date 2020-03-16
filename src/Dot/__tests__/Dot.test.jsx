@@ -59,4 +59,9 @@ describe('<Dot />', () => {
     const wrapper = mount(<Dot {...props} slide={0} disabled />);
     expect(wrapper.find('button').prop('disabled')).toBe(true);
   });
+  it('should pause autoplay when clicked', () => {
+    const wrapper = mount(<Dot {...props} slide={10} />);
+    wrapper.find('button').simulate('click');
+    expect(props.carouselStore.getStoreState().isPlaying).toBe(false);
+  });
 });

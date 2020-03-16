@@ -35,7 +35,13 @@ const ButtonFirst = class ButtonFirst extends React.Component {
 
   render() {
     const {
-      carouselStore, className, currentSlide, disabled, onClick, totalSlides, ...props
+      carouselStore,
+      className,
+      currentSlide,
+      disabled,
+      onClick,
+      totalSlides,
+      ...props
     } = this.props;
 
     const newClassName = cn([
