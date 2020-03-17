@@ -70,4 +70,14 @@ describe('<ButtonLast />', () => {
     const wrapper = shallow(<ButtonLast {...newProps} />);
     expect(wrapper.prop('disabled')).toBe(false);
   });
+  it('should pause autoplay when clicked', () => {
+    const newProps = Object.assign({}, props, {
+      carouselStore: new Store({
+        isPlaying: true,
+      }),
+    });
+    const wrapper = mount(<ButtonLast {...newProps} />);
+    wrapper.find('button').simulate('click');
+    expect(newProps.carouselStore.getStoreState().isPlaying).toBe(false);
+  });
 });

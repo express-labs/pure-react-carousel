@@ -33,6 +33,7 @@ const ButtonLast = class ButtonLast extends React.Component {
     carouselStore.setStoreState(
       {
         currentSlide: totalSlides - visibleSlides,
+        isPlaying: false,
       },
       onClick !== null && onClick.call(this, ev),
     );

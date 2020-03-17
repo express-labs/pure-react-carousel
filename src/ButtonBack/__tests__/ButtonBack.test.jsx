@@ -191,4 +191,20 @@ describe('<ButtonBack />', () => {
     );
     expect(wrapper.find('button').prop('foo')).toEqual('bar');
   });
+  it('should pause autoplay when clicked', () => {
+    const wrapper = mount(
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={3}
+        currentSlide={1}
+        step={3}
+        isPlaying
+      >
+        <ButtonBackWithStore>Hello</ButtonBackWithStore>
+      </CarouselProvider>,
+    );
+    wrapper.find('button').simulate('click');
+    expect(wrapper.instance().getStore().state.isPlaying).toBe(false);
+  });
 });

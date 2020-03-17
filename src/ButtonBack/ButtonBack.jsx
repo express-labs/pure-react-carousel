@@ -55,6 +55,7 @@ export default class ButtonBack extends React.Component {
     carouselStore.setStoreState(
       {
         currentSlide: newCurrentSlide,
+        isPlaying: false,
       },
       onClick !== null && onClick.call(this, ev),
     );

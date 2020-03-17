@@ -56,6 +56,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     carouselStore.setStoreState(
       {
         currentSlide: newCurrentSlide,
+        isPlaying: false,
       },
       onClick !== null && onClick.call(this, ev),
     );

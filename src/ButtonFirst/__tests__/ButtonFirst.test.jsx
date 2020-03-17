@@ -40,4 +40,9 @@ describe('<ButtonFirst />', () => {
     wrapper.find('button').simulate('click');
     expect(onClick.mock.calls.length).toBe(1);
   });
+  it('should pause autoplay when clicked', () => {
+    const wrapper = mount(<ButtonFirst {...props} />);
+    wrapper.find('button').simulate('click');
+    expect(props.carouselStore.getStoreState().isPlaying).toBe(false);
+  });
 });
