@@ -306,6 +306,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ZLevine",
+      "name": "Zach Levine",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/4452484?v=4",
+      "profile": "https://howchoo.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
