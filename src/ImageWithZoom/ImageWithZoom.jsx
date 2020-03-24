@@ -13,6 +13,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
   static propTypes = {
     // alt: PropTypes.string,
     carouselStore: PropTypes.object.isRequired,
+    className: PropTypes.string,
+    imageClassName: PropTypes.string,
+    overlayClassName: PropTypes.string,
     spinner: PropTypes.func,
     src: PropTypes.string.isRequired,
     srcZoomed: PropTypes.string,
@@ -21,6 +24,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
   }
 
   static defaultProps = {
+    className: null,
+    imageClassName: null,
+    overlayClassName: null,
     isPinchZoomEnabled: true,
     spinner: null,
     srcZoomed: null,
@@ -264,6 +270,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
   render() {
     const {
       carouselStore,
+      className,
+      imageClassName,
+      overlayClassName,
       isPinchZoomEnabled,
       spinner,
       src,
@@ -272,18 +281,25 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       ...filteredProps
     } = this.props;
 
-    const imageClassName = cn([
-      s.image,
-      'carousel__zoom-image',
+    const newClassName = cn([
+      s.container,
+      className,
     ]);
 
-    const overlayClassName = cn([
+    const newImageClassName = cn([
+      s.image,
+      'carousel__zoom-image',
+      imageClassName,
+    ]);
+
+    const newOverlayClassName = cn([
       s.overlay,
       'carousel__zoom-image-overlay',
       this.state.isHovering && s.hover,
       this.state.isZooming && s.zoom,
       this.state.isHovering && 'carousel__zoom-image-overlay--hovering',
       this.state.isZooming && 'carousel__zoom-image-overlay--zooming',
+      overlayClassName,
     ]);
 
     const overlayStyle = {};
@@ -293,9 +309,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     }
 
     return (
-      <Tag className={s.container} {...filteredProps}>
+      <Tag className={newClassName} {...filteredProps}>
         <Image
-          className={imageClassName}
+          className={newImageClassName}
           tag="div"
           src={src}
           isBgImage
@@ -303,7 +319,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
           onError={this.handleImageComplete}
         />
         <Image
-          className={overlayClassName}
+          className={newOverlayClassName}
           tag="div"
           src={srcZoomed || src}
           style={overlayStyle}

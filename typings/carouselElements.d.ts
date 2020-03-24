@@ -47,9 +47,13 @@ declare const Slide: SlideInterface
 
 
 interface ImageWithZoomProps {
+  readonly className?: string
+  readonly imageClassName?: string
+  readonly overlayClassName?: string
   readonly src: string
   readonly srcZoomed?: string
   readonly tag?: string
+  readonly isPinchZoomEnabled?: boolean
 }
 type ImageWithZoomInterface = React.ComponentClass<ImageWithZoomProps>
 declare const ImageWithZoom: ImageWithZoomInterface
