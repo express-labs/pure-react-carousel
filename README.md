@@ -727,6 +727,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/cbasJS"><img src="https://avatars2.githubusercontent.com/u/28812706?v=4" width="100px;" alt=""/><br /><sub><b>Sebastian Martha</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=cbasJS" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/reckter"><img src="https://avatars1.githubusercontent.com/u/1771450?v=4" width="100px;" alt=""/><br /><sub><b>Hannes Güdelhöfer</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=reckter" title="Code">💻</a></td>
     <td align="center"><a href="https://howchoo.com"><img src="https://avatars3.githubusercontent.com/u/4452484?v=4" width="100px;" alt=""/><br /><sub><b>Zach Levine</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=ZLevine" title="Code">💻</a></td>
+    <td align="center"><a href="https://git.owls.io"><img src="https://avatars2.githubusercontent.com/u/2741569?v=4" width="100px;" alt=""/><br /><sub><b>Alec WM</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=alecdwm" title="Code">💻</a></td>
   </tr>
 </table>
 

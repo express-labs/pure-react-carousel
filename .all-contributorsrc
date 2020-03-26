@@ -315,6 +315,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "alecdwm",
+      "name": "Alec WM",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2741569?v=4",
+      "profile": "https://git.owls.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
