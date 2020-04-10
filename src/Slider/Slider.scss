@@ -1,7 +1,11 @@
 .horizontalSlider {
   position: relative;
   overflow: hidden;
-  direction: ltr;
+
+  [dir='rtl'] & {
+    direction: ltr;
+    transform: scaleX(-1);
+  }
 
   &Tray {
     overflow: hidden;

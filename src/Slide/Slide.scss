@@ -12,6 +12,13 @@
 
   &Horizontal {
     float: left;
+
+    [dir='rtl'] & {
+      > * {
+        direction: rtl;
+        transform: scaleX(-1);
+      }
+    }
   }
 
   &Inner {
