@@ -1,11 +1,10 @@
 import React from 'react';
 import
 {
-  ButtonBack, ButtonFirst, ButtonLast, ButtonNext, CarouselProvider, Slide, Slider,
+  ButtonBack, ButtonFirst, ButtonLast, ButtonNext, CarouselProvider, Slide, Slider, ImageWithZoom, DotGroup
 } from '../../..';
 
 import s from '../../style.scss';
-import ImageWithZoom from '../../../ImageWithZoom/ImageWithZoom';
 
 export default () => (
   <CarouselProvider
@@ -53,6 +52,7 @@ export default () => (
       <ButtonBack>Back</ButtonBack>
       <ButtonNext>Next</ButtonNext>
       <ButtonLast>Last</ButtonLast>
+      <DotGroup dotNumbers />
     </div>
   </CarouselProvider>
 );
