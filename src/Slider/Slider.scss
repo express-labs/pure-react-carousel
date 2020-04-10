@@ -1,6 +1,7 @@
 .horizontalSlider {
   position: relative;
   overflow: hidden;
+  direction: ltr;
 
   &Tray {
     overflow: hidden;
