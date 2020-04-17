@@ -1,7 +1,15 @@
 import React from 'react';
 import
 {
-  ButtonBack, ButtonFirst, ButtonLast, ButtonNext, CarouselProvider, Slide, Slider, ImageWithZoom, DotGroup
+  ButtonBack,
+  ButtonFirst,
+  ButtonLast,
+  ButtonNext,
+  CarouselProvider,
+  Slide,
+  Slider,
+  ImageWithZoom,
+  DotGroup,
 } from '../../..';
 
 import s from '../../style.scss';
