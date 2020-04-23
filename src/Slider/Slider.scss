@@ -2,6 +2,11 @@
   position: relative;
   overflow: hidden;
 
+  [dir='rtl'] & {
+    direction: ltr;
+    transform: scaleX(-1);
+  }
+
   &Tray {
     overflow: hidden;
     width: 100%;
