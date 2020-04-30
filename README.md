@@ -256,6 +256,7 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 | innerTag | string | 'div' | No | The inner HTML element for each Slide. |
 | onBlur | [function&#124;null] | null | No | Optional callback function that is called after the internal onBlur function is called. It is passed the React synthetic event |
 | onFocus | [function&#124;null] | null | No | Optional callback function that is called after the internal onFocus function is called. It is passed the React synthetic event |
+| role | [string&#124;null] | null | No | The ARIA role of the root HTML element |
 | tabIndex | [number&#124;null] | null | No | When null, the Carousel will set this automatically.  99.9% of the time, you're going to want to leave this alone and let the carousel handle tabIndex automatically. |
 | tag | string | 'li' | No | The root HTML element for each Slide. |
 
