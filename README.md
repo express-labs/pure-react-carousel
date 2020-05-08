@@ -296,7 +296,7 @@ A Dot component is a HTML button.  Dots directly correlate to slides.  Clicking 
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the Dot component needs to wrap other components and/or JSX |
+| children | [string&#124;null&#124;node] | null | No | Children is a special React property.  Basically, the Dot component wraps other components and/or JSX |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means Dot will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
