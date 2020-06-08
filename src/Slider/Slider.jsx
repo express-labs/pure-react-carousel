@@ -390,7 +390,6 @@ const Slider = class Slider extends React.Component {
     carouselStore.setStoreState({
       currentSlide: this.forward() === currentSlide ? 0 : this.forward(),
     });
-    console.log("slide " + currentSlide);
   }
 
   playBackward() {
@@ -415,12 +414,10 @@ const Slider = class Slider extends React.Component {
     }
     if (this.props.intervalList) {
       let priorIntervals = 0;
-      console.log(this.props.intervalList.length);
       for (let i = 0; i < this.props.intervalList.length - 1; i++) {
         setTimeout(playDirection === 'forward' ? this.playForward : this.playBackward, this.props.intervalList[i] + priorIntervals);
         priorIntervals += this.props.intervalList[i];
       }
-      console.log(priorIntervals);
       setTimeout(playDirection === 'forward' ? this.playForward : this.playBackward, this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
       setTimeout(this.play, this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
 
