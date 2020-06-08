@@ -14,6 +14,7 @@ import {
   Example12,
   Example13,
   Example14,
+  Example15,
 } from './examples';
 import s from './style.scss';
 
@@ -242,19 +243,25 @@ class DevelopmentApp extends React.Component {
               )}
 
               {(value === '0' || value === '13') && (
-              <section id="example--13">
-                <hr />
-                <Example13 />
-              </section>
+                <section id="example--13">
+                  <hr />
+                  <Example13 />
+                </section>
               )}
 
               {(value === '0' || value === '14') && (
-              <section id="example--14">
-                <hr />
-                <Example14 />
-              </section>
+                <section id="example--14">
+                  <hr />
+                  <Example14 />
+                </section>
               )}
 
+              {(value === '0' || value === '15') && (
+                <section id="example--15">
+                  <hr />
+                  <Example15 />
+                </section>
+              )}
             </div>
           </div>
         </div>

@@ -16,15 +16,19 @@ import s from '../../style.scss';
 
 export default () => (
   <CarouselProvider
-    visibleSlides={2}
+    visibleSlides={1}
     totalSlides={8}
     step={1}
     naturalSlideWidth={400}
     naturalSlideHeight={500}
+    interval={3000}
+    intervalList={[10000, 9000, 8000, 7000, 6000, 5000, 4000, 3000, 2000]}
+    isPlaying={true}
+    infinite={true}
   >
-    <h2 className={s.headline}>RTL</h2>
+    <h2 className={s.headline}>Custom Slide Timings</h2>
     <p>
-      A carousel wrapped in an element with
+      A carousel with custom slide timing.
       {' '}
       <code>dir=&quot;rtl&quot;</code>
 , demonstrating support for use with right-to-left languages.

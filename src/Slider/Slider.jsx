@@ -416,7 +416,10 @@ const Slider = class Slider extends React.Component {
 
   play() {
     const { playDirection } = this.props;
+    console.log("PACKED");
+    console.log(this.props);
     if (this.props.intervalList) {
+      console.log("PACKING HEAT");
       let priorIntervals = 0;
       for (var interval of intervalList) {
         setTimeout(playDirection === 'forward' ? this.playForward : this.playBackwardList, interval);
@@ -556,6 +559,7 @@ const Slider = class Slider extends React.Component {
       dragEnabled,
       hasMasterSpinner,
       interval,
+      intervalList,
       isPageScrollLocked,
       isPlaying,
       lockOnWindowScroll,

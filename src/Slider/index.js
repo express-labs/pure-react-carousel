@@ -10,6 +10,7 @@ export default WithStore(Slider, state => ({
   hasMasterSpinner: state.hasMasterSpinner,
   infinite: state.infinite,
   interval: state.interval,
+  intervalList: state.intervalList,
   isPageScrollLocked: state.isPageScrollLocked,
   isPlaying: state.isPlaying,
   lockOnWindowScroll: state.lockOnWindowScroll,
