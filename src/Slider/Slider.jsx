@@ -23,6 +23,7 @@ const Slider = class Slider extends React.Component {
     hasMasterSpinner: PropTypes.bool.isRequired,
     infinite: PropTypes.bool,
     interval: PropTypes.number.isRequired,
+    intervalList: PropTypes.array,
     isPageScrollLocked: PropTypes.bool.isRequired,
     isPlaying: PropTypes.bool.isRequired,
     lockOnWindowScroll: PropTypes.bool.isRequired,
@@ -401,9 +402,29 @@ const Slider = class Slider extends React.Component {
     });
   }
 
+  playBackwardList() {
+    const {
+      carouselStore, currentSlide, totalSlides, visibleSlides,
+    } = this.props;
+    carouselStore.setStoreState({
+      currentSlide: (
+        this.backward() === currentSlide ? totalSlides - visibleSlides : this.backward()
+      ),
+    });
+    play();
+  }
+
   play() {
     const { playDirection } = this.props;
-    this.interval = setInterval(playDirection === 'forward' ? this.playForward : this.playBackward, this.props.interval);
+    if (this.props.intervalList) {
+      let priorIntervals = 0;
+      for (var interval of intervalList) {
+        setTimeout(playDirection === 'forward' ? this.playForward : this.playBackwardList, interval);
+        priorIntervals += interval;
+      }
+    } else {
+      this.interval = setInterval(playDirection === 'forward' ? this.playForward : this.playBackward, this.props.interval);
+    }
   }
 
   stop() {
