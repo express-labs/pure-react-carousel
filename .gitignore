@@ -64,3 +64,4 @@ coverage.json
 # when working with contributors
 package-lock.json
 yarn.lock
+.vscode/settings.json

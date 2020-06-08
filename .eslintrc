@@ -21,8 +21,6 @@
   "rules": {
     "indent": ["error", 2],
     "import/no-named-as-default": ["error", 0],
-    "import/no-named-as-default-member": ["error", 0],
-    "linebreak-style": 0
-
+    "import/no-named-as-default-member": ["error", 0]
   }
 }
