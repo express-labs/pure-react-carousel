@@ -30,10 +30,8 @@ export default () => (
     <p>
       A carousel with custom slide timing.
       {' '}
-      <code>dir=&quot;rtl&quot;</code>
-, demonstrating support for use with right-to-left languages.
     </p>
-    <div dir="rtl">
+
       <Slider className={s.slider}>
         <Slide index={0}>
           <ImageWithZoom src="./media/img01.jpeg" />
@@ -65,6 +63,5 @@ export default () => (
       <ButtonNext>Next</ButtonNext>
       <ButtonLast>Last</ButtonLast>
       <DotGroup dotNumbers />
-    </div>
   </CarouselProvider>
 );
