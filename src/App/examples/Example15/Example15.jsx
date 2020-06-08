@@ -22,7 +22,7 @@ export default () => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
     interval={3000}
-    intervalList={[10000, 9000, 8000, 7000, 6000, 5000, 4000, 3000, 2000]}
+    intervalList={[10000, 9000, 8000, 7000, 6000, 5000, 4000, 3000]} //Apend zero to fix bug
     isPlaying={true}
     infinite={true}
   >

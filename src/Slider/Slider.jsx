@@ -112,6 +112,7 @@ const Slider = class Slider extends React.Component {
     this.handleOnTouchStart = this.handleOnTouchStart.bind(this);
     this.playBackward = this.playBackward.bind(this);
     this.playForward = this.playForward.bind(this);
+    this.play = this.play.bind(this);
     this.callCallback = this.callCallback.bind(this);
 
     this.state = {
@@ -389,6 +390,7 @@ const Slider = class Slider extends React.Component {
     carouselStore.setStoreState({
       currentSlide: this.forward() === currentSlide ? 0 : this.forward(),
     });
+    console.log("slide " + currentSlide);
   }
 
   playBackward() {
@@ -402,26 +404,26 @@ const Slider = class Slider extends React.Component {
     });
   }
 
-  playBackwardList() {
-    const {
-      carouselStore, currentSlide, totalSlides, visibleSlides,
-    } = this.props;
-    carouselStore.setStoreState({
-      currentSlide: (
-        this.backward() === currentSlide ? totalSlides - visibleSlides : this.backward()
-      ),
-    });
-    play();
-  }
+
 
   play() {
-    const { playDirection } = this.props;
+    let playDirection;
+    try {
+      playDirection = this.props.playDirection;
+    } catch (err) {
+      playDirection = "forward";
+    }
     if (this.props.intervalList) {
       let priorIntervals = 0;
-      for (var interval of this.props.intervalList) {
-        setTimeout(playDirection === 'forward' ? this.playForward : this.playBackwardList, interval+priorIntervals);
-        priorIntervals += interval;
+      console.log(this.props.intervalList.length);
+      for (let i = 0; i < this.props.intervalList.length - 1; i++) {
+        setTimeout(playDirection === 'forward' ? this.playForward : this.playBackward, this.props.intervalList[i] + priorIntervals);
+        priorIntervals += this.props.intervalList[i];
       }
+      console.log(priorIntervals);
+      setTimeout(playDirection === 'forward' ? this.playForward : this.playBackward, this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
+      setTimeout(this.play, this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
+
     } else {
       this.interval = setInterval(playDirection === 'forward' ? this.playForward : this.playBackward, this.props.interval);
     }
