@@ -214,6 +214,13 @@ class DevelopmentApp extends React.Component {
                 </section>
               )}
 
+              {(value === '0' || value === '9') && (
+                <section id="example--9">
+                  <hr />
+                  <Example9 />
+                </section>
+              )}
+
               {(value === '0' || value === '10') && (
                 <section id="example--10">
                   <hr />
