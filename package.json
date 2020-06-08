@@ -114,9 +114,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
+    "chokidar": "^3.4.0",
     "deep-freeze": "0.0.1",
     "deepmerge": "^2.2.1",
     "equals": "^1.0.5",
+    "minimist": "^1.2.5",
     "prop-types": "^15.6.2"
   },
   "jest": {
