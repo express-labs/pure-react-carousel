@@ -924,7 +924,7 @@ describe('<Slider />', () => {
 
     it('should start playing the slideshow after mounting after a delay of props.intervalList[0] if props.isPlay is true and an intervalList was passed', () => {
       const playForward = jest.spyOn(Slider.prototype, 'playForward');
-      const intervalList = [7000, 10000, 3000];
+      const intervalList = [4000, 1000, 5000];
       const wrapper = shallow(<Slider {...props} intervalList={intervalList} isPlaying />);
       const instance = wrapper.instance();
       jest.runTimersToTime(intervalList[0]);
@@ -932,6 +932,16 @@ describe('<Slider />', () => {
       expect(playForward).toHaveBeenCalledTimes(1);
       playForward.mockReset();
       playForward.mockRestore();
+    });
+
+    it('should start playing the slideshow backwards after prop.intervalList[0] milliseconds if prop.isPlaying is true, prop.playDirection is backward, and intervalList was passed', () => {
+      const playBackward = jest.spyOn(Slider.prototype, 'playBackward');
+      const intervalList = [2000, 50000, 3000];
+      const wrapper = shallow(<Slider {...props} isPlaying playDirection="backward" intervalList={intervalList} />);
+      const instance = wrapper.instance();
+      expect(instance.intervalList).not.toBe(null);
+      jest.runTimersToTime(intervalList[0]);
+      expect(playBackward).toHaveBeenCalledTimes(1);
     });
 
     it('should not change isBeingMouseDragged on mousedown event when dragging is disabled', () => {
