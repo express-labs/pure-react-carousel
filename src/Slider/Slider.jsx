@@ -68,6 +68,7 @@ const Slider = class Slider extends React.Component {
     disableKeyboard: false,
     dragStep: 1,
     infinite: false,
+    intervalList: undefined,
     moveThreshold: 0.1,
     onMasterSpinner: null,
     privateUnDisableAnimation: false,
@@ -411,7 +412,8 @@ const Slider = class Slider extends React.Component {
         setTimeout(this.props.playDirection === 'forward' ? this.playForward : this.playBackward, this.props.intervalList[i] + priorIntervals);
         priorIntervals += this.props.intervalList[i];
       }
-      setTimeout(this.props.playDirection === 'forward' ? this.playForward : this.playBackward, this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
+      const functionToCall = this.props.playDirection === 'forward' ? this.playForward : this.playBackward;
+      setTimeout(functionToCall, this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
       setTimeout(this.play, this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
     } else {
       this.interval = setInterval(this.props.playDirection === 'forward' ? this.playForward : this.playBackward, this.props.interval);
