@@ -412,11 +412,14 @@ const Slider = class Slider extends React.Component {
         setTimeout(this.props.playDirection === 'forward' ? this.playForward : this.playBackward, this.props.intervalList[i] + priorIntervals);
         priorIntervals += this.props.intervalList[i];
       }
-      const functionToCall = this.props.playDirection === 'forward' ? this.playForward : this.playBackward;
-      setTimeout(functionToCall, this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
-      setTimeout(this.play, this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
+      const call = this.props.playDirection === 'forward' ? this.playForward : this.playBackward;
+      const time = this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals;
+      setTimeout(call, time);
+      const timeTwo = this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals;
+      setTimeout(this.play, timeTwo);
     } else {
-      this.interval = setInterval(this.props.playDirection === 'forward' ? this.playForward : this.playBackward, this.props.interval);
+      const call = this.props.playDirection === 'forward' ? this.playForward : this.playBackward;
+      this.interval = setInterval(call, this.props.interval);
     }
   }
 
