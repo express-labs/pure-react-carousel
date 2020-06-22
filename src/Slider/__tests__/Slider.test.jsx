@@ -887,6 +887,8 @@ describe('<Slider />', () => {
       jest.runTimersToTime(props.interval);
       expect(instance.interval).not.toBe(null);
       expect(playBackward).toHaveBeenCalledTimes(1);
+      playBackward.mockReset();
+      playBackward.mockRestore();
     });
 
     it('should play the slideshow again after a total time as provided in the intervalList if props.isPlay is true and an intervalList was passed.', () => {
@@ -894,8 +896,8 @@ describe('<Slider />', () => {
       const intervalList = [7000, 10000, 3000];
       const wrapper = shallow(<Slider {...props} intervalList={intervalList} isPlaying />);
       const instance = wrapper.instance();
-      const sumIntervalList = intervalList[0] + intervalList[1] + intervalList[2];
-      jest.runTimersToTime(sumIntervalList);
+      const sumIntervalListFirstTwo = intervalList[0] + intervalList[1];
+      jest.runTimersToTime(sumIntervalListFirstTwo);
       expect(instance.intervalList).not.toBe(null);
       expect(playForward).toHaveBeenCalledTimes(2);
       playForward.mockReset();
@@ -904,14 +906,17 @@ describe('<Slider />', () => {
 
     it('should play the slideshow again after a total time as provided in the intervalList if props.isPlay is true and an intervalList was passed.', () => {
       const playForward = jest.spyOn(Slider.prototype, 'playForward');
+      const playBackward = jest.spyOn(Slider.prototype, 'playBackward');
       const intervalList = [7000, 10000, 3000];
       const wrapper = shallow(<Slider {...props} intervalList={intervalList} isPlaying playDirection="backward" />);
       const instance = wrapper.instance();
-      const playBackward = jest.spyOn(instance, 'playBackward');
-      const sumIntervalList = intervalList[0] + intervalList[1] + intervalList[2];
+      const sumIntervalList = intervalList[0] + intervalList[1];
       jest.runTimersToTime(sumIntervalList);
       expect(instance.intervalList).not.toBe(null);
+      //edit here
       expect(playBackward).toHaveBeenCalledTimes(2);
+      playBackward.mockReset();
+      playBackward.mockRestore();
       playForward.mockReset();
       playForward.mockRestore();
     });
@@ -951,7 +956,7 @@ describe('<Slider />', () => {
 
     it('should start playing the slideshow after mounting after a delay of props.intervalList[0] if props.isPlay is true and an intervalList was passed', () => {
       const playForward = jest.spyOn(Slider.prototype, 'playForward');
-      const intervalList = [4000, 1000, 5000];
+      const intervalList = [4000, 3000, 5000];
       const wrapper = shallow(<Slider {...props} intervalList={intervalList} isPlaying />);
       const instance = wrapper.instance();
       jest.runTimersToTime(intervalList[0]);
@@ -969,6 +974,8 @@ describe('<Slider />', () => {
       expect(instance.intervalList).not.toBe(null);
       jest.runTimersToTime(intervalList[0]);
       expect(playBackward).toHaveBeenCalledTimes(1);
+      playBackward.mockReset();
+      playBackward.mockRestore();
     });
 
     it('should not change isBeingMouseDragged on mousedown event when dragging is disabled', () => {
