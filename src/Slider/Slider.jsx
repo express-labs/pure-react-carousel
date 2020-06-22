@@ -406,12 +406,7 @@ const Slider = class Slider extends React.Component {
 
 
   play() {
-    let playDirection;
-    try {
-      playDirection = this.props.playDirection;
-    } catch (err) {
-      playDirection = "forward";
-    }
+    const playDirection = this.props.playDirection;
     if (this.props.intervalList) {
       let priorIntervals = 0;
       for (let i = 0; i < this.props.intervalList.length - 1; i++) {

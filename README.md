@@ -199,6 +199,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | currentSlide | number | 0 | No | &lt;Slide \> to display ONLY when CarouselProvider mounts. The indexing of &lt;Slide /> components starts with 0.  This is a poorly named variable and will be deprecated in a future version. |
 | hasMasterSpinner | bool | false | No | When true, a spinner will cover &lt;Slider /> component until all &lt;Image \> and &lt;ImageWithZoom \> are done loading images.  If there are no &lt;Image /> or &lt;ImageWithZoom> components, the spinner will spin until this property is set to false |
 | interval | number | 5000 | No | Number of milliseconds to wait when the auto slideshow is active |
+| intervalList | array | undefined | No | List of numbers of milliseconds to wait for each slide when the slideshow is active |
 | isPlaying | bool | false | No | Setting this to true starts an auto slideshow. After "interval" milliseconds, the slider will move by "step" slides either forward or backwards depending on the value of "playDirection". |
 | lockOnWindowScroll | bool | false | No | When set to true, scrolling of the carousel slides are disabled while the browser window is scrolling |
 | **naturalSlideHeight** | number | | **Yes** | The natural height of each <\Slide > component. ** |
