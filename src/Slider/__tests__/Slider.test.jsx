@@ -913,7 +913,6 @@ describe('<Slider />', () => {
       const sumIntervalList = intervalList[0] + intervalList[1];
       jest.runTimersToTime(sumIntervalList);
       expect(instance.intervalList).not.toBe(null);
-      //edit here
       expect(playBackward).toHaveBeenCalledTimes(2);
       playBackward.mockReset();
       playBackward.mockRestore();
