@@ -20,6 +20,7 @@ const Slider = class Slider extends React.Component {
     disableKeyboard: PropTypes.bool,
     dragEnabled: PropTypes.bool.isRequired,
     dragStep: PropTypes.number,
+    disableDragStep: PropTypes.bool.isRequired,
     hasMasterSpinner: PropTypes.bool.isRequired,
     infinite: PropTypes.bool,
     interval: PropTypes.number.isRequired,
@@ -83,16 +84,34 @@ const Slider = class Slider extends React.Component {
     return (orientation === 'horizontal' ? sliderTrayWidth : sliderTrayHeight) / totalSlides;
   }
 
-  static slidesMoved(threshold, orientation, deltaX, deltaY, slideSizeInPx, dragStep) {
-    const delta = orientation === 'horizontal' ? deltaX : deltaY;
-    const bigDrag = Math.abs(Math.round(delta / slideSizeInPx));
-    const smallDrag = (Math.abs(delta) >= (slideSizeInPx * threshold)) ? dragStep : 0;
-    const moved = Math.max(smallDrag, bigDrag);
+  static movedValue(delta, moved) {
     if (delta < 0) {
       return moved;
     }
     const retval = -moved;
     return retval === 0 ? 0 : retval; // get rid of -0
+  }
+
+  static slidesMoved(
+    threshold,
+    orientation,
+    deltaX,
+    deltaY,
+    slideSizeInPx,
+    dragStep,
+    disableDragStep,
+  ) {
+    const delta = orientation === 'horizontal' ? deltaX : deltaY;
+
+    if (disableDragStep) {
+      const moved = Math.abs(delta / slideSizeInPx);
+      return this.movedValue(delta, moved);
+    }
+
+    const bigDrag = Math.abs(Math.round(delta / slideSizeInPx));
+    const smallDrag = (Math.abs(delta) >= (slideSizeInPx * threshold)) ? dragStep : 0;
+    const moved = Math.max(smallDrag, bigDrag);
+    return this.movedValue(delta, moved);
   }
 
   constructor(props) {
@@ -454,6 +473,7 @@ const Slider = class Slider extends React.Component {
       this.state.deltaY,
       slideSizeInPx,
       this.props.dragStep,
+      this.props.disableDragStep,
     );
 
     const maxSlide = this.props.totalSlides - Math.min(
@@ -626,6 +646,7 @@ const Slider = class Slider extends React.Component {
     // remove invalid div attributes
     const {
       dragStep,
+      disableDragStep,
       step,
       infinite,
       ...rest

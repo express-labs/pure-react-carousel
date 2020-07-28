@@ -151,6 +151,7 @@ export default {
       disableAnimation: false,
       disableKeyboard: false,
       dragEnabled: true,
+      disableDragStep: false,
       hasMasterSpinner: false,
       interval: 5000,
       infinite: false,

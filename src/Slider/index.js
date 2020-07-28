@@ -22,6 +22,7 @@ export default WithStore(Slider, state => ({
   slideTraySize: state.slideTraySize,
   step: state.step,
   dragStep: state.dragStep,
+  disableDragStep: state.disableDragStep,
   totalSlides: state.totalSlides,
   touchEnabled: state.touchEnabled,
   visibleSlides: state.visibleSlides,
