@@ -183,6 +183,7 @@ declare const ButtonFirst: ButtonLastInterface
 interface ButtonPlayProps {
   readonly childrenPaused?: React.ReactNode
   readonly childrenPlaying?: React.ReactNode
+  readonly className?: string
   readonly disabled?: boolean
   readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
 }
