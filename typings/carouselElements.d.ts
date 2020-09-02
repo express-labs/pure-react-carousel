@@ -110,7 +110,7 @@ declare const DotGroup: DotGroupInterface
 
 
 interface DotProps {
-  readonly children: React.ReactChild
+  readonly children?: React.ReactChild
   readonly className?: string
   readonly disabled?: boolean
   readonly onClick?: () => void

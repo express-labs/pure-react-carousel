@@ -6,7 +6,7 @@ import s from './Dot.scss';
 const Dot = class Dot extends React.Component {
   static propTypes = {
     carouselStore: PropTypes.object.isRequired,
-    children: CarouselPropTypes.children.isRequired,
+    children: CarouselPropTypes.children,
     className: PropTypes.string,
     currentSlide: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
@@ -18,6 +18,7 @@ const Dot = class Dot extends React.Component {
   }
 
   static defaultProps = {
+    children: null,
     className: null,
     disabled: null,
     onClick: null,
