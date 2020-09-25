@@ -11,6 +11,7 @@ interface SliderProps {
   readonly style?: {}
   readonly spinner?: () => void
   readonly trayTag?: string
+  readonly trayProps?: React.HTMLAttributes<HTMLUListElement>
 }
 type SliderInterface = React.ComponentClass<SliderProps>
 /**
