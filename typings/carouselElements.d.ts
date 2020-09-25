@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-interface SliderProps {
+interface SliderProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly children: React.ReactNode
   readonly className?: string
   readonly classNameAnimation?: string
