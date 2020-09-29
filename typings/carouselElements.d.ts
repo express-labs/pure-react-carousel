@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-interface SliderProps {
+interface SliderProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly children: React.ReactNode
   readonly className?: string
   readonly classNameAnimation?: string
@@ -11,6 +11,7 @@ interface SliderProps {
   readonly style?: {}
   readonly spinner?: () => void
   readonly trayTag?: string
+  readonly trayProps?: React.HTMLAttributes<HTMLUListElement>
 }
 type SliderInterface = React.ComponentClass<SliderProps>
 /**
@@ -20,7 +21,7 @@ declare const Slider: SliderInterface
 
 
 
-interface SlideProps {
+interface SlideProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly className?: string
   readonly classNameHidden?: string
   readonly classNameVisible?: string
@@ -60,7 +61,7 @@ declare const ImageWithZoom: ImageWithZoomInterface
 
 
 
-interface ImageProps {
+interface ImageProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly alt?: string
   readonly children?: React.ReactNode
   readonly className?: string
@@ -90,7 +91,7 @@ interface RenderDotsProps {
 
 type RenderDotsFunction = (props: RenderDotsProps) => void
 
-interface DotGroupProps {
+interface DotGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly children?: React.ReactNode
   readonly className?: string
   readonly dotNumbers?: boolean
@@ -109,7 +110,7 @@ declare const DotGroup: DotGroupInterface
 
 
 
-interface DotProps {
+interface DotProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly children?: React.ReactChild
   readonly className?: string
   readonly disabled?: boolean
@@ -124,7 +125,7 @@ declare const Dot: DotInterface
 
 
 
-interface ButtonNextProps {
+interface ButtonNextProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly children: React.ReactChild
   readonly className?: string
   readonly disabled?: boolean
@@ -138,7 +139,7 @@ declare const ButtonNext: ButtonNextInterface
 
 
 
-interface ButtonBackProps {
+interface ButtonBackProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly children: React.ReactChild
   readonly className?: string
   readonly disabled?: boolean
@@ -152,7 +153,7 @@ declare const ButtonBack: ButtonBackInterface
 
 
 
-interface ButtonLastProps {
+interface ButtonLastProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly children: React.ReactChild
   readonly className?: string
   readonly disabled?: boolean
@@ -166,7 +167,7 @@ declare const ButtonLast: ButtonLastInterface
 
 
 
-interface ButtonFirstProps {
+interface ButtonFirstProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly children: React.ReactChild
   readonly className?: string
   readonly disabled?: boolean
@@ -180,7 +181,7 @@ declare const ButtonFirst: ButtonLastInterface
 
 
 
-interface ButtonPlayProps {
+interface ButtonPlayProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly childrenPaused?: React.ReactNode
   readonly childrenPlaying?: React.ReactNode
   readonly className?: string
