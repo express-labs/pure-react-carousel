@@ -89,10 +89,7 @@ const Store = class Store {
   }
 
   isMasterSpinnerFinished() {
-    // console.log('MASTER SPINNER SUBSCRIPTIONS', this.masterSpinnerSubscriptions);
-    return !Object.keys(this.masterSpinnerSubscriptions).find(
-      src => this.masterSpinnerSubscriptions[src].complete !== true,
-    );
+    return Object.keys(this.masterSpinnerSubscriptions).filter(src => this.masterSpinnerSubscriptions[src].complete !== true).length === 0;
   }
 };
 
