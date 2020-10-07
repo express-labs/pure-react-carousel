@@ -90,7 +90,8 @@ const Store = class Store {
 
   isMasterSpinnerFinished() {
     return Object.keys(this.masterSpinnerSubscriptions).filter(
-      src => this.masterSpinnerSubscriptions[src].complete !== true).length === 0;
+      src => this.masterSpinnerSubscriptions[src].complete !== true,
+    ).length === 0;
   }
 };
 
