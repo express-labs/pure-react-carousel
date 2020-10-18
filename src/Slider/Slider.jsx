@@ -121,6 +121,7 @@ const Slider = class Slider extends React.Component {
       isBeingTouchDragged: false,
       startX: 0,
       startY: 0,
+      disableAnimationTemp: false,
     };
 
     this.interval = null;
@@ -207,6 +208,8 @@ const Slider = class Slider extends React.Component {
         isPageScrollLocked: true,
       });
     }
+
+    this.computeCurrentSlide(true);
 
     this.setState({
       isBeingTouchDragged: touchDrag,
@@ -342,14 +345,16 @@ const Slider = class Slider extends React.Component {
 
   forward() {
     const {
-      currentSlide, step, totalSlides, visibleSlides,
+      currentSlide, step, totalSlides, visibleSlides, infinite,
     } = this.props;
-    return Math.min(currentSlide + step, totalSlides - visibleSlides);
+    return infinite ? currentSlide + step : Math.min(currentSlide + step, totalSlides - visibleSlides);
   }
 
   backward() {
-    const { currentSlide, step } = this.props;
-    return Math.max(currentSlide - step, 0);
+    const {
+      currentSlide, step, infinite,
+    } = this.props;
+    return infinite ? currentSlide - step : Math.max(currentSlide - step, 0);
   }
 
   handleOnKeyDown(ev) {
@@ -385,8 +390,13 @@ const Slider = class Slider extends React.Component {
 
   playForward() {
     const { carouselStore, currentSlide } = this.props;
-    carouselStore.setStoreState({
-      currentSlide: this.forward() === currentSlide ? 0 : this.forward(),
+
+    this.checkInfinite()
+
+    setTimeout(() => {
+      carouselStore.setStoreState({
+        currentSlide: this.forward() === currentSlide ? 0 : this.forward(),
+      });
     });
   }
 
@@ -394,10 +404,15 @@ const Slider = class Slider extends React.Component {
     const {
       carouselStore, currentSlide, totalSlides, visibleSlides,
     } = this.props;
-    carouselStore.setStoreState({
-      currentSlide: (
-        this.backward() === currentSlide ? totalSlides - visibleSlides : this.backward()
-      ),
+
+    this.checkInfinite()
+
+    setTimeout(() => {
+      carouselStore.setStoreState({
+        currentSlide: (
+          this.backward() === currentSlide ? totalSlides - visibleSlides : this.backward()
+        ),
+      });
     });
   }
 
@@ -439,7 +454,7 @@ const Slider = class Slider extends React.Component {
     }
   }
 
-  computeCurrentSlide() {
+  computeCurrentSlide(handleInfinite = false) {
     const slideSizeInPx = Slider.slideSizeInPx(
       this.props.orientation,
       this.sliderTrayElement.clientWidth,
@@ -460,18 +475,19 @@ const Slider = class Slider extends React.Component {
       this.props.totalSlides, this.props.visibleSlides,
     );
 
-    let currentSlide = boundedRange({
-      min: 0,
-      max: maxSlide,
-      x: (this.props.currentSlide + slidesMoved),
-    });
+    let currentSlide = this.props.infinite
+      ? this.props.currentSlide + slidesMoved
+      : boundedRange({
+          min: 0,
+          max: maxSlide,
+          x: (this.props.currentSlide + slidesMoved),
+        });
 
-    if (this.props.infinite) {
-      if (this.props.currentSlide >= maxSlide && slidesMoved > 0) {
+    if (this.props.infinite && handleInfinite) {
+      if (currentSlide > this.props.totalSlides - 1) {
         currentSlide = 0;
-      }
-      if (this.props.currentSlide === 0 && slidesMoved < 0) {
-        currentSlide = maxSlide;
+      } else if (currentSlide < 0) {
+        currentSlide = this.props.totalSlides - 1
       }
     }
 
@@ -521,6 +537,39 @@ const Slider = class Slider extends React.Component {
     return null;
   }
 
+  checkInfinite() {
+    let skipToSlide = null;
+
+    const {
+      carouselStore,
+      currentSlide,
+      infinite,
+      totalSlides,
+    } = this.props;
+
+    if (infinite) {
+      if (currentSlide > totalSlides) {
+        skipToSlide = 1;
+      } else if (currentSlide < 0) {
+        skipToSlide = totalSlides - 1
+      }
+
+      if (skipToSlide) {
+        this.setState({
+          disableAnimationTemp: true
+        });
+        carouselStore.setStoreState({
+          currentSlide: skipToSlide
+        });
+        setTimeout(() => {
+          this.setState({
+            disableAnimationTemp: false
+          });
+        });
+      }
+    }
+  }
+
   render() {
     const {
       carouselStore,
@@ -534,6 +583,7 @@ const Slider = class Slider extends React.Component {
       disableKeyboard,
       dragEnabled,
       hasMasterSpinner,
+      infinite,
       interval,
       isPageScrollLocked,
       isPlaying,
@@ -576,9 +626,10 @@ const Slider = class Slider extends React.Component {
 
     // slider tray
     const trayStyle = {};
-    const trans = pct(slideSize * currentSlide * -1);
+    const additionalSlides = infinite ? 1 : 0;
+    const trans = pct((slideSize * currentSlide + additionalSlides * slideSize) * -1);
 
-    if (this.state.isBeingTouchDragged || this.state.isBeingMouseDragged || disableAnimation) {
+    if (this.state.isBeingTouchDragged || this.state.isBeingMouseDragged || this.state.disableAnimationTemp || disableAnimation) {
       trayStyle.transition = 'none';
     }
 
@@ -627,7 +678,6 @@ const Slider = class Slider extends React.Component {
     const {
       dragStep,
       step,
-      infinite,
       ...rest
     } = props;
 
@@ -647,6 +697,9 @@ const Slider = class Slider extends React.Component {
       style: ignoreStyle,
       ...filteredTrayProps
     } = trayProps;
+
+    const infiniteBefore = infinite ? React.cloneElement(children[children.length - 1], { key: "infiniteBefore" }) : null;
+    const infiniteAfter = infinite ? React.cloneElement(children[0], { key: "infiniteAfter" }) : null;
 
     return (
       <div
@@ -672,7 +725,9 @@ const Slider = class Slider extends React.Component {
             onClickCapture={this.handleOnClickCapture}
             {...filteredTrayProps}
           >
+            {infiniteBefore}
             {children}
+            {infiniteAfter}
           </TrayTag>
           {this.renderMasterSpinner()}
         </div>

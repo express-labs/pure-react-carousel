@@ -77,8 +77,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       orientation: props.orientation,
       playDirection: props.playDirection,
       privateUnDisableAnimation: false,
-      slideSize: slideSize(props.totalSlides, props.visibleSlides),
-      slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides),
+      slideSize: slideSize(props.totalSlides, props.visibleSlides, props.infinite),
+      slideTraySize: slideTraySize(props.totalSlides, props.visibleSlides, props.infinite),
       step: props.step,
       dragStep: props.dragStep,
       totalSlides: props.totalSlides,
@@ -135,8 +135,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       this.props.totalSlides !== prevProps.totalSlides
       || this.props.visibleSlides !== prevProps.visibleSlides
     ) {
-      newStoreState.slideSize = slideSize(this.props.totalSlides, this.props.visibleSlides);
-      newStoreState.slideTraySize = slideTraySize(this.props.totalSlides, this.props.visibleSlides);
+      newStoreState.slideSize = slideSize(this.props.totalSlides, this.props.visibleSlides, this.props.infinite);
+      newStoreState.slideTraySize = slideTraySize(this.props.totalSlides, this.props.visibleSlides, this.props.infinite);
     }
 
     if (this.carouselStore.state.currentSlide >= this.props.totalSlides) {

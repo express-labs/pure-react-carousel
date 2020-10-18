@@ -16,12 +16,14 @@ export function slideUnit(visibleSlides = 1) {
   return 100 / visibleSlides;
 }
 
-export function slideSize(totalSlides, visibleSlides) {
-  return ((100 / totalSlides) * visibleSlides) / visibleSlides;
+export function slideSize(totalSlides, visibleSlides, infinite) {
+  const additionalSlides = infinite ? 2 : 0;
+  return ((100 / (totalSlides + additionalSlides)) * visibleSlides) / visibleSlides;
 }
 
-export function slideTraySize(totalSlides, visibleSlides) {
-  return (100 * totalSlides) / visibleSlides;
+export function slideTraySize(totalSlides, visibleSlides, infinite) {
+  const additionalSlides = infinite ? 2 : 0;
+  return (100 * (totalSlides + additionalSlides)) / visibleSlides;
 }
 
 export function pct(num) {
