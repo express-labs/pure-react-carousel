@@ -732,6 +732,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://savas.ca"><img src="https://avatars1.githubusercontent.com/u/5691564?v=4" width="100px;" alt=""/><br /><sub><b>Niko Savas</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=taurheim" title="Code">💻</a></td>
+    <td align="center"><a href="https://bret.io"><img src="https://avatars1.githubusercontent.com/u/166301?v=4" width="100px;" alt=""/><br /><sub><b>Bret</b></sub></a><br /><a href="https://github.com/express-labs/pure-react-carousel/commits?author=bcomnes" title="Code">💻</a></td>
   </tr>
 </table>
 
