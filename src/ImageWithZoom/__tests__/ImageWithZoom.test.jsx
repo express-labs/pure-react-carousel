@@ -196,7 +196,7 @@ describe('<ImageWithZoom />', () => {
       expect(wrapper.find('Wrapper')).toHaveLength(2);
       expect(wrapper.find('Wrapper').first().prop('tag')).toEqual('img');
     });
-    it('should use uses an alt tag on the background image if there is one passed in', () => {
+    it('should use an alt tag on the background image if there is one passed in', () => {
       const wrapper = shallow(<ImageWithZoom {...props} bgImageTag="img" alt="Test" />);
       expect(wrapper.find('Wrapper').first().prop('alt')).toEqual('Test');
     });
