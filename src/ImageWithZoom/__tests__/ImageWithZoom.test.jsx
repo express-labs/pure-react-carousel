@@ -186,6 +186,21 @@ describe('<ImageWithZoom />', () => {
       ).toBe(false);
     });
   });
+  describe('background image tests', () => {
+    let props;
+    beforeEach(() => {
+      props = clone(components.ImageWithZoom.props);
+    });
+    it('should use the "bgImageTag" to decide the tag for the background image', () => {
+      const wrapper = shallow(<ImageWithZoom {...props} bgImageTag="img" />);
+      expect(wrapper.find('Wrapper')).toHaveLength(2);
+      expect(wrapper.find('Wrapper').first().prop('tag')).toEqual('img');
+    });
+    it('should use uses an alt tag on the background image if there is one passed in', () => {
+      const wrapper = shallow(<ImageWithZoom {...props} bgImageTag="img" alt="Test" />);
+      expect(wrapper.find('Wrapper').first().prop('alt')).toEqual('Test');
+    });
+  });
   describe('zoom tests', () => {
     let props;
     beforeEach(() => {
