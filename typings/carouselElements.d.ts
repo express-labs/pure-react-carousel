@@ -48,6 +48,9 @@ declare const Slide: SlideInterface
 
 
 interface ImageWithZoomProps {
+  readonly alt?: string
+  readonly bgImageProps?: object
+  readonly bgImageTag?: string
   readonly className?: string
   readonly imageClassName?: string
   readonly overlayClassName?: string
