@@ -342,6 +342,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "bcomnes",
+      "name": "Bret",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/166301?v=4",
+      "profile": "https://bret.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
