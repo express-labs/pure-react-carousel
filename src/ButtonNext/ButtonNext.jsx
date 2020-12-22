@@ -15,6 +15,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
     infinite: PropTypes.bool,
+    tag: PropTypes.elementType,
   };
 
   static defaultProps = {
@@ -22,6 +23,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     disabled: null,
     onClick: null,
     infinite: false,
+    tag: 'button',
   };
 
   static setDisabled(disabled, currentSlide, visibleSlides, totalSlides, infinite) {
@@ -73,6 +75,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
       totalSlides,
       visibleSlides,
       infinite,
+      tag: Tag,
       ...props
     } = this.props;
 
@@ -86,7 +89,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
     );
 
     return (
-      <button
+      <Tag
         type="button"
         aria-label="next"
         className={newClassName}
@@ -95,7 +98,7 @@ const ButtonNext = class ButtonNext extends React.PureComponent {
         {...props}
       >
         {this.props.children}
-      </button>
+      </Tag>
     );
   }
 };

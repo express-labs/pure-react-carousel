@@ -16,6 +16,7 @@ const DotGroup = class DotGroup extends React.Component {
     disableActiveDots: PropTypes.bool,
     showAsSelectedForCurrentSlideOnly: PropTypes.bool,
     renderDots: PropTypes.func,
+    dotTag: PropTypes.elementType,
   }
 
   static defaultProps = {
@@ -25,6 +26,7 @@ const DotGroup = class DotGroup extends React.Component {
     disableActiveDots: true,
     showAsSelectedForCurrentSlideOnly: false,
     renderDots: null,
+    dotTag: undefined,
   }
 
   renderDots() {
@@ -35,6 +37,7 @@ const DotGroup = class DotGroup extends React.Component {
       disableActiveDots,
       showAsSelectedForCurrentSlideOnly,
       renderDots,
+      dotTag,
     } = this.props;
 
     if (renderDots) {
@@ -54,6 +57,7 @@ const DotGroup = class DotGroup extends React.Component {
           slide={slide}
           selected={selected}
           disabled={disableActiveDots ? selected : false}
+          tag={dotTag}
         >
           <span className={cn['carousel__dot-group-dot']}>{this.props.dotNumbers && i + 1}</span>
         </Dot>,
@@ -74,6 +78,7 @@ const DotGroup = class DotGroup extends React.Component {
       disableActiveDots,
       showAsSelectedForCurrentSlideOnly,
       renderDots,
+      dotTag,
       ...props
     } = this.props;
 

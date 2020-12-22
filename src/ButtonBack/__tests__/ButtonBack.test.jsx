@@ -207,4 +207,20 @@ describe('<ButtonBack />', () => {
     wrapper.find('button').simulate('click');
     expect(wrapper.instance().getStore().state.isPlaying).toBe(false);
   });
+  it('should use given tag instead of button', () => {
+    const CustomButton = customProps => (<button type="button" {...customProps} />);
+    const wrapper = shallow(
+      <ButtonBack
+        currentSlide={1}
+        step={1}
+        carouselStore={{}}
+        totalSlides={10}
+        visibleSlides={1}
+        tag={CustomButton}
+      >
+      Hello
+      </ButtonBack>,
+    );
+    expect(wrapper.find(CustomButton)).toBeTruthy();
+  });
 });

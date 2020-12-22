@@ -72,4 +72,11 @@ describe('<DotGroup />', () => {
     expect(wrapper.find('img').at(1).text()).toEqual('');
     expect(wrapper.find('img').at(2).text()).toEqual('');
   });
+  it('should forward given tag to the dots', () => {
+    const CustomButton = customProps => (<button type="button" {...customProps} />);
+    const wrapper = shallow(<DotGroup {...props} dotTag={CustomButton} />);
+    expect(wrapper.children().at(0).prop('tag')).toBe(CustomButton);
+    expect(wrapper.children().at(1).prop('tag')).toBe(CustomButton);
+    expect(wrapper.children().at(2).prop('tag')).toBe(CustomButton);
+  });
 });

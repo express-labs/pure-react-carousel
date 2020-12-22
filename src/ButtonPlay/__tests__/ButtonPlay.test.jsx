@@ -32,4 +32,9 @@ describe('<ButtonPlay />', () => {
     wrapper.find('button').simulate('click');
     expect(onClick).toHaveBeenCalledTimes(1);
   });
+  it('should use given tag instead of button', () => {
+    const CustomButton = customProps => (<button type="button" {...customProps} />);
+    const wrapper = shallow(<ButtonPlay {...props} tag={CustomButton} />);
+    expect(wrapper.find(CustomButton)).toBeTruthy();
+  });
 });

@@ -300,6 +300,7 @@ A Dot component is a HTML button.  Dots directly correlate to slides.  Clicking 
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means Dot will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
 | **slide** | number | | **Yes** | There must be a matching &lt;Slide /> component with a matching index property. Example: `<Dot slide={0} />` will match `<Slide index={0} />`|
 
 #### The Dot component creates the following pseudo HTML by default:
@@ -321,6 +322,7 @@ A compound component that creates a bunch of Dot's automatically for you.
 | disableActiveDots | boolean | true | No | Setting to true make all dots, including active dots, enabled. |
 | showAsSelectedForCurrentSlideOnly | boolean | false | No | Setting to true show only the current slide dot as selected. |
 | renderDots | function| null | No | It accepts `props` and overrides renderDots() in <DotGroup/>. |
+| dotTag | [string&#124;function] | undefined | No | Optional tag to use for all dots. It can be either an HTML tag or a React component. It won't have any effect if `renderDots` is provided. |
 
 #### The DotGroup component creates the following pseudo HTML by default:
 
@@ -359,6 +361,7 @@ A button for moving the slider backwards. Backwards on a horizontal carousel mea
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonBack will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
 
 #### The ButtonBack component creates the following pseudo HTML by default:
 
@@ -377,6 +380,7 @@ A button for moving the slider forwards. Forwards on a horizontal carousel means
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonNext will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
 
 #### The ButtonNext component creates the following pseudo HTML by default:
 
@@ -395,6 +399,7 @@ Moves the slider to the beginning of the slides.
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonFirst will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
 
 #### The ButtonFirst component creates the following pseudo HTML by default:
 
@@ -413,6 +418,7 @@ Moves the slider to the end of the slides (totalSlides - visibleSlides).
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonLast will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
 
 #### The ButtonLast component creates the following pseudo HTML by default:
 
@@ -433,6 +439,7 @@ Pressing this button causes the slides to automatically advance by CarouselProvi
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonPlay will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
 
 #### The ButtonPlay component creates the following pseudo HTML by default:
 
@@ -674,7 +681,7 @@ I promise to add docs for every component.  In the meantime, feel free to downlo
 - `npm start` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload<br><br>
 - `npm run build` compiles commonjs and ES modules and places them in the dist directory<br><br>
 - `npm test` runs unit and integration tests using Jest + Enzyme.  Also does coverage reporting.<br><br>
-- `npm lint` runs linting tests using eslint & airbnb linting.<br><br>
+- `npm run lint` runs linting tests using eslint & airbnb linting.<br><br>
 - `npm test:watch` same as `npm test` but it will watch for updates and auto-run tests. Does not do coverage reporting.<br><br>
 
 ## Contributors

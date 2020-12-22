@@ -12,6 +12,7 @@ const ButtonPlay = class ButtonPlay extends React.PureComponent {
     className: PropTypes.string,
     isPlaying: PropTypes.bool.isRequired,
     onClick: PropTypes.func,
+    tag: PropTypes.elementType,
   };
 
   static defaultProps = {
@@ -20,6 +21,7 @@ const ButtonPlay = class ButtonPlay extends React.PureComponent {
     childrenPlaying: null,
     className: null,
     onClick: null,
+    tag: 'button',
   }
 
   constructor(props) {
@@ -43,6 +45,7 @@ const ButtonPlay = class ButtonPlay extends React.PureComponent {
       className,
       isPlaying,
       onClick,
+      tag: Tag,
       ...props
     } = this.props;
 
@@ -53,7 +56,7 @@ const ButtonPlay = class ButtonPlay extends React.PureComponent {
     ]);
 
     return (
-      <button
+      <Tag
         type="button"
         aria-label="play"
         className={newClassName}
@@ -63,7 +66,7 @@ const ButtonPlay = class ButtonPlay extends React.PureComponent {
         {isPlaying && childrenPlaying}
         {!isPlaying && childrenPaused}
         {this.props.children}
-      </button>
+      </Tag>
     );
   }
 };

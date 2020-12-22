@@ -104,6 +104,7 @@ interface DotGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly disableActiveDots?: boolean,
   readonly showAsSelectedForCurrentSlideOnly?: boolean,
   readonly renderDots?: RenderDotsFunction,
+  readonly dotTag?: React.ReactElement,
 }
 type DotGroupInterface = React.ComponentClass<DotGroupProps>
 /**
@@ -119,6 +120,7 @@ interface DotProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly disabled?: boolean
   readonly onClick?: () => void
   readonly slide: number
+  readonly tag?: React.ReactElement
 }
 type DotInterface = React.ComponentClass<DotProps>
 /**
@@ -133,6 +135,7 @@ interface ButtonNextProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly className?: string
   readonly disabled?: boolean
   readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
+  readonly tag?: React.ReactElement
 }
 type ButtonNextInterface = React.ComponentClass<ButtonNextProps>
 /**
@@ -147,6 +150,7 @@ interface ButtonBackProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly className?: string
   readonly disabled?: boolean
   readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
+  readonly tag?: React.ReactElement
 }
 type ButtonBackInterface = React.ComponentClass<ButtonBackProps>
 /**
@@ -161,6 +165,7 @@ interface ButtonLastProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly className?: string
   readonly disabled?: boolean
   readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
+  readonly tag?: React.ReactElement
 }
 type ButtonLastInterface = React.ComponentClass<ButtonLastProps>
 /**
@@ -175,6 +180,7 @@ interface ButtonFirstProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly className?: string
   readonly disabled?: boolean
   readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
+  readonly tag?: React.ReactElement
 }
 type ButtonFirstInterface = React.ComponentClass<ButtonFirstProps>
 /**
@@ -190,6 +196,7 @@ interface ButtonPlayProps extends React.HTMLAttributes<HTMLButtonElement> {
   readonly className?: string
   readonly disabled?: boolean
   readonly onClick?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void
+  readonly tag?: React.ReactElement
 }
 type ButtonPlayInterface = React.ComponentClass<ButtonPlayProps>
 /**

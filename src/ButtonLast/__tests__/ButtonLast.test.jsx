@@ -80,4 +80,9 @@ describe('<ButtonLast />', () => {
     wrapper.find('button').simulate('click');
     expect(newProps.carouselStore.getStoreState().isPlaying).toBe(false);
   });
+  it('should use given tag instead of button', () => {
+    const CustomButton = customProps => (<button type="button" {...customProps} />);
+    const wrapper = shallow(<ButtonLast {...props} tag={CustomButton} />);
+    expect(wrapper.find(CustomButton)).toBeTruthy();
+  });
 });

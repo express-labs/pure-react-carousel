@@ -167,4 +167,9 @@ describe('<ButtonNext />', () => {
     wrapper.find('button').simulate('click');
     expect(wrapper.instance().getStore().state.isPlaying).toBe(false);
   });
+  it('should use given tag instead of button', () => {
+    const CustomButton = customProps => (<button type="button" {...customProps} />);
+    const wrapper = shallow(<ButtonNext {...props} tag={CustomButton} />);
+    expect(wrapper.find(CustomButton)).toBeTruthy();
+  });
 });
