@@ -351,6 +351,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cyphire",
+      "name": "Brian B. Canin",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/337798?v=4",
+      "profile": "http://superapps.com",
+      "contributions": [
+        "question"
+      ]
     }
   ],
   "contributorsPerLine": 7,
