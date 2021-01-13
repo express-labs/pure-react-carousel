@@ -248,9 +248,9 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 ```HTML
 <div class="carousel__slider [carousel__slider--vertical|carousel__slider--horizontal] [props.className]" aria-live="polite" style="[props.style]" ...props>
   <div class="carousel__slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal][props.classNameTrayWrap]">
-    <props.trayTag|ul class="carousel__slider-tray [props.classNameAnimation] [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]">
+    <props.trayTag|div class="carousel__slider-tray [props.classNameAnimation] [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]">
       [props.children]
-    </props.trayTag|ul>
+    </props.trayTag|div>
     <div class="carousel__master-spinner-container">
       <div class="carousel__spinner" />
     </div>
@@ -283,12 +283,12 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 
 #### The Slide component creates the following pseudo HTML by default:
 ```HTML
-<props.tag|li class="carousel__slide [carousel__slide--focused] [props.className] [props.classNameVisible|props.classNameHidden] [carousel__slide--hidden|carousel__slide--visible]" tabIndex="[props.tabIndex]" aria-hidden="[computed internally]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
+<props.tag|div class="carousel__slide [carousel__slide--focused] [props.className] [props.classNameVisible|props.classNameHidden] [carousel__slide--hidden|carousel__slide--visible]" tabIndex="[props.tabIndex]" aria-hidden="[computed internally]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
   <props.innerTag|div class="carousel__inner-slide [props.innerClassName]">
     [props.children]
     <div class="carousel__slide-focus-ring" />
   <props.innerTag|div>
-</props.tag|li>
+</props.tag|div>
 ```
 
 ### &lt;Dot />
