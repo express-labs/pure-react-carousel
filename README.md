@@ -232,6 +232,7 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the Slider needs to wrap other components and/or JSX |
+| ariaLabel | string |'slider' | N |  Optional sting that sets the "aria-label" attribute.|
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | classNameAnimation| [string&#124;null] | null | No |Optional className string. The slider uses the css transform property, applying translateX to move the slider tray east and west for a horizontal slider, and translateY to move the slider north and south for a vertical slider.   The actual animation is the result of applying a CSS3 transition effect.  If you supply your own classNameAnimation class, the default transition is disabled and ONLY the transitions specified by the classNameAnimation class are applied. Learn more about [CSS3 transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions). |
 | classNameTray | [string&#124;null] | null | No | Optional className string that is applied to the Slider's tray. The "tray" is the DOM element that contains the slides. The type of DOM element is specified by the trayTag property |
@@ -241,16 +242,16 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 | spinner | function | null | No |  Optional inline JSX (aka "render props") to render your own custom spinner.  Example `() => <MyCustomSpinnerComponent />`  If left blank, the default spinner is used. |
 | style | object | {} | No | Optional css styles to add to the Slider.  Note: internal css properties take precedence over any styles specified in the styles object |
 | trayProps | object | {} | No | Any props you want to attach to the slider tray with the exception of className and style. The className prop is handled via classNameTray prop above.  Style is used internally. Any event handlers like onMouseDown or others are called after any of our internal event handlers. |
-| trayTag | string | 'ul' | No | The HTML tag to used for the tray (the thing that holds all the slides and moves the slides back and forth.) |
+| trayTag | string | 'div' | No | The HTML tag to used for the tray (the thing that holds all the slides and moves the slides back and forth.) |
 
 #### The Slider component creates the following pseudo HTML by default.
 
 ```HTML
 <div class="carousel__slider [carousel__slider--vertical|carousel__slider--horizontal] [props.className]" aria-live="polite" style="[props.style]" ...props>
   <div class="carousel__slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal][props.classNameTrayWrap]">
-    <props.trayTag|ul class="carousel__slider-tray [props.classNameAnimation] [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]">
+    <props.trayTag|div class="carousel__slider-tray [props.classNameAnimation] [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]">
       [props.children]
-    </props.trayTag|ul>
+    </props.trayTag|div>
     <div class="carousel__master-spinner-container">
       <div class="carousel__spinner" />
     </div>
@@ -271,6 +272,7 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
+| ariaLabel | string |'slide' | N |  Optional sting that sets the "aria-label" attribute.|
 | classNameHidden | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string when the slide is not visible. |
 | classNameVisible | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string when the slide is visible. |
 | **index** | number | | **Yes** | You must consecutively number the &lt;Slide > components in order starting with zero. |
@@ -279,16 +281,16 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 | onBlur | [function&#124;null] | null | No | Optional callback function that is called after the internal onBlur function is called. It is passed the React synthetic event |
 | onFocus | [function&#124;null] | null | No | Optional callback function that is called after the internal onFocus function is called. It is passed the React synthetic event |
 | tabIndex | [number&#124;null] | null | No | When null, the Carousel will set this automatically.  99.9% of the time, you're going to want to leave this alone and let the carousel handle tabIndex automatically. |
-| tag | string | 'li' | No | The root HTML element for each Slide. |
+| tag | string | 'div' | No | The root HTML element for each Slide. |
 
 #### The Slide component creates the following pseudo HTML by default:
 ```HTML
-<props.tag|li class="carousel__slide [carousel__slide--focused] [props.className] [props.classNameVisible|props.classNameHidden] [carousel__slide--hidden|carousel__slide--visible]" tabIndex="[props.tabIndex]" aria-hidden="[computed internally]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
+<props.tag|div class="carousel__slide [carousel__slide--focused] [props.className] [props.classNameVisible|props.classNameHidden] [carousel__slide--hidden|carousel__slide--visible]" tabIndex="[props.tabIndex]" aria-hidden="[computed internally]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
   <props.innerTag|div class="carousel__inner-slide [props.innerClassName]">
     [props.children]
     <div class="carousel__slide-focus-ring" />
   <props.innerTag|div>
-</props.tag|li>
+</props.tag|div>
 ```
 
 ### &lt;Dot />

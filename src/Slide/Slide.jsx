@@ -5,6 +5,7 @@ import s from './Slide.scss';
 
 const Slide = class Slide extends React.PureComponent {
   static propTypes = {
+    ariaLabel: PropTypes.string,
     carouselStore: PropTypes.object,
     children: CarouselPropTypes.children,
     className: PropTypes.string,
@@ -29,6 +30,7 @@ const Slide = class Slide extends React.PureComponent {
   }
 
   static defaultProps = {
+    ariaLabel: 'slide',
     carouselStore: null,
     children: null,
     className: null,
@@ -40,7 +42,7 @@ const Slide = class Slide extends React.PureComponent {
     onFocus: null,
     style: {},
     tabIndex: null,
-    tag: 'li',
+    tag: 'div',
     isIntrinsicHeight: false,
   }
 
@@ -85,6 +87,7 @@ const Slide = class Slide extends React.PureComponent {
 
   render() {
     const {
+      ariaLabel,
       carouselStore,
       children,
       className,
@@ -161,6 +164,7 @@ const Slide = class Slide extends React.PureComponent {
         ref={(el) => { this.tagRef = el; }}
         tabIndex={newTabIndex}
         aria-selected={this.isVisible()}
+        aria-label={ariaLabel}
         role="option"
         onFocus={this.handleOnFocus}
         onBlur={this.handleOnBlur}
