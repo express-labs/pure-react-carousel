@@ -30,7 +30,7 @@ const Slide = class Slide extends React.PureComponent {
   }
 
   static defaultProps = {
-    ariaLabel: 'test',
+    ariaLabel: 'slide',
     carouselStore: null,
     children: null,
     className: null,
