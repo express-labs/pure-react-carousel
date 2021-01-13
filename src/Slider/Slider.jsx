@@ -9,6 +9,7 @@ import s from './Slider.scss';
 
 const Slider = class Slider extends React.Component {
   static propTypes = {
+    ariaLabel: PropTypes.string,
     carouselStore: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
@@ -59,6 +60,7 @@ const Slider = class Slider extends React.Component {
   }
 
   static defaultProps = {
+    ariaLabel: 'slider',
     className: null,
     classNameAnimation: null,
     classNameTray: null,
@@ -74,7 +76,7 @@ const Slider = class Slider extends React.Component {
     style: {},
     tabIndex: null,
     trayProps: {},
-    trayTag: 'ul',
+    trayTag: 'div',
     visibleSlides: 1,
     isIntrinsicHeight: false,
   }
@@ -523,6 +525,7 @@ const Slider = class Slider extends React.Component {
 
   render() {
     const {
+      ariaLabel,
       carouselStore,
       children,
       className,
@@ -653,6 +656,7 @@ const Slider = class Slider extends React.Component {
         ref={(el) => { this.sliderElement = el; }}
         className={sliderClasses}
         aria-live="polite"
+        aria-label={ariaLabel}
         style={sliderStyle}
         tabIndex={newTabIndex}
         onKeyDown={this.handleOnKeyDown}
