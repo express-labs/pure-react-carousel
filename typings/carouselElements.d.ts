@@ -84,34 +84,6 @@ type ImageInterface = React.ComponentClass<ImageProps>
 declare const Image: ImageInterface
 
 
-interface RenderDotsProps {
-  readonly currentSlide?: number,
-  readonly totalSlides?: number,
-  readonly visibleSlides?: number,
-  readonly disableActiveDots?: boolean,
-  readonly showAsSelectedForCurrentSlideOnly?: boolean,
-}
-
-type RenderDotsFunction = (props: RenderDotsProps) => void
-
-interface DotGroupProps extends React.HTMLAttributes<HTMLDivElement> {
-  readonly children?: React.ReactNode
-  readonly className?: string
-  readonly dotNumbers?: boolean
-  readonly currentSlide?: number,
-  readonly totalSlides?: number,
-  readonly visibleSlides?: number,
-  readonly disableActiveDots?: boolean,
-  readonly showAsSelectedForCurrentSlideOnly?: boolean,
-  readonly renderDots?: RenderDotsFunction,
-}
-type DotGroupInterface = React.ComponentClass<DotGroupProps>
-/**
- * A compound component that creates a bunch of Dot's automatically for you.
- */
-declare const DotGroup: DotGroupInterface
-
-
 
 interface DotProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly children?: React.ReactChild
@@ -125,6 +97,25 @@ type DotInterface = React.ComponentClass<DotProps>
  * A Dot component is a HTML button. Dots directly correlate to slides. Clicking on a dot causes it's correlating slide to scroll into the left-most visible slot of slider. The dots for currently visible slides cause are disabled. You can override the auto-disable feature by setting disabled to false (see table below)
  */
 declare const Dot: DotInterface
+
+
+
+interface DotGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  readonly children?: React.ReactNode
+  readonly className?: string
+  readonly dotNumbers?: boolean
+  readonly currentSlide?: number,
+  readonly totalSlides?: number,
+  readonly visibleSlides?: number,
+  readonly disableActiveDots?: boolean,
+  readonly showAsSelectedForCurrentSlideOnly?: boolean,
+  readonly dotComponent?: React.ComponentType<DotProps>,
+}
+type DotGroupInterface = React.ComponentClass<DotGroupProps>
+/**
+ * A compound component that creates a bunch of Dot's automatically for you.
+ */
+declare const DotGroup: DotGroupInterface
 
 
 

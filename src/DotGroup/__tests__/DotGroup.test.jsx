@@ -57,19 +57,12 @@ describe('<DotGroup />', () => {
     expect(wrapper.children().at(1).prop('selected')).toEqual(true);
     expect(wrapper.children().at(2).prop('selected')).toEqual(true);
   });
-  it('should render dots differently if renderDots is provided', () => {
-    const renderDots = ({ totalSlides }) => {
-      const dots = [];
+  it('should render dots differently if dotComponent is provided', () => {
+    const CustomDot = () => <div />;
 
-      for (let i = 0; i < totalSlides; i += 1) {
-        dots.push(<img key={i} src="data:," alt="" />);
-      }
-      return dots;
-    };
-
-    const wrapper = shallow(<DotGroup {...props} renderDots={renderDots} />);
-    expect(wrapper.find('img').at(0).text()).toEqual('');
-    expect(wrapper.find('img').at(1).text()).toEqual('');
-    expect(wrapper.find('img').at(2).text()).toEqual('');
+    const wrapper = shallow(<DotGroup {...props} dotComponent={CustomDot} />);
+    expect(wrapper.find(CustomDot).at(0).exists()).toBe(true);
+    expect(wrapper.find(CustomDot).at(1).exists()).toBe(true);
+    expect(wrapper.find(CustomDot).at(2).exists()).toBe(true);
   });
 });
