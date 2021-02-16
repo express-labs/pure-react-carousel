@@ -110,7 +110,7 @@ interface DotGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly visibleSlides?: number,
   readonly disableActiveDots?: boolean,
   readonly showAsSelectedForCurrentSlideOnly?: boolean,
-  readonly dotTag?: React.ReactElement,
+  readonly dotComponent?: React.ComponentType<DotProps>,
 }
 type DotGroupInterface = React.ComponentClass<DotGroupProps>
 /**
