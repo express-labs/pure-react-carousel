@@ -15,6 +15,7 @@ const Dot = class Dot extends React.Component {
     slide: PropTypes.number.isRequired,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
+    tag: PropTypes.elementType,
   }
 
   static defaultProps = {
@@ -23,6 +24,7 @@ const Dot = class Dot extends React.Component {
     disabled: null,
     onClick: null,
     selected: null,
+    tag: 'button',
   }
 
   constructor(props) {
@@ -45,7 +47,7 @@ const Dot = class Dot extends React.Component {
   render() {
     const {
       carouselStore, children, className, currentSlide, disabled, onClick, selected, slide,
-      totalSlides, visibleSlides, ...props
+      totalSlides, visibleSlides, tag: Tag, ...props
     } = this.props;
     const defaultSelected = slide >= currentSlide && slide < (currentSlide + visibleSlides);
     const newSelected = typeof selected === 'boolean' ? selected : defaultSelected;
@@ -62,7 +64,7 @@ const Dot = class Dot extends React.Component {
     ]);
 
     return (
-      <button
+      <Tag
         aria-label="slide dot"
         type="button"
         onClick={this.handleOnClick}
@@ -71,7 +73,7 @@ const Dot = class Dot extends React.Component {
         {...props}
       >
         {this.props.children}
-      </button>
+      </Tag>
     );
   }
 };

@@ -57,12 +57,11 @@ describe('<DotGroup />', () => {
     expect(wrapper.children().at(1).prop('selected')).toEqual(true);
     expect(wrapper.children().at(2).prop('selected')).toEqual(true);
   });
-  it('should render dots differently if dotComponent is provided', () => {
-    const CustomDot = () => <div />;
-
-    const wrapper = shallow(<DotGroup {...props} dotComponent={CustomDot} />);
-    expect(wrapper.find(CustomDot).at(0).exists()).toBe(true);
-    expect(wrapper.find(CustomDot).at(1).exists()).toBe(true);
-    expect(wrapper.find(CustomDot).at(2).exists()).toBe(true);
+  it('should forward given tag to the dots', () => {
+    const CustomDot = customProps => (<button type="button" {...customProps} />);
+    const wrapper = shallow(<DotGroup {...props} dotTag={CustomDot} />);
+    expect(wrapper.children().at(0).prop('tag')).toBe(CustomDot);
+    expect(wrapper.children().at(1).prop('tag')).toBe(CustomDot);
+    expect(wrapper.children().at(2).prop('tag')).toBe(CustomDot);
   });
 });

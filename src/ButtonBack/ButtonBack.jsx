@@ -15,6 +15,7 @@ export default class ButtonBack extends React.Component {
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
     infinite: PropTypes.bool,
+    tag: PropTypes.elementType,
   };
 
   static defaultProps = {
@@ -22,6 +23,7 @@ export default class ButtonBack extends React.Component {
     disabled: null,
     onClick: null,
     infinite: false,
+    tag: 'button',
   };
 
   static setDisabled(disabled, currentSlide, infinite) {
@@ -72,6 +74,7 @@ export default class ButtonBack extends React.Component {
       totalSlides,
       visibleSlides,
       infinite,
+      tag: Tag,
       ...props
     } = this.props;
 
@@ -83,7 +86,7 @@ export default class ButtonBack extends React.Component {
     );
 
     return (
-      <button
+      <Tag
         type="button"
         aria-label="previous"
         className={newClassName}
@@ -92,7 +95,7 @@ export default class ButtonBack extends React.Component {
         {...props}
       >
         {this.props.children}
-      </button>
+      </Tag>
     );
   }
 }

@@ -12,12 +12,14 @@ const ButtonFirst = class ButtonFirst extends React.Component {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     totalSlides: PropTypes.number.isRequired,
+    tag: PropTypes.elementType,
   }
 
   static defaultProps = {
     className: null,
     disabled: null,
     onClick: null,
+    tag: 'button',
   }
 
   constructor() {
@@ -41,6 +43,7 @@ const ButtonFirst = class ButtonFirst extends React.Component {
       disabled,
       onClick,
       totalSlides,
+      tag: Tag,
       ...props
     } = this.props;
 
@@ -53,7 +56,7 @@ const ButtonFirst = class ButtonFirst extends React.Component {
     const newDisabled = disabled !== null ? disabled : currentSlide === 0;
 
     return (
-      <button
+      <Tag
         type="button"
         aria-label="first"
         className={newClassName}
@@ -62,7 +65,7 @@ const ButtonFirst = class ButtonFirst extends React.Component {
         {...props}
       >
         {this.props.children}
-      </button>
+      </Tag>
     );
   }
 };

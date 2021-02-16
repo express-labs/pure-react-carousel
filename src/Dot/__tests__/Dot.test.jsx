@@ -64,4 +64,9 @@ describe('<Dot />', () => {
     wrapper.find('button').simulate('click');
     expect(props.carouselStore.getStoreState().isPlaying).toBe(false);
   });
+  it('should use given tag instead of button', () => {
+    const CustomButton = customProps => (<button type="button" {...customProps} />);
+    const wrapper = shallow(<Dot {...props} tag={CustomButton} />);
+    expect(wrapper.find(CustomButton)).toBeTruthy();
+  });
 });
