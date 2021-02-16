@@ -24,7 +24,7 @@ const DotGroup = class DotGroup extends React.Component {
     dotNumbers: false,
     disableActiveDots: true,
     showAsSelectedForCurrentSlideOnly: false,
-    dotTag: null,
+    dotTag: undefined,
   }
 
   renderDots() {
