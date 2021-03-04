@@ -129,7 +129,6 @@ const Slide = class Slide extends React.PureComponent {
       } else {
         tempStyle.width = 'unset';
       }
-      tempStyle.position = 'unset';
       tempStyle.paddingBottom = 'unset';
       innerStyle.position = 'unset';
     }
