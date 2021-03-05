@@ -137,6 +137,7 @@ const Slider = class Slider extends React.Component {
     if (this.props.lockOnWindowScroll) {
       window.addEventListener('scroll', this.handleDocumentScroll, false);
     }
+    window.addEventListener('touchmove', ev => this.blockWindowScroll(ev), { passive: false });
     document.documentElement.addEventListener('mouseleave', this.handleOnMouseUp, false);
     document.documentElement.addEventListener('mousemove', this.handleOnMouseMove, false);
     document.documentElement.addEventListener('mouseup', this.handleOnMouseUp, false);
@@ -166,6 +167,7 @@ const Slider = class Slider extends React.Component {
     document.documentElement.removeEventListener('mousemove', this.handleOnMouseMove, false);
     document.documentElement.removeEventListener('mouseup', this.handleOnMouseUp, false);
     window.removeEventListener('scroll', this.handleDocumentScroll, false);
+    window.removeEventListener('touchmove', this.blockWindowScroll, false);
 
     this.stop();
     window.cancelAnimationFrame.call(window, this.moveTimer);
@@ -438,6 +440,14 @@ const Slider = class Slider extends React.Component {
       this.scrollParent.style.overflow = this.originalOverflow;
       this.originalOverflow = null;
       this.scrollParent = null;
+    }
+  }
+
+  blockWindowScroll(ev) {
+    console.log(this.state.isBeingTouchDragged);
+    if (this.state.isBeingTouchDragged) {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
     }
   }
 
