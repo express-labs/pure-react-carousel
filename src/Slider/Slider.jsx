@@ -121,6 +121,7 @@ const Slider = class Slider extends React.Component {
       deltaY: 0,
       isBeingMouseDragged: false,
       isBeingTouchDragged: false,
+      preventVerticalScroll: false,
       startX: 0,
       startY: 0,
     };
@@ -163,6 +164,7 @@ const Slider = class Slider extends React.Component {
   }
 
   componentWillUnmount() {
+
     document.documentElement.removeEventListener('mouseleave', this.handleOnMouseUp, false);
     document.documentElement.removeEventListener('mousemove', this.handleOnMouseMove, false);
     document.documentElement.removeEventListener('mouseup', this.handleOnMouseUp, false);
@@ -221,6 +223,11 @@ const Slider = class Slider extends React.Component {
   }
 
   fakeOnDragMove(screenX, screenY) {
+    console.log(Math.abs(screenY - this.state.startY), Math.abs(screenX - this.state.startX));
+    this.setState(state => ({
+      preventVerticalScroll: Math.abs(screenY - state.startY) < 15,
+    }));
+
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
         deltaX: screenX - state.startX,
@@ -444,10 +451,12 @@ const Slider = class Slider extends React.Component {
   }
 
   blockWindowScroll(ev) {
-    console.log(this.state.isBeingTouchDragged);
-    if (this.state.isBeingTouchDragged) {
+    if (this.state.preventVerticalScroll) {
+      console.log("blocked");
       ev.preventDefault();
       ev.stopImmediatePropagation();
+    } else {
+      console.log("unblocked")
     }
   }
 
