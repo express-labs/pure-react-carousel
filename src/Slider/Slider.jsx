@@ -139,7 +139,7 @@ const Slider = class Slider extends React.Component {
     if (this.props.lockOnWindowScroll) {
       window.addEventListener('scroll', this.handleDocumentScroll, false);
     }
-    window.addEventListener('touchmove', ev => this.blockWindowScroll(ev), { passive: false });
+    window.addEventListener('touchmove', this.blockWindowScroll, false);
     document.documentElement.addEventListener('mouseleave', this.handleOnMouseUp, false);
     document.documentElement.addEventListener('mousemove', this.handleOnMouseMove, false);
     document.documentElement.addEventListener('mouseup', this.handleOnMouseUp, false);
@@ -224,7 +224,6 @@ const Slider = class Slider extends React.Component {
   }
 
   fakeOnDragMove(screenX, screenY) {
-    console.log(Math.abs(screenY - this.state.startY), Math.abs(screenX - this.state.startX));
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
         deltaX: screenX - state.startX,

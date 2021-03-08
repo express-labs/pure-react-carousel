@@ -34,7 +34,7 @@ window.requestAnimationFrame = (r) => {
   raf += 1;
   return raf;
 };
-window.cancelAnimationFrame = jest.fn().mockImplementation(() => {});
+window.cancelAnimationFrame = jest.fn().mockImplementation(() => { });
 
 // patch for missing SVGElement in jsDom.  Supposedly is fixed in newer versions of jsDom.
 if (!global.SVGElement) global.SVGElement = global.Element;
@@ -126,6 +126,9 @@ describe('<Slider />', () => {
       it('should bind playForward', () => {
         expect(instance.playForward.name).toEqual('bound playForward');
       });
+      it('should bind blockWindowScroll', () => {
+        expect(instance.blockWindowScroll.name).toEqual('bound blockWindowScroll');
+      });
       it('should initialize the state with the following shape', () => {
         expect(instance.state).toEqual({
           cancelNextClick: false,
@@ -133,6 +136,7 @@ describe('<Slider />', () => {
           deltaY: 0,
           isBeingMouseDragged: false,
           isBeingTouchDragged: false,
+          preventVerticalScroll: false,
           startX: 0,
           startY: 0,
         });
@@ -161,11 +165,17 @@ describe('<Slider />', () => {
         const instance = new Slider({ lockOnWindowScroll: true });
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledWith('scroll', instance.handleDocumentScroll, false);
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(2);
       });
       it('should NOT add an event listener for handleDocumentScroll if the prop lockOnWindowScroll is false', () => {
         const instance = new Slider({ lockOnWindowScroll: false });
         instance.componentDidMount();
-        expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(1);
+      });
+      it('should add an event listener to Window for blocking vertical scroll on touchmove ', () => {
+        const instance = new Slider({});
+        instance.componentDidMount();
+        expect(global.window.addEventListener).toHaveBeenCalledWith('touchmove', instance.blockWindowScroll, false);
       });
       it('should add an event listener to documentElement for mouseleave', () => {
         const instance = new Slider({});
@@ -212,6 +222,9 @@ describe('<Slider />', () => {
       });
       it('should remove the scroll listener from window', () => {
         expect(global.window.removeEventListener).toHaveBeenCalledWith('scroll', instance.handleDocumentScroll, false);
+      });
+      it('should remove the touchmove listener from window', () => {
+        expect(global.window.removeEventListener).toHaveBeenCalledWith('touchmove', instance.blockWindowScroll, false);
       });
       it('should reset isDocumentScrolling to null', () => {
         expect(instance.isDocumentScrolling).toBe(null);
@@ -810,7 +823,7 @@ describe('<Slider />', () => {
     it('endTouchMove should set this.isDocumentScrolling to false if props.lockOnWindowScroll is true', () => {
       const wrapper = shallow(<Slider {...props} lockOnWindowScroll />);
       const instance = wrapper.instance();
-      instance.computeCurrentSlide = () => {};
+      instance.computeCurrentSlide = () => { };
       instance.handleDocumentScroll();
       expect(instance.isDocumentScrolling).toBe(true);
       instance.endTouchMove();
@@ -820,7 +833,7 @@ describe('<Slider />', () => {
     it('endTouchMove should NOT set this.isDocumentScrolling to false if props.lockOnWindowScroll is FALSE', () => {
       const wrapper = shallow(<Slider {...props} />);
       const instance = wrapper.instance();
-      instance.computeCurrentSlide = () => {};
+      instance.computeCurrentSlide = () => { };
       instance.endTouchMove();
       expect(instance.isDocumentScrolling).toBe(null);
     });
