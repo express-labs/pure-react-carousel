@@ -223,15 +223,12 @@ const Slider = class Slider extends React.Component {
   }
 
   fakeOnDragMove(screenX, screenY) {
-    console.log(Math.abs(screenY - this.state.startY), Math.abs(screenX - this.state.startX));
-    this.setState(state => ({
-      preventVerticalScroll: Math.abs(screenY - state.startY) < 15,
-    }));
-
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
         deltaX: screenX - state.startX,
         deltaY: screenY - state.startY,
+        preventVerticalScroll: Math.abs(screenY - state.startY) < 15 &&
+          Math.abs(screenX - state.startX) > 20,
       }));
     });
   }
@@ -452,11 +449,8 @@ const Slider = class Slider extends React.Component {
 
   blockWindowScroll(ev) {
     if (this.state.preventVerticalScroll) {
-      console.log("blocked");
       ev.preventDefault();
       ev.stopImmediatePropagation();
-    } else {
-      console.log("unblocked")
     }
   }
 
