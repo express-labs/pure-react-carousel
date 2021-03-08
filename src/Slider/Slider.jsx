@@ -114,6 +114,7 @@ const Slider = class Slider extends React.Component {
     this.playBackward = this.playBackward.bind(this);
     this.playForward = this.playForward.bind(this);
     this.callCallback = this.callCallback.bind(this);
+    this.blockWindowScroll = this.blockWindowScroll.bind(this);
 
     this.state = {
       cancelNextClick: false,
@@ -223,12 +224,13 @@ const Slider = class Slider extends React.Component {
   }
 
   fakeOnDragMove(screenX, screenY) {
+    console.log(Math.abs(screenY - this.state.startY), Math.abs(screenX - this.state.startX));
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
         deltaX: screenX - state.startX,
         deltaY: screenY - state.startY,
-        preventVerticalScroll: Math.abs(screenY - state.startY) < 15 &&
-          Math.abs(screenX - state.startX) > 20,
+        preventVerticalScroll: Math.abs(screenY - state.startY) <= 10
+          && Math.abs(screenX - state.startX) >= 15,
       }));
     });
   }
