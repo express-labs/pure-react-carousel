@@ -570,7 +570,7 @@ describe('<Slider />', () => {
       expect(wrapper.state('deltaY')).toBe(100);
     });
 
-    it('should change preventVerticalScroll state to true with cross axis touch with in deviation', () => {
+    it('should change preventVerticalScroll state to true with cross axis touch with in parameters', () => {
       const wrapper = shallow(<Slider {...props} />);
       expect(wrapper.state('startX')).toBe(0);
       expect(wrapper.state('startY')).toBe(0);
@@ -581,7 +581,7 @@ describe('<Slider />', () => {
       expect(wrapper.state('deltaY')).toBe(9);
     });
 
-    it('should change preventVerticalScroll state to false with cross axis touch outside of deviation', () => {
+    it('should change preventVerticalScroll state to false with cross axis touch outside of parameters', () => {
       const wrapper = shallow(<Slider {...props} />);
       expect(wrapper.state('startX')).toBe(0);
       expect(wrapper.state('startY')).toBe(0);

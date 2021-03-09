@@ -201,6 +201,9 @@ Any remaining props not consumed by the component are passed directly to the roo
 | interval | number | 5000 | No | Number of milliseconds to wait when the auto slideshow is active |
 | isPlaying | bool | false | No | Setting this to true starts an auto slideshow. After "interval" milliseconds, the slider will move by "step" slides either forward or backwards depending on the value of "playDirection". |
 | lockOnWindowScroll | bool | false | No | When set to true, scrolling of the carousel slides are disabled while the browser window is scrolling |
+| preventVerticalScrollOnTouch | bool | true | No | When set to true, prevents vertical screen scroll based on touch move of the carousel|
+| horizontalPixelThreshold| number | 15 | No | The minimum amount of pixels moved horizontally, by touch on the carousel, which will block page scroll if the  movement in pixels is greater or equal than the amount of the provided value.|
+| verticalPixelThreshold | number | 10 | No | The maximum amount of pixels moved vertically, by touch on the carousel, which will block page scroll if the movement in pixels is less than the provided value |
 | **naturalSlideHeight** | number | | **Yes** | The natural height of each <\Slide > component. ** |
 | **naturalSlideWidth** | number | | **Yes** | The natural width of each <\Slide > component. ** |
 | orientation | string | "horizontal" | No | Possible values are "horizontal" and "vertical".  Let's you have a horizontal or vertical carousel. |
