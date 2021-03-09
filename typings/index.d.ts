@@ -36,6 +36,9 @@ interface CarouselState {
   readonly imageErrorCount: number
   readonly imageSuccessCount: number
   readonly lockOnWindowScroll: boolean
+  readonly preventVerticalScrollOnTouch: boolean
+  readonly horizontalPixelThreshold: number
+  readonly verticalPixelThreshold: number,
   readonly masterSpinnerFinished: boolean
   readonly masterSpinnerThreshold: number
   readonly naturalSlideHeight: number
@@ -81,9 +84,12 @@ interface CarouselProviderProps {
   readonly interval?: number
   readonly isPlaying?: boolean
   readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
+  readonly preventVerticalScrollOnTouch?: CarouselState['preventVerticalScrollOnTouch']
+  readonly horizontalPixelThreshold: CarouselState['horizontalPixelThreshold']
+  readonly verticalPixelThreshold: CarouselState['verticalPixelThreshold'],
   readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
   readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
-  readonly playDirection?: 'forward'|'backward'
+  readonly playDirection?: 'forward' | 'backward'
   readonly orientation?: CarouselState['orientation']
   readonly step?: CarouselState['step']
   readonly dragStep?: CarouselState['dragStep']
