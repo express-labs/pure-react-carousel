@@ -180,7 +180,7 @@ describe('<Slider />', () => {
           deltaY: 0,
           isBeingMouseDragged: false,
           isBeingTouchDragged: false,
-          preventVerticalScroll: false,
+          preventingVerticalScroll: false,
           startX: 0,
           startY: 0,
         });
@@ -328,9 +328,9 @@ describe('<Slider />', () => {
       });
     });
     describe('blockWindowScroll()', () => {
-      it('should call preventDefault on the supplied event if preventVerticalScroll is true', () => {
+      it('should call preventDefault on the supplied event if preventingVerticalScroll is true', () => {
         const instance = new Slider({});
-        instance.state.preventVerticalScroll = true;
+        instance.state.preventingVerticalScroll = true;
         const ev = {
           preventDefault: jest.fn(),
           stopImmediatePropagation: jest.fn(),
@@ -341,9 +341,9 @@ describe('<Slider />', () => {
         expect(ev.preventDefault).toHaveBeenCalledTimes(1);
         expect(ev.stopImmediatePropagation).toHaveBeenCalledTimes(1);
       });
-      it('should not call preventDefault on the supplied event if preventVerticalScroll is false', () => {
+      it('should not call preventDefault on the supplied event if preventingVerticalScroll is false', () => {
         const instance = new Slider({});
-        instance.state.preventVerticalScroll = false;
+        instance.state.preventingVerticalScroll = false;
         const ev = {
           preventDefault: jest.fn(),
           stopImmediatePropagation: jest.fn(),
@@ -548,46 +548,46 @@ describe('<Slider />', () => {
       expect(wrapper.state('deltaY')).toBe(100);
     });
 
-    it('should change preventVerticalScroll state to true with pure horizontal scroll', () => {
+    it('should change preventingVerticalScroll state to true with pure horizontal scroll', () => {
       const wrapper = shallow(<Slider {...props} />);
       expect(wrapper.state('startX')).toBe(0);
       expect(wrapper.state('startY')).toBe(0);
       wrapper.find('.sliderTray').simulate('touchmove', pureHorizontalTouch);
       wrapper.update();
-      expect(wrapper.state('preventVerticalScroll')).toBe(true);
+      expect(wrapper.state('preventingVerticalScroll')).toBe(true);
       expect(wrapper.state('deltaX')).toBe(100);
       expect(wrapper.state('deltaY')).toBe(0);
     });
 
-    it('should change preventVerticalScroll state to false with pure vertical scroll', () => {
+    it('should change preventingVerticalScroll state to false with pure vertical scroll', () => {
       const wrapper = shallow(<Slider {...props} />);
       expect(wrapper.state('startX')).toBe(0);
       expect(wrapper.state('startY')).toBe(0);
       wrapper.find('.sliderTray').simulate('touchmove', pureVerticalTouch);
       wrapper.update();
-      expect(wrapper.state('preventVerticalScroll')).toBe(false);
+      expect(wrapper.state('preventingVerticalScroll')).toBe(false);
       expect(wrapper.state('deltaX')).toBe(0);
       expect(wrapper.state('deltaY')).toBe(100);
     });
 
-    it('should change preventVerticalScroll state to true with cross axis touch with in parameters', () => {
+    it('should change preventingVerticalScroll state to true with cross axis touch with in parameters', () => {
       const wrapper = shallow(<Slider {...props} />);
       expect(wrapper.state('startX')).toBe(0);
       expect(wrapper.state('startY')).toBe(0);
       wrapper.find('.sliderTray').simulate('touchmove', rightCrossAxisTouch);
       wrapper.update();
-      expect(wrapper.state('preventVerticalScroll')).toBe(true);
+      expect(wrapper.state('preventingVerticalScroll')).toBe(true);
       expect(wrapper.state('deltaX')).toBe(15);
       expect(wrapper.state('deltaY')).toBe(9);
     });
 
-    it('should change preventVerticalScroll state to false with cross axis touch outside of parameters', () => {
+    it('should change preventingVerticalScroll state to false with cross axis touch outside of parameters', () => {
       const wrapper = shallow(<Slider {...props} />);
       expect(wrapper.state('startX')).toBe(0);
       expect(wrapper.state('startY')).toBe(0);
       wrapper.find('.sliderTray').simulate('touchmove', leftCrossAxisTouch);
       wrapper.update();
-      expect(wrapper.state('preventVerticalScroll')).toBe(false);
+      expect(wrapper.state('preventingVerticalScroll')).toBe(false);
       expect(wrapper.state('deltaX')).toBe(-16);
       expect(wrapper.state('deltaY')).toBe(-11);
     });

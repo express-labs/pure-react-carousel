@@ -128,7 +128,7 @@ const Slider = class Slider extends React.Component {
       deltaY: 0,
       isBeingMouseDragged: false,
       isBeingTouchDragged: false,
-      preventVerticalScroll: false,
+      preventingVerticalScroll: false,
       startX: 0,
       startY: 0,
     };
@@ -145,6 +145,7 @@ const Slider = class Slider extends React.Component {
     if (this.props.lockOnWindowScroll) {
       window.addEventListener('scroll', this.handleDocumentScroll, false);
     }
+
     window.addEventListener('touchmove', this.blockWindowScroll, false);
     document.documentElement.addEventListener('mouseleave', this.handleOnMouseUp, false);
     document.documentElement.addEventListener('mousemove', this.handleOnMouseMove, false);
@@ -233,7 +234,7 @@ const Slider = class Slider extends React.Component {
       this.setState(state => ({
         deltaX: screenX - state.startX,
         deltaY: screenY - state.startY,
-        preventVerticalScroll: Math.abs(screenY - state.startY) <= 10
+        preventingVerticalScroll: Math.abs(screenY - state.startY) <= 10
           && Math.abs(screenX - state.startX) >= 15,
       }));
     });
@@ -454,7 +455,7 @@ const Slider = class Slider extends React.Component {
   }
 
   blockWindowScroll(ev) {
-    if (this.state.preventVerticalScroll) {
+    if (this.state.preventingVerticalScroll) {
       ev.preventDefault();
       ev.stopImmediatePropagation();
     }
