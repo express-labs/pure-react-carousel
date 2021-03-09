@@ -27,6 +27,9 @@ const Slider = class Slider extends React.Component {
     isPageScrollLocked: PropTypes.bool.isRequired,
     isPlaying: PropTypes.bool.isRequired,
     lockOnWindowScroll: PropTypes.bool.isRequired,
+    preventVerticalScrollOnTouch: PropTypes.bool,
+    horizontalPixelThreshold: PropTypes.number,
+    verticalPixelThreshold: PropTypes.number,
     masterSpinnerFinished: PropTypes.bool.isRequired,
     moveThreshold: PropTypes.number,
     naturalSlideHeight: PropTypes.number.isRequired,
@@ -69,6 +72,9 @@ const Slider = class Slider extends React.Component {
     disableKeyboard: false,
     dragStep: 1,
     infinite: false,
+    preventVerticalScrollOnTouch: true,
+    horizontalPixelThreshold: 15,
+    verticalPixelThreshold: 10,
     moveThreshold: 0.1,
     onMasterSpinner: null,
     privateUnDisableAnimation: false,
@@ -644,6 +650,9 @@ const Slider = class Slider extends React.Component {
       dragStep,
       step,
       infinite,
+      preventVerticalScrollOnTouch,
+      horizontalPixelThreshold,
+      verticalPixelThreshold,
       ...rest
     } = props;
 
