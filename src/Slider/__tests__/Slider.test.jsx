@@ -209,17 +209,23 @@ describe('<Slider />', () => {
         const instance = new Slider({ lockOnWindowScroll: true });
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledWith('scroll', instance.handleDocumentScroll, false);
-        expect(global.window.addEventListener).toHaveBeenCalledTimes(2);
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(1);
       });
       it('should NOT add an event listener for handleDocumentScroll if the prop lockOnWindowScroll is false', () => {
         const instance = new Slider({ lockOnWindowScroll: false });
         instance.componentDidMount();
-        expect(global.window.addEventListener).toHaveBeenCalledTimes(1);
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
       });
-      it('should add an event listener to Window for blocking vertical scroll on touchmove ', () => {
-        const instance = new Slider({});
+      it('should add an event listener to Window for blocking vertical scroll on touchmove if the prop preventVerticalScrollOnTouch is true', () => {
+        const instance = new Slider({ preventVerticalScrollOnTouch: true });
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledWith('touchmove', instance.blockWindowScroll, false);
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(1);
+      });
+      it('should NOT an event listener to Window for blocking vertical scroll on touchmove if the prop preventVerticalScrollOnTouch is false', () => {
+        const instance = new Slider({ preventVerticalScrollOnTouch: false });
+        instance.componentDidMount();
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
       });
       it('should add an event listener to documentElement for mouseleave', () => {
         const instance = new Slider({});

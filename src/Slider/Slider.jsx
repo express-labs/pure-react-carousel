@@ -145,8 +145,9 @@ const Slider = class Slider extends React.Component {
     if (this.props.lockOnWindowScroll) {
       window.addEventListener('scroll', this.handleDocumentScroll, false);
     }
-
-    window.addEventListener('touchmove', this.blockWindowScroll, false);
+    if (this.props.preventVerticalScrollOnTouch) {
+      window.addEventListener('touchmove', this.blockWindowScroll, false);
+    }
     document.documentElement.addEventListener('mouseleave', this.handleOnMouseUp, false);
     document.documentElement.addEventListener('mousemove', this.handleOnMouseMove, false);
     document.documentElement.addEventListener('mouseup', this.handleOnMouseUp, false);
