@@ -227,6 +227,11 @@ describe('<Slider />', () => {
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
       });
+      it('should NOT an event listener to Window for blocking vertical scroll on touchmove if the prop touchEnabled is false', () => {
+        const instance = new Slider({ touchEnabled: false });
+        instance.componentDidMount();
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
+      });
       it('should add an event listener to documentElement for mouseleave', () => {
         const instance = new Slider({});
         instance.componentDidMount();
