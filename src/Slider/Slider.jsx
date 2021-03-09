@@ -235,8 +235,9 @@ const Slider = class Slider extends React.Component {
       this.setState(state => ({
         deltaX: screenX - state.startX,
         deltaY: screenY - state.startY,
-        preventingVerticalScroll: Math.abs(screenY - state.startY) <= 10
-          && Math.abs(screenX - state.startX) >= 15,
+        preventingVerticalScroll: Math.abs(screenY - state.startY)
+          <= this.props.verticalPixelThreshold
+          && Math.abs(screenX - state.startX) >= this.props.horizontalPixelThreshold,
       }));
     });
   }
