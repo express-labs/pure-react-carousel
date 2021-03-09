@@ -165,7 +165,6 @@ const Slider = class Slider extends React.Component {
   }
 
   componentWillUnmount() {
-
     document.documentElement.removeEventListener('mouseleave', this.handleOnMouseUp, false);
     document.documentElement.removeEventListener('mousemove', this.handleOnMouseMove, false);
     document.documentElement.removeEventListener('mouseup', this.handleOnMouseUp, false);
