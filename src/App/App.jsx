@@ -152,7 +152,7 @@ class DevelopmentApp extends React.Component {
                   <option value="11">Simple carousel with event callbacks on Slider.</option>
                   <option value="12">Infinite Carousel</option>
                   <option value="13">Using Intrinsic Axis Dimension</option>
-                  <option value="14">Horizontal carousel moving right to left</option>
+                  <option value="14">Horizontal Carousel moving right to left</option>
                 </select>
               </label>
             </p>
