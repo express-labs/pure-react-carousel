@@ -152,6 +152,7 @@ class DevelopmentApp extends React.Component {
                   <option value="11">Simple carousel with event callbacks on Slider.</option>
                   <option value="12">Infinite Carousel</option>
                   <option value="13">Using Intrinsic Axis Dimension</option>
+                  <option value="14">Horizontal carousel moving right to left</option>
                 </select>
               </label>
             </p>
@@ -242,17 +243,17 @@ class DevelopmentApp extends React.Component {
               )}
 
               {(value === '0' || value === '13') && (
-              <section id="example--13">
-                <hr />
-                <Example13 />
-              </section>
+                <section id="example--13">
+                  <hr />
+                  <Example13 />
+                </section>
               )}
 
               {(value === '0' || value === '14') && (
-              <section id="example--14">
-                <hr />
-                <Example14 />
-              </section>
+                <section id="example--14">
+                  <hr />
+                  <Example14 />
+                </section>
               )}
 
             </div>
