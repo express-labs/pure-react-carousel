@@ -37,4 +37,8 @@ describe('<ButtonPlay />', () => {
     const wrapper = shallow(<ButtonPlay {...props} tag={CustomButton} />);
     expect(wrapper.find(CustomButton)).toBeTruthy();
   });
+  it('should use given intrinsic tag instead of button', () => {
+    const wrapper = shallow(<ButtonPlay {...props} tag="a" />);
+    expect(wrapper.find('a')).toBeTruthy();
+  });
 });

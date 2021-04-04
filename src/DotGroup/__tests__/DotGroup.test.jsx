@@ -79,4 +79,10 @@ describe('<DotGroup />', () => {
     expect(wrapper.children().at(1).prop('tag')).toBe(CustomButton);
     expect(wrapper.children().at(2).prop('tag')).toBe(CustomButton);
   });
+  it('should forward given intrinsic tag to the dots', () => {
+    const wrapper = shallow(<DotGroup {...props} dotTag="a" />);
+    expect(wrapper.children().at(0).prop('tag')).toBe('a');
+    expect(wrapper.children().at(1).prop('tag')).toBe('a');
+    expect(wrapper.children().at(2).prop('tag')).toBe('a');
+  });
 });

@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Pure React Carousel</h1>
-  
+
   Created By
   <br />
   <a href="http://www.express.com">
@@ -13,8 +13,8 @@
   </a>
   <br />
   <p>A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.</p>
-  
-  [**See Live Examples**](https://express-labs.github.io/pure-react-carousel/) | 
+
+  [**See Live Examples**](https://express-labs.github.io/pure-react-carousel/) |
   [See Example Code](src/App/examples)
 </div>
 
@@ -213,7 +213,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | dragEnabled | boolean | true | No | Set to true to enable mouse dragging events |
 | visibleSlides | number | 1 | No | The number of slides to show at once.  This number should be <= totalSlides |
 | infinite | boolean | false | No | Should the carousel continue or stop at the beginning or end of the slides |
-| isIntrinsicHeight | boolean | false | No | Disables the enforced height ratio, and instead uses the intrinsic height of the slides. This option can only be active in horizontal orientation, it will throw an error in vertical orientation. | 
+| isIntrinsicHeight | boolean | false | No | Disables the enforced height ratio, and instead uses the intrinsic height of the slides. This option can only be active in horizontal orientation, it will throw an error in vertical orientation. |
 
 #### The CarouselProvider component creates the following pseudo HTML by default:
 
@@ -300,7 +300,7 @@ A Dot component is a HTML button.  Dots directly correlate to slides.  Clicking 
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means Dot will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
-| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. **WARNING**: Failure to use a button or an interactive DOM element with the appropriate props can result in failed a11y/w3c compliance. |
 | **slide** | number | | **Yes** | There must be a matching &lt;Slide /> component with a matching index property. Example: `<Dot slide={0} />` will match `<Slide index={0} />`|
 
 #### The Dot component creates the following pseudo HTML by default:
@@ -322,7 +322,7 @@ A compound component that creates a bunch of Dot's automatically for you.
 | disableActiveDots | boolean | true | No | Setting to true make all dots, including active dots, enabled. |
 | showAsSelectedForCurrentSlideOnly | boolean | false | No | Setting to true show only the current slide dot as selected. |
 | renderDots | function| null | No | It accepts `props` and overrides renderDots() in <DotGroup/>. |
-| dotTag | [string&#124;function] | undefined | No | Optional tag to use for all dots. It can be either an HTML tag or a React component. It won't have any effect if `renderDots` is provided. |
+| dotTag | [string&#124;function] | undefined | No | Optional tag to use for all dots. It can be either an HTML tag or a React component. It won't have any effect if `renderDots` is provided. **WARNING**: Failure to use a button or an interactive DOM element with the appropriate props can result in failed a11y/w3c compliance. |
 
 #### The DotGroup component creates the following pseudo HTML by default:
 
@@ -361,7 +361,7 @@ A button for moving the slider backwards. Backwards on a horizontal carousel mea
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonBack will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
-| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. **WARNING**: Failure to use a button or an interactive DOM element with the appropriate props can result in failed a11y/w3c compliance. |
 
 #### The ButtonBack component creates the following pseudo HTML by default:
 
@@ -380,7 +380,7 @@ A button for moving the slider forwards. Forwards on a horizontal carousel means
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonNext will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
-| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. **WARNING**: Failure to use a button or an interactive DOM element with the appropriate props can result in failed a11y/w3c compliance. |
 
 #### The ButtonNext component creates the following pseudo HTML by default:
 
@@ -399,7 +399,7 @@ Moves the slider to the beginning of the slides.
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonFirst will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
-| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. **WARNING**: Failure to use a button or an interactive DOM element with the appropriate props can result in failed a11y/w3c compliance. |
 
 #### The ButtonFirst component creates the following pseudo HTML by default:
 
@@ -418,7 +418,7 @@ Moves the slider to the end of the slides (totalSlides - visibleSlides).
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonLast will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
-| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. **WARNING**: Failure to use a button or an interactive DOM element with the appropriate props can result in failed a11y/w3c compliance. |
 
 #### The ButtonLast component creates the following pseudo HTML by default:
 
@@ -439,7 +439,7 @@ Pressing this button causes the slides to automatically advance by CarouselProvi
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | disabled | [boolean&#124;null] | null | No | Null means ButtonPlay will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
-| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. |
+| tag | [string&#124;function] | "button" | No | Optional tag to use instead of the default "button". It can be either an HTML tag or a React component. **WARNING**: Failure to use a button or an interactive DOM element with the appropriate props can result in failed a11y/w3c compliance. |
 
 #### The ButtonPlay component creates the following pseudo HTML by default:
 

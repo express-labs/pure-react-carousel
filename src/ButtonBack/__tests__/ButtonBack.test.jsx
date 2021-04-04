@@ -223,4 +223,19 @@ describe('<ButtonBack />', () => {
     );
     expect(wrapper.find(CustomButton)).toBeTruthy();
   });
+  it('should use given intrinsic tag instead of button', () => {
+    const wrapper = shallow(
+      <ButtonBack
+        currentSlide={1}
+        step={1}
+        carouselStore={{}}
+        totalSlides={10}
+        visibleSlides={1}
+        tag="a"
+      >
+        Hello
+      </ButtonBack>,
+    );
+    expect(wrapper.find('a')).toBeTruthy();
+  });
 });

@@ -172,4 +172,8 @@ describe('<ButtonNext />', () => {
     const wrapper = shallow(<ButtonNext {...props} tag={CustomButton} />);
     expect(wrapper.find(CustomButton)).toBeTruthy();
   });
+  it('should use given intrinsic tag instead of button', () => {
+    const wrapper = shallow(<ButtonNext {...props} tag="a" />);
+    expect(wrapper.find('a')).toBeTruthy();
+  });
 });
