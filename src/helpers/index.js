@@ -38,13 +38,6 @@ export const CarouselPropTypes = {
     PropTypes.node,
   ]),
   direction: PropTypes.oneOf(['forward', 'backward']),
-  height: (props, propName) => {
-    const prop = props[propName];
-    if (props.orientation === 'vertical' && (prop === null || typeof prop !== 'number')) {
-      return new Error(`Missing required property '${propName}' when orientation is vertical.  You must supply a number representing the height in pixels`);
-    }
-    return null;
-  },
   orientation: PropTypes.oneOf(['horizontal', 'vertical']),
   isBgImage: (props, propName) => {
     const value = props[propName];
@@ -52,6 +45,12 @@ export const CarouselPropTypes = {
       return new Error(`HTML img elements should not have a backgroundImage.  Please use ${propName} for other block-level HTML tags, like div, a, section, etc...`);
     }
     return null;
+  },
+  slideSize: (props, propName, componentName, ...rest) => {
+    if (props.isIntrinsicHeight === true) {
+      return PropTypes.number(props, propName, componentName, ...rest);
+    }
+    return PropTypes.number.isRequired(props, propName, componentName, ...rest);
   },
 };
 

@@ -18,8 +18,10 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     isPageScrollLocked: PropTypes.bool,
     isPlaying: PropTypes.bool,
     lockOnWindowScroll: PropTypes.bool,
-    naturalSlideHeight: PropTypes.number.isRequired,
-    naturalSlideWidth: PropTypes.number.isRequired,
+    /* eslint-disable react/require-default-props */
+    naturalSlideHeight: CarouselPropTypes.slideSize,
+    naturalSlideWidth: CarouselPropTypes.slideSize,
+    /* eslint-enable react/require-default-props */
     orientation: CarouselPropTypes.orientation,
     playDirection: CarouselPropTypes.direction,
     step: PropTypes.number,

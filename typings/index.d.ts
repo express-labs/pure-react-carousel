@@ -71,7 +71,7 @@ interface CarouselStoreInterface {
 
 declare const CarouselContext: React.Context<CarouselStoreInterface>
 
-interface CarouselProviderProps {
+type CarouselProviderProps = {
   readonly children: React.ReactNode
   readonly className?: string
   readonly currentSlide?: CarouselState['currentSlide']
@@ -81,8 +81,6 @@ interface CarouselProviderProps {
   readonly interval?: number
   readonly isPlaying?: boolean
   readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
-  readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
-  readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
   readonly playDirection?: 'forward'|'backward'
   readonly orientation?: CarouselState['orientation']
   readonly step?: CarouselState['step']
@@ -93,7 +91,14 @@ interface CarouselProviderProps {
   readonly dragEnabled?: CarouselState['dragEnabled']
   readonly visibleSlides?: CarouselState['visibleSlides']
   readonly infinite?: CarouselState['infinite']
+} & {
   readonly isIntrinsicHeight?: CarouselState['isIntrinsicHeight']
+  readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
+  readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
+} | {
+  readonly isIntrinsicHeight: true
+  readonly naturalSlideHeight?: CarouselState['naturalSlideHeight']
+  readonly naturalSlideWidth?: CarouselState['naturalSlideWidth']
 }
 
 type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>

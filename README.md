@@ -201,8 +201,8 @@ Any remaining props not consumed by the component are passed directly to the roo
 | interval | number | 5000 | No | Number of milliseconds to wait when the auto slideshow is active |
 | isPlaying | bool | false | No | Setting this to true starts an auto slideshow. After "interval" milliseconds, the slider will move by "step" slides either forward or backwards depending on the value of "playDirection". |
 | lockOnWindowScroll | bool | false | No | When set to true, scrolling of the carousel slides are disabled while the browser window is scrolling |
-| **naturalSlideHeight** | number | | **Yes** | The natural height of each <\Slide > component. ** |
-| **naturalSlideWidth** | number | | **Yes** | The natural width of each <\Slide > component. ** |
+| **naturalSlideHeight** | number | | **Yes** / <abbr title="Not required when isIntrinsicHeight is true">No</abbr> | The natural height of each <\Slide > component. |
+| **naturalSlideWidth** | number | | **Yes** / <abbr title="Not required when isIntrinsicHeight is true">No</abbr> | The natural width of each <\Slide > component. |
 | orientation | string | "horizontal" | No | Possible values are "horizontal" and "vertical".  Let's you have a horizontal or vertical carousel. |
 | playDirection | ['forward'&#124;'backward' ] | 'forward' | No | The direction for the auto slideshow |
 | step | number | 1 | No | The number of slides to move when pressing the &lt;ButtonBack /> and &lt;ButtonNext /> buttons.|
@@ -224,7 +224,9 @@ Any remaining props not consumed by the component are passed directly to the roo
 ```
 
 **__More about naturalSlideWidth and naturalSlideHeight__**
-The carousel is responsive and by default will flex to the full width of the <Slider \> parent container.  It's up to you to contain the carousel width via css.  Each slide will be the same height to width ratio ([intrinsic ratio](https://alistapart.com/d/creating-intrinsic-ratios-for-video/example2.html)). CarouselProvider needs to know the default size of each &lt;Slide />.  Note: you can make the carousel non-responsive by setting the width of <Slider \>to a fixed css unit, like pixels. There are many other ways to make the carousel non-responsive.
+The carousel is responsive and by default will flex to the full width of the <Slider \> parent container.  It's up to you to contain the carousel width via css.  Each slide will be the same height to width ratio ([intrinsic ratio](https://alistapart.com/d/creating-intrinsic-ratios-for-video/example2.html)). However if `isIntrinsicHeight` is set to `true` each slide will have natural height based on its content. 
+
+Note: you can make the carousel non-responsive by setting the width of <Slider \>to a fixed css unit, like pixels. There are many other ways to make the carousel non-responsive.
 
 ### &lt;Slider />
 A Slider is a viewport that masks slides.  The Slider component must wrap one or more Slide components.

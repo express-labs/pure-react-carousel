@@ -15,8 +15,10 @@ const Slide = class Slide extends React.PureComponent {
     index: PropTypes.number.isRequired,
     innerClassName: PropTypes.string,
     innerTag: PropTypes.string,
-    naturalSlideHeight: PropTypes.number.isRequired,
-    naturalSlideWidth: PropTypes.number.isRequired,
+    /* eslint-disable react/require-default-props */
+    naturalSlideHeight: CarouselPropTypes.slideSize,
+    naturalSlideWidth: CarouselPropTypes.slideSize,
+    /* eslint-enable react/require-default-props */
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,

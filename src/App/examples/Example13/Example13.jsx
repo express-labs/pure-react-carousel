@@ -10,8 +10,6 @@ export default () => (
     visibleSlides={2}
     totalSlides={4}
     step={1}
-    naturalSlideWidth={400}
-    naturalSlideHeight={500}
     isIntrinsicHeight
   >
     <h2 className={s.headline}>With intrinsic axis dimension</h2>
