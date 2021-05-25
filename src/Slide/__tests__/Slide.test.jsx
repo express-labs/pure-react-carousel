@@ -137,7 +137,6 @@ describe('<Slide />', () => {
     const slideStyle = wrapper.find('.slide').prop('style');
     expect(slideStyle.paddingBottom).toBe('unset');
     expect(slideStyle.height).toBe('unset');
-    expect(slideStyle.position).toBe('unset');
 
     const innerSlideStyle = wrapper.find('.carousel__inner-slide').prop('style');
     expect(innerSlideStyle.position).toBe('unset');
@@ -149,7 +148,6 @@ describe('<Slide />', () => {
     const slideStyle = wrapper.find('.slide').prop('style');
     expect(slideStyle.paddingBottom).toBe('unset');
     expect(slideStyle.width).toBe('unset');
-    expect(slideStyle.position).toBe('unset');
 
     const innerSlideStyle = wrapper.find('.carousel__inner-slide').prop('style');
     expect(innerSlideStyle.position).toBe('unset');

@@ -11,7 +11,9 @@ const MAX_TOUCH_SCALE = 3;
 
 const ImageWithZoom = class ImageWithZoom extends React.Component {
   static propTypes = {
-    // alt: PropTypes.string,
+    alt: PropTypes.string,
+    bgImageProps: PropTypes.object,
+    bgImageTag: PropTypes.string,
     carouselStore: PropTypes.object.isRequired,
     className: PropTypes.string,
     imageClassName: PropTypes.string,
@@ -24,6 +26,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
   }
 
   static defaultProps = {
+    alt: undefined,
+    bgImageProps: {},
+    bgImageTag: 'div',
     className: null,
     imageClassName: null,
     overlayClassName: null,
@@ -269,6 +274,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
   render() {
     const {
+      alt,
+      bgImageProps,
+      bgImageTag,
       carouselStore,
       className,
       imageClassName,
@@ -311,12 +319,13 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     return (
       <Tag className={newClassName} {...filteredProps}>
         <Image
+          alt={alt}
           className={newImageClassName}
-          tag="div"
+          tag={bgImageTag}
           src={src}
-          isBgImage
           onLoad={this.handleImageComplete}
           onError={this.handleImageComplete}
+          {...bgImageProps}
         />
         <Image
           className={newOverlayClassName}
