@@ -407,23 +407,33 @@ const Slider = class Slider extends React.Component {
   }
 
 
-  play() {
+  play(currentSlide) {
     // If the user has defined a custom time for each of the slides.
+
     if (this.props.intervalList) {
+      let expectedIntervalList = this.props.intervalList;
+      if (currentSlide) {
+        expectedIntervalList = [].concat(this.props.intervalList.slice(currentSlide, this.props.intervalList.length), this.props.intervalList.slice(0, currentSlide));
+        // Code from.https://stackoverflow.com/questions/8860188/javascript-clear-all-timeouts
+        let id = window.setTimeout(function () { }, 0);
+        while (id--) {
+          window.clearTimeout(id); // will do nothing if no timeout with id is present
+        }
+      }
       let priorIntervals = 0;
       // Create a move forward call at each of the times that a slide would be ending.
-      for (let i = 0; i < this.props.intervalList.length - 1; i += 1) {
+      for (let i = 0; i < expectedIntervalList.length - 1; i += 1) {
 
-        setTimeout(this.props.playDirection === 'forward' ? this.playForward : this.playBackward, this.props.intervalList[i] + priorIntervals);
-        priorIntervals += this.props.intervalList[i];
+        setTimeout(this.props.playDirection === 'forward' ? this.playForward : this.playBackward, expectedIntervalList[i] + priorIntervals);
+        priorIntervals += expectedIntervalList[i];
       }
       // Create a final move forward call for the last slide but do not increase the prior intervals.
       setTimeout(this.props.playDirection === 'forward' ? this.playForward : this.playBackward,
-        this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
+        expectedIntervalList[expectedIntervalList.length - 1] + priorIntervals);
       // Call play to reset the slideshow as the last slide moves forward.
       setTimeout(this.play,
-        this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
-    } else {
+        expectedIntervalList[expectedIntervalList.length - 1] + priorIntervals);
+    } else if (!currentSlide) {
       this.interval = setInterval(this.props.playDirection === 'forward'
         ? this.playForward : this.playBackward, this.props.interval);
     }
@@ -488,6 +498,8 @@ const Slider = class Slider extends React.Component {
       max: maxSlide,
       x: (this.props.currentSlide + slidesMoved),
     });
+    // TODO: Implement a call to reinitialize play because the image has been dragged.
+    this.play(currentSlide);
 
     if (this.props.infinite) {
       if (this.props.currentSlide >= maxSlide && slidesMoved > 0) {
