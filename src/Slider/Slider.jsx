@@ -431,7 +431,7 @@ const Slider = class Slider extends React.Component {
       setTimeout(this.props.playDirection === 'forward' ? this.playForward : this.playBackward,
         expectedIntervalList[expectedIntervalList.length - 1] + priorIntervals);
       // Call play to reset the slideshow as the last slide moves forward.
-      setTimeout(this.play,
+      setTimeout(this.play(currentSlide),
         expectedIntervalList[expectedIntervalList.length - 1] + priorIntervals);
     } else if (!currentSlide) {
       this.interval = setInterval(this.props.playDirection === 'forward'
