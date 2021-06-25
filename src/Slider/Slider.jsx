@@ -408,14 +408,19 @@ const Slider = class Slider extends React.Component {
 
 
   play() {
+    // If the user has defined a custom time for each of the slides.
     if (this.props.intervalList) {
       let priorIntervals = 0;
+      // Create a move forward call at each of the times that a slide would be ending.
       for (let i = 0; i < this.props.intervalList.length - 1; i += 1) {
+
         setTimeout(this.props.playDirection === 'forward' ? this.playForward : this.playBackward, this.props.intervalList[i] + priorIntervals);
         priorIntervals += this.props.intervalList[i];
       }
+      // Create a final move forward call for the last slide but do not increase the prior intervals.
       setTimeout(this.props.playDirection === 'forward' ? this.playForward : this.playBackward,
         this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
+      // Call play to reset the slideshow as the last slide moves forward.
       setTimeout(this.play,
         this.props.intervalList[this.props.intervalList.length - 1] + priorIntervals);
     } else {
