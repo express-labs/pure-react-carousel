@@ -28,12 +28,12 @@ jobs:
             npm run test
             npm run build
             
-      - name: semantic-release
-        if: ${{ github.ref == 'master' }}
-        needs: build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          npm run semantic-release
-          npm run deploy
+#       - name: semantic-release
+#         if: ${{ github.ref == 'master' }}
+#         needs: build
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#         run: |
+#           npm run semantic-release
+#           npm run deploy
