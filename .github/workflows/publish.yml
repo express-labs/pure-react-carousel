@@ -1,0 +1,33 @@
+name: CD
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+  publish:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+          
+      - name: Publish and Deploy latest code
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run:
+            npm i
+            npm run lint
+            npm run test
+            npm run build
+            npm run semantic-release
+            npm run publish
+            npm run deploy
+            
