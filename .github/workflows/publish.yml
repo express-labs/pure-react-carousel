@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
-          node-version: '10.x'
+          node-version: '10.19'
           registry-url: 'https://registry.npmjs.org'
       - name: Publish and Deploy latest code
         env:
@@ -28,7 +28,7 @@ jobs:
             npm run test
             npm run prebuild
             npm run build
-            npm run semantic-release
+            npx run semantic-release
             npm publish --access public
             npm run deploy
             
