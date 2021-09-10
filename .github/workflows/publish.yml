@@ -14,20 +14,21 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: '10.x'
-          
+          registry-url: 'https://registry.npmjs.org'
       - name: Publish and Deploy latest code
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run:
+        run: |
             npm i
             npm run lint
             npm run test
+            npm run prebuild
             npm run build
             npm run semantic-release
-            npm run publish
+            npm publish --access public
             npm run deploy
             
