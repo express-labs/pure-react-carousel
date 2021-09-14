@@ -4,31 +4,44 @@ on:
     branches: [ master ]
   workflow_dispatch:
 jobs:
-  publish:
-    # The type of runner that the job will run on
+  build:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
-      - name: Setup Node
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2
         with:
-          node-version: '10.19'
-          registry-url: 'https://registry.npmjs.org'
-      - name: Publish and Deploy latest code
+          node-version: 10.19
+      - run: npm ci
+      - run: npm run test
+      - run: npm run lint
+      - run: npm run prebuild
+  
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish
+      - run: npx run semantic-release
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+  deploy:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 10.19
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm run deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-            npm i
-            npm run lint
-            npm run test
-            npm run prebuild
-            npm run build
-            npx run semantic-release
-            npm publish --access public
-            npm run deploy
-            
