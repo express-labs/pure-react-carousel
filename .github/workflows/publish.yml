@@ -26,8 +26,7 @@ jobs:
           node-version: 10.19
           registry-url: https://registry.npmjs.org/
       - run: npm i
-      - run: npm run semantic-release
-      - run: npm publish --access public
+      - run: npx semantic-release
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
