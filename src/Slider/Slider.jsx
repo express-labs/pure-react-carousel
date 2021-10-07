@@ -119,6 +119,14 @@ const Slider = class Slider extends React.Component {
       cancelNextClick: false,
       deltaX: 0,
       deltaY: 0,
+      /**
+       * scrolled{X|Y} and assistantScrolled{X|Y}
+       * allow the user scrolls without snap to the next slider
+       */
+      assistantScrolledY: 0,
+      assistantScrolledX: 0,
+      scrolledY: 0,
+      scrolledX: 0,
       isBeingMouseDragged: false,
       isBeingTouchDragged: false,
       startX: 0,
@@ -218,18 +226,23 @@ const Slider = class Slider extends React.Component {
     });
   }
 
-  fakeOnDragMove(screenX, screenY) {
+  fakeOnDragMove(endX, endY) {
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
-      this.setState(state => ({
-        deltaX: screenX - state.startX,
-        deltaY: screenY - state.startY,
-      }));
+      this.setState((state) => {
+        const deltaX = endX - state.startX;
+        const deltaY = endY - state.startY;
+        return {
+          assistantScrolledX: state.scrolledX + deltaX,
+          assistantScrolledY: state.scrolledY + deltaY,
+          deltaX: endX - state.startX,
+          deltaY: endY - state.startY,
+        };
+      });
     });
   }
 
   fakeOnDragEnd() {
     window.cancelAnimationFrame.call(window, this.moveTimer);
-
     this.computeCurrentSlide();
 
     if (this.props.orientation === 'vertical') {
@@ -238,12 +251,36 @@ const Slider = class Slider extends React.Component {
       });
     }
 
-    this.setState({
-      deltaX: 0,
-      deltaY: 0,
+    const ClientWidth = this.sliderTrayElement.clientWidth; // Always positive
+    const SlideWidth = ClientWidth / this.props.totalSlides;// Always positive
+    const negativeFullViewWidth = (ClientWidth - (SlideWidth * this.props.visibleSlides)) * -1;
+
+    const ClientHeight = this.sliderTrayElement.clientHeight; // Always positive
+    const SlideHeight = ClientHeight / this.props.totalSlides;// Always positive
+    const negativeFullViewHeight = (ClientHeight - (SlideHeight * this.props.visibleSlides)) * -1;
+
+    this.setState(state => ({
       isBeingTouchDragged: false,
       isBeingMouseDragged: false,
-    });
+      assistantScrolledX: Math.min(0, Math.max(
+        state.scrolledX + state.deltaX,
+        negativeFullViewWidth,
+      )),
+      assistantScrolledY: Math.min(0, Math.max(
+        state.scrolledY + state.deltaY,
+        negativeFullViewHeight,
+      )),
+      scrolledX: Math.min(0, Math.max(
+        state.scrolledX + state.deltaX,
+        negativeFullViewWidth,
+      )),
+      scrolledY: Math.min(0, Math.max(
+        state.scrolledY + state.deltaY,
+        negativeFullViewHeight,
+      )),
+      deltaX: 0,
+      deltaY: 0,
+    }));
 
     this.isDocumentScrolling = this.props.lockOnWindowScroll ? false : null;
   }
@@ -578,11 +615,19 @@ const Slider = class Slider extends React.Component {
 
 
     // slider tray
+    const disableSnap = this.props.dragStep === 0;
     const trayStyle = {};
-    const trans = pct(slideSize * currentSlide * -1);
+    const trans = disableSnap ? 0 : pct(slideSize * currentSlide * -1);
 
     if (this.state.isBeingTouchDragged || this.state.isBeingMouseDragged || disableAnimation) {
-      trayStyle.transition = 'none';
+      trayStyle.transition = 'transform .005s';
+    } else {
+      /* This style was moved because when `DeltaX` state did change the browser wasn't been able
+      * to add remove the transition none from element,
+      * so adding a transform nearly to 0s was enough to fix it
+      */
+      trayStyle.transition = 'transform .5s';
+      trayStyle.transitionTimingFunction = 'cubic-bezier(.645,.045,.355,1)';
     }
 
     if (isIntrinsicHeight) {
@@ -591,12 +636,12 @@ const Slider = class Slider extends React.Component {
     }
 
     if (orientation === 'vertical') {
-      trayStyle.transform = `translateY(${trans}) translateY(${this.state.deltaY}px)`;
+      trayStyle.transform = `translateY(${trans}) translateY(${disableSnap ? this.state.assistantScrolledY : this.state.deltaY}px)`;
       trayStyle.width = pct(100);
       trayStyle.flexDirection = 'column';
     } else {
       trayStyle.width = pct(slideTraySize);
-      trayStyle.transform = `translateX(${trans}) translateX(${this.state.deltaX}px)`;
+      trayStyle.transform = `translateX(${trans}) translateX(${disableSnap ? this.state.assistantScrolledX : this.state.deltaX}px)`;
       trayStyle.flexDirection = 'row';
     }
 
@@ -650,7 +695,6 @@ const Slider = class Slider extends React.Component {
       style: ignoreStyle,
       ...filteredTrayProps
     } = trayProps;
-
     return (
       <div
         ref={(el) => { this.sliderElement = el; }}
