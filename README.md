@@ -37,13 +37,13 @@ My goal was to create a 100% ReactJS carousel that doesn't try to impose structu
 Carousels: Love them or hate them.  However, if you are a React developer, and you have to use a carousel, why not use one that was...
 
 - Developed from the ground-up in React.
-- Is not a wrapper or port of some non-react carousel like Slick or Flickity.
+- Is not a wrapper or port of some non-React carousel like Slick or Flickity.
 - Fully supports touch events.
-- Is aria compliant.
+- Is ARIA compliant.
 - Is responsive by default.
 - Lets you assemble the carousel components in the DOM in any order you desire so long as they are all children of a single &lt;CarouselProvider /> component.
 - Lets you put any class names, properties, attributes, or styles on any of the components that you need.
-- Supports ES6 and commonjs.
+- Supports ES6 and CommonJS.
 - Has 100% test coverage. Solid!
 
 ## Table of contents
@@ -689,7 +689,7 @@ I promise to add docs for every component.  In the meantime, feel free to downlo
 ## Dev Workflow
 
 - `npm start` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload.<br><br>
-- `npm run build` compiles commonjs and ES modules and places them in the dist directory.<br><br>
+- `npm run build` compiles CommonJS and ES modules and places them in the dist directory.<br><br>
 - `npm test` runs unit and integration tests using Jest + Enzyme.  Also does coverage reporting.<br><br>
 - `npm lint` runs linting tests using ESLint & Airbnb linting.<br><br>
 - `npm test:watch` same as `npm test` but it will watch for updates and auto-run tests. Does not do coverage reporting.<br><br>
