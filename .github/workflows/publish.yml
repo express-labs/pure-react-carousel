@@ -41,6 +41,8 @@ jobs:
           node-version: 10.19
           registry-url: https://registry.npmjs.org/
       - run: npm i
-      - run: npm run deploy
+      - run: |
+              git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/express-labs/pure-react-carousel.git
+              npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
