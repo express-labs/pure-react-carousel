@@ -43,6 +43,6 @@ jobs:
       - run: npm i
       - run: |
               git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/express-labs/pure-react-carousel.git
-              npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
+              npx gh-pages -d dev -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
