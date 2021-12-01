@@ -1,4 +1,4 @@
-name: BUILD 🔧
+name: BUILD
 on:
   push:
     branches: [ master ]
