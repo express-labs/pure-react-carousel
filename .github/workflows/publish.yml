@@ -1,4 +1,4 @@
-name: CD
+name: BUILD 🔧
 on:
   push:
     branches: [ master ]
@@ -7,6 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Build 🛠️
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
@@ -20,6 +21,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: publish-npm ✈️
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
@@ -35,12 +37,15 @@ jobs:
     needs: publish-npm
     runs-on: ubuntu-latest
     steps:
+      - name: deploy to GH-Pages 🚀
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
+      - uses: JamesIves/github-pages-deploy-action@4.1.7
         with:
           node-version: 10.19
           registry-url: https://registry.npmjs.org/
+          branch: gh-pages # The branch the action should deploy to.
+          folder: dev # The folder the action should deploy.
       - run: npm i
-      - run: npm run deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
