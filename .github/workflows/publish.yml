@@ -38,14 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: deploy to GH-Pages 🚀
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - uses: JamesIves/github-pages-deploy-action@4.1.7
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          node-version: 10.19
-          registry-url: https://registry.npmjs.org/
-          branch: gh-pages # The branch the action should deploy to.
-          folder: dev # The folder the action should deploy.
-      - run: npm i
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dev
