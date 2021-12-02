@@ -38,7 +38,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: deploy to GH-Pages 🚀
-      - uses: peaceiris/actions-gh-pages@v3
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dev
+          node-version: 10.19
+          registry-url: https://registry.npmjs.org/
+      - run: |
+              git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/express-labs/pure-react-carousel.git
+              npx gh-pages -d dev -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
