@@ -1,4 +1,4 @@
-name: CD
+name: Build
 on:
   push:
     branches: [ master ]
@@ -7,7 +7,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Build 🛠️
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
@@ -21,7 +20,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: publish-npm ✈️
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
@@ -37,7 +35,6 @@ jobs:
     needs: publish-npm
     runs-on: ubuntu-latest
     steps:
-      - name: deploy to GH-Pages 🚀
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
@@ -45,6 +42,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: |
               git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/express-labs/pure-react-carousel.git
-              npx gh-pages -d dev -u "github-actions-bot <support+actions@github.com>"
+              npx gh-pages -d ./dev -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
