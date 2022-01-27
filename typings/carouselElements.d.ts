@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 interface SliderProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly children: React.ReactNode
@@ -13,7 +13,7 @@ interface SliderProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly trayTag?: string
   readonly trayProps?: React.HTMLAttributes<HTMLUListElement>
 }
-type SliderInterface = React.ComponentClass<SliderProps>
+type SliderInterface = React.ComponentType<SliderProps>
 /**
  * A Slider is a viewport that masks slides. The Slider component must wrap one or more Slide components.
  */
@@ -34,7 +34,7 @@ interface SlideProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly tag?: string
   readonly style?: {}
 }
-type SlideInterface = React.ComponentClass<SlideProps>
+type SlideInterface = React.ComponentType<SlideProps>
 /**
  * The Slide component is a container with an intrinsic ratio computed by the
  * CarouselProvider naturalSlideWidth and naturalSlideHeight properties.
@@ -59,7 +59,7 @@ interface ImageWithZoomProps {
   readonly tag?: string
   readonly isPinchZoomEnabled?: boolean
 }
-type ImageWithZoomInterface = React.ComponentClass<ImageWithZoomProps>
+type ImageWithZoomInterface = React.ComponentType<ImageWithZoomProps>
 declare const ImageWithZoom: ImageWithZoomInterface
 
 
