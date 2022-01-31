@@ -35,6 +35,7 @@ interface CarouselState {
   readonly hasMasterSpinner: boolean
   readonly imageErrorCount: number
   readonly imageSuccessCount: number
+  readonly isPlaying: boolean
   readonly lockOnWindowScroll: boolean
   readonly masterSpinnerFinished: boolean
   readonly masterSpinnerThreshold: number
@@ -79,7 +80,7 @@ interface CarouselProviderProps {
   readonly disableKeyboard?: CarouselState['disableKeyboard']
   readonly hasMasterSpinner?: CarouselState['hasMasterSpinner']
   readonly interval?: number
-  readonly isPlaying?: boolean
+  readonly isPlaying?: CarouselState['isPlaying']
   readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
   readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
   readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
