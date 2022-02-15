@@ -133,7 +133,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     this.setState({
       isImageLoading: false,
     });
-    if (this.props.onLoad) this.props.onLoad(ev);
+    if (this.props && this.props.onLoad) this.props.onLoad(ev);
   }
 
   handleImageLoadError(ev) {
@@ -141,7 +141,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       isImageLoadingError: true,
       isImageLoading: false,
     });
-    if (this.props.onError) this.props.onError(ev);
+    if (this.props && this.props.onError) this.props.onError(ev);
   }
 
   handleOnMouseOver() {

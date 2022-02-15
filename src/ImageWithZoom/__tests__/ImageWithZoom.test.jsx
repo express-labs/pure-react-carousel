@@ -75,13 +75,22 @@ describe('<ImageWithZoom />', () => {
         expect(instance.renderLoading()).toBe(null);
       });
     });
-    describe('handleImageComplete', () => {
-      it('should set state isImageLoading', () => {
+    describe('handleImage callback', () => {
+      it('should set state isImageLoading when function handleImageComplete is called', () => {
         const instance = new ImageWithZoom();
         instance.setState = jest.fn();
         instance.handleImageComplete();
         expect(instance.setState).toHaveBeenCalledWith({
           isImageLoading: false,
+        });
+      });
+      it('should set state isImageLoading, isImageLoadingError when function handleImageLoadError is called', () => {
+        const instance = new ImageWithZoom();
+        instance.setState = jest.fn();
+        instance.handleImageLoadError();
+        expect(instance.setState).toHaveBeenCalledWith({
+          isImageLoading: false,
+          isImageLoadingError: true
         });
       });
     });
