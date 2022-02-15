@@ -19,6 +19,8 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     imageClassName: PropTypes.string,
     overlayClassName: PropTypes.string,
     spinner: PropTypes.func,
+    onLoad: PropTypes.func,
+    onError: PropTypes.func,
     src: PropTypes.string.isRequired,
     srcZoomed: PropTypes.string,
     tag: PropTypes.string,
@@ -34,6 +36,8 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     overlayClassName: null,
     isPinchZoomEnabled: true,
     spinner: null,
+    onLoad: null,
+    onError: null,
     srcZoomed: null,
     tag: 'div',
   }
@@ -76,8 +80,11 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
     // state changes that require a re-render
     this.state = {
-      // tracks the status via image element's onload, onerror events.
+      // tracks the status via image element's onload events.
       isImageLoading: true,
+
+      // tracks the status via image element's onerror events.
+      isImageLoadingError: true,
 
       // the mouse is currently hovering over the image.
       isHovering: false,
@@ -100,6 +107,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
     // event handlers
     this.handleImageComplete = this.handleImageComplete.bind(this);
+    this.handleImageLoadError = this.handleImageLoadError.bind(this);
     this.handleOnMouseMove = this.handleOnMouseMove.bind(this);
     this.handleOnMouseOut = this.handleOnMouseOut.bind(this);
     this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
@@ -121,10 +129,19 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     }
   }
 
-  handleImageComplete() {
+  handleImageComplete(ev) {
     this.setState({
       isImageLoading: false,
     });
+    if (this.props.onLoad) this.props.onLoad(ev);
+  }
+
+  handleImageLoadError(ev) {
+    this.setState({
+      isImageLoadingError: true,
+      isImageLoading: false,
+    });
+    if (this.props.onError) this.props.onError(ev);
   }
 
   handleOnMouseOver() {
@@ -324,7 +341,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
           tag={bgImageTag}
           src={src}
           onLoad={this.handleImageComplete}
-          onError={this.handleImageComplete}
+          onError={this.handleImageLoadError}
           {...bgImageProps}
         />
         <Image
