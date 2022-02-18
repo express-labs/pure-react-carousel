@@ -90,7 +90,7 @@ describe('<ImageWithZoom />', () => {
         instance.handleImageLoadError();
         expect(instance.setState).toHaveBeenCalledWith({
           isImageLoading: false,
-          isImageLoadingError: true
+          isImageLoadingError: true,
         });
       });
     });
