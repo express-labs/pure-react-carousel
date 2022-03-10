@@ -176,7 +176,7 @@ Some components have a ancestor / descendant relationship but they don't have to
 
 ## Component Properties (props)
 
-#### classname
+#### className
 
 You can attach your own className property to each and every component in this library and it will be appended to the list of classes.  It's appended so that it has more specificity in a tie, allowing your CSS to more easily override any internal styles without resorting to using !important.
 
