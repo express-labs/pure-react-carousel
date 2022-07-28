@@ -360,6 +360,24 @@
       "contributions": [
         "question"
       ]
+    },
+    {
+      "login": "GLosch",
+      "name": "Gabby Losch",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5502159?v=4",
+      "profile": "https://github.com/GLosch",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tonygustafsson",
+      "name": "Tony Gustafsson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7383255?v=4",
+      "profile": "https://www.tonyg.se/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
