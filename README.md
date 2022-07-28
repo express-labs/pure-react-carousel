@@ -138,7 +138,7 @@ Let's make a simple carousel with three slides, a next button, and a back button
   }
   ```
 
-6. Add some buttons so the user can navigate forward and backwards.
+6. Add some buttons so the user can navigate forward and backwards. In order to use left/right arrow keyboard navigation, the Slider component needs to be focused. See example in the [Slider section](#slider-)
 
   ```JSX
   import React from 'react';
@@ -262,6 +262,27 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
     </div>
   </div>
 </div>
+```
+
+#### How to enable left/right arrow key navigation
+While keyboard navigation to scroll between slides is supported by default, the Slider needs to be given [`focus()`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) in order to make it work out of the box. There are several ways to accomplish this, but a simple solution could look like the following (note that this is not a full carousel example. It's meant solely to illustrate how to `focus()` the Slider):
+
+```
+  componentDidMount() {
+    const slider = document.getElementById('mySlider');
+
+    if (slider) {
+      slider.focus();
+    }
+  }
+  
+  render() {
+    return (
+      <Slider id='mySlider'>
+      // ...
+      </Slider>
+    )
+  }
 ```
 
 #### How to Change the Default Transition Animation
