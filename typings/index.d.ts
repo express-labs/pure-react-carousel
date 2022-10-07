@@ -2,7 +2,7 @@
 // Definitions by: Jedrzej Lewandowski <https://github.com/TheFullResolution>
 // TypeScript Version: 2.7.2
 
-import * as React from 'react'
+import React from 'react'
 import {
   ButtonBack,
   ButtonFirst,
@@ -26,7 +26,7 @@ import {
   ButtonLastProps,
   ButtonFirstProps,
   ButtonPlayProps
-} from './carouselElements.d'
+} from './carouselElements'
 
 interface CarouselState {
   readonly currentSlide: number
@@ -35,6 +35,7 @@ interface CarouselState {
   readonly hasMasterSpinner: boolean
   readonly imageErrorCount: number
   readonly imageSuccessCount: number
+  readonly isPlaying: boolean
   readonly lockOnWindowScroll: boolean
   readonly preventVerticalScrollOnTouch: boolean
   readonly horizontalPixelThreshold: number
@@ -82,7 +83,7 @@ interface CarouselProviderProps {
   readonly disableKeyboard?: CarouselState['disableKeyboard']
   readonly hasMasterSpinner?: CarouselState['hasMasterSpinner']
   readonly interval?: number
-  readonly isPlaying?: boolean
+  readonly isPlaying?: CarouselState['isPlaying']
   readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
   readonly preventVerticalScrollOnTouch?: CarouselState['preventVerticalScrollOnTouch']
   readonly horizontalPixelThreshold: CarouselState['horizontalPixelThreshold']
@@ -102,7 +103,7 @@ interface CarouselProviderProps {
   readonly isIntrinsicHeight?: CarouselState['isIntrinsicHeight']
 }
 
-type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
+type CarouselProviderInterface = React.ComponentType<CarouselProviderProps>
 /**
  * CarouselProvider allows the other carousel components to communicate with each other.
  *
@@ -120,31 +121,25 @@ type CarouselProviderInterface = React.ComponentClass<CarouselProviderProps>
 declare const CarouselProvider: CarouselProviderInterface
 
 export interface CarouselInjectedProps {
-  readonly carouselStore: CarouselStoreInterface
+  readonly carouselStore: Pick<
+    CarouselStoreInterface,
+    | "getStoreState"
+    | "masterSpinnerError"
+    | "masterSpinnerSuccess"
+    | "setStoreState"
+    | "subscribeMasterSpinner"
+    | "unsubscribeAllMasterSpinner"
+    | "unsubscribeMasterSpinner"
+  >;
 }
-
-// Diff / Omit taken from https://github.com/Microsoft/TypeScript/issues/12215#issuecomment-311923766
-type Diff<T extends string, U extends string> = ({ [P in T]: P } &
-  { [P in U]: never } & { readonly [x: string]: never })[T]
-type Omit<T, K extends keyof T> = Pick<T, Diff<Extract<keyof T, string>, Extract<K, string>>>
 
 type MapStateToProps<TStateProps> = (state: CarouselState) => TStateProps
 
 interface WithStoreInterface {
-  <CustomProps extends CarouselInjectedProps>(
-    component: React.ComponentClass<CustomProps>
-  ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> & {
-    readonly WrappedComponent: React.ComponentClass<CustomProps>
-  }
-
-  <CustomProps extends CarouselInjectedProps, CustomStateProps>(
-    component: React.ComponentClass<CustomProps & CustomStateProps>,
-    state: MapStateToProps<CustomStateProps>
-  ): React.ComponentClass<Omit<CustomProps, keyof CarouselInjectedProps>> & {
-    readonly WrappedComponent: React.ComponentClass<
-      CustomProps & CustomStateProps
-    >
-  }
+  <CustomProps, CustomStateProps = {}>(
+    component: React.ComponentType<CustomProps & CustomStateProps & CarouselInjectedProps>,
+    mapStateToProps?: MapStateToProps<CustomStateProps>
+  ): React.ComponentType<CustomProps>
 }
 /**
  * Use this HOC to pass CarouselProvider state properties as props to a component.

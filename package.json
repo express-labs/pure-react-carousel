@@ -1,6 +1,6 @@
 {
   "name": "pure-react-carousel",
-  "version": "0.0.0-semantically-released",
+  "version": "0.0.0-development",
   "description": "A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -41,7 +41,7 @@
   "typings": "typings/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/express-labs/pure-react-carousel.git"
+    "url": "https://github.com/express-labs/pure-react-carousel.git"
   },
   "author": "Matthew Toledo",
   "license": "MIT",
@@ -103,14 +103,14 @@
     "rollup-plugin-uglify": "^6.0.3",
     "rollup-plugin-uglify-es": "0.0.1",
     "rollup-watch": "^4.3.1",
-    "semantic-release": "^15.13.3",
+    "semantic-release": "^18.0.0",
     "uglify-es": "^3.3.5",
     "waait": "^1.0.5",
     "watch": "^1.0.2"
   },
   "peerDependencies": {
-    "react": "15.x || 16.x || 17.x",
-    "react-dom": "15.x || 16.x || 17.x"
+    "react": "15.x || 16.x || 17.x || 18.x",
+    "react-dom": "15.x || 16.x || 17.x || 18.x"
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",

@@ -1,0 +1,48 @@
+name: Build
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 10.19
+      - run: npm i
+      - run: npm run test
+      - run: npm run lint
+      - run: npm run prebuild
+  
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.17
+          registry-url: https://registry.npmjs.org/
+      - run: npm i
+      - run: npx semantic-release
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 10.19
+          registry-url: https://registry.npmjs.org/
+      - run: npm i
+      - run: |
+              git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/express-labs/pure-react-carousel.git
+              npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
