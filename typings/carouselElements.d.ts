@@ -7,6 +7,9 @@ interface SliderProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly classNameTray?: string
   readonly classNameTrayWrap?: string
   readonly moveThreshold?: number,
+  readonly preventVerticalScrollOnTouch?: boolean
+  readonly horizontalPixelThreshold?: number
+  readonly verticalPixelThreshold?: number,
   readonly onMasterSpinner?: () => void
   readonly style?: {}
   readonly spinner?: () => void

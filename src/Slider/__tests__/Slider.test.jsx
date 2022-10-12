@@ -26,6 +26,50 @@ const drag100 = {
   screenY: 100,
 };
 
+const pureHorizontalTouch = {
+  preventDefault: jest.fn(),
+  stopPropagation: jest.fn(),
+  targetTouches: [
+    {
+      screenX: 100,
+      screenY: 0,
+    },
+  ],
+};
+
+const pureVerticalTouch = {
+  preventDefault: jest.fn(),
+  stopPropagation: jest.fn(),
+  targetTouches: [
+    {
+      screenX: 0,
+      screenY: 100,
+    },
+  ],
+};
+
+const rightCrossAxisTouch = {
+  preventDefault: jest.fn(),
+  stopPropagation: jest.fn(),
+  targetTouches: [
+    {
+      screenX: 15,
+      screenY: 9,
+    },
+  ],
+};
+
+const leftCrossAxisTouch = {
+  preventDefault: jest.fn(),
+  stopPropagation: jest.fn(),
+  targetTouches: [
+    {
+      screenX: -16,
+      screenY: -11,
+    },
+  ],
+};
+
 // mock requestAnimationFrame
 global.window = global;
 let raf = 0;
@@ -34,7 +78,7 @@ window.requestAnimationFrame = (r) => {
   raf += 1;
   return raf;
 };
-window.cancelAnimationFrame = jest.fn().mockImplementation(() => {});
+window.cancelAnimationFrame = jest.fn().mockImplementation(() => { });
 
 // patch for missing SVGElement in jsDom.  Supposedly is fixed in newer versions of jsDom.
 if (!global.SVGElement) global.SVGElement = global.Element;
@@ -126,6 +170,9 @@ describe('<Slider />', () => {
       it('should bind playForward', () => {
         expect(instance.playForward.name).toEqual('bound playForward');
       });
+      it('should bind blockWindowScroll', () => {
+        expect(instance.blockWindowScroll.name).toEqual('bound blockWindowScroll');
+      });
       it('should initialize the state with the following shape', () => {
         expect(instance.state).toEqual({
           cancelNextClick: false,
@@ -133,6 +180,7 @@ describe('<Slider />', () => {
           deltaY: 0,
           isBeingMouseDragged: false,
           isBeingTouchDragged: false,
+          preventingVerticalScroll: false,
           startX: 0,
           startY: 0,
         });
@@ -161,9 +209,26 @@ describe('<Slider />', () => {
         const instance = new Slider({ lockOnWindowScroll: true });
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledWith('scroll', instance.handleDocumentScroll, false);
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(1);
       });
       it('should NOT add an event listener for handleDocumentScroll if the prop lockOnWindowScroll is false', () => {
         const instance = new Slider({ lockOnWindowScroll: false });
+        instance.componentDidMount();
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
+      });
+      it('should add an event listener to Window for blocking vertical scroll on touchmove if the prop preventVerticalScrollOnTouch is true', () => {
+        const instance = new Slider({ preventVerticalScrollOnTouch: true });
+        instance.componentDidMount();
+        expect(global.window.addEventListener).toHaveBeenCalledWith('touchmove', instance.blockWindowScroll, false);
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(1);
+      });
+      it('should NOT an event listener to Window for blocking vertical scroll on touchmove if the prop preventVerticalScrollOnTouch is false', () => {
+        const instance = new Slider({ preventVerticalScrollOnTouch: false });
+        instance.componentDidMount();
+        expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
+      });
+      it('should NOT an event listener to Window for blocking vertical scroll on touchmove if the prop touchEnabled is false', () => {
+        const instance = new Slider({ touchEnabled: false });
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
       });
@@ -212,6 +277,9 @@ describe('<Slider />', () => {
       });
       it('should remove the scroll listener from window', () => {
         expect(global.window.removeEventListener).toHaveBeenCalledWith('scroll', instance.handleDocumentScroll, false);
+      });
+      it('should remove the touchmove listener from window', () => {
+        expect(global.window.removeEventListener).toHaveBeenCalledWith('touchmove', instance.blockWindowScroll, false);
       });
       it('should reset isDocumentScrolling to null', () => {
         expect(instance.isDocumentScrolling).toBe(null);
@@ -268,6 +336,34 @@ describe('<Slider />', () => {
         instance.handleOnMouseMove(ev);
         expect(instance.fakeOnDragMove).toHaveBeenCalledTimes(1);
         expect(instance.fakeOnDragMove).toHaveBeenCalledWith(1, 2);
+      });
+    });
+    describe('blockWindowScroll()', () => {
+      it('should call preventDefault on the supplied event if preventingVerticalScroll is true', () => {
+        const instance = new Slider({});
+        instance.state.preventingVerticalScroll = true;
+        const ev = {
+          preventDefault: jest.fn(),
+          stopImmediatePropagation: jest.fn(),
+        };
+        instance.fakeOnDragMove = jest.fn();
+        instance.setState = jest.fn();
+        instance.blockWindowScroll(ev);
+        expect(ev.preventDefault).toHaveBeenCalledTimes(1);
+        expect(ev.stopImmediatePropagation).toHaveBeenCalledTimes(1);
+      });
+      it('should not call preventDefault on the supplied event if preventingVerticalScroll is false', () => {
+        const instance = new Slider({});
+        instance.state.preventingVerticalScroll = false;
+        const ev = {
+          preventDefault: jest.fn(),
+          stopImmediatePropagation: jest.fn(),
+        };
+        instance.fakeOnDragMove = jest.fn();
+        instance.setState = jest.fn();
+        instance.blockWindowScroll(ev);
+        expect(ev.preventDefault).toHaveBeenCalledTimes(0);
+        expect(ev.stopImmediatePropagation).toHaveBeenCalledTimes(0);
       });
     });
     describe('onMouseUp()', () => {
@@ -461,6 +557,50 @@ describe('<Slider />', () => {
       wrapper.find('.sliderTray').simulate('touchmove', touch100);
       expect(wrapper.state('deltaX')).toBe(100);
       expect(wrapper.state('deltaY')).toBe(100);
+    });
+
+    it('should change preventingVerticalScroll state to true with pure horizontal scroll', () => {
+      const wrapper = shallow(<Slider {...props} />);
+      expect(wrapper.state('startX')).toBe(0);
+      expect(wrapper.state('startY')).toBe(0);
+      wrapper.find('.sliderTray').simulate('touchmove', pureHorizontalTouch);
+      wrapper.update();
+      expect(wrapper.state('preventingVerticalScroll')).toBe(true);
+      expect(wrapper.state('deltaX')).toBe(100);
+      expect(wrapper.state('deltaY')).toBe(0);
+    });
+
+    it('should change preventingVerticalScroll state to false with pure vertical scroll', () => {
+      const wrapper = shallow(<Slider {...props} />);
+      expect(wrapper.state('startX')).toBe(0);
+      expect(wrapper.state('startY')).toBe(0);
+      wrapper.find('.sliderTray').simulate('touchmove', pureVerticalTouch);
+      wrapper.update();
+      expect(wrapper.state('preventingVerticalScroll')).toBe(false);
+      expect(wrapper.state('deltaX')).toBe(0);
+      expect(wrapper.state('deltaY')).toBe(100);
+    });
+
+    it('should change preventingVerticalScroll state to true with cross axis touch with in parameters', () => {
+      const wrapper = shallow(<Slider {...props} />);
+      expect(wrapper.state('startX')).toBe(0);
+      expect(wrapper.state('startY')).toBe(0);
+      wrapper.find('.sliderTray').simulate('touchmove', rightCrossAxisTouch);
+      wrapper.update();
+      expect(wrapper.state('preventingVerticalScroll')).toBe(true);
+      expect(wrapper.state('deltaX')).toBe(15);
+      expect(wrapper.state('deltaY')).toBe(9);
+    });
+
+    it('should change preventingVerticalScroll state to false with cross axis touch outside of parameters', () => {
+      const wrapper = shallow(<Slider {...props} />);
+      expect(wrapper.state('startX')).toBe(0);
+      expect(wrapper.state('startY')).toBe(0);
+      wrapper.find('.sliderTray').simulate('touchmove', leftCrossAxisTouch);
+      wrapper.update();
+      expect(wrapper.state('preventingVerticalScroll')).toBe(false);
+      expect(wrapper.state('deltaX')).toBe(-16);
+      expect(wrapper.state('deltaY')).toBe(-11);
     });
 
     it('should handle not being given a touch event', () => {
@@ -810,7 +950,7 @@ describe('<Slider />', () => {
     it('endTouchMove should set this.isDocumentScrolling to false if props.lockOnWindowScroll is true', () => {
       const wrapper = shallow(<Slider {...props} lockOnWindowScroll />);
       const instance = wrapper.instance();
-      instance.computeCurrentSlide = () => {};
+      instance.computeCurrentSlide = () => { };
       instance.handleDocumentScroll();
       expect(instance.isDocumentScrolling).toBe(true);
       instance.endTouchMove();
@@ -820,7 +960,7 @@ describe('<Slider />', () => {
     it('endTouchMove should NOT set this.isDocumentScrolling to false if props.lockOnWindowScroll is FALSE', () => {
       const wrapper = shallow(<Slider {...props} />);
       const instance = wrapper.instance();
-      instance.computeCurrentSlide = () => {};
+      instance.computeCurrentSlide = () => { };
       instance.endTouchMove();
       expect(instance.isDocumentScrolling).toBe(null);
     });

@@ -13,6 +13,7 @@ export default WithStore(Slider, state => ({
   isPageScrollLocked: state.isPageScrollLocked,
   isPlaying: state.isPlaying,
   lockOnWindowScroll: state.lockOnWindowScroll,
+  preventingVerticalScroll: state.preventingVerticalScroll,
   masterSpinnerFinished: state.masterSpinnerFinished,
   naturalSlideHeight: state.naturalSlideHeight,
   naturalSlideWidth: state.naturalSlideWidth,

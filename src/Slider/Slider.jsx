@@ -27,6 +27,9 @@ const Slider = class Slider extends React.Component {
     isPageScrollLocked: PropTypes.bool.isRequired,
     isPlaying: PropTypes.bool.isRequired,
     lockOnWindowScroll: PropTypes.bool.isRequired,
+    preventVerticalScrollOnTouch: PropTypes.bool,
+    horizontalPixelThreshold: PropTypes.number,
+    verticalPixelThreshold: PropTypes.number,
     masterSpinnerFinished: PropTypes.bool.isRequired,
     moveThreshold: PropTypes.number,
     naturalSlideHeight: PropTypes.number.isRequired,
@@ -69,6 +72,9 @@ const Slider = class Slider extends React.Component {
     disableKeyboard: false,
     dragStep: 1,
     infinite: false,
+    preventVerticalScrollOnTouch: true,
+    horizontalPixelThreshold: 15,
+    verticalPixelThreshold: 10,
     moveThreshold: 0.1,
     onMasterSpinner: null,
     privateUnDisableAnimation: false,
@@ -114,6 +120,7 @@ const Slider = class Slider extends React.Component {
     this.playBackward = this.playBackward.bind(this);
     this.playForward = this.playForward.bind(this);
     this.callCallback = this.callCallback.bind(this);
+    this.blockWindowScroll = this.blockWindowScroll.bind(this);
 
     this.state = {
       cancelNextClick: false,
@@ -121,6 +128,7 @@ const Slider = class Slider extends React.Component {
       deltaY: 0,
       isBeingMouseDragged: false,
       isBeingTouchDragged: false,
+      preventingVerticalScroll: false,
       startX: 0,
       startY: 0,
     };
@@ -136,6 +144,9 @@ const Slider = class Slider extends React.Component {
   componentDidMount() {
     if (this.props.lockOnWindowScroll) {
       window.addEventListener('scroll', this.handleDocumentScroll, false);
+    }
+    if (this.props.touchEnabled || this.props.preventVerticalScrollOnTouch) {
+      window.addEventListener('touchmove', this.blockWindowScroll, false);
     }
     document.documentElement.addEventListener('mouseleave', this.handleOnMouseUp, false);
     document.documentElement.addEventListener('mousemove', this.handleOnMouseMove, false);
@@ -166,6 +177,7 @@ const Slider = class Slider extends React.Component {
     document.documentElement.removeEventListener('mousemove', this.handleOnMouseMove, false);
     document.documentElement.removeEventListener('mouseup', this.handleOnMouseUp, false);
     window.removeEventListener('scroll', this.handleDocumentScroll, false);
+    window.removeEventListener('touchmove', this.blockWindowScroll, false);
 
     this.stop();
     window.cancelAnimationFrame.call(window, this.moveTimer);
@@ -223,6 +235,9 @@ const Slider = class Slider extends React.Component {
       this.setState(state => ({
         deltaX: screenX - state.startX,
         deltaY: screenY - state.startY,
+        preventingVerticalScroll: Math.abs(screenY - state.startY)
+          <= this.props.verticalPixelThreshold
+          && Math.abs(screenX - state.startX) >= this.props.horizontalPixelThreshold,
       }));
     });
   }
@@ -441,6 +456,13 @@ const Slider = class Slider extends React.Component {
     }
   }
 
+  blockWindowScroll(ev) {
+    if (this.state.preventingVerticalScroll) {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+    }
+  }
+
   computeCurrentSlide() {
     const slideSizeInPx = Slider.slideSizeInPx(
       this.props.orientation,
@@ -631,6 +653,9 @@ const Slider = class Slider extends React.Component {
       dragStep,
       step,
       infinite,
+      preventVerticalScrollOnTouch,
+      horizontalPixelThreshold,
+      verticalPixelThreshold,
       ...rest
     } = props;
 
