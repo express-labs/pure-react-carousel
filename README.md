@@ -205,9 +205,6 @@ Any remaining props not consumed by the component are passed directly to the roo
 | interval | number | 5000 | No | Number of milliseconds to wait when the auto slideshow is active |
 | isPlaying | bool | false | No | Setting this to true starts an auto slideshow. After "interval" milliseconds, the slider will move by "step" slides either forward or backwards depending on the value of "playDirection". |
 | lockOnWindowScroll | bool | false | No | When set to true, scrolling of the carousel slides are disabled while the browser window is scrolling |
-| preventVerticalScrollOnTouch | bool | true | No | When set to true, prevents vertical screen scroll based on touch move of the carousel|
-| horizontalPixelThreshold| number | 15 | No | The minimum amount of pixels moved horizontally, by touch on the carousel, which will block page scroll if the  movement in pixels is greater or equal than the amount of the provided value.|
-| verticalPixelThreshold | number | 10 | No | The maximum amount of pixels moved vertically, by touch on the carousel, which will block page scroll if the movement in pixels is less than the provided value |
 | **naturalSlideHeight** | number | | **Yes** | The natural height of each <\Slide > component. ** |
 | **naturalSlideWidth** | number | | **Yes** | The natural width of each <\Slide > component. ** |
 | orientation | string | "horizontal" | No | Possible values are "horizontal" and "vertical".  Let's you have a horizontal or vertical carousel. |
@@ -246,6 +243,9 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 | classNameTray | [string&#124;null] | null | No | Optional className string that is applied to the Slider's tray. The "tray" is the DOM element that contains the slides. The type of DOM element is specified by the trayTag property |
 | classNameTrayWrap | [string&#124;null] | null | No | Optional className string that is applied to a div that surrounds the Slider's tray |
 | moveThreshold | number | 0.1 | No | Threshold to control the drag distance that triggers a scroll to the next or previous slide. (slide width or height * moveThreshold = drag pixel distance required to scroll) |
+| preventVerticalScrollOnTouch | bool | true | No | When set to true and touch enabled, prevents vertical screen scroll based on touch move of the carousel|
+| horizontalPixelThreshold| number | 15 | No | The minimum amount of pixels moved horizontally, by touch on the carousel, which will block page scroll if the  movement in pixels is greater or equal than the amount of the provided value.|
+| verticalPixelThreshold | number | 10 | No | The maximum amount of pixels moved vertically, by touch on the carousel, which will block page scroll if the movement in pixels is less than the provided value |
 | onMasterSpinner | [function&#124;null] | null | No | Optional callback function that is called when the Master Spinner is visible.  Requires that &lt;CarouselProvider /> set hasMasterSpinner to true |
 | spinner | function | null | No |  Optional inline JSX (aka "render props") to render your own custom spinner.  Example `() => <MyCustomSpinnerComponent />`.  If left blank, the default spinner is used. |
 | style | object | {} | No | Optional css styles to add to the Slider.  Note: internal css properties take precedence over any styles specified in the styles object |
