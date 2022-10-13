@@ -654,6 +654,7 @@ const Slider = class Slider extends React.Component {
       step,
       infinite,
       preventVerticalScrollOnTouch,
+      preventingVerticalScroll,
       horizontalPixelThreshold,
       verticalPixelThreshold,
       ...rest

@@ -86,8 +86,8 @@ interface CarouselProviderProps {
   readonly isPlaying?: CarouselState['isPlaying']
   readonly lockOnWindowScroll?: CarouselState['lockOnWindowScroll']
   readonly preventVerticalScrollOnTouch?: CarouselState['preventVerticalScrollOnTouch']
-  readonly horizontalPixelThreshold: CarouselState['horizontalPixelThreshold']
-  readonly verticalPixelThreshold: CarouselState['verticalPixelThreshold'],
+  readonly horizontalPixelThreshold?: CarouselState['horizontalPixelThreshold']
+  readonly verticalPixelThreshold?: CarouselState['verticalPixelThreshold'],
   readonly naturalSlideHeight: CarouselState['naturalSlideHeight']
   readonly naturalSlideWidth: CarouselState['naturalSlideWidth']
   readonly playDirection?: 'forward' | 'backward'
