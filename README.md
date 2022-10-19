@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Pure React Carousel</h1>
-  
+
   Created By
   <br />
   <a href="http://www.express.com">
@@ -13,8 +13,8 @@
   </a>
   <br />
   <p>A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.</p>
-  
-  [**See Live Examples**](https://express-labs.github.io/pure-react-carousel/) | 
+
+  [**See Live Examples**](https://express-labs.github.io/pure-react-carousel/) |
   [See Example Code](src/App/examples)
 </div>
 
@@ -217,7 +217,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | dragEnabled | boolean | true | No | Set to true to enable mouse dragging events |
 | visibleSlides | number | 1 | No | The number of slides to show at once.  This number should be <= totalSlides |
 | infinite | boolean | false | No | Should the carousel continue or stop at the beginning or end of the slides |
-| isIntrinsicHeight | boolean | false | No | Disables the enforced height ratio, and instead uses the intrinsic height of the slides. This option can only be active in horizontal orientation, it will throw an error in vertical orientation. | 
+| isIntrinsicHeight | boolean | false | No | Disables the enforced height ratio, and instead uses the intrinsic height of the slides. This option can only be active in horizontal orientation, it will throw an error in vertical orientation. |
 
 #### The CarouselProvider component creates the following pseudo HTML by default:
 
@@ -278,7 +278,7 @@ While keyboard navigation to scroll between slides is supported by default, the 
       slider.focus();
     }
   }
-  
+
   render() {
     return (
       <Slider id='mySlider'>
@@ -711,12 +711,15 @@ const DecoratedComponent = WithStore(InjectedComponent)
 I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.
 
 ## Dev Workflow
+**Note about Correct Node Version:**  You must switch to node version **10.16.1** and then run `npm install` before developing pure-react-carousel on your local machine.  Use Node Version Manager (nvm) to switch between versions of node.  This project has an .nvmrc file.  You can set up Node Version Manager to automatically switch to the correct version of Node when working on this repo.  If you run `npm install` and encounter fatal errors, it is because you're using the wrong version of Node and npm.
 
+- `npm install` See note above about correct Node version.  This installs all the necessary dependencies for local development.<br><br>
 - `npm start` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload.<br><br>
-- `npm run build` compiles CommonJS and ES modules and places them in the dist directory.<br><br>
 - `npm test` runs unit and integration tests using Jest + Enzyme.  Also does coverage reporting.<br><br>
 - `npm lint` runs linting tests using ESLint & Airbnb linting.<br><br>
 - `npm test:watch` same as `npm test` but it will watch for updates and auto-run tests. Does not do coverage reporting.<br><br>
+- `npm run build` compiles CommonJS and ES modules and places them in the dist directory. See note above about correct node Version<br><br>
+- `npm run deploy` If you updated the demo app, you need to build the project and then deploy the updates to github.<br><br>
 
 ## Contributors
 
