@@ -7,7 +7,7 @@ npm-debug.log*
 .babel-cache
 
 # dev server
-/dev/script/*
+/dev/script
 /dev/style.css
 
 #ignore webpack generated stats file
