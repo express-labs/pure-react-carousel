@@ -711,9 +711,9 @@ const DecoratedComponent = WithStore(InjectedComponent)
 I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.
 
 ## Dev Workflow
-**Note about Correct Node Version:**  You must switch to node version **10.16.1** and then run `npm install` before developing pure-react-carousel on your local machine.  Use Node Version Manager (nvm) to switch between versions of node.  This project has an .nvmrc file.  You can set up Node Version Manager to automatically switch to the correct version of Node when working on this repo.  If you run `npm install` and encounter fatal errors, it is because you're using the wrong version of Node and npm.
+**Note about Correct Node Version:**  You must switch to node version **10.16.1** and then run `npm ci` before developing pure-react-carousel on your local machine.  Use Node Version Manager (nvm) to switch between versions of node.  This project has an .nvmrc file.  You can set up Node Version Manager to automatically switch to the correct version of Node when working on this repo.  If you run `npm ci` and encounter fatal errors, it is because you're using the wrong version of Node and npm.
 
-- `npm install` See note above about correct Node version.  This installs all the necessary dependencies for local development.<br><br>
+- `npm ci` See note above about correct Node version.  This installs all the necessary dependencies for local development.<br><br>
 - `npm start` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload.<br><br>
 - `npm test` runs unit and integration tests using Jest + Enzyme.  Also does coverage reporting.<br><br>
 - `npm lint` runs linting tests using ESLint & Airbnb linting.<br><br>
