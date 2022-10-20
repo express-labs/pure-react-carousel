@@ -7,7 +7,7 @@ npm-debug.log*
 .babel-cache
 
 # dev server
-/dev/script/*
+/dev/script
 /dev/style.css
 
 #ignore webpack generated stats file
@@ -60,8 +60,3 @@ coverage.json
 
 .idea/
 .vscode/
-
-# these cause more harm than good
-# when working with contributors
-package-lock.json
-yarn.lock
