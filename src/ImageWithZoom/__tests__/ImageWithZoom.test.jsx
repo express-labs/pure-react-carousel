@@ -93,6 +93,20 @@ describe('<ImageWithZoom />', () => {
           isImageLoadingError: true,
         });
       });
+      it('should call onError prop function when function handleImageLoadError is called', () => {
+        const onError = jest.fn();
+        const instance = new ImageWithZoom({ onError });
+        instance.setState = jest.fn();
+        instance.handleImageLoadError();
+        expect(onError).toHaveBeenCalled();
+      });
+      it('should call onLoad prop function when function handleImageComplete is called', () => {
+        const onLoad = jest.fn();
+        const instance = new ImageWithZoom({ onLoad });
+        instance.setState = jest.fn();
+        instance.handleImageComplete();
+        expect(onLoad).toHaveBeenCalled();
+      });
     });
   });
   describe('integration tests', () => {
