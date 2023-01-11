@@ -222,12 +222,12 @@ describe('<Slider />', () => {
         expect(global.window.addEventListener).toHaveBeenCalledWith('touchmove', instance.blockWindowScroll, false);
         expect(global.window.addEventListener).toHaveBeenCalledTimes(1);
       });
-      it('should NOT an event listener to Window for blocking vertical scroll on touchmove if the prop preventVerticalScrollOnTouch is false', () => {
+      it('should NOT add an event listener to Window for blocking vertical scroll on touchmove if the prop preventVerticalScrollOnTouch is false', () => {
         const instance = new Slider({ preventVerticalScrollOnTouch: false });
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
       });
-      it('should NOT an event listener to Window for blocking vertical scroll on touchmove if the prop touchEnabled is false', () => {
+      it('should NOT add an event listener to Window for blocking vertical scroll on touchmove if the prop touchEnabled is false', () => {
         const instance = new Slider({ touchEnabled: false });
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
