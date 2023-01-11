@@ -627,6 +627,13 @@ describe('<Slider />', () => {
       expect(wrapper.state('deltaY')).toBe(0);
     });
 
+    it('should not set touch-action css property if touchEnabled is false', () => {
+      const wrapper = mount(<Slider {...props} touchEnabled />);
+      expect(wrapper.getDOMNode().classList.contains('touchDisabled')).toBe(false);
+      wrapper.setProps({ touchEnabled: false });
+      expect(wrapper.getDOMNode().classList.contains('touchDisabled')).toBe(true);
+    });
+
     it('touchmove should not alter state if props.lockOnWindowScroll and this.isDocumentScrolling are both true', () => {
       const wrapper = shallow(<Slider {...props} lockOnWindowScroll />);
       const instance = wrapper.instance();
