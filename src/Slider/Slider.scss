@@ -1,7 +1,9 @@
 .horizontalSlider {
   position: relative;
   overflow: hidden;
-  touch-action: pan-y pinch-zoom;
+  &:not(.touchDisabled) {
+    touch-action: pan-y pinch-zoom;
+  }
 
   [dir='rtl'] & {
     direction: ltr;
