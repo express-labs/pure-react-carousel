@@ -624,6 +624,7 @@ const Slider = class Slider extends React.Component {
 
     const sliderClasses = cn([
       orientation === 'vertical' ? s.verticalSlider : s.horizontalSlider,
+      !touchEnabled && s.touchDisabled,
       'carousel__slider',
       orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal',
       className,

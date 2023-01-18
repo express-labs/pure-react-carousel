@@ -222,12 +222,12 @@ describe('<Slider />', () => {
         expect(global.window.addEventListener).toHaveBeenCalledWith('touchmove', instance.blockWindowScroll, false);
         expect(global.window.addEventListener).toHaveBeenCalledTimes(1);
       });
-      it('should NOT an event listener to Window for blocking vertical scroll on touchmove if the prop preventVerticalScrollOnTouch is false', () => {
+      it('should NOT add an event listener to Window for blocking vertical scroll on touchmove if the prop preventVerticalScrollOnTouch is false', () => {
         const instance = new Slider({ preventVerticalScrollOnTouch: false });
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
       });
-      it('should NOT an event listener to Window for blocking vertical scroll on touchmove if the prop touchEnabled is false', () => {
+      it('should NOT add an event listener to Window for blocking vertical scroll on touchmove if the prop touchEnabled is false', () => {
         const instance = new Slider({ touchEnabled: false });
         instance.componentDidMount();
         expect(global.window.addEventListener).toHaveBeenCalledTimes(0);
@@ -625,6 +625,13 @@ describe('<Slider />', () => {
       wrapper.find('.sliderTray').simulate('touchmove', touch100);
       expect(wrapper.state('deltaX')).toBe(0);
       expect(wrapper.state('deltaY')).toBe(0);
+    });
+
+    it('should not set touch-action css property if touchEnabled is false', () => {
+      const wrapper = mount(<Slider {...props} touchEnabled />);
+      expect(wrapper.getDOMNode().classList.contains('touchDisabled')).toBe(false);
+      wrapper.setProps({ touchEnabled: false });
+      expect(wrapper.getDOMNode().classList.contains('touchDisabled')).toBe(true);
     });
 
     it('touchmove should not alter state if props.lockOnWindowScroll and this.isDocumentScrolling are both true', () => {
