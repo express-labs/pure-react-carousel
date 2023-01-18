@@ -31780,7 +31780,7 @@
 	  return GetScrollParent;
 	}();
 
-	var s$b = {"horizontalSlider":"horizontalSlider___281Ls","horizontalSliderTray":"horizontalSliderTray___1L-0W","verticalSlider":"verticalSlider___34ZFD","verticalSliderTray":"verticalSliderTray___267D8","verticalTray":"verticalTray___12Key","verticalSlideTrayWrap":"verticalSlideTrayWrap___2nO7o","sliderTray":"sliderTray___-vHFQ","sliderAnimation":"sliderAnimation___300FY","masterSpinnerContainer":"masterSpinnerContainer___1Z6hB"};
+	var s$b = {"horizontalSlider":"horizontalSlider___281Ls","touchDisabled":"touchDisabled___2qs4y","horizontalSliderTray":"horizontalSliderTray___1L-0W","verticalSlider":"verticalSlider___34ZFD","verticalSliderTray":"verticalSliderTray___267D8","verticalTray":"verticalTray___12Key","verticalSlideTrayWrap":"verticalSlideTrayWrap___2nO7o","sliderTray":"sliderTray___-vHFQ","sliderAnimation":"sliderAnimation___300FY","masterSpinnerContainer":"masterSpinnerContainer___1Z6hB"};
 
 	var _excluded$c = ["ariaLabel", "carouselStore", "children", "className", "classNameAnimation", "classNameTray", "classNameTrayWrap", "currentSlide", "disableAnimation", "disableKeyboard", "dragEnabled", "hasMasterSpinner", "interval", "isPageScrollLocked", "isPlaying", "lockOnWindowScroll", "masterSpinnerFinished", "moveThreshold", "naturalSlideHeight", "naturalSlideWidth", "onMasterSpinner", "orientation", "playDirection", "privateUnDisableAnimation", "slideSize", "slideTraySize", "spinner", "style", "tabIndex", "totalSlides", "touchEnabled", "trayProps", "trayTag", "visibleSlides", "isIntrinsicHeight"],
 	    _excluded2$2 = ["dragStep", "step", "infinite", "preventVerticalScrollOnTouch", "preventingVerticalScroll", "horizontalPixelThreshold", "verticalPixelThreshold"],
@@ -32328,7 +32328,7 @@
 	        trayStyle.flexDirection = 'row';
 	      }
 
-	      var sliderClasses = cn([orientation === 'vertical' ? s$b.verticalSlider : s$b.horizontalSlider, 'carousel__slider', orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal', className]);
+	      var sliderClasses = cn([orientation === 'vertical' ? s$b.verticalSlider : s$b.horizontalSlider, !touchEnabled && s$b.touchDisabled, 'carousel__slider', orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal', className]);
 	      var trayWrapClasses = cn([s$b.sliderTrayWrap, 'carousel__slider-tray-wrapper', orientation === 'vertical' ? s$b.verticalSlideTrayWrap : s$b.horizontalTrayWrap, orientation === 'vertical' ? 'carousel__slider-tray-wrap--vertical' : 'carousel__slider-tray-wrap--horizontal', classNameTrayWrap]);
 	      var trayClasses = cn([s$b.sliderTray, classNameAnimation || s$b.sliderAnimation, 'carousel__slider-tray', orientation === 'vertical' ? s$b.verticalTray : s$b.horizontalTray, orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal', classNameTray]);
 	      var newTabIndex = tabIndex !== null ? tabIndex : 0; // remove invalid div attributes
