@@ -69,7 +69,7 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
   * [Dev Workflow](#dev-workflow)
   * [Contributors](#contributors)
 
-## 🛠 Tutorial
+## 🛠 Tutorial 🛠
 
 Let's make a simple carousel with three slides, a next button, and a back button.
 
