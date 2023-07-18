@@ -15,21 +15,21 @@ import
 import s from '../../style.scss';
 
 export default () => (
-  <CarouselProvider
-    visibleSlides={2}
-    totalSlides={8}
-    step={1}
-    naturalSlideWidth={400}
-    naturalSlideHeight={500}
-  >
-    <h2 className={s.headline}>RTL</h2>
-    <p>
+  <div dir="rtl">
+    <CarouselProvider
+      visibleSlides={2}
+      totalSlides={8}
+      step={1}
+      naturalSlideWidth={400}
+      naturalSlideHeight={500}
+    >
+      <h2 className={s.headline}>RTL</h2>
+      <p>
       A carousel wrapped in an element with
-      {' '}
-      <code>dir=&quot;rtl&quot;</code>
+        {' '}
+        <code>dir=&quot;rtl&quot;</code>
 , demonstrating support for use with right-to-left languages.
-    </p>
-    <div dir="rtl">
+      </p>
       <Slider className={s.slider}>
         <Slide index={0}>
           <ImageWithZoom src="./media/img01.jpeg" />
@@ -61,6 +61,6 @@ export default () => (
       <ButtonNext>Next</ButtonNext>
       <ButtonLast>Last</ButtonLast>
       <DotGroup dotNumbers />
-    </div>
-  </CarouselProvider>
+    </CarouselProvider>
+  </div>
 );
