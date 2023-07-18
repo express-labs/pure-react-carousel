@@ -201,9 +201,14 @@ const Slider = class Slider extends React.Component {
 
   getSliderRef(el) {
     this.sliderTrayElement = el;
-    // NOTE: we can't rely on the element itself to detect direction
-    // as the direction of the slider is currently flipped to ltr
-    this.rtl = window.getComputedStyle(el.closest('.carousel'), null).getPropertyValue('direction') === 'rtl';
+    if (el && window) {
+      // NOTE: we can't rely on the element itself to detect direction
+      // as the direction of the slider is currently flipped to ltr
+      const carouselElement = el.closest('.carousel');
+      if (carouselElement) {
+        this.rtl = window.getComputedStyle(carouselElement, null).getPropertyValue('direction') === 'rtl';
+      }
+    }
   }
 
 
