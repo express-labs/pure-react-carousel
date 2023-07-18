@@ -201,6 +201,9 @@ const Slider = class Slider extends React.Component {
 
   getSliderRef(el) {
     this.sliderTrayElement = el;
+    // NOTE: we can't rely on the element itself to detect direction
+    // as the direction of the slider is currently flipped to ltr
+    this.rtl = window.getComputedStyle(el.closest('.carousel'), null).getPropertyValue('direction') === 'rtl';
   }
 
 
@@ -233,7 +236,7 @@ const Slider = class Slider extends React.Component {
   fakeOnDragMove(screenX, screenY) {
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
-        deltaX: screenX - state.startX,
+        deltaX: (screenX - state.startX) * (this.rtl ? -1 : 1),
         deltaY: screenY - state.startY,
         preventingVerticalScroll: Math.abs(screenY - state.startY)
           <= this.props.verticalPixelThreshold
