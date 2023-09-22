@@ -232,7 +232,6 @@ const Slider = class Slider extends React.Component {
 
   fakeOnDragMove(screenX, screenY) {
     window.cancelAnimationFrame.call(window, this.moveTimer);
-    
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
         deltaX: screenX - state.startX,
