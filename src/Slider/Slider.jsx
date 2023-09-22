@@ -231,6 +231,8 @@ const Slider = class Slider extends React.Component {
   }
 
   fakeOnDragMove(screenX, screenY) {
+    window.cancelAnimationFrame.call(window, this.moveTimer);
+    
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
         deltaX: screenX - state.startX,
@@ -344,8 +346,6 @@ const Slider = class Slider extends React.Component {
       this.callCallback('onTouchMove', ev);
       return;
     }
-
-    window.cancelAnimationFrame.call(window, this.moveTimer);
 
     const touch = ev.targetTouches[0];
     // TODO: This prevents an error case we were seeing internally, but long term we
