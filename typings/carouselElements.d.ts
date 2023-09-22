@@ -57,6 +57,8 @@ interface ImageWithZoomProps {
   readonly className?: string
   readonly imageClassName?: string
   readonly overlayClassName?: string
+  readonly onError?: () => void
+  readonly onLoad?: () => void
   readonly src: string
   readonly srcZoomed?: string
   readonly tag?: string
