@@ -31942,6 +31942,7 @@
 	    value: function fakeOnDragMove(screenX, screenY) {
 	      var _this2 = this;
 
+	      window.cancelAnimationFrame.call(window, this.moveTimer);
 	      this.moveTimer = window.requestAnimationFrame.call(window, function () {
 	        _this2.setState(function (state) {
 	          return {
@@ -32069,7 +32070,6 @@
 	        return;
 	      }
 
-	      window.cancelAnimationFrame.call(window, this.moveTimer);
 	      var touch = ev.targetTouches[0]; // TODO: This prevents an error case we were seeing internally, but long term we
 	      //  should evaluate if there's something better we can do to ensure there's not
 	      //  a different problem that we can address instead.
