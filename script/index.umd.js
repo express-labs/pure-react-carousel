@@ -31179,8 +31179,10 @@
 	    _this = _super.call(this, props); // state changes that require a re-render
 
 	    _this.state = {
-	      // tracks the status via image element's onload, onerror events.
+	      // tracks the status via image element's onload events.
 	      isImageLoading: true,
+	      // tracks the status via image element's onerror events.
+	      isImageLoadingError: true,
 	      // the mouse is currently hovering over the image.
 	      isHovering: false,
 	      // the user is doing the pinch-zoom gesture on the image on a touch device.
@@ -31197,6 +31199,7 @@
 	    // event handlers
 
 	    _this.handleImageComplete = _this.handleImageComplete.bind(_assertThisInitialized(_this));
+	    _this.handleImageLoadError = _this.handleImageLoadError.bind(_assertThisInitialized(_this));
 	    _this.handleOnMouseMove = _this.handleOnMouseMove.bind(_assertThisInitialized(_this));
 	    _this.handleOnMouseOut = _this.handleOnMouseOut.bind(_assertThisInitialized(_this));
 	    _this.handleOnMouseOver = _this.handleOnMouseOver.bind(_assertThisInitialized(_this));
@@ -31223,10 +31226,20 @@
 	    }
 	  }, {
 	    key: "handleImageComplete",
-	    value: function handleImageComplete() {
+	    value: function handleImageComplete(ev) {
 	      this.setState({
 	        isImageLoading: false
 	      });
+	      if (this.props && this.props.onLoad) this.props.onLoad(ev);
+	    }
+	  }, {
+	    key: "handleImageLoadError",
+	    value: function handleImageLoadError(ev) {
+	      this.setState({
+	        isImageLoadingError: true,
+	        isImageLoading: false
+	      });
+	      if (this.props && this.props.onError) this.props.onError(ev);
 	    }
 	  }, {
 	    key: "handleOnMouseOver",
@@ -31419,7 +31432,7 @@
 	        tag: bgImageTag,
 	        src: src,
 	        onLoad: this.handleImageComplete,
-	        onError: this.handleImageComplete
+	        onError: this.handleImageLoadError
 	      }, bgImageProps)), /*#__PURE__*/react.createElement(Image$1, {
 	        className: newOverlayClassName,
 	        tag: "div",
@@ -31489,6 +31502,8 @@
 	  imageClassName: propTypes.string,
 	  overlayClassName: propTypes.string,
 	  spinner: propTypes.func,
+	  onLoad: propTypes.func,
+	  onError: propTypes.func,
 	  src: propTypes.string.isRequired,
 	  srcZoomed: propTypes.string,
 	  tag: propTypes.string,
@@ -31502,6 +31517,8 @@
 	  overlayClassName: null,
 	  isPinchZoomEnabled: true,
 	  spinner: null,
+	  onLoad: null,
+	  onError: null,
 	  srcZoomed: null,
 	  tag: 'div'
 	}), _class$8);
