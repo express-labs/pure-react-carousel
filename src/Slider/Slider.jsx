@@ -38,12 +38,12 @@ const Slider = class Slider extends React.Component {
     orientation: CarouselPropTypes.orientation.isRequired,
     playDirection: CarouselPropTypes.direction.isRequired,
     privateUnDisableAnimation: PropTypes.bool,
+    role: PropTypes.string,
     slideSize: PropTypes.number.isRequired,
     slideTraySize: PropTypes.number.isRequired,
     spinner: PropTypes.func,
     step: PropTypes.number.isRequired,
     style: PropTypes.object,
-    tabIndex: PropTypes.number,
     totalSlides: PropTypes.number.isRequired,
     touchEnabled: PropTypes.bool.isRequired,
     trayProps: PropTypes.shape({
@@ -78,9 +78,9 @@ const Slider = class Slider extends React.Component {
     moveThreshold: 0.1,
     onMasterSpinner: null,
     privateUnDisableAnimation: false,
+    role: 'listbox',
     spinner: null,
     style: {},
-    tabIndex: null,
     trayProps: {},
     trayTag: 'div',
     visibleSlides: 1,
@@ -582,7 +582,6 @@ const Slider = class Slider extends React.Component {
       slideTraySize,
       spinner,
       style,
-      tabIndex,
       totalSlides,
       touchEnabled,
       trayProps,
@@ -654,7 +653,7 @@ const Slider = class Slider extends React.Component {
       classNameTray,
     ]);
 
-    const newTabIndex = tabIndex !== null ? tabIndex : 0;
+  
 
     // remove invalid div attributes
     const {
@@ -691,10 +690,9 @@ const Slider = class Slider extends React.Component {
         className={sliderClasses}
         aria-live="polite"
         aria-label={ariaLabel}
+        role={this.props.role}
         style={sliderStyle}
-        tabIndex={newTabIndex}
         onKeyDown={this.handleOnKeyDown}
-        role="listbox"
         {...rest}
       >
         <div className={trayWrapClasses} style={trayWrapStyle}>
