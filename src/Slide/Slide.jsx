@@ -21,8 +21,8 @@ const Slide = class Slide extends React.PureComponent {
     onFocus: PropTypes.func,
     orientation: CarouselPropTypes.orientation.isRequired,
     slideSize: PropTypes.number.isRequired,
+    role: PropTypes.string,
     style: PropTypes.object,
-    tabIndex: PropTypes.number,
     tag: PropTypes.string,
     totalSlides: PropTypes.number.isRequired,
     visibleSlides: PropTypes.number.isRequired,
@@ -40,8 +40,8 @@ const Slide = class Slide extends React.PureComponent {
     innerTag: 'div',
     onBlur: null,
     onFocus: null,
+    role: 'option',
     style: {},
-    tabIndex: null,
     tag: 'div',
     isIntrinsicHeight: false,
   }
@@ -104,7 +104,6 @@ const Slide = class Slide extends React.PureComponent {
       orientation,
       slideSize,
       style,
-      tabIndex,
       tag: Tag,
       totalSlides,
       visibleSlides,
@@ -155,16 +154,12 @@ const Slide = class Slide extends React.PureComponent {
       innerClassName,
     ]);
 
-    const defaultTabIndex = this.isVisible() ? 0 : -1;
-    const newTabIndex = typeof tabIndex === 'number' ? tabIndex : defaultTabIndex;
-
     return (
       <Tag
         ref={(el) => { this.tagRef = el; }}
-        tabIndex={newTabIndex}
         aria-selected={this.isVisible()}
         aria-label={ariaLabel}
-        role="option"
+        role={this.props.role}
         onFocus={this.handleOnFocus}
         onBlur={this.handleOnBlur}
         className={newClassName}

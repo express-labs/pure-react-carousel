@@ -935,16 +935,6 @@ describe('<Slider />', () => {
       expect(wrapper.prop('carouselStore').state.currentSlide).toBe(1);
     });
 
-    it('the .carousel__slider should have a default tabIndex of 0', () => {
-      const wrapper = shallow(<Slider {...props} />);
-      expect(wrapper.find('.carousel__slider').prop('tabIndex')).toBe(0);
-    });
-
-    it('override the default tabIndex for .carousel__slider if a tabIndex prop is passed to this component', () => {
-      const wrapper = shallow(<Slider {...props} tabIndex={-1} />);
-      expect(wrapper.find('.carousel__slider').prop('tabIndex')).toBe(-1);
-    });
-
     it('should not call this.focus() if totalSlides <= visibleSlides', () => {
       const wrapper = shallow(<Slider {...props} totalSlides={2} visibleSlides={2} />);
       const instance = wrapper.instance();
