@@ -1,10 +1,65 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Context from './context';
-import Store from '../Store/Store';
-import {
-  CarouselPropTypes, slideSize, slideTraySize, cn,
-} from '../helpers';
+import { responsiveSlideSize, responsiveSlideTraySize, cn } from '../helpers';
+
+import { createContext } from 'react';
+
+export const TasksContext = createContext(null);
+export const TasksDispatchContext = createContext(null);
+
+type CommonProps = {
+  className?: string;
+  interval?: number;
+  lockOnWindowScroll?: boolean;
+  responsive?: boolean;
+  animations?: boolean;
+  initialSlide?: number;
+  stepSlideShow?: number;
+  stepDrag?: number;
+  visibleSlides?: number;
+  totalSlides?: number;
+  infiniteSlideShow?: boolean;
+};
+
+type HorizontalSlider = {
+  orientation: 'horizontal';
+  playDirection: 'right' | 'left';
+  slideWidth: number;
+};
+
+type VerticalSlider = {
+  orientation: 'vertical';
+  playDirection: 'up' | 'down';
+  slideHeight: number;
+};
+
+export type CarouselProviderProps = CommonProps &
+  (HorizontalSlider | VerticalSlider);
+
+export type CarouselContext = {
+  currentSlide: number;
+  isAnimationEnabled: boolean;
+  isKeyboardEnabled: boolean;
+  isResponsiveEnabled: boolean;
+  interval: number;
+  isPageScrollLocked: boolean;
+  isPlaying: boolean;
+  isLockOnWindowScroll: boolean;
+  naturalSlideHeight?: number;
+  naturalSlideWidth?: number;
+  orientation: 'horizontal' | 'vertical';
+  playDirection: 'right' | 'left';
+  slideSize: number;
+  slideTraySize: number;
+  stepSlideShow: number;
+  stepDrag: number;
+  totalSlides: number;
+  visibleSlides: number;
+  infinite: boolean;
+};
+
+const CarouselProvider = (props: CarouselProviderProps) => {
+  return <h1>Hello</h1>;
+};
 
 const CarouselProvider = class CarouselProvider extends React.Component {
   static propTypes = {
@@ -38,7 +93,6 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     currentSlide: 0,
     disableAnimation: false,
     disableKeyboard: false,
-    hasMasterSpinner: false,
     interval: 5000,
     isPageScrollLocked: false,
     isPlaying: false,
@@ -58,7 +112,9 @@ const CarouselProvider = class CarouselProvider extends React.Component {
   constructor(props) {
     super(props);
     if (props.isIntrinsicHeight && props.orientation !== 'horizontal') {
-      throw Error('isIntrinsicHeight can only be used in "horizontal" orientation. See Readme for more information.');
+      throw Error(
+        'isIntrinsicHeight can only be used in "horizontal" orientation. See Readme for more information.'
+      );
     }
     const options = {
       currentSlide: props.currentSlide,
@@ -118,7 +174,8 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       }
     });
 
-    const isNewCurrentSlide = this.props.currentSlide !== prevProps.currentSlide;
+    const isNewCurrentSlide =
+      this.props.currentSlide !== prevProps.currentSlide;
 
     // currentSlide, a poorly named variable that determines which slide show when carousel is
     // mounted, has changed value.  We want to temporarily disable the css transition and just
@@ -132,11 +189,17 @@ const CarouselProvider = class CarouselProvider extends React.Component {
     }
 
     if (
-      this.props.totalSlides !== prevProps.totalSlides
-      || this.props.visibleSlides !== prevProps.visibleSlides
+      this.props.totalSlides !== prevProps.totalSlides ||
+      this.props.visibleSlides !== prevProps.visibleSlides
     ) {
-      newStoreState.slideSize = slideSize(this.props.totalSlides, this.props.visibleSlides);
-      newStoreState.slideTraySize = slideTraySize(this.props.totalSlides, this.props.visibleSlides);
+      newStoreState.slideSize = slideSize(
+        this.props.totalSlides,
+        this.props.visibleSlides
+      );
+      newStoreState.slideTraySize = slideTraySize(
+        this.props.totalSlides,
+        this.props.visibleSlides
+      );
     }
 
     if (this.carouselStore.state.currentSlide >= this.props.totalSlides) {
