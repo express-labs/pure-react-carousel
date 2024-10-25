@@ -80,8 +80,8 @@
     "eslint-plugin-react": "7.14.3",
     "gh-pages": "^2.0.1",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^24.9.0",
-    "node-sass": "^4.12.0",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^28.1.3",
     "object.omit": "^3.0.0",
     "raf": "^3.4.1",
     "react": "^16.9.0",
@@ -106,6 +106,7 @@
     "rollup-plugin-uglify": "^6.0.3",
     "rollup-plugin-uglify-es": "0.0.1",
     "rollup-watch": "^4.3.1",
+    "sass": "^1.80.4",
     "semantic-release": "^19.0.5",
     "uglify-es": "^3.3.5",
     "waait": "^1.0.5",
@@ -123,6 +124,8 @@
     "prop-types": "^15.6.2"
   },
   "jest": {
+    "testEnvironment": "jsdom",
+    "testEnvironmentOptions": {},
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|scss)$": "identity-obj-proxy"
@@ -131,6 +134,10 @@
       "<rootDir>/node_modules/",
       "<rootDir>/dev/",
       "<rootDir>/dist/"
+    ],
+
+    "transformIgnorePatterns": [
+      "/node_modules/"
     ],
     "testMatch": [
       "**/__tests__/**.test.js?(x)"
@@ -162,10 +169,7 @@
     },
     "setupFiles": [
       "raf/polyfill"
-    ],
-    "testEnvironmentOptions": {
-      "resources": "usable"
-    }
+    ]
   },
   "release": {
     "branch": "master",
