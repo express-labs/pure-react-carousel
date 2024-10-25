@@ -30424,12 +30424,94 @@
 	  };
 	});
 
-	var s$2 = {"buttonNext":"buttonNext___2mOCa"};
+	var s$2 = {"buttonLast":"buttonLast___2yuh0"};
 
-	var _excluded$3 = ["carouselStore", "className", "currentSlide", "disabled", "onClick", "step", "totalSlides", "visibleSlides", "infinite"];
+	var _excluded$3 = ["carouselStore", "className", "currentSlide", "disabled", "onClick", "totalSlides", "visibleSlides"];
 
 	var _class$2;
-	var ButtonNext = (_class$2 = /*#__PURE__*/function (_React$PureComponent) {
+	var ButtonLast = (_class$2 = /*#__PURE__*/function (_React$Component) {
+	  _inherits(ButtonLast, _React$Component);
+
+	  var _super = _createSuper(ButtonLast);
+
+	  function ButtonLast() {
+	    var _this;
+
+	    _classCallCheck(this, ButtonLast);
+
+	    _this = _super.call(this);
+	    _this.handleOnClick = _this.handleOnClick.bind(_assertThisInitialized(_this));
+	    return _this;
+	  }
+
+	  _createClass(ButtonLast, [{
+	    key: "handleOnClick",
+	    value: function handleOnClick(ev) {
+	      var _this$props = this.props,
+	          carouselStore = _this$props.carouselStore,
+	          onClick = _this$props.onClick,
+	          totalSlides = _this$props.totalSlides,
+	          visibleSlides = _this$props.visibleSlides;
+	      carouselStore.setStoreState({
+	        currentSlide: totalSlides - visibleSlides,
+	        isPlaying: false
+	      }, onClick !== null && onClick.call(this, ev));
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _this$props2 = this.props,
+	          carouselStore = _this$props2.carouselStore,
+	          className = _this$props2.className,
+	          currentSlide = _this$props2.currentSlide,
+	          disabled = _this$props2.disabled,
+	          onClick = _this$props2.onClick,
+	          totalSlides = _this$props2.totalSlides,
+	          visibleSlides = _this$props2.visibleSlides,
+	          props = _objectWithoutProperties(_this$props2, _excluded$3);
+
+	      var newClassName = cn([s$2.buttonLast, 'carousel__last-button', className]);
+	      var isDisabled = disabled !== null ? disabled : currentSlide >= totalSlides - visibleSlides;
+	      return /*#__PURE__*/react.createElement("button", _extends({
+	        type: "button",
+	        "aria-label": "last",
+	        className: newClassName,
+	        onClick: this.handleOnClick,
+	        disabled: isDisabled
+	      }, props), this.props.children);
+	    }
+	  }]);
+
+	  return ButtonLast;
+	}(react.Component), _defineProperty(_class$2, "propTypes", {
+	  carouselStore: propTypes.object.isRequired,
+	  children: CarouselPropTypes.children.isRequired,
+	  className: propTypes.string,
+	  currentSlide: propTypes.number.isRequired,
+	  disabled: propTypes.bool,
+	  onClick: propTypes.func,
+	  totalSlides: propTypes.number.isRequired,
+	  visibleSlides: propTypes.number.isRequired
+	}), _defineProperty(_class$2, "defaultProps", {
+	  className: null,
+	  disabled: null,
+	  onClick: null
+	}), _class$2);
+
+	var ButtonLast$1 = WithStore(ButtonLast, function (state) {
+	  return {
+	    currentSlide: state.currentSlide,
+	    totalSlides: state.totalSlides,
+	    visibleSlides: state.visibleSlides
+	  };
+	});
+
+	var s$3 = {"buttonNext":"buttonNext___2mOCa"};
+
+	var _excluded$4 = ["carouselStore", "className", "currentSlide", "disabled", "onClick", "step", "totalSlides", "visibleSlides", "infinite"];
+
+	var _class$3;
+	var ButtonNext = (_class$3 = /*#__PURE__*/function (_React$PureComponent) {
 	  _inherits(ButtonNext, _React$PureComponent);
 
 	  var _super = _createSuper(ButtonNext);
@@ -30482,9 +30564,9 @@
 	          totalSlides = _this$props2.totalSlides,
 	          visibleSlides = _this$props2.visibleSlides,
 	          infinite = _this$props2.infinite,
-	          props = _objectWithoutProperties(_this$props2, _excluded$3);
+	          props = _objectWithoutProperties(_this$props2, _excluded$4);
 
-	      var newClassName = cn([s$2.buttonNext, 'carousel__next-button', className]);
+	      var newClassName = cn([s$3.buttonNext, 'carousel__next-button', className]);
 	      var isDisabled = ButtonNext.setDisabled(disabled, currentSlide, visibleSlides, totalSlides, infinite);
 	      return /*#__PURE__*/react.createElement("button", _extends({
 	        type: "button",
@@ -30504,7 +30586,7 @@
 	  }]);
 
 	  return ButtonNext;
-	}(react.PureComponent), _defineProperty(_class$2, "propTypes", {
+	}(react.PureComponent), _defineProperty(_class$3, "propTypes", {
 	  carouselStore: propTypes.object.isRequired,
 	  children: CarouselPropTypes.children.isRequired,
 	  className: propTypes.string,
@@ -30515,12 +30597,12 @@
 	  totalSlides: propTypes.number.isRequired,
 	  visibleSlides: propTypes.number.isRequired,
 	  infinite: propTypes.bool
-	}), _defineProperty(_class$2, "defaultProps", {
+	}), _defineProperty(_class$3, "defaultProps", {
 	  className: null,
 	  disabled: null,
 	  onClick: null,
 	  infinite: false
-	}), _class$2);
+	}), _class$3);
 
 	var ButtonNext$1 = WithStore(ButtonNext, function (state) {
 	  return {
@@ -30529,88 +30611,6 @@
 	    totalSlides: state.totalSlides,
 	    visibleSlides: state.visibleSlides,
 	    infinite: state.infinite
-	  };
-	});
-
-	var s$3 = {"buttonLast":"buttonLast___2yuh0"};
-
-	var _excluded$4 = ["carouselStore", "className", "currentSlide", "disabled", "onClick", "totalSlides", "visibleSlides"];
-
-	var _class$3;
-	var ButtonLast = (_class$3 = /*#__PURE__*/function (_React$Component) {
-	  _inherits(ButtonLast, _React$Component);
-
-	  var _super = _createSuper(ButtonLast);
-
-	  function ButtonLast() {
-	    var _this;
-
-	    _classCallCheck(this, ButtonLast);
-
-	    _this = _super.call(this);
-	    _this.handleOnClick = _this.handleOnClick.bind(_assertThisInitialized(_this));
-	    return _this;
-	  }
-
-	  _createClass(ButtonLast, [{
-	    key: "handleOnClick",
-	    value: function handleOnClick(ev) {
-	      var _this$props = this.props,
-	          carouselStore = _this$props.carouselStore,
-	          onClick = _this$props.onClick,
-	          totalSlides = _this$props.totalSlides,
-	          visibleSlides = _this$props.visibleSlides;
-	      carouselStore.setStoreState({
-	        currentSlide: totalSlides - visibleSlides,
-	        isPlaying: false
-	      }, onClick !== null && onClick.call(this, ev));
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      var _this$props2 = this.props,
-	          carouselStore = _this$props2.carouselStore,
-	          className = _this$props2.className,
-	          currentSlide = _this$props2.currentSlide,
-	          disabled = _this$props2.disabled,
-	          onClick = _this$props2.onClick,
-	          totalSlides = _this$props2.totalSlides,
-	          visibleSlides = _this$props2.visibleSlides,
-	          props = _objectWithoutProperties(_this$props2, _excluded$4);
-
-	      var newClassName = cn([s$3.buttonLast, 'carousel__last-button', className]);
-	      var isDisabled = disabled !== null ? disabled : currentSlide >= totalSlides - visibleSlides;
-	      return /*#__PURE__*/react.createElement("button", _extends({
-	        type: "button",
-	        "aria-label": "last",
-	        className: newClassName,
-	        onClick: this.handleOnClick,
-	        disabled: isDisabled
-	      }, props), this.props.children);
-	    }
-	  }]);
-
-	  return ButtonLast;
-	}(react.Component), _defineProperty(_class$3, "propTypes", {
-	  carouselStore: propTypes.object.isRequired,
-	  children: CarouselPropTypes.children.isRequired,
-	  className: propTypes.string,
-	  currentSlide: propTypes.number.isRequired,
-	  disabled: propTypes.bool,
-	  onClick: propTypes.func,
-	  totalSlides: propTypes.number.isRequired,
-	  visibleSlides: propTypes.number.isRequired
-	}), _defineProperty(_class$3, "defaultProps", {
-	  className: null,
-	  disabled: null,
-	  onClick: null
-	}), _class$3);
-
-	var ButtonLast$1 = WithStore(ButtonLast, function (state) {
-	  return {
-	    currentSlide: state.currentSlide,
-	    totalSlides: state.totalSlides,
-	    visibleSlides: state.visibleSlides
 	  };
 	});
 
@@ -31529,7 +31529,7 @@
 
 	var s$a = {"slide":"slide___3-Nqo","slideHorizontal":"slideHorizontal___1NzNV","slideInner":"slideInner___2mfX9","focusRing":"focusRing___1airF"};
 
-	var _excluded$b = ["ariaLabel", "carouselStore", "children", "className", "classNameHidden", "classNameVisible", "currentSlide", "index", "innerClassName", "innerTag", "naturalSlideHeight", "naturalSlideWidth", "onBlur", "onFocus", "orientation", "slideSize", "style", "tabIndex", "tag", "totalSlides", "visibleSlides", "isIntrinsicHeight"];
+	var _excluded$b = ["ariaLabel", "carouselStore", "children", "className", "classNameHidden", "classNameVisible", "currentSlide", "index", "innerClassName", "innerTag", "naturalSlideHeight", "naturalSlideWidth", "onBlur", "onFocus", "orientation", "slideSize", "style", "tag", "totalSlides", "visibleSlides", "isIntrinsicHeight"];
 
 	var _class$9;
 	var Slide = (_class$9 = /*#__PURE__*/function (_React$PureComponent) {
@@ -31619,7 +31619,6 @@
 	          orientation = _this$props2.orientation,
 	          slideSize = _this$props2.slideSize,
 	          style = _this$props2.style,
-	          tabIndex = _this$props2.tabIndex,
 	          Tag = _this$props2.tag,
 	          totalSlides = _this$props2.totalSlides,
 	          visibleSlides = _this$props2.visibleSlides,
@@ -31654,16 +31653,13 @@
 	      var isVisible = this.isVisible();
 	      var newClassName = cn([s$a.slide, orientation === 'horizontal' && s$a.slideHorizontal, 'carousel__slide', this.state.focused && 'carousel__slide--focused', isVisible && classNameVisible, isVisible && 'carousel__slide--visible', !isVisible && classNameHidden, !isVisible && 'carousel__slide--hidden', className]);
 	      var newInnerClassName = cn([s$a.slideInner, 'carousel__inner-slide', innerClassName]);
-	      var defaultTabIndex = this.isVisible() ? 0 : -1;
-	      var newTabIndex = typeof tabIndex === 'number' ? tabIndex : defaultTabIndex;
 	      return /*#__PURE__*/react.createElement(Tag, _extends({
 	        ref: function ref(el) {
 	          _this4.tagRef = el;
 	        },
-	        tabIndex: newTabIndex,
 	        "aria-selected": this.isVisible(),
 	        "aria-label": ariaLabel,
-	        role: "option",
+	        role: this.props.role,
 	        onFocus: this.handleOnFocus,
 	        onBlur: this.handleOnBlur,
 	        className: newClassName,
@@ -31696,8 +31692,8 @@
 	  onFocus: propTypes.func,
 	  orientation: CarouselPropTypes.orientation.isRequired,
 	  slideSize: propTypes.number.isRequired,
+	  role: propTypes.string,
 	  style: propTypes.object,
-	  tabIndex: propTypes.number,
 	  tag: propTypes.string,
 	  totalSlides: propTypes.number.isRequired,
 	  visibleSlides: propTypes.number.isRequired,
@@ -31713,8 +31709,8 @@
 	  innerTag: 'div',
 	  onBlur: null,
 	  onFocus: null,
+	  role: 'option',
 	  style: {},
-	  tabIndex: null,
 	  tag: 'div',
 	  isIntrinsicHeight: false
 	}), _class$9);
@@ -31799,7 +31795,7 @@
 
 	var s$b = {"horizontalSlider":"horizontalSlider___281Ls","touchDisabled":"touchDisabled___2qs4y","horizontalSliderTray":"horizontalSliderTray___1L-0W","verticalSlider":"verticalSlider___34ZFD","verticalSliderTray":"verticalSliderTray___267D8","verticalTray":"verticalTray___12Key","verticalSlideTrayWrap":"verticalSlideTrayWrap___2nO7o","sliderTray":"sliderTray___-vHFQ","sliderAnimation":"sliderAnimation___300FY","masterSpinnerContainer":"masterSpinnerContainer___1Z6hB"};
 
-	var _excluded$c = ["ariaLabel", "carouselStore", "children", "className", "classNameAnimation", "classNameTray", "classNameTrayWrap", "currentSlide", "disableAnimation", "disableKeyboard", "dragEnabled", "hasMasterSpinner", "interval", "isPageScrollLocked", "isPlaying", "lockOnWindowScroll", "masterSpinnerFinished", "moveThreshold", "naturalSlideHeight", "naturalSlideWidth", "onMasterSpinner", "orientation", "playDirection", "privateUnDisableAnimation", "slideSize", "slideTraySize", "spinner", "style", "tabIndex", "totalSlides", "touchEnabled", "trayProps", "trayTag", "visibleSlides", "isIntrinsicHeight"],
+	var _excluded$c = ["ariaLabel", "carouselStore", "children", "className", "classNameAnimation", "classNameTray", "classNameTrayWrap", "currentSlide", "disableAnimation", "disableKeyboard", "dragEnabled", "hasMasterSpinner", "interval", "isPageScrollLocked", "isPlaying", "lockOnWindowScroll", "masterSpinnerFinished", "moveThreshold", "naturalSlideHeight", "naturalSlideWidth", "onMasterSpinner", "orientation", "playDirection", "privateUnDisableAnimation", "slideSize", "slideTraySize", "spinner", "style", "totalSlides", "touchEnabled", "trayProps", "trayTag", "visibleSlides", "isIntrinsicHeight"],
 	    _excluded2$2 = ["dragStep", "step", "infinite", "preventVerticalScrollOnTouch", "preventingVerticalScroll", "horizontalPixelThreshold", "verticalPixelThreshold"],
 	    _excluded3 = ["className", "onClickCapture", "onMouseDown", "onTouchCancel", "onTouchEnd", "onTouchMove", "onTouchStart", "ref", "style"];
 
@@ -31909,6 +31905,17 @@
 	    key: "getSliderRef",
 	    value: function getSliderRef(el) {
 	      this.sliderTrayElement = el;
+	      /* istanbul ignore else */
+
+	      if (el && window) {
+	        // NOTE: we can't rely on the element itself to detect direction
+	        // as the direction of the slider is currently flipped to ltr
+	        var carouselElement = el.closest('.carousel');
+
+	        if (carouselElement) {
+	          this.rtl = window.getComputedStyle(carouselElement, null).getPropertyValue('direction') === 'rtl';
+	        }
+	      }
 	    }
 	  }, {
 	    key: "fakeOnDragStart",
@@ -31946,7 +31953,9 @@
 	      this.moveTimer = window.requestAnimationFrame.call(window, function () {
 	        _this2.setState(function (state) {
 	          return {
-	            deltaX: screenX - state.startX,
+	            deltaX: (screenX - state.startX) * (_this2.rtl ?
+	            /* istanbul ignore next -- deprecated anyhow */
+	            -1 : 1),
 	            deltaY: screenY - state.startY,
 	            preventingVerticalScroll: Math.abs(screenY - state.startY) <= _this2.props.verticalPixelThreshold && Math.abs(screenX - state.startX) >= _this2.props.horizontalPixelThreshold
 	          };
@@ -32302,7 +32311,6 @@
 	          slideTraySize = _this$props7.slideTraySize,
 	          spinner = _this$props7.spinner,
 	          style = _this$props7.style,
-	          tabIndex = _this$props7.tabIndex,
 	          totalSlides = _this$props7.totalSlides,
 	          touchEnabled = _this$props7.touchEnabled,
 	          trayProps = _this$props7.trayProps,
@@ -32347,8 +32355,7 @@
 
 	      var sliderClasses = cn([orientation === 'vertical' ? s$b.verticalSlider : s$b.horizontalSlider, !touchEnabled && s$b.touchDisabled, 'carousel__slider', orientation === 'vertical' ? 'carousel__slider--vertical' : 'carousel__slider--horizontal', className]);
 	      var trayWrapClasses = cn([s$b.sliderTrayWrap, 'carousel__slider-tray-wrapper', orientation === 'vertical' ? s$b.verticalSlideTrayWrap : s$b.horizontalTrayWrap, orientation === 'vertical' ? 'carousel__slider-tray-wrap--vertical' : 'carousel__slider-tray-wrap--horizontal', classNameTrayWrap]);
-	      var trayClasses = cn([s$b.sliderTray, classNameAnimation || s$b.sliderAnimation, 'carousel__slider-tray', orientation === 'vertical' ? s$b.verticalTray : s$b.horizontalTray, orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal', classNameTray]);
-	      var newTabIndex = tabIndex !== null ? tabIndex : 0; // remove invalid div attributes
+	      var trayClasses = cn([s$b.sliderTray, classNameAnimation || s$b.sliderAnimation, 'carousel__slider-tray', orientation === 'vertical' ? s$b.verticalTray : s$b.horizontalTray, orientation === 'vertical' ? 'carousel__slider-tray--vertical' : 'carousel__slider-tray--horizontal', classNameTray]); // remove invalid div attributes
 
 	      var dragStep = props.dragStep,
 	          step = props.step,
@@ -32372,7 +32379,10 @@
 	          onTouchStart = trayProps.onTouchStart,
 	          ignoreRef = trayProps.ref,
 	          ignoreStyle = trayProps.style,
-	          filteredTrayProps = _objectWithoutProperties(trayProps, _excluded3);
+	          filteredTrayProps = _objectWithoutProperties(trayProps, _excluded3); // ignoring for now, this entire component is getting re-written anyhow soon.
+
+	      /* eslint-disable jsx-a11y/no-static-element-interactions */
+
 
 	      return /*#__PURE__*/react.createElement("div", _extends({
 	        ref: function ref(el) {
@@ -32381,10 +32391,9 @@
 	        className: sliderClasses,
 	        "aria-live": "polite",
 	        "aria-label": ariaLabel,
+	        role: this.props.role,
 	        style: sliderStyle,
-	        tabIndex: newTabIndex,
-	        onKeyDown: this.handleOnKeyDown,
-	        role: "listbox"
+	        onKeyDown: this.handleOnKeyDown
 	      }, rest), /*#__PURE__*/react.createElement("div", {
 	        className: trayWrapClasses,
 	        style: trayWrapStyle
@@ -32453,12 +32462,12 @@
 	  orientation: CarouselPropTypes.orientation.isRequired,
 	  playDirection: CarouselPropTypes.direction.isRequired,
 	  privateUnDisableAnimation: propTypes.bool,
+	  role: propTypes.string,
 	  slideSize: propTypes.number.isRequired,
 	  slideTraySize: propTypes.number.isRequired,
 	  spinner: propTypes.func,
 	  step: propTypes.number.isRequired,
 	  style: propTypes.object,
-	  tabIndex: propTypes.number,
 	  totalSlides: propTypes.number.isRequired,
 	  touchEnabled: propTypes.bool.isRequired,
 	  trayProps: propTypes.shape({
@@ -32491,9 +32500,9 @@
 	  moveThreshold: 0.1,
 	  onMasterSpinner: null,
 	  privateUnDisableAnimation: false,
+	  role: 'listbox',
 	  spinner: null,
 	  style: {},
-	  tabIndex: null,
 	  trayProps: {},
 	  trayTag: 'div',
 	  visibleSlides: 1,
@@ -33140,7 +33149,9 @@
 	});
 
 	var Example14 = (function () {
-	  return /*#__PURE__*/react.createElement(CarouselProvider, {
+	  return /*#__PURE__*/react.createElement("div", {
+	    dir: "rtl"
+	  }, /*#__PURE__*/react.createElement(CarouselProvider, {
 	    visibleSlides: 2,
 	    totalSlides: 8,
 	    step: 1,
@@ -33148,9 +33159,7 @@
 	    naturalSlideHeight: 500
 	  }, /*#__PURE__*/react.createElement("h2", {
 	    className: s$c.headline
-	  }, "RTL"), /*#__PURE__*/react.createElement("p", null, "A carousel wrapped in an element with", ' ', /*#__PURE__*/react.createElement("code", null, "dir=\"rtl\""), ", demonstrating support for use with right-to-left languages."), /*#__PURE__*/react.createElement("div", {
-	    dir: "rtl"
-	  }, /*#__PURE__*/react.createElement(Slider$1, {
+	  }, "RTL"), /*#__PURE__*/react.createElement("p", null, "A carousel wrapped in an element with", ' ', /*#__PURE__*/react.createElement("code", null, "dir=\"rtl\""), ", demonstrating support for use with right-to-left languages."), /*#__PURE__*/react.createElement(Slider$1, {
 	    className: s$c.slider
 	  }, /*#__PURE__*/react.createElement(Slide$1, {
 	    index: 0
