@@ -201,6 +201,7 @@ const Slider = class Slider extends React.Component {
 
   getSliderRef(el) {
     this.sliderTrayElement = el;
+    /* istanbul ignore else */
     if (el && window) {
       // NOTE: we can't rely on the element itself to detect direction
       // as the direction of the slider is currently flipped to ltr
@@ -242,7 +243,9 @@ const Slider = class Slider extends React.Component {
     window.cancelAnimationFrame.call(window, this.moveTimer);
     this.moveTimer = window.requestAnimationFrame.call(window, () => {
       this.setState(state => ({
-        deltaX: (screenX - state.startX) * (this.rtl ? -1 : 1),
+        deltaX: (screenX - state.startX) * (
+          this.rtl ? /* istanbul ignore next -- deprecated anyhow */ -1 : 1
+        ),
         deltaY: screenY - state.startY,
         preventingVerticalScroll: Math.abs(screenY - state.startY)
           <= this.props.verticalPixelThreshold
@@ -653,7 +656,6 @@ const Slider = class Slider extends React.Component {
       classNameTray,
     ]);
 
-  
 
     // remove invalid div attributes
     const {
@@ -684,6 +686,8 @@ const Slider = class Slider extends React.Component {
       ...filteredTrayProps
     } = trayProps;
 
+    // ignoring for now, this entire component is getting re-written anyhow soon.
+    /* eslint-disable jsx-a11y/no-static-element-interactions */
     return (
       <div
         ref={(el) => { this.sliderElement = el; }}

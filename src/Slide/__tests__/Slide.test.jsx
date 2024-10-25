@@ -58,7 +58,7 @@ describe('<Slide />', () => {
     const wrapper = shallow(<Slide {...props} orientation="vertical" />);
     expect(wrapper.find('.slide').prop('style').width).toBe('100%');
   });
-  
+
   it('should apply any supplied classes to hidden slides', () => {
     const wrapper = shallow((
       <Slide
@@ -95,10 +95,10 @@ describe('<Slide />', () => {
     expect(wrapper.find('.slide').hasClass('i-be-visible')).toBe(true);
     expect(wrapper.find('.slide').hasClass('carousel__slide--visible')).toBe(true);
   });
-  
+
   it('should correctly set styles, if isIntrinsicHeight is set', () => {
     // this is for testing only.
-    
+
     const wrapper = shallow(<Slide {...props} isIntrinsicHeight />);
     const slideStyle = wrapper.find('.slide').prop('style');
     expect(slideStyle.paddingBottom).toBe('unset');

@@ -706,6 +706,30 @@ const DecoratedComponent = WithStore<UpdateCheckProps>(InjectedComponent)
 const DecoratedComponent = WithStore(InjectedComponent)
 ```
 
+## Advanced Concept: Accessing the "View" Components Directly
+All the components in Pure React Carousel were designed using the model -> view approach.
+Meaning that the index file for each component gathers all the data required from sources external
+to that component (like context, or redux, or cookies, or fetched data from a rest api), organizes
+the data, and passes that data to the "view" component as a flattened props object.
+
+For example, look at the structure of the Slide component folder:
+
+```
+Slide/
+├─ index.js (model)
+├─ Slide.jsx (view)
+```
+
+The index file (model) in this instance uses the WithRouter HOC to provide the Slide (view) with
+all the data it needs from the carousel state. Stuff like the current slide, size width, height,
+etc.
+
+If, for some reason, you want direct access to the "view" for Slider, you can import it directly
+by adding "View" to the end of the component name.  This works for all components except for
+CarouselProvider.
+
+So to access the "view" of Slide, `import { SlideView } from 'pure-react-carousel'`
+
 ## More Documentation to Come
 
 I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.
