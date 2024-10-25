@@ -1,6 +1,6 @@
 {
   "name": "pure-react-carousel",
-  "version": "1.30.1",
+  "version": "1.31.0",
   "description": "A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
