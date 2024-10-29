@@ -94,7 +94,10 @@ export function computeCurrentVisibleSlidesAfterScrolling({
   scrollLeft,
   scrollTop,
   width,
-}: AfterScrollArgs) {}
+}: AfterScrollArgs) {
+  if (orientation === 'horizontal') {
+  }
+}
 
 export function computeCurrentVisibleSlides(
   currentSlide: CarouselStore['currentSlide'] = 0,
