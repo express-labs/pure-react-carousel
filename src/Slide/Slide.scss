@@ -1,46 +1,9 @@
 .slide {
   position: relative;
   display: block;
-  box-sizing: border-box;
-  height: 0;
-  margin: 0;
-  list-style-type: none;
-
-  &:focus {
-    outline: none !important;
-  }
-
-  &Horizontal {
-    float: left;
-
-    [dir='rtl'] & {
-      direction: rtl;
-      transform: scaleX(-1);
-    }
-  }
-
-  &Inner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
+  scroll-snap-align: start;
 }
 
-.focusRing {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  bottom: 5px;
-  left: 5px;
-  pointer-events: none;
-  outline-width: 5px;
-  outline-style: solid;
-  outline-color: Highlight;
-
-  @media (-webkit-min-device-pixel-ratio:0) {
-    outline-style: auto;
-    outline-color: -webkit-focus-ring-color;
-  }
+.horizontal {
+  float: left;
 }

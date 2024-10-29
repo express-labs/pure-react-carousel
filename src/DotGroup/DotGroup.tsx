@@ -36,12 +36,12 @@ const DotGroup = React.forwardRef<HTMLDivElement, DotGroupProps>(
 
     const { dispatch } = useContext(CarouselActionContext);
 
-    const dots: React.ReactElement[] = [];
+    const dots: React.ReactNode[] = [];
     for (let i = 0; i < totalSlides; i += 1) {
       dots.push(
         <Dot
           key={i}
-          slide={i}
+          slideIndex={i}
           className={cn('carousel__dot-group-dot', classNameDot)}
         >
           <span className={cn('carousel__dot-group-span', classNameDotSpan)}>

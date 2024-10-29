@@ -66,19 +66,61 @@ export const boundedRange = ({
   x: number;
 }) => Math.min(max, Math.max(min, x));
 
+type AfterScrollArgs =
+  | {
+      // required
+      orientation: 'horizontal';
+      scrollLeft: number;
+      width: number;
+
+      // illegal
+      height?: never;
+      scrollTop?: never;
+    }
+  | {
+      // required
+      height: number;
+      orientation: 'vertical';
+      scrollTop: number;
+
+      // illegal
+      width?: never;
+      scrollLeft?: never;
+    };
+
+export function computeCurrentVisibleSlidesAfterScrolling({
+  height,
+  orientation,
+  scrollLeft,
+  scrollTop,
+  width,
+}: AfterScrollArgs) {}
+
 export function computeCurrentVisibleSlides(
   currentSlide: CarouselStore['currentSlide'] = 0,
   visibleSlides: CarouselStore['visibleSlides'] = 0,
   totalSlides: CarouselStore['totalSlides'] = 0
 ): number[] {
+  console.log('computeCurrentVisibleSlides', {
+    currentSlide,
+    visibleSlides,
+    totalSlides,
+  });
+
   const range = boundedRange({
     min: 0,
     max: totalSlides,
     x: currentSlide + visibleSlides,
   });
-  return Array<number>(currentSlide)
+
+  console.log('range', range);
+
+  const retVal = Array<number>(currentSlide)
     .fill(range)
     .map((x, y) => x + y);
+
+  console.log('retVal', retVal);
+  return retVal;
 }
 
 type ComputeSlidesRemaining = (

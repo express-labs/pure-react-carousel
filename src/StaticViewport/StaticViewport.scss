@@ -1,56 +1,11 @@
-.horizontalSlider {
+.horizontal {
   position: relative;
-  overflow: hidden;
-  &:not(.touchDisabled) {
-    touch-action: pan-y pinch-zoom;
-  }
-
-  [dir='rtl'] & {
-    direction: ltr;
-    transform: scaleX(-1);
-  }
-
-  &Tray {
-    overflow: hidden;
-    width: 100%;
-  }
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
 }
 
-.verticalSlider {
+.vertical {
   position: relative;
-  overflow: hidden;
-
-  &Tray {
-    overflow: hidden;
-  }
-}
-
-.verticalTray {
-  float: left;
-}
-
-.verticalSlideTrayWrap {
-  overflow: hidden;
-}
-
-.sliderTray {
-  display: block;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sliderAnimation {
-  transition: transform 500ms;
-  transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1.000); /* easeInOutCubic */
-  will-change: transform;
-}
-
-.masterSpinnerContainer {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: #f4f4f4;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
 }

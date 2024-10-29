@@ -2,8 +2,6 @@ import React, { useMemo, useReducer } from 'react';
 import {
   computeSlidesRemaining,
   computeCurrentVisibleSlides,
-  responsiveSlideSize,
-  responsiveSlideTraySize,
 } from '../helpers';
 import {
   type CarouselStore,
@@ -11,12 +9,12 @@ import {
   ActionTypes,
   CarouselActionContext,
   CarouselStoreContext,
-  CarouselActionContextProps,
+  type CarouselActionContextProps,
 } from './CarouselContext';
 
 export type CarouselProviderProps = React.ComponentPropsWithoutRef<'div'> & {
   animations?: boolean;
-  children?: React.ReactElement;
+  children?: React.ReactNode;
   className?: string;
   dragStep?: number;
   infinite?: boolean;
@@ -25,18 +23,15 @@ export type CarouselProviderProps = React.ComponentPropsWithoutRef<'div'> & {
   keyboard?: boolean;
   naturalSlideHeight?: number;
   naturalSlideWidth?: number;
-  orientation?: 'horizontal' | 'vertical';
   play?: boolean;
   playDirection?: 'right' | 'left' | 'up' | 'down';
   responsive?: boolean;
   scrollLockParent?: boolean;
   scrollLockWindow?: boolean;
   slide?: number;
-  slideHeight?: number;
-  slideWidth?: number;
   step?: number;
-  totalSlides?: number;
-  visibleSlides?: number;
+  totalSlides: number;
+  visibleSlides: number;
 };
 
 function updateSlidePosition(
@@ -50,11 +45,19 @@ function updateSlidePosition(
       state.visibleSlides
     );
 
+  console.log(payload.currentSlide, state.visibleSlides, state.totalSlides);
+
   const currentVisibleSlides = computeCurrentVisibleSlides(
     payload.currentSlide,
-    state.totalSlides,
-    state.visibleSlides
+    state.visibleSlides,
+    state.totalSlides
   );
+
+  console.log({
+    slidesRemainingBackward,
+    slidesRemainingForward,
+    currentVisibleSlides,
+  });
 
   return [
     slidesRemainingBackward,
@@ -66,6 +69,8 @@ function updateSlidePosition(
 function reducer(state: CarouselStore, action: ActionDispatch): CarouselStore {
   Object.freeze(state);
   const { type, payload = {} } = action;
+  console.log(`Action "${type}":`, payload);
+
   switch (type) {
     case ActionTypes.BTN_ONCLICK: {
       const [
@@ -92,6 +97,7 @@ function reducer(state: CarouselStore, action: ActionDispatch): CarouselStore {
       return {
         ...state,
         isPlaying: false,
+        isScrolling: true,
       };
     }
     case ActionTypes.SCROLL_END: {
@@ -105,6 +111,15 @@ function reducer(state: CarouselStore, action: ActionDispatch): CarouselStore {
         slidesRemainingBackward,
         slidesRemainingForward,
         currentVisibleSlides,
+        isScrolling: false,
+      };
+    }
+    case ActionTypes.UPDATE_SIZES: {
+      return {
+        ...state,
+        slideSize: payload.slideSize,
+        slideTraySize: payload.slideTraySize,
+        orientation: payload.orientation,
       };
     }
     default:
@@ -121,29 +136,16 @@ const CarouselProvider = (props: CarouselProviderProps) => {
     infinite: isInfinite = false,
     interval = 5000,
     keyboard: isKeyboardEnabled = true,
-    orientation = 'horizontal',
     play: isPlaying = false,
     playDirection = 'right',
     responsive: isResponsive = false,
     scrollLockWindow: isScrollLockWindow = true,
     scrollLockParent: isScrollLockParent = true,
     slide: currentSlide = 0,
-    slideHeight = 0,
-    slideWidth = 0,
     step = 1,
     totalSlides = 0,
     visibleSlides = 0,
   } = props;
-
-  let slideSize: number, slideTraySize: number;
-
-  if (isResponsive) {
-    slideSize = responsiveSlideSize(totalSlides, visibleSlides);
-    slideTraySize = responsiveSlideTraySize(totalSlides, visibleSlides);
-  } else {
-    slideSize = orientation === 'horizontal' ? slideWidth : slideHeight;
-    slideTraySize = slideSize * totalSlides;
-  }
 
   const currentVisibleSlides = computeCurrentVisibleSlides(
     currentSlide,
@@ -162,12 +164,13 @@ const CarouselProvider = (props: CarouselProviderProps) => {
       isKeyboardEnabled,
       isPlaying,
       isResponsive,
+      isScrolling: false,
       isScrollLockParent,
       isScrollLockWindow,
-      orientation,
+      orientation: 'horizontal',
       playDirection,
-      slideSize,
-      slideTraySize,
+      slideSize: 0,
+      slideTraySize: 0,
       step,
       totalSlides,
       visibleSlides,
@@ -177,12 +180,12 @@ const CarouselProvider = (props: CarouselProviderProps) => {
 
   const [state, dispatch] = useReducer(reducer, initialStoreState);
 
-  const initialActionsState: CarouselActionContextProps = useMemo(
-    (): CarouselActionContextProps => ({
-      dispatch,
-    }),
-    [dispatch]
-  );
+  const initialActionsState: CarouselActionContextProps =
+    useMemo((): CarouselActionContextProps => {
+      return {
+        dispatch,
+      };
+    }, [dispatch]);
 
   if (!totalSlides || !visibleSlides) {
     return null;

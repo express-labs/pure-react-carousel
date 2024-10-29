@@ -60,3 +60,5 @@ coverage.json
 
 .idea/
 .vscode/
+
+*storybook.log

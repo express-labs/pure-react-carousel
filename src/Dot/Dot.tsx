@@ -8,11 +8,12 @@ import {
 } from '../CarouselProvider/CarouselContext';
 
 export type DotProps = React.ComponentPropsWithoutRef<'button'> & {
-  slide: number;
+  slideIndex: number;
 };
 
 const Dot = React.forwardRef<HTMLButtonElement, DotProps>((props, btnRef) => {
-  const { onClick, disabled, slide, children, className, ...restProps } = props;
+  const { onClick, disabled, slideIndex, children, className, ...restProps } =
+    props;
   const { currentVisibleSlides = [], currentSlide = 0 } =
     useContext(CarouselStoreContext);
   const { dispatch } = useContext(CarouselActionContext);
@@ -22,7 +23,7 @@ const Dot = React.forwardRef<HTMLButtonElement, DotProps>((props, btnRef) => {
       dispatch({
         type: ActionTypes.BTN_ONCLICK,
         payload: {
-          currentSlide: slide,
+          currentSlide: slideIndex,
           isPlaying: false,
         },
       });
@@ -31,8 +32,10 @@ const Dot = React.forwardRef<HTMLButtonElement, DotProps>((props, btnRef) => {
         onClick(ev);
       }
     },
-    [onClick, dispatch, slide]
+    [onClick, dispatch, slideIndex, ActionTypes]
   );
+
+  const newDisabled = disabled || !!currentVisibleSlides?.[slideIndex];
 
   return (
     <button
@@ -40,13 +43,13 @@ const Dot = React.forwardRef<HTMLButtonElement, DotProps>((props, btnRef) => {
       onClick={handleOnClick}
       className={cn([
         s.dot,
-        currentVisibleSlides?.[slide] && s.dotSelected,
+        currentVisibleSlides?.[slideIndex] && s.dotSelected,
         'carousel__dot',
-        `carousel__dot--${slide}`,
+        `carousel__dot--${slideIndex}`,
         className,
       ])}
       ref={btnRef}
-      disabled={disabled || !!currentVisibleSlides?.[slide]}
+      disabled={newDisabled}
       {...restProps}
     >
       {children}

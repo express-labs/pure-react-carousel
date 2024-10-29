@@ -13,8 +13,7 @@ export type SlideProps<C extends React.ElementType> =
 
     // optional
     as?: C;
-    children?: React.ReactElement;
-    className: string;
+    className?: string;
     classNameHidden?: string;
     classNameVisible?: string;
   };
@@ -34,7 +33,6 @@ const Slide = <C extends React.ElementType = 'div'>({
   const {
     currentVisibleSlides = [],
     orientation,
-    isResponsive,
     slideSize = 0,
   } = useContext(CarouselStoreContext);
 
@@ -46,15 +44,14 @@ const Slide = <C extends React.ElementType = 'div'>({
 
   // compute the "size" of the slide (width for horizontal, height for vertical)
   const newStyle: React.CSSProperties = { ...style };
-  newStyle[orientation === 'horizontal' ? 'width' : 'height'] = isResponsive
-    ? pct(slideSize)
-    : slideSize;
+  newStyle[orientation === 'horizontal' ? 'width' : 'height'] = slideSize;
 
   return (
     <Tag
       className={cn([
         s.slide,
-        orientation === 'horizontal' && s.slideHorizontal,
+        orientation === 'horizontal' && s.horizontal,
+        orientation === 'vertical' && s.vertical,
         'carousel__slide',
         isVisible && classNameVisible,
         isVisible && 'carousel__slide--visible',

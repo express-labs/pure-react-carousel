@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 import { cn } from '../helpers';
-import s from './Dot.scss';
+import s from './ButtonLast.scss';
 import {
   ActionTypes,
   CarouselActionContext,
