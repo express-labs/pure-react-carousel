@@ -5,11 +5,8 @@ export interface CarouselStore {
   readonly currentVisibleSlides?: number[];
   readonly dragStep?: number;
   readonly interval?: number;
-  readonly isAnimationEnabled?: boolean;
   readonly isInfinite?: boolean;
-  readonly isKeyboardEnabled?: boolean;
   readonly isPlaying?: boolean;
-  readonly isResponsive?: boolean;
   readonly isScrolling?: boolean;
   readonly isScrollLockParent?: boolean;
   readonly isScrollLockWindow?: boolean;
@@ -27,6 +24,7 @@ export interface CarouselStore {
 export const CarouselStoreContext = createContext<CarouselStore>({});
 
 export enum ActionTypes {
+  FIRST_RENDER = 'first::render',
   BTN_ONCLICK = 'dot::onclick',
   BTN_PLAY = 'buttonPlay::play',
   SCROLL_END = 'scrollEnd',
@@ -36,13 +34,14 @@ export enum ActionTypes {
   UPDATE_SIZES = 'update:sizes',
 }
 
-interface ActionPayload extends CarouselStore {
+type ActionPayload = {
   [key: string]: any;
-}
+};
 
 export interface ActionDispatch {
   type: ActionTypes;
   payload?: ActionPayload;
+  log?: string;
 }
 
 export interface CarouselActionContextProps {

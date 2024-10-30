@@ -6,10 +6,17 @@ import {
   ButtonFirst,
   Dot,
   ButtonLast,
+  ButtonBack,
+  ButtonNext,
 } from '../../..';
 import { randomHexColor } from '../../../helpers';
 
-const Basic = ({ totalSlides = 5, visibleSlides = 2 }) => {
+const StaticCarousel = ({
+  totalSlides = 5,
+  visibleSlides = 2,
+  infinite = false,
+  step = 1,
+}) => {
   const Slides: React.ReactNode[] = [];
   const Dots: React.ReactNode[] = [];
 
@@ -23,27 +30,33 @@ const Basic = ({ totalSlides = 5, visibleSlides = 2 }) => {
             backgroundColor: randomHexColor(),
           }}
         >
-          {' '}
-          Slide {i + 1}{' '}
+          Slide {i}
         </div>
       </Slide>
     );
     Dots.push(
       <Dot key={i} slideIndex={i}>
-        {i + 1}
+        {i}
       </Dot>
     );
   }
 
   return (
     <div>
-      <CarouselProvider totalSlides={totalSlides} visibleSlides={visibleSlides}>
+      <CarouselProvider
+        totalSlides={totalSlides}
+        visibleSlides={visibleSlides}
+        infinite={infinite}
+        step={step}
+      >
         <StaticViewport orientation="horizontal" slideWidth={200}>
           {Slides}
         </StaticViewport>
         <center>
           <ButtonFirst>First</ButtonFirst>
+          <ButtonBack>&lt;</ButtonBack>
           {Dots}
+          <ButtonNext>&gt;</ButtonNext>
           <ButtonLast>Last</ButtonLast>
         </center>
       </CarouselProvider>
@@ -51,4 +64,4 @@ const Basic = ({ totalSlides = 5, visibleSlides = 2 }) => {
   );
 };
 
-export default Basic;
+export default StaticCarousel;

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useRef } from 'react';
-import { cn } from '../helpers';
+import { cn, computeCurrentVisibleSlides } from '../helpers';
 import s from './StaticViewport.scss';
 import {
   ActionTypes,
@@ -8,9 +8,10 @@ import {
 } from '../CarouselProvider/CarouselContext';
 
 export type StaticViewportProps = React.ComponentPropsWithoutRef<'div'> & {
+  behavior?: ScrollOptions;
   children?: React.ReactNode;
   className?: string;
-  behavior?: ScrollOptions;
+  styleTray?: React.CSSProperties;
 } & (
     | { orientation: 'horizontal'; slideWidth: number; slideHeight?: never }
     | { orientation: 'vertical'; slideWidth?: never; slideHeight: number }
@@ -19,48 +20,64 @@ export type StaticViewportProps = React.ComponentPropsWithoutRef<'div'> & {
 const SliderViewport = ({
   children,
   className,
-  style,
-  slideWidth,
-  slideHeight,
-  orientation: initOrientation,
+  slideHeight = 0,
+  slideWidth = 0,
+  style = {},
+  styleTray = {},
 }: StaticViewportProps) => {
   const {
+    currentSlide,
+    isScrolling,
     orientation,
-    currentSlide = 0,
-    isScrolling = false,
-    slideSize = 0,
-    slideTraySize = 0,
-    totalSlides = 0,
-    visibleSlides = 0,
+    slideSize,
+    slideTraySize,
+    totalSlides,
+    visibleSlides,
   } = useContext(CarouselStoreContext);
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const trayRef = useRef<HTMLDivElement>(null);
-
   const { dispatch } = useContext(CarouselActionContext);
 
+  // initialize after first mount
   useEffect(() => {
-    const slideSize =
-      initOrientation === 'horizontal' ? slideWidth : slideHeight;
-    const slideTraySize = slideSize * totalSlides;
-    dispatch({
-      type: ActionTypes.UPDATE_SIZES,
-      payload: { slideSize, slideTraySize, orientation: initOrientation },
+    const slideSize = orientation === 'horizontal' ? slideWidth : slideHeight;
+    const slideTraySize = slideSize * (totalSlides ?? 0);
+    const currentVisibleSlides = computeCurrentVisibleSlides({
+      currentSlide,
+      totalSlides,
+      visibleSlides,
     });
-  }, []);
 
+    dispatch({
+      log: 'StaticViewport - on mount & update for totalSlides, visibleSlides',
+      type: ActionTypes.FIRST_RENDER,
+      payload: {
+        slideSize,
+        slideTraySize,
+        currentVisibleSlides,
+      },
+    });
+  }, [totalSlides, visibleSlides]);
+
+  // currentSlide changed
   useEffect(() => {
     const scrollOptions: ScrollToOptions = {
-      [orientation === 'horizontal' ? 'left' : 'top']: slideSize * currentSlide,
+      [orientation === 'horizontal' ? 'left' : 'top']:
+        (slideSize ?? 0) * (currentSlide ?? 0),
       behavior: 'smooth',
     };
     viewportRef?.current?.scrollTo(scrollOptions);
   }, [currentSlide, trayRef]);
 
+  // scroll start
   useEffect(() => {
     const handleScrollStart = () => {
       if (!isScrolling) {
-        dispatch({ type: ActionTypes.SCROLL_START });
+        dispatch({
+          log: 'StaticViewport - scroll start',
+          type: ActionTypes.SCROLL_START,
+        });
       }
     };
     const el = viewportRef.current;
@@ -70,18 +87,19 @@ const SliderViewport = ({
     };
   }, [viewportRef, dispatch, isScrolling]);
 
+  // scroll end
   useEffect(() => {
     const handleScrollEnd = () => {
-      const { width, height } =
-        viewportRef.current?.getBoundingClientRect() ?? {};
       const { scrollLeft, scrollTop } = viewportRef.current ?? {};
       dispatch({
+        log: 'StaticViewport - scroll end',
         type: ActionTypes.SCROLL_END,
         payload: {
-          viewportWidth: width,
-          viewportHeight: height,
+          orientation,
           scrollLeft,
           scrollTop,
+          slideSize,
+          visibleSlides,
         },
       });
     };
@@ -90,20 +108,25 @@ const SliderViewport = ({
     return () => {
       el?.removeEventListener('scrollend', handleScrollEnd);
     };
-  }, []);
+  }, [viewportRef, orientation, slideSize, visibleSlides]);
 
   // viewport styles
   const viewportStyle = useMemo<React.CSSProperties>(() => {
     const x: React.CSSProperties = {};
     x[orientation === 'horizontal' ? 'width' : 'height'] =
-      slideSize * visibleSlides;
+      (slideSize ?? 0) * (visibleSlides ?? 0);
     return { ...x, ...style };
-  }, [style, orientation, slideTraySize]);
+  }, [orientation, slideSize, visibleSlides, style]);
 
   // tray styles
-  const trayStyle: React.CSSProperties = {};
-  trayStyle[orientation === 'horizontal' ? 'width' : 'height'] = slideTraySize;
+  const trayStyle = useMemo<React.CSSProperties>(() => {
+    return {
+      [orientation === 'horizontal' ? 'width' : 'height']: slideTraySize,
+      ...styleTray,
+    };
+  }, [orientation, slideTraySize]);
 
+  // html
   return (
     <div
       ref={viewportRef}

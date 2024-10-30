@@ -21,6 +21,7 @@ const ButtonLast = React.forwardRef<HTMLButtonElement, ButtonLastProps>(
     const handleOnClick = useCallback(
       (ev: React.MouseEvent<HTMLButtonElement>) => {
         dispatch({
+          log: 'ButtonLast',
           type: ActionTypes.BTN_ONCLICK,
           payload: {
             currentSlide: totalSlides - visibleSlides,

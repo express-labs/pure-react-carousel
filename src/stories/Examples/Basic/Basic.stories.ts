@@ -15,6 +15,12 @@ const meta = {
     visibleSlides: {
       control: { type: 'range', min: 1, max: 5 },
     },
+    infinite: {
+      control: 'boolean',
+    },
+    step: {
+      control: { type: 'range', min: 1, max: 5 },
+    },
   },
   tags: ['autodocs'],
 } satisfies Meta<typeof Basic>;
@@ -26,5 +32,7 @@ export const Primary: Story = {
   args: {
     totalSlides: 5,
     visibleSlides: 2,
+    infinite: false,
+    step: 1,
   },
 };

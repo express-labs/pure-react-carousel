@@ -14,13 +14,13 @@ export type DotProps = React.ComponentPropsWithoutRef<'button'> & {
 const Dot = React.forwardRef<HTMLButtonElement, DotProps>((props, btnRef) => {
   const { onClick, disabled, slideIndex, children, className, ...restProps } =
     props;
-  const { currentVisibleSlides = [], currentSlide = 0 } =
-    useContext(CarouselStoreContext);
+  const { currentVisibleSlides = [] } = useContext(CarouselStoreContext);
   const { dispatch } = useContext(CarouselActionContext);
 
   const handleOnClick = useCallback(
     (ev: React.MouseEvent<HTMLButtonElement>) => {
       dispatch({
+        log: `Dot index "${slideIndex}" - handleOnClick`,
         type: ActionTypes.BTN_ONCLICK,
         payload: {
           currentSlide: slideIndex,
@@ -35,7 +35,8 @@ const Dot = React.forwardRef<HTMLButtonElement, DotProps>((props, btnRef) => {
     [onClick, dispatch, slideIndex, ActionTypes]
   );
 
-  const newDisabled = disabled || !!currentVisibleSlides?.[slideIndex];
+  const newDisabled =
+    disabled || currentVisibleSlides.indexOf(slideIndex) !== -1;
 
   return (
     <button

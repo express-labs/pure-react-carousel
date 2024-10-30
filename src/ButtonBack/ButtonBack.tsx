@@ -24,8 +24,8 @@ const ButtonBack = React.forwardRef<HTMLButtonElement, ButtonBackProps>(
     const handleOnClick = useCallback(
       (ev: React.MouseEvent<HTMLButtonElement>) => {
         const maxSlide = totalSlides - visibleSlides;
-        const nextSlide = step + currentSlide;
-        let newCurrentSlide = Math.max(currentSlide - step, 0);
+        const previousSlide = currentSlide - step;
+        let newCurrentSlide = Math.max(previousSlide - step, 0);
 
         if (isInfinite) {
           const isOnFirstSlide = currentSlide === 0;
@@ -33,6 +33,7 @@ const ButtonBack = React.forwardRef<HTMLButtonElement, ButtonBackProps>(
         }
 
         dispatch({
+          log: 'ButtonBack',
           type: ActionTypes.BTN_ONCLICK,
           payload: {
             currentSlide: newCurrentSlide,
@@ -44,8 +45,11 @@ const ButtonBack = React.forwardRef<HTMLButtonElement, ButtonBackProps>(
           onClick(ev);
         }
       },
-      [onClick, dispatch]
+      [totalSlides, visibleSlides, step, currentSlide, isInfinite]
     );
+
+    const newDisabled = disabled || (isInfinite === false && currentSlide <= 0);
+    console.log('buttonback', currentSlide);
 
     return (
       <button
@@ -53,10 +57,7 @@ const ButtonBack = React.forwardRef<HTMLButtonElement, ButtonBackProps>(
         type="button"
         className={cn([s.ButtonBack, 'carousel__next-button', className])}
         onClick={handleOnClick}
-        disabled={
-          disabled ||
-          (currentSlide >= totalSlides - visibleSlides && !isInfinite)
-        }
+        disabled={newDisabled}
         {...props}
       >
         {children}

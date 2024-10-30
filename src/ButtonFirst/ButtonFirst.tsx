@@ -17,6 +17,7 @@ const ButtonFirst = React.forwardRef<HTMLButtonElement, ButtonFirstProps>(
     const handleOnClick = useCallback(
       (ev: React.MouseEvent<HTMLButtonElement>) => {
         dispatch({
+          log: 'ButtonFirst',
           type: ActionTypes.BTN_ONCLICK,
           payload: {
             currentSlide: 0,

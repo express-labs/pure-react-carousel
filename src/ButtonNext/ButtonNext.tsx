@@ -16,23 +16,26 @@ const ButtonNext = React.forwardRef<HTMLButtonElement, ButtonNextProps>(
       totalSlides = 0,
       visibleSlides = 0,
       step = 1,
-      isInfinite,
+      isInfinite = true,
     } = useContext(CarouselStoreContext);
 
     const { dispatch } = useContext(CarouselActionContext);
 
     const handleOnClick = useCallback(
       (ev: React.MouseEvent<HTMLButtonElement>) => {
-        const maxSlide = totalSlides - visibleSlides;
-        const nextSlide = step + currentSlide;
-        let newCurrentSlide = Math.min(nextSlide, maxSlide);
+        const maxSlideLeft = totalSlides - visibleSlides;
+        const maxSlideRight = totalSlides;
+        const nextSlide = currentSlide + step;
+        let newCurrentSlide = nextSlide;
 
-        if (isInfinite) {
-          const isOnLastSlide = maxSlide === currentSlide;
-          newCurrentSlide = isOnLastSlide ? 0 : newCurrentSlide;
+        if (isInfinite && maxSlideRight > totalSlides) {
+          newCurrentSlide = totalSlides - visibleSlides;
+        } else if (isInfinite && nextSlide > maxSlideLeft) {
+          newCurrentSlide = 0;
         }
 
         dispatch({
+          log: 'ButtonNext',
           type: ActionTypes.BTN_ONCLICK,
           payload: {
             currentSlide: newCurrentSlide,
@@ -44,8 +47,12 @@ const ButtonNext = React.forwardRef<HTMLButtonElement, ButtonNextProps>(
           onClick(ev);
         }
       },
-      [onClick, dispatch]
+      [totalSlides, visibleSlides, currentSlide, step, isInfinite, dispatch]
     );
+
+    const newDisabled =
+      disabled ||
+      (isInfinite === false && currentSlide >= totalSlides - visibleSlides);
 
     return (
       <button
@@ -53,10 +60,7 @@ const ButtonNext = React.forwardRef<HTMLButtonElement, ButtonNextProps>(
         type="button"
         className={cn([s.buttonNext, 'carousel__next-button', className])}
         onClick={handleOnClick}
-        disabled={
-          disabled ||
-          (currentSlide >= totalSlides - visibleSlides && !isInfinite)
-        }
+        disabled={newDisabled}
         {...props}
       >
         {children}
