@@ -33,7 +33,6 @@
     "build:es": "check-node-version --node $(cat .nvmrc) && NODE_ENV=production rollup -c rollup.config.es.js",
     "postbuild": "node postbuild.js",
     "build:watch": "check-node-version --node $(cat .nvmrc) && watch 'npm run build' src",
-    "prepublishOnly": "check-node-version --node $(cat .nvmrc) && npm run build",
     "semantic-release": "semantic-release",
     "predeploy": "check-node-version --node $(cat .nvmrc) && rimraf dev/script && NODE_ENV=development rollup -c rollup.config.dev.js",
     "deploy": "check-node-version --node $(cat .nvmrc) && gh-pages -d dev",
