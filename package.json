@@ -75,6 +75,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rimraf": "^6.0.1",
+    "sass": "^1.80.5",
     "sass-loader": "^16.0.2",
     "storybook": "^8.3.6",
     "ts-loader": "^9.5.1",
