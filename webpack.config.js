@@ -1,13 +1,15 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = (env) => {
-  console.log(env)
+  console.log(env);
   console.log('Production: ', !!env.PRODUCTION);
 
   return {
     entry: './src/index.ts',
     mode: env.PRODUCTION ? 'production' : 'development',
+    devtool: env.PRODUCTION ? 'source-map': 'eval-source-map',
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'pure-react-carousel.js',
@@ -37,16 +39,18 @@ module.exports = (env) => {
           // include: [path.resolve(__dirname, '../src')],
           use: [
             {
-              loader:
-                env.PRODUCTION
-                  ?  MiniCssExtractPlugin.loader
-                  : 'style-loader',
+              loader: env.PRODUCTION
+                ? MiniCssExtractPlugin.loader
+                : 'style-loader',
             },
             {
               loader: 'css-loader',
               options: {
+                sourceMap: true,
                 modules: {
-                  localIdentName: env.PRODUCTION ? '[hash:base64:5]' : '[name]__[local]__[hash:base64:5]',
+                  localIdentName: env.PRODUCTION
+                    ? '[hash:base64:5]'
+                    : '[name]__[local]__[hash:base64:5]',
                 },
                 importLoaders: 2,
               },
@@ -64,6 +68,11 @@ module.exports = (env) => {
     },
     optimization: {
       usedExports: true,
+      minimizer: [
+        // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+        `...`,
+        new CssMinimizerPlugin(),
+      ],
     },
   };
 };
