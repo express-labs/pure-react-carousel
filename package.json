@@ -2,12 +2,9 @@
   "name": "pure-react-carousel",
   "version": "2.0.0-alpha.0",
   "description": "A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
-  "jsnext:main": "dist/index.es.js",
+  "module": "dist/pure-react-carousel.js",
   "files": [
-    "dist/**/*",
-    "typings/**/*"
+    "dist/**/*"
   ],
   "keywords": [
     "react",
@@ -28,20 +25,15 @@
     "lint": "eslint . --ext .js --ext .jsx --ignore-path .gitignore",
     "lint:fix": "eslint ./src --fix --ext .js --ext .jsx --ignore-path .gitignore",
     "prebuild": "rimraf dist",
-    "build": "check-node-version --node $(cat .nvmrc) && NODE_ENV=production rollup -c rollup.config.cjs.js && NODE_ENV=production rollup -c rollup.config.es.js",
-    "build:commonjs": "check-node-version --node $(cat .nvmrc) && NODE_ENV=production rollup -c rollup.config.cjs.js",
-    "build:es": "check-node-version --node $(cat .nvmrc) && NODE_ENV=production rollup -c rollup.config.es.js",
-    "postbuild": "node postbuild.js",
+    "build": "check-node-version --node $(cat .nvmrc) && webpack --env PRODUCTION",
     "build:watch": "check-node-version --node $(cat .nvmrc) && watch 'npm run build' src",
     "prepublishOnly": "check-node-version --node $(cat .nvmrc) && npm run build",
     "semantic-release": "semantic-release",
-    "predeploy": "check-node-version --node $(cat .nvmrc) && rimraf dev/script && NODE_ENV=development rollup -c rollup.config.dev.js",
-    "deploy": "check-node-version --node $(cat .nvmrc) && gh-pages -d dev",
     "true-level": "check-node-version --node $(cat .nvmrc) && rm -rf ./node_modules ./.babel-cache; npm install",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "typings": "typings/index.d.ts",
+  "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/express-labs/pure-react-carousel.git"
@@ -64,6 +56,9 @@
     "@storybook/react": "^8.3.6",
     "@storybook/react-webpack5": "^8.3.6",
     "@storybook/test": "^8.3.6",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "check-node-version": "^4.2.1",
     "css-loader": "^6.11.0",
     "eslint": "^9.13.0",
     "eslint-plugin-react": "^7.37.2",
@@ -71,6 +66,7 @@
     "gh-pages": "^6.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
+    "mini-css-extract-plugin": "^2.9.1",
     "postcss-loader": "^8.1.1",
     "postcss-preset-env": "^10.0.8",
     "postcss-scss": "^4.0.9",
@@ -80,18 +76,16 @@
     "rimraf": "^6.0.1",
     "sass-loader": "^16.0.2",
     "storybook": "^8.3.6",
+    "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.11.0",
     "waait": "^1.0.5",
-    "webpack": "^5.95.0"
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
   },
   "peerDependencies": {
     "react": "17.x || 18.x",
     "react-dom": "17.x || 18.x"
-  },
-  "dependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1"
   },
   "jest": {
     "moduleNameMapper": {
