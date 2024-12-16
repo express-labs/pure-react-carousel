@@ -378,6 +378,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pankaj2961",
+      "name": "Pankaj kumar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29835559?v=4",
+      "profile": "https://github.com/pankaj2961",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mattedicksoncom",
+      "name": "Matt Dickson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35905014?v=4",
+      "profile": "https://mattedickson.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "roberttaylor426",
+      "name": "Robert Taylor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/535032?v=4",
+      "profile": "https://github.com/roberttaylor426",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
