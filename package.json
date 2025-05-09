@@ -115,7 +115,7 @@
     "react-dom": "15.x || 16.x || 17.x || 18.x || 19.x"
   },
   "dependencies": {
-    "@babel/runtime": "^7.5.5",
+    "@babel/runtime": "^7.26.10",
     "deep-freeze": "0.0.1",
     "deepmerge": "^2.2.1",
     "equals": "^1.0.5",
