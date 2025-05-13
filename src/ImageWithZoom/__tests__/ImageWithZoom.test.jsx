@@ -276,6 +276,15 @@ describe('<ImageWithZoom />', () => {
       expect(wrapper.state('x')).toBe('50%');
       expect(wrapper.state('y')).toBe('50%');
     });
+    it('if onlyZoomOnClick then zoom should not happen if not clicked', () => {
+      const wrapper = shallow(<ImageWithZoom {...props} onlyZoomOnClick />);
+      expect(wrapper.state('clicked')).toBe(false);
+      expect(wrapper.find('.overlay').exists()).toBe(false);
+      wrapper.simulate('click');
+      wrapper.update();
+      expect(wrapper.find('.overlay').exists()).toBe(true);
+      expect(wrapper.state('clicked')).toBe(true);
+    });
     it('should properly set state for x y when touches are moving', () => {
       const wrapper = shallow(<ImageWithZoom {...props} />);
       expect(wrapper.state('x')).toBe(null);
