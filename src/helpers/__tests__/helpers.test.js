@@ -47,7 +47,7 @@ describe('helpers', () => {
     describe('customMerge function', () => {
       it('should return source merger for React internal keys', () => {
         const reactKeys = ['$$typeof', '_owner', '_store', 'ref', 'key'];
-        
+
         reactKeys.forEach((key) => {
           const merger = safeMergeOptions.customMerge(key);
           expect(typeof merger).toBe('function');
@@ -61,7 +61,7 @@ describe('helpers', () => {
 
       it('should return undefined for non-React keys', () => {
         const normalKeys = ['prop', 'className', 'children', 'data'];
-        
+
         normalKeys.forEach((key) => {
           const merger = safeMergeOptions.customMerge(key);
           expect(merger).toBeUndefined();
