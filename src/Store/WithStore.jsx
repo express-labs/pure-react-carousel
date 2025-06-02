@@ -43,7 +43,8 @@ export default function WithStore(
     }
 
     render() {
-      const props = deepMerge(this.state, this.props, safeMergeOptions);
+      const { children, ...propsWithoutChildren } = this.props;
+      const props = deepMerge(this.state, propsWithoutChildren, safeMergeOptions);
 
       return (
         <WrappedComponent
@@ -61,7 +62,7 @@ export default function WithStore(
             unsubscribeMasterSpinner: this.context.unsubscribeMasterSpinner,
           }}
         >
-          {this.props.children}
+          {children}
         </WrappedComponent>
       );
     }
