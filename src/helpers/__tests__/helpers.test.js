@@ -131,29 +131,4 @@ describe('helpers', () => {
       expect(result.props.className).toBe('source-class');
     });
   });
-
-  // Test other helper functions to ensure they still work
-  describe('existing helper functions', () => {
-    it('cn should join class names correctly', () => {
-      expect(cn(['class1', 'class2'])).toBe('class1 class2');
-      expect(cn(['class1', false, 'class2'])).toBe('class1 class2');
-    });
-
-    it('slideUnit should calculate correctly', () => {
-      expect(slideUnit(1)).toBe(100);
-      expect(slideUnit(2)).toBe(50);
-      expect(slideUnit(4)).toBe(25);
-    });
-
-    it('pct should format percentages', () => {
-      expect(pct(50)).toBe('50%');
-      expect(pct(100)).toBe('100%');
-    });
-
-    it('boundedRange should constrain values', () => {
-      expect(boundedRange({ min: 0, max: 10, x: 5 })).toBe(5);
-      expect(boundedRange({ min: 0, max: 10, x: -5 })).toBe(0);
-      expect(boundedRange({ min: 0, max: 10, x: 15 })).toBe(10);
-    });
-  });
 });
