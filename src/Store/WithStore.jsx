@@ -1,9 +1,8 @@
 import React from 'react';
 import equal from 'equals';
 import deepMerge from 'deepmerge';
-import { CarouselPropTypes } from '../helpers';
+import { CarouselPropTypes, safeMergeOptions } from '../helpers';
 import { CarouselContext } from '../CarouselProvider';
-import { safeMergeOptions } from './mergeOptions';
 
 export default function WithStore(
   WrappedComponent,
