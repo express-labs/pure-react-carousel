@@ -1,7 +1,7 @@
 import React from 'react';
 import equal from 'equals';
 import deepMerge from 'deepmerge';
-import { CarouselPropTypes } from '../helpers';
+import { CarouselPropTypes, safeMergeOptions } from '../helpers';
 import { CarouselContext } from '../CarouselProvider';
 
 export default function WithStore(
@@ -43,7 +43,8 @@ export default function WithStore(
     }
 
     render() {
-      const props = deepMerge(this.state, this.props);
+      const { children, ...propsWithoutChildren } = this.props;
+      const props = deepMerge(this.state, propsWithoutChildren, safeMergeOptions);
 
       return (
         <WrappedComponent
@@ -61,7 +62,7 @@ export default function WithStore(
             unsubscribeMasterSpinner: this.context.unsubscribeMasterSpinner,
           }}
         >
-          {this.props.children}
+          {children}
         </WrappedComponent>
       );
     }

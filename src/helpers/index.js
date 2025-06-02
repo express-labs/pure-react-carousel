@@ -66,3 +66,16 @@ export const boundedRange = ({ min, max, x }) => Math.min(
   max,
   Math.max(min, x),
 );
+
+export const safeArrayMerge = (destination, source) => source;
+
+export const safeMergeOptions = {
+  arrayMerge: safeArrayMerge,
+  clone: false,
+  customMerge: (key) => {
+    if (key === '$$typeof' || key === '_owner' || key === '_store' || key === 'ref' || key === 'key') {
+      return (target, source) => source;
+    }
+    return undefined;
+  },
+};
