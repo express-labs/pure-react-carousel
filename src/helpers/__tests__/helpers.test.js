@@ -1,10 +1,7 @@
 import deepMerge from 'deepmerge';
 import {
   cn,
-  randomHexColor,
   slideUnit,
-  slideSize,
-  slideTraySize,
   pct,
   boundedRange,
   safeArrayMerge,
@@ -55,10 +52,10 @@ describe('helpers', () => {
       it('should return source merger for React internal keys', () => {
         const reactKeys = ['$$typeof', '_owner', '_store', 'ref', 'key'];
         
-        reactKeys.forEach(key => {
+        reactKeys.forEach((key) => {
           const merger = safeMergeOptions.customMerge(key);
           expect(typeof merger).toBe('function');
-          
+
           const target = 'target';
           const source = 'source';
           const result = merger(target, source);
@@ -69,7 +66,7 @@ describe('helpers', () => {
       it('should return undefined for non-React keys', () => {
         const normalKeys = ['prop', 'className', 'children', 'data'];
         
-        normalKeys.forEach(key => {
+        normalKeys.forEach((key) => {
           const merger = safeMergeOptions.customMerge(key);
           expect(merger).toBeUndefined();
         });
@@ -90,7 +87,7 @@ describe('helpers', () => {
       const source = {
         $$typeof: 'source-type',
         _owner: 'source-owner',
-        _store: 'source-store',  
+        _store: 'source-store',
         ref: 'source-ref',
         key: 'source-key',
         className: 'source-class',
@@ -101,7 +98,9 @@ describe('helpers', () => {
 
       // React internal keys should use source values
       expect(result.$$typeof).toBe('source-type');
+      // eslint-disable-next-line no-underscore-dangle
       expect(result._owner).toBe('source-owner');
+      // eslint-disable-next-line no-underscore-dangle
       expect(result._store).toBe('source-store');
       expect(result.ref).toBe('source-ref');
       expect(result.key).toBe('source-key');
@@ -116,14 +115,14 @@ describe('helpers', () => {
         props: {
           $$typeof: 'target-type',
           className: 'target-class',
-        }
+        },
       };
 
       const source = {
         props: {
           $$typeof: 'source-type',
           className: 'source-class',
-        }
+        },
       };
 
       const result = deepMerge(target, source, safeMergeOptions);
