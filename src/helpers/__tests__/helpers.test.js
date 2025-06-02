@@ -1,9 +1,5 @@
 import deepMerge from 'deepmerge';
 import {
-  cn,
-  slideUnit,
-  pct,
-  boundedRange,
   safeArrayMerge,
   safeMergeOptions,
 } from '../index';
