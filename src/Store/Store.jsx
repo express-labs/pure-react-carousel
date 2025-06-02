@@ -1,5 +1,6 @@
 import deepMerge from 'deepmerge';
 import deepFreeze from 'deep-freeze';
+import { safeMergeOptions } from './mergeOptions';
 
 const DEFAULT_STATE = {
   masterSpinnerFinished: false,
@@ -7,7 +8,7 @@ const DEFAULT_STATE = {
 
 const Store = class Store {
   constructor(initialState) {
-    this.state = deepFreeze(deepMerge(DEFAULT_STATE, initialState));
+    this.state = deepFreeze(deepMerge(DEFAULT_STATE, initialState, safeMergeOptions));
     this.subscriptions = [];
     this.masterSpinnerSubscriptions = {};
     this.setStoreState = this.setStoreState.bind(this);
@@ -23,12 +24,12 @@ const Store = class Store {
   }
 
   setStoreState(newState, cb) {
-    this.state = deepFreeze(deepMerge(this.state, newState));
+    this.state = deepFreeze(deepMerge(this.state, newState, safeMergeOptions));
     this.updateSubscribers(cb);
   }
 
   getStoreState() {
-    return deepMerge({}, this.state);
+    return deepMerge({}, this.state, safeMergeOptions);
   }
 
   subscribe(func) {

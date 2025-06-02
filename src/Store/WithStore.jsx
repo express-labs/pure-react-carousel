@@ -3,6 +3,7 @@ import equal from 'equals';
 import deepMerge from 'deepmerge';
 import { CarouselPropTypes } from '../helpers';
 import { CarouselContext } from '../CarouselProvider';
+import { safeMergeOptions } from './mergeOptions';
 
 export default function WithStore(
   WrappedComponent,
@@ -43,7 +44,7 @@ export default function WithStore(
     }
 
     render() {
-      const props = deepMerge(this.state, this.props);
+      const props = deepMerge(this.state, this.props, safeMergeOptions);
 
       return (
         <WrappedComponent
