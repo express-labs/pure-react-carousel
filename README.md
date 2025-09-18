@@ -735,11 +735,13 @@ So to access the "view" of Slide, `import { SlideView } from 'pure-react-carouse
 I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.
 
 ## Dev Workflow
-**Note about Correct Node Version:**  You must switch to node version **10.16.1** and then run `npm ci` before developing pure-react-carousel on your local machine.  Use Node Version Manager (nvm) to switch between versions of node.  This project has an .nvmrc file.  You can set up Node Version Manager to automatically switch to the correct version of Node when working on this repo.  If you run `npm ci` and encounter fatal errors, it is because you're using the wrong version of Node and npm.
+**Note about Correct Node Version:** You must switch to node version **16.14.2** and then run `npm ci` before developing pure-react-carousel on your local machine. Use Node Version Manager (nvm) to switch between versions of node. This project has an .nvmrc file. You can set up Node Version Manager to automatically switch to the correct version of Node when working on this repo. If you run `npm ci` and encounter fatal errors, it is because you're using the wrong version of Node and npm.
 
-- `npm ci` See note above about correct Node version.  This installs all the necessary dependencies for local development.<br><br>
+This project was originally designed for Node 10.16.1 and now works with Node 16.14.2. To ensure compatibility we rely on check-node-version package to run before certain npm scripts. Package should be installed globally by running `npm install -g check-node-version `
+
+- `npm ci` See note above about correct Node version. This installs all the necessary dependencies for local development.<br><br>
 - `npm start` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload.<br><br>
-- `npm test` runs unit and integration tests using Jest + Enzyme.  Also does coverage reporting.<br><br>
+- `npm test` runs unit and integration tests using Jest + Enzyme. Also does coverage reporting.<br><br>
 - `npm lint` runs linting tests using ESLint & Airbnb linting.<br><br>
 - `npm test:watch` same as `npm test` but it will watch for updates and auto-run tests. Does not do coverage reporting.<br><br>
 - `npm run build` compiles CommonJS and ES modules and places them in the dist directory. See note above about correct node Version<br><br>
