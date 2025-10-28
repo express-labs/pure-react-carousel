@@ -1,12 +1,10 @@
 import React from 'react';
-import { shallow, mount, configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { render, screen, fireEvent } from '@testing-library/react';
 import clone from 'clone';
 import components from '../../helpers/component-config';
 import Dot from '../Dot';
 import Store from '../../Store/Store';
 
-configure({ adapter: new Adapter() });
 
 
 let props;
@@ -16,52 +14,52 @@ describe('<Dot />', () => {
     props = clone(components.Dot.props);
   });
   it('should render', () => {
-    const wrapper = shallow(<Dot {...props} />);
-    expect(wrapper.exists()).toBe(true);
+    render(<Dot {...props} />);
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
   it('should add the dotSelected class when selected', () => {
     const newProps = Object.assign({}, props, { selected: true });
-    const wrapper = shallow(<Dot {...newProps} />);
-    expect(wrapper.hasClass('dotSelected')).toBe(true);
+    render(<Dot {...newProps} />);
+    expect(screen.getByRole('button')).toHaveClass('dotSelected');
   });
   it('should add the carousel__dot--selected class when selected', () => {
     const newProps = Object.assign({}, props, { selected: true });
-    const wrapper = shallow(<Dot {...newProps} />);
-    expect(wrapper.hasClass('carousel__dot--selected')).toBe(true);
+    render(<Dot {...newProps} />);
+    expect(screen.getByRole('button')).toHaveClass('carousel__dot--selected');
   });
   it('should call any supplied onClick as a callback', () => {
     const onClick = jest.fn();
     const newProps = Object.assign({}, props, { onClick });
-    const wrapper = mount(<Dot {...newProps} />);
-    expect(onClick.mock.calls.length).toBe(0);
-    wrapper.find('button').simulate('click');
-    expect(onClick.mock.calls.length).toBe(1);
+    render(<Dot {...newProps} />);
+    expect(onClick).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button'));
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
   it('should update carouselStore.state.currentSlide with the value of slide', () => {
     const onClick = jest.fn();
     const carouselStore = new Store(Object.assign({}, props, { currentSlide: 0 }));
     const newProps = Object.assign({}, props, { onClick, carouselStore });
-    const wrapper = mount(<Dot {...newProps} />);
+    render(<Dot {...newProps} />);
     expect(carouselStore.state.currentSlide).toBe(0);
-    wrapper.find('button').simulate('click');
+    fireEvent.click(screen.getByRole('button'));
     expect(carouselStore.state.currentSlide).toEqual(props.slide);
   });
   it('should keep the last slide pegged to the right of the viewport if visibleSlides > 1', () => {
-    const wrapper = mount(<Dot {...props} slide={10} />);
-    wrapper.find('button').simulate('click');
+    render(<Dot {...props} slide={10} />);
+    fireEvent.click(screen.getByRole('button'));
     expect(props.carouselStore.getStoreState().currentSlide).toBe(8);
   });
   it('should not override disabled if disabled prop is set to false manually', () => {
-    const wrapper = mount(<Dot {...props} slide={10} disabled={false} />);
-    expect(wrapper.find('button').prop('disabled')).toBe(false);
+    render(<Dot {...props} slide={10} disabled={false} />);
+    expect(screen.getByRole('button')).not.toBeDisabled();
   });
   it('should not override disabled if disabled prop is set to true manually', () => {
-    const wrapper = mount(<Dot {...props} slide={0} disabled />);
-    expect(wrapper.find('button').prop('disabled')).toBe(true);
+    render(<Dot {...props} slide={0} disabled />);
+    expect(screen.getByRole('button')).toBeDisabled();
   });
   it('should pause autoplay when clicked', () => {
-    const wrapper = mount(<Dot {...props} slide={10} />);
-    wrapper.find('button').simulate('click');
+    render(<Dot {...props} slide={10} />);
+    fireEvent.click(screen.getByRole('button'));
     expect(props.carouselStore.getStoreState().isPlaying).toBe(false);
   });
 });

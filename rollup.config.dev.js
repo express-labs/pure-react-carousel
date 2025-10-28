@@ -1,16 +1,16 @@
-import babel from "rollup-plugin-babel";
-import commonjs from "rollup-plugin-commonjs";
+import babel from "@rollup/plugin-babel";
+import commonjs from "@rollup/plugin-commonjs";
 import { eslint } from "rollup-plugin-eslint";
 import livereload from "rollup-plugin-livereload";
 import image from "rollup-plugin-img";
 import omit from "object.omit";
 import path from "path";
 import postcss from "rollup-plugin-postcss";
-import replace from "rollup-plugin-replace";
-import resolve from "rollup-plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
+import resolve from "@rollup/plugin-node-resolve";
 import serve from "rollup-plugin-serve";
 
-var pkg = require("./package.json");
+import pkg from "./package.json" with { type: 'json' };
 var cache;
 
 const plugins = [
@@ -29,15 +29,11 @@ const plugins = [
   }),
   resolve({
     browser: true,
-    customResolveOptions: {
-      moduleDirectory: "node_modules"
-    },
+    moduleDirectories: ["node_modules"],
     extensions: [".js", ".jsx"],
-    jsnext: true,
-    main: true,
-    module: true
+    preferBuiltins: false
   }),
-  replace({ "process.env.NODE_ENV": JSON.stringify("development") }),
+  replace({ "process.env.NODE_ENV": JSON.stringify("development"), preventAssignment: true }),
   commonjs({
     include: ["node_modules/**"],
     exclude: ["node_modules/process-es6/**"],
@@ -60,7 +56,8 @@ const plugins = [
     exclude: ["**/*.scss", "**/*.css", "node_modules/**"]
   }),
   babel({
-    exclude: ["node_modules/**", "__tests__/**"]
+    exclude: ["node_modules/**", "__tests__/**"],
+    babelHelpers: 'bundled'
   }),
 ];
 

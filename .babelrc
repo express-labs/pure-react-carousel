@@ -27,18 +27,16 @@
           "@babel/preset-env",
           {
             "targets": {
-              "browsers": ["> 5%", "Explorer 11"]
+              "browsers": ["> 1%", "not dead"]
             }
           }
         ],
-        "@babel/preset-react"
+        ["@babel/preset-react", { "runtime": "automatic" }]
       ],
       "plugins": [
-        "@babel/plugin-proposal-class-properties",
-        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-class-properties",
+        "@babel/plugin-transform-object-rest-spread",
         "@babel/plugin-transform-object-assign"
-        // latest version of rollup-plugin-babel already applies external helpers for us.
-        // "@babel/plugin-external-helpers"
       ]
     },
     "production": {
@@ -47,35 +45,33 @@
           "@babel/preset-env",
           {
             "targets": {
-              "browsers": ["> 5%", "Explorer 11"]
+              "browsers": ["> 1%", "not dead"]
             }
           }
         ],
-        "@babel/preset-react"
+        ["@babel/preset-react", { "runtime": "automatic" }]
       ],
       "plugins": [
-        "@babel/plugin-proposal-class-properties",
-        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-class-properties",
+        "@babel/plugin-transform-object-rest-spread",
         "@babel/plugin-transform-object-assign"
       ]
     },
     "test": {
-      // difference is that we don't use external-helpers
       "presets": [
         [
           "@babel/preset-env",
           {
             "targets": {
-              "browsers": ["> 5%", "Explorer 11"],
               "node": "current"
             }
           }
         ],
-        "@babel/preset-react"
+        ["@babel/preset-react", { "runtime": "automatic" }]
       ],
       "plugins": [
-        "@babel/plugin-proposal-class-properties",
-        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-class-properties",
+        "@babel/plugin-transform-object-rest-spread",
         "@babel/plugin-transform-object-assign",
         [
           "@babel/plugin-transform-runtime",

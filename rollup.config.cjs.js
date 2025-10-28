@@ -1,13 +1,13 @@
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
-import { eslint } from 'rollup-plugin-eslint';
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+// import { eslint } from 'rollup-plugin-eslint';
 import path from 'path';
 import postcss from 'rollup-plugin-postcss';
-import replace from 'rollup-plugin-replace';
-import resolve from 'rollup-plugin-node-resolve';
-import { uglify } from 'rollup-plugin-uglify';
+import replace from '@rollup/plugin-replace';
+import resolve from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
 
-var pkg = require('./package.json');
+import pkg from './package.json' with { type: 'json' };
 var cache;
 
 export default {
@@ -35,32 +35,30 @@ export default {
     }),
     resolve({
       browser: true,
-      customResolveOptions: {
-        moduleDirectory: 'node_modules'
-      },
+      moduleDirectories: ['node_modules'],
       extensions: ['.js', '.jsx'],
-      jsnext: true,
-      main: true,
-      module: true
+      preferBuiltins: false
     }),
-    replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+    replace({ 'process.env.NODE_ENV': JSON.stringify('production'), preventAssignment: true }),
     commonjs(),
-    eslint({
-      exclude: [
-        '**/*.css',
-        '**/*.scss',
-        'node_modules/**'
-      ]
-    }),
+    // eslint({
+    //   exclude: [
+    //     '**/*.css',
+    //     '**/*.scss',
+    //     'node_modules/**'
+    //   ]
+    // }),
     babel({
       exclude: [
         'node_modules/**'
       ],
+      babelHelpers: 'bundled'
     }),
     replace({
       include: 'src/**',
-      ENV: JSON.stringify(process.env.NODE_ENV || 'production')
+      ENV: JSON.stringify(process.env.NODE_ENV || 'production'),
+      preventAssignment: true
     }),
-    (process.env.NODE_ENV === 'production' && uglify())
+    (process.env.NODE_ENV === 'production' && terser())
   ],
 }

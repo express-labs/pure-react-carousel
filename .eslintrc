@@ -3,12 +3,17 @@
     "node": true,
     "es6": true
   },
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2022,
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true,
+      "jsx": true
     },
+    "requireConfigFile": true,
+    "babelOptions": {
+      "configFile": "./.babelrc"
+    }
   },
   "plugins": [
     "node"
@@ -20,7 +25,7 @@
   ],
   "rules": {
     "indent": ["error", 2],
-    "import/no-named-as-default": ["error", 0],
-    "import/no-named-as-default-member": ["error", 0]
+    "import/no-named-as-default": ["off"],
+    "import/no-named-as-default-member": ["off"]
   }
 }

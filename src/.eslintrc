@@ -1,27 +1,32 @@
 {
   "root": true,
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2022,
+    "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
     },
+    "requireConfigFile": true,
+    "babelOptions": {
+      "configFile": "../.babelrc"
+    }
   },
   "env": {
     "browser": true,
     "es6": true
   },
   "globals": {
-    "ENV": true,
-    "react": true,
-    "react-dom": true
+    "ENV": true
   },
   "extends": [
-    "airbnb"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended"
   ],
-
   "plugins": [
     "react",
+    "react-hooks",
     "jsx-a11y"
   ],
   "rules": {
@@ -29,17 +34,17 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/forbid-prop-types": "off",
     "react/destructuring-assignment": [0, "never"],
-    "jsx-a11y/label-has-for": [ 2, {
-      "components": [ "Label" ],
-      "required": {
-        "every": [ "nesting", "id" ]
-      },
-      "allowChildren": true
-    }],
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/label-has-for": "off",
     "jsx-a11y/label-has-associated-control": [ 2, {
       "labelAttributes": ["label"],
       "controlComponents": ["input", "select"],
-      "depth": 3,
-    }],
+      "depth": 3
+    }]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

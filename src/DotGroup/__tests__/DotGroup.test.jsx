@@ -1,11 +1,10 @@
 import React from 'react';
-import { shallow, configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { render, screen } from '@testing-library/react';
 import clone from 'clone';
 import components from '../../helpers/component-config';
 import DotGroup from '../DotGroup';
+import CarouselProvider from '../../CarouselProvider/CarouselProvider';
 
-configure({ adapter: new Adapter() });
 
 let props;
 
@@ -14,62 +13,106 @@ describe('<DotGroup />', () => {
     props = clone(components.DotGroup.props);
   });
   it('should render', () => {
-    const wrapper = shallow(<DotGroup {...props} />);
-    expect(wrapper.exists()).toBe(true);
+    const { container } = render(
+      <CarouselProvider naturalSlideHeight={100} naturalSlideWidth={100} totalSlides={3}>
+        <DotGroup {...props} />
+      </CarouselProvider>
+    );
+    expect(container.querySelector('.carousel__dot-group')).toBeInTheDocument();
   });
   it('should render any children', () => {
-    const wrapper = shallow(<DotGroup {...props}><h1>Hello There</h1></DotGroup>);
-    expect(wrapper.find('h1').text()).toBe('Hello There');
+    render(
+      <CarouselProvider naturalSlideHeight={100} naturalSlideWidth={100} totalSlides={3}>
+        <DotGroup {...props}><h1>Hello There</h1></DotGroup>
+      </CarouselProvider>
+    );
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Hello There');
   });
   it('should render dots with numbers if dotNumbers prop is true', () => {
-    const wrapper = shallow(<DotGroup {...props} dotNumbers />);
-    expect(wrapper.find('span').at(0).text()).toEqual('1');
-    expect(wrapper.find('span').at(1).text()).toEqual('2');
-    expect(wrapper.find('span').at(2).text()).toEqual('3');
+    render(
+      <CarouselProvider naturalSlideHeight={100} naturalSlideWidth={100} totalSlides={3}>
+        <DotGroup {...props} dotNumbers />
+      </CarouselProvider>
+    );
+    const spans = screen.getAllByRole('button').map(button => button.querySelector('span'));
+    expect(spans[0]).toHaveTextContent('1');
+    expect(spans[1]).toHaveTextContent('2');
+    expect(spans[2]).toHaveTextContent('3');
   });
   it('should NOT render dots with numbers if dotNumbers prop is not set', () => {
-    const wrapper = shallow(<DotGroup {...props} />);
-    expect(wrapper.find('span').at(0).text()).toEqual('');
-    expect(wrapper.find('span').at(1).text()).toEqual('');
-    expect(wrapper.find('span').at(2).text()).toEqual('');
+    render(
+      <CarouselProvider naturalSlideHeight={100} naturalSlideWidth={100} totalSlides={3}>
+        <DotGroup {...props} />
+      </CarouselProvider>
+    );
+    const spans = screen.getAllByRole('button').map(button => button.querySelector('span'));
+    expect(spans[0]).toHaveTextContent('');
+    expect(spans[1]).toHaveTextContent('');
+    expect(spans[2]).toHaveTextContent('');
   });
   it('should render enabled active dots if disableActiveDots prop is false', () => {
-    const wrapper = shallow(<DotGroup {...props} disableActiveDots={false} />);
-    expect(wrapper.children().at(0).prop('disabled')).toEqual(false);
-    expect(wrapper.children().at(1).prop('disabled')).toEqual(false);
-    expect(wrapper.children().at(2).prop('disabled')).toEqual(false);
+    render(
+      <CarouselProvider naturalSlideHeight={100} naturalSlideWidth={100} totalSlides={3}>
+        <DotGroup {...props} disableActiveDots={false} />
+      </CarouselProvider>
+    );
+    const buttons = screen.getAllByRole('button');
+    expect(buttons[0]).not.toBeDisabled();
+    expect(buttons[1]).not.toBeDisabled();
+    expect(buttons[2]).not.toBeDisabled();
   });
   it('should render DISABLED dots if disableActiveDots prop is not set', () => {
-    const wrapper = shallow(<DotGroup {...props} />);
-    expect(wrapper.children().at(0).prop('disabled')).toEqual(false);
-    expect(wrapper.children().at(1).prop('disabled')).toEqual(true);
-    expect(wrapper.children().at(2).prop('disabled')).toEqual(true);
+    render(
+      <CarouselProvider naturalSlideHeight={100} naturalSlideWidth={100} totalSlides={3}>
+        <DotGroup {...props} />
+      </CarouselProvider>
+    );
+    const buttons = screen.getAllByRole('button');
+    expect(buttons[0]).not.toBeDisabled();
+    expect(buttons[1]).toBeDisabled();
+    expect(buttons[2]).toBeDisabled();
   });
   it('should render only current slide dot as selected if showAsSelectedForCurrentSlideOnly prop is true', () => {
-    const wrapper = shallow(<DotGroup {...props} showAsSelectedForCurrentSlideOnly />);
-    expect(wrapper.children().at(0).prop('selected')).toEqual(false);
-    expect(wrapper.children().at(1).prop('selected')).toEqual(true);
-    expect(wrapper.children().at(2).prop('selected')).toEqual(false);
+    render(
+      <CarouselProvider naturalSlideHeight={100} naturalSlideWidth={100} totalSlides={3}>
+        <DotGroup {...props} showAsSelectedForCurrentSlideOnly />
+      </CarouselProvider>
+    );
+    const buttons = screen.getAllByRole('button');
+    expect(buttons[0]).not.toHaveClass('carousel__dot--selected');
+    expect(buttons[1]).toHaveClass('carousel__dot--selected');
+    expect(buttons[2]).not.toHaveClass('carousel__dot--selected');
   });
   it('should render all visible slides dot as selected if showAsSelectedForCurrentSlideOnly prop is not set', () => {
-    const wrapper = shallow(<DotGroup {...props} />);
-    expect(wrapper.children().at(0).prop('selected')).toEqual(false);
-    expect(wrapper.children().at(1).prop('selected')).toEqual(true);
-    expect(wrapper.children().at(2).prop('selected')).toEqual(true);
+    render(
+      <CarouselProvider naturalSlideHeight={100} naturalSlideWidth={100} totalSlides={3}>
+        <DotGroup {...props} />
+      </CarouselProvider>
+    );
+    const buttons = screen.getAllByRole('button');
+    expect(buttons[0]).not.toHaveClass('carousel__dot--selected');
+    expect(buttons[1]).toHaveClass('carousel__dot--selected');
+    expect(buttons[2]).toHaveClass('carousel__dot--selected');
   });
   it('should render dots differently if renderDots is provided', () => {
     const renderDots = ({ totalSlides }) => {
       const dots = [];
 
       for (let i = 0; i < totalSlides; i += 1) {
-        dots.push(<img key={i} src="data:," alt="" />);
+        dots.push(<img key={i} src="data:," alt={`Dot ${i + 1}`} />);
       }
       return dots;
     };
 
-    const wrapper = shallow(<DotGroup {...props} renderDots={renderDots} />);
-    expect(wrapper.find('img').at(0).text()).toEqual('');
-    expect(wrapper.find('img').at(1).text()).toEqual('');
-    expect(wrapper.find('img').at(2).text()).toEqual('');
+    render(
+      <CarouselProvider naturalSlideHeight={100} naturalSlideWidth={100} totalSlides={3}>
+        <DotGroup {...props} renderDots={renderDots} />
+      </CarouselProvider>
+    );
+    const images = screen.getAllByRole('img');
+    expect(images).toHaveLength(3);
+    expect(images[0]).toBeInTheDocument();
+    expect(images[1]).toBeInTheDocument();
+    expect(images[2]).toBeInTheDocument();
   });
 });

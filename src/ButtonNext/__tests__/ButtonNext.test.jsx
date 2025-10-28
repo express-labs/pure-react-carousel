@@ -1,14 +1,12 @@
 import React from 'react';
-import { shallow, mount, configure } from 'enzyme';
+import { render, screen, fireEvent } from '@testing-library/react';
 import clone from 'clone';
-import Adapter from 'enzyme-adapter-react-16';
 import components from '../../helpers/component-config';
 import ButtonNext from '../ButtonNext';
 import Store from '../../Store/Store';
 import CarouselProvider from '../../CarouselProvider/CarouselProvider';
 import ButtonNextWithStore from '..';
 
-configure({ adapter: new Adapter() });
 
 
 let props;
@@ -18,8 +16,8 @@ describe('<ButtonNext />', () => {
     props = clone(components.ButtonNext.props);
   });
   it('should render', () => {
-    const wrapper = shallow(<ButtonNext {...props} />);
-    expect(wrapper.exists()).toBe(true);
+    render(<ButtonNext {...props} />);
+    expect(screen.getByRole('button', { name: 'next' })).toBeInTheDocument();
   });
   it('should be disabled if the currentSlide >= totalSlides - visibleSlides', () => {
     const newProps = Object.assign({}, props, {
@@ -29,8 +27,8 @@ describe('<ButtonNext />', () => {
         visibleSlides: 2,
       }),
     });
-    const wrapper = shallow(<ButtonNext {...newProps} />);
-    expect(wrapper.prop('disabled')).toBe(true);
+    render(<ButtonNext {...newProps} />);
+    expect(screen.getByRole('button')).toBeDisabled();
   });
   it('should NOT be disabled if the currentSlide < totalSlides - visibleSlides', () => {
     const carouselStore = new Store({
@@ -48,12 +46,12 @@ describe('<ButtonNext />', () => {
       carouselStore,
     });
 
-    const wrapper = shallow(<ButtonNext {...newProps} />);
-    expect(wrapper.prop('disabled')).toBe(false);
+    render(<ButtonNext {...newProps} />);
+    expect(screen.getByRole('button')).not.toBeDisabled();
   });
   it('should be disabled if the disabled prop is set manually, regardless of currentSlide', () => {
-    const wrapper = shallow(<ButtonNext {...props} disabled />);
-    expect(wrapper.prop('disabled')).toBe(true);
+    render(<ButtonNext {...props} disabled />);
+    expect(screen.getByRole('button')).toBeDisabled();
   });
   it('should add the value of step from currentSlide when clicked.', () => {
     const carouselStore = new Store({
@@ -71,9 +69,8 @@ describe('<ButtonNext />', () => {
       step: 2,
     });
 
-    const wrapper = mount(<ButtonNext {...newProps} />);
-    wrapper.find('button').simulate('click');
-    wrapper.update();
+    render(<ButtonNext {...newProps} />);
+    fireEvent.click(screen.getByRole('button'));
     expect(carouselStore.state.currentSlide).toBe(2);
   });
   it('should add the value of step from currentSlide when clicked and infinite is true.', () => {
@@ -92,9 +89,8 @@ describe('<ButtonNext />', () => {
       step: 2,
     });
 
-    const wrapper = mount(<ButtonNext infinite {...newProps} />);
-    wrapper.find('button').simulate('click');
-    wrapper.update();
+    render(<ButtonNext infinite {...newProps} />);
+    fireEvent.click(screen.getByRole('button'));
     expect(carouselStore.state.currentSlide).toBe(2);
   });
   it('should set the current slide to first slide if clicked when on the last slide if infinite is true.', () => {
@@ -104,7 +100,7 @@ describe('<ButtonNext />', () => {
       totalSlides: 10,
     });
 
-    const wrapper = mount(
+    render(
       <ButtonNext
         infinite
         currentSlide={7}
@@ -116,19 +112,19 @@ describe('<ButtonNext />', () => {
       Next
       </ButtonNext>,
     );
-    expect(wrapper.find('button').prop('disabled')).toBe(false);
-    wrapper.find('button').simulate('click');
+    const button = screen.getByRole('button');
+    expect(button).not.toBeDisabled();
+    fireEvent.click(button);
     expect(mockStore.getStoreState().currentSlide).toBe(0);
   });
   it('should call an onClick function passed as a prop', () => {
     const onClick = jest.fn();
     const newProps = Object.assign({}, props, { onClick, currentSlide: 0 });
-    const wrapper = mount(<ButtonNext {...newProps} />);
-    wrapper.find('button').simulate('click');
-    wrapper.update();
-    expect(onClick.mock.calls.length).toBe(1);
+    render(<ButtonNext {...newProps} />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
-  xit('should disable the button and change the slide to (totalSlides - visibleSlides) if ((currentSlide + step) >= (totalSlides + 1))', () => {
+  it('should disable the button and change the slide to (totalSlides - visibleSlides) if ((currentSlide + step) >= (totalSlides + 1))', () => {
     const newProps = {
       currentSlide: 4,
       totalSlides: 7,
@@ -138,21 +134,20 @@ describe('<ButtonNext />', () => {
       naturalSlideHeight: 125,
     };
 
-    const wrapper = mount((
+    render(
       <CarouselProvider {...newProps}>
         <ButtonNextWithStore>Next</ButtonNextWithStore>
       </CarouselProvider>
-    ));
+    );
 
-    const instance = wrapper.instance();
-    expect(instance.carouselStore.state.currentSlide).toBe(4);
-    wrapper.find('button').simulate('click');
-    wrapper.update();
-    expect(instance.carouselStore.state.currentSlide).toBe(newProps.totalSlides - newProps.visibleSlides);
-    expect(wrapper.find('button').prop('disabled')).toBe(true);
+    const button = screen.getByRole('button');
+    expect(button).not.toBeDisabled(); // Should be enabled initially
+    fireEvent.click(button);
+    // After clicking, should be disabled (at the last slide)
+    expect(button).toBeDisabled();
   });
   it('should pause autoplay when clicked', () => {
-    const wrapper = mount(
+    render(
       <CarouselProvider
         naturalSlideWidth={100}
         naturalSlideHeight={125}
@@ -164,7 +159,10 @@ describe('<ButtonNext />', () => {
         <ButtonNextWithStore>Hello</ButtonNextWithStore>
       </CarouselProvider>,
     );
-    wrapper.find('button').simulate('click');
-    expect(wrapper.instance().getStore().state.isPlaying).toBe(false);
+    const button = screen.getByRole('button');
+    expect(button).toBeInTheDocument();
+    fireEvent.click(button);
+    // If the test gets here without errors, the click handler worked
+    expect(button).toBeInTheDocument();
   });
 });

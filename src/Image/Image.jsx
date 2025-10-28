@@ -115,7 +115,7 @@ class Image extends React.Component {
 
   customRender(propName) {
     if (typeof this.props[propName] === 'function') return this.props[propName]();
-    return this.props.children;
+    return this.props.children || null;
   }
 
   renderLoading(filteredProps) {

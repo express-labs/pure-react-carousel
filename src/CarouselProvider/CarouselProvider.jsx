@@ -89,6 +89,15 @@ const CarouselProvider = class CarouselProvider extends React.Component {
       isIntrinsicHeight: props.isIntrinsicHeight,
     };
     this.carouselStore = new Store(options);
+    
+    // Subscribe to store changes to trigger re-renders
+    this.handleStoreUpdate = this.handleStoreUpdate.bind(this);
+    this.carouselStore.subscribe(this.handleStoreUpdate);
+  }
+
+  handleStoreUpdate() {
+    // Force a re-render when the store updates
+    this.forceUpdate();
   }
 
   componentDidUpdate(prevProps) {
@@ -149,6 +158,7 @@ const CarouselProvider = class CarouselProvider extends React.Component {
   }
 
   componentWillUnmount() {
+    this.carouselStore.unsubscribe(this.handleStoreUpdate);
     this.carouselStore.unsubscribeAllMasterSpinner();
   }
 
