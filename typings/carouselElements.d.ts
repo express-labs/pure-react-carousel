@@ -65,7 +65,7 @@ type ImageWithZoomProps<T extends React.ElementType = "div"> =
 type ImageWithZoomInterface = React.ComponentType<ImageWithZoomProps>;
 declare const ImageWithZoom: ImageWithZoomInterface;
 
-type ImageProps<T extends React.ElementType = "div"> =
+type ImageProps<T extends React.ElementType = "img"> =
   React.HTMLAttributes<T> & {
     readonly alt?: string;
     readonly children?: React.ReactNode;
