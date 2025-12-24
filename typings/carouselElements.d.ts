@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ElementType } from "react";
 
 interface SliderProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly children: React.ReactNode;
@@ -22,19 +22,20 @@ type SliderInterface = React.ComponentType<SliderProps>;
  */
 declare const Slider: SliderInterface;
 
-interface SlideProps extends React.HTMLAttributes<HTMLDivElement> {
-  readonly className?: string;
-  readonly classNameHidden?: string;
-  readonly classNameVisible?: string;
-  readonly index: number;
-  readonly innerClassName?: string;
-  readonly innerTag?: string;
-  readonly onBlur?: () => void;
-  readonly onFocus?: () => void;
-  readonly tabIndex?: number;
-  readonly tag?: string;
-  readonly style?: {};
-}
+type SlideProps<T extends React.ElementType = React.ElementType> =
+  React.HTMLAttributes<T> & {
+    readonly className?: string;
+    readonly classNameHidden?: string;
+    readonly classNameVisible?: string;
+    readonly index: number;
+    readonly innerClassName?: string;
+    readonly innerTag?: string;
+    readonly onBlur?: () => void;
+    readonly onFocus?: () => void;
+    readonly tabIndex?: number;
+    readonly tag?: T;
+    readonly style?: {};
+  };
 type SlideInterface = React.ComponentType<SlideProps>;
 /**
  * The Slide component is a container with an intrinsic ratio computed by the
@@ -46,39 +47,41 @@ type SlideInterface = React.ComponentType<SlideProps>;
  */
 declare const Slide: SlideInterface;
 
-interface ImageWithZoomProps {
-  readonly alt?: string;
-  readonly bgImageProps?: object;
-  readonly bgImageTag?: string;
-  readonly className?: string;
-  readonly imageClassName?: string;
-  readonly overlayClassName?: string;
-  readonly onError?: () => void;
-  readonly onLoad?: () => void;
-  readonly src: string;
-  readonly srcZoomed?: string;
-  readonly tag?: string;
-  readonly isPinchZoomEnabled?: boolean;
-}
+type ImageWithZoomProps<T extends React.ElementType = React.ElementType> =
+  React.ComponentPropsWithoutRef<T> & {
+    readonly alt?: string;
+    readonly bgImageProps?: object;
+    readonly bgImageTag?: string;
+    readonly className?: string;
+    readonly imageClassName?: string;
+    readonly overlayClassName?: string;
+    readonly onError?: () => void;
+    readonly onLoad?: () => void;
+    readonly src: string;
+    readonly srcZoomed?: string;
+    readonly tag?: T;
+    readonly isPinchZoomEnabled?: boolean;
+  };
 type ImageWithZoomInterface = React.ComponentType<ImageWithZoomProps>;
 declare const ImageWithZoom: ImageWithZoomInterface;
 
-interface ImageProps extends React.HTMLAttributes<HTMLDivElement> {
-  readonly alt?: string;
-  readonly children?: React.ReactNode;
-  readonly className?: string;
-  readonly hasMasterSpinner: boolean;
-  readonly isBgImage?: boolean;
-  readonly onError?: () => void;
-  readonly onLoad?: () => void;
-  readonly renderError?: () => void;
-  readonly renderLoading?: () => void;
-  readonly src: string;
-  readonly style?: {
-    readonly [key: string]: string;
+type ImageProps<T extends React.ElementType = React.ElementType> =
+  React.ComponentPropsWithoutRef<T> & {
+    readonly alt?: string;
+    readonly children?: React.ReactNode;
+    readonly className?: string;
+    readonly hasMasterSpinner: boolean;
+    readonly isBgImage?: boolean;
+    readonly onError?: () => void;
+    readonly onLoad?: () => void;
+    readonly renderError?: () => void;
+    readonly renderLoading?: () => void;
+    readonly src: string;
+    readonly style?: {
+      readonly [key: string]: string;
+    };
+    readonly tag?: T;
   };
-  readonly tag?: string;
-}
 type ImageInterface = React.ComponentClass<ImageProps>;
 declare const Image: ImageInterface;
 
