@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount, configure } from 'enzyme';
 import clone from 'clone';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import components from '../../helpers/component-config';
 import ButtonNext from '../ButtonNext';
 import Store from '../../Store/Store';
