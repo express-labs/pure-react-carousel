@@ -22,7 +22,7 @@ type SliderInterface = React.ComponentType<SliderProps>;
  */
 declare const Slider: SliderInterface;
 
-type SlideProps<T extends React.ElementType = React.ElementType> =
+type SlideProps<T extends React.ElementType = "div"> =
   React.HTMLAttributes<T> & {
     readonly className?: string;
     readonly classNameHidden?: string;
@@ -47,8 +47,8 @@ type SlideInterface = React.ComponentType<SlideProps>;
  */
 declare const Slide: SlideInterface;
 
-type ImageWithZoomProps<T extends React.ElementType = React.ElementType> =
-  React.ComponentPropsWithoutRef<T> & {
+type ImageWithZoomProps<T extends React.ElementType = "div"> =
+  React.HTMLAttributes<T> & {
     readonly alt?: string;
     readonly bgImageProps?: object;
     readonly bgImageTag?: string;
@@ -65,8 +65,8 @@ type ImageWithZoomProps<T extends React.ElementType = React.ElementType> =
 type ImageWithZoomInterface = React.ComponentType<ImageWithZoomProps>;
 declare const ImageWithZoom: ImageWithZoomInterface;
 
-type ImageProps<T extends React.ElementType = React.ElementType> =
-  React.ComponentPropsWithoutRef<T> & {
+type ImageProps<T extends React.ElementType = "img"> =
+  React.HTMLAttributes<T> & {
     readonly alt?: string;
     readonly children?: React.ReactNode;
     readonly className?: string;
