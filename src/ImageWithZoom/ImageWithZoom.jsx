@@ -25,7 +25,8 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     srcZoomed: PropTypes.string,
     tag: PropTypes.string,
     isPinchZoomEnabled: PropTypes.bool,
-  }
+    onlyZoomOnClick: PropTypes.bool,
+  };
 
   static defaultProps = {
     alt: undefined,
@@ -40,7 +41,8 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     onError: null,
     srcZoomed: null,
     tag: 'div',
-  }
+    onlyZoomOnClick: false,
+  };
 
   /**
    * Find the midpoint between two touches.
@@ -85,6 +87,9 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
 
       // tracks the status via image element's onerror events.
       isImageLoadingError: true,
+
+      // tracks if the user has clicked on the image or not.
+      clicked: false,
 
       // the mouse is currently hovering over the image.
       isHovering: false,
@@ -156,6 +161,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
     if (this.state.isZooming) return;
     this.setState({
       isHovering: false,
+      clicked: false,
       scale: 1,
     });
   }
@@ -303,6 +309,7 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       src,
       srcZoomed,
       tag: Tag,
+      onlyZoomOnClick,
       ...filteredProps
     } = this.props;
 
@@ -333,8 +340,38 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
       overlayStyle.transform = `scale(${this.state.scale})`;
     }
 
+    const overlayImage = (
+      <Image
+        className={newOverlayClassName}
+        tag="div"
+        src={srcZoomed || src}
+        style={overlayStyle}
+        isBgImage
+        onFocus={this.handleOnMouseOver}
+        onMouseOver={this.handleOnMouseOver}
+        onBlur={this.handleOnMouseOut}
+        onMouseOut={this.handleOnMouseOut}
+        onMouseMove={this.handleOnMouseMove}
+        onTouchStart={this.handleOnTouchStart}
+        onTouchEnd={this.handleOnTouchEnd}
+        onTouchMove={this.handleOnTouchMove}
+      />
+    );
+
+    let cursorStyle = { cursor: 'zoom-in' };
+    if (onlyZoomOnClick) {
+      cursorStyle = this.state.clicked ? { cursor: 'zoom-out' } : { cursor: 'zoom-in' };
+    }
+
     return (
-      <Tag className={newClassName} {...filteredProps}>
+      <Tag
+        className={newClassName}
+        {...filteredProps}
+        onClick={() => {
+          this.setState(state => ({ clicked: !state.clicked }));
+        }}
+        style={cursorStyle}
+      >
         <Image
           alt={alt}
           className={newImageClassName}
@@ -344,21 +381,8 @@ const ImageWithZoom = class ImageWithZoom extends React.Component {
           onError={this.handleImageLoadError}
           {...bgImageProps}
         />
-        <Image
-          className={newOverlayClassName}
-          tag="div"
-          src={srcZoomed || src}
-          style={overlayStyle}
-          isBgImage
-          onFocus={this.handleOnMouseOver}
-          onMouseOver={this.handleOnMouseOver}
-          onBlur={this.handleOnMouseOut}
-          onMouseOut={this.handleOnMouseOut}
-          onMouseMove={this.handleOnMouseMove}
-          onTouchStart={this.handleOnTouchStart}
-          onTouchEnd={this.handleOnTouchEnd}
-          onTouchMove={this.handleOnTouchMove}
-        />
+        {((onlyZoomOnClick && this.state.clicked) || !onlyZoomOnClick)
+          ? overlayImage : <></>}
         {this.renderLoading()}
       </Tag>
     );
