@@ -1,0 +1,206 @@
+import React, { useEffect, useRef, useState } from "react";
+import { cn, LOADING, SUCCESS, ERROR } from "../helpers";
+import type { ImageProps } from "../types";
+import s from "./Image.scss";
+
+export function subscribeMasterSpinner(
+  props: Pick<ImageProps, "hasMasterSpinner" | "carouselStore" | "src">,
+): void {
+  if (props.hasMasterSpinner) {
+    props.carouselStore.subscribeMasterSpinner(props.src);
+  }
+}
+
+export function unsubscribeMasterSpinner(
+  props: Pick<ImageProps, "hasMasterSpinner" | "carouselStore" | "src">,
+): void {
+  if (props.hasMasterSpinner) {
+    props.carouselStore.unsubscribeMasterSpinner(props.src);
+  }
+}
+
+const Image = (props: ImageProps) => {
+  const {
+    alt = "",
+    bgImageProps: _bgImageProps,
+    bgImageTag: _bgImageTag,
+    carouselStore,
+    children = null,
+    className = null,
+    classNameError: _classNameError,
+    classNameLoading: _classNameLoading,
+    classNameSuccess: _classNameSuccess,
+    hasMasterSpinner,
+    isBgImage = false,
+    onError = null,
+    onLoad = null,
+    renderError = null,
+    renderLoading = null,
+    src,
+    style = null,
+    tag = "img",
+    ...restProps
+  } = props;
+
+  const [imageState, setImageState] = useState<{ src: string; status: string }>({
+    src,
+    status: LOADING,
+  });
+  const imageStatus = imageState.src === src ? imageState.status : LOADING;
+
+  const latestPropsRef = useRef({
+    carouselStore,
+    hasMasterSpinner,
+    onError,
+    onLoad,
+    src,
+  });
+
+  useEffect(() => {
+    latestPropsRef.current = {
+      carouselStore,
+      hasMasterSpinner,
+      onError,
+      onLoad,
+      src,
+    };
+  });
+
+  useEffect(() => {
+    if (isBgImage && tag === "img") {
+      // eslint-disable-next-line no-console
+      console.error(
+        "HTML img elements should not have a backgroundImage. Please use isBgImage for other block-level HTML tags, like div, a, section, etc...",
+      );
+    }
+  }, [isBgImage, tag]);
+
+  useEffect(() => {
+    const currentProps = latestPropsRef.current;
+    subscribeMasterSpinner({
+      hasMasterSpinner: currentProps.hasMasterSpinner,
+      carouselStore: currentProps.carouselStore,
+      src,
+    });
+
+    const img = document.createElement("img");
+
+    const handleImageLoad = (ev: Event) => {
+      setImageState({ src, status: SUCCESS });
+      if (latestPropsRef.current.hasMasterSpinner) {
+        latestPropsRef.current.carouselStore.masterSpinnerSuccess(src);
+      }
+      if (latestPropsRef.current.onLoad) {
+        latestPropsRef.current.onLoad(ev);
+      }
+    };
+
+    const handleImageError = (ev: Event) => {
+      setImageState({ src, status: ERROR });
+      if (latestPropsRef.current.hasMasterSpinner) {
+        latestPropsRef.current.carouselStore.masterSpinnerError(src);
+      }
+      if (latestPropsRef.current.onError) {
+        latestPropsRef.current.onError(ev);
+      }
+    };
+
+    img.addEventListener("load", handleImageLoad, false);
+    img.addEventListener("error", handleImageError, false);
+    img.src = src;
+
+    if ((img as HTMLImageElement & { readyState?: string }).readyState || img.complete) {
+      const currentSrc = img.src;
+      img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+      img.src = currentSrc;
+    }
+
+    return () => {
+      unsubscribeMasterSpinner({
+        hasMasterSpinner: latestPropsRef.current.hasMasterSpinner,
+        carouselStore: latestPropsRef.current.carouselStore,
+        src,
+      });
+      img.removeEventListener("load", handleImageLoad);
+      img.removeEventListener("error", handleImageError);
+    };
+  }, [src]);
+
+  const tempTag = (tag === "img" ? "div" : tag) as React.ElementType;
+  const FinalTag = tag as React.ElementType;
+
+  const filteredProps = {
+    alt,
+    src,
+    ...(style ? { style } : {}),
+    ...restProps,
+  };
+
+  if (imageStatus === LOADING) {
+    const LoadingTag = tempTag;
+    const newClassName = cn([
+      s.image,
+      s.imageLoading,
+      "carousel__image",
+      isBgImage && "carousel__image--with-background",
+      "carousel__image--loading",
+      className,
+    ]);
+
+    return (
+      <LoadingTag className={newClassName} {...filteredProps}>
+        {typeof renderLoading === "function" ? renderLoading() : children}
+      </LoadingTag>
+    );
+  }
+
+  if (imageStatus === ERROR) {
+    const ErrorTag = tempTag;
+    const newClassName = cn([
+      s.image,
+      s.imageError,
+      "carousel__image",
+      isBgImage && "carousel__image--with-background",
+      "carousel__image--error",
+      className,
+    ]);
+
+    return (
+      <ErrorTag className={newClassName} {...filteredProps}>
+        {typeof renderError === "function" ? renderError() : children}
+      </ErrorTag>
+    );
+  }
+
+  const newClassName = cn([
+    s.image,
+    "carousel__image",
+    isBgImage && "carousel__image--with-background",
+    "carousel__image--success",
+    className,
+  ]);
+
+  let newStyle: React.CSSProperties = { ...style };
+  let newFilteredProps: Record<string, unknown> = filteredProps;
+
+  if (tag !== "img") {
+    const { src: _src, alt: _alt, ...tempFilteredProps } = filteredProps;
+    newFilteredProps = tempFilteredProps;
+    newStyle = {
+      ...style,
+      backgroundImage: `url("${src}")`,
+      backgroundSize: "cover",
+    };
+  }
+
+  return (
+    <FinalTag className={newClassName} style={newStyle} {...newFilteredProps}>
+      {children}
+    </FinalTag>
+  );
+};
+
+Image.subscribeMasterSpinner = subscribeMasterSpinner;
+Image.unsubscribeMasterSpinner = unsubscribeMasterSpinner;
+
+export default Image;

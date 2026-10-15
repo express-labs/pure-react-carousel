@@ -13,7 +13,7 @@
   &Horizontal {
     float: left;
 
-    [dir='rtl'] & {
+    [dir="rtl"] & {
       direction: rtl;
       transform: scaleX(-1);
     }
@@ -39,7 +39,7 @@
   outline-style: solid;
   outline-color: Highlight;
 
-  @media (-webkit-min-device-pixel-ratio:0) {
+  @media (-webkit-min-device-pixel-ratio: 0) {
     outline-style: auto;
     outline-color: -webkit-focus-ring-color;
   }

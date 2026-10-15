@@ -20,7 +20,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   color: $dark;
   background-color: $light;
 }
@@ -38,7 +38,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 p {
@@ -143,7 +143,8 @@ p {
   &Demo {
     @extend .examples;
     background-color: $highlight2;
-    h2, h3 {
+    h2,
+    h3 {
       color: $white;
     }
   }
