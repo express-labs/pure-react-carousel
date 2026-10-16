@@ -24,11 +24,13 @@ const aliases: Array<{ find: RegExp | string; replacement: string }> = [
   { find: /^react-dom\/test-utils$/, replacement: envRequire.resolve("react-dom/test-utils") },
 ];
 
+let hasAutomaticJsxRuntime = false;
 try {
   aliases.push(
     { find: /^react\/jsx-runtime$/, replacement: envRequire.resolve("react/jsx-runtime") },
     { find: /^react\/jsx-dev-runtime$/, replacement: envRequire.resolve("react/jsx-dev-runtime") },
   );
+  hasAutomaticJsxRuntime = true;
 } catch {
   // React < 16.14.0 did not ship react/jsx-runtime
 }
@@ -51,6 +53,22 @@ export default defineConfig({
   resolve: {
     alias: aliases,
   },
+  ...(hasAutomaticJsxRuntime
+    ? {}
+    : {
+        oxc: {
+          jsx: {
+            runtime: "classic",
+            pragma: "React.createElement",
+            pragmaFrag: "React.Fragment",
+          },
+        },
+        esbuild: {
+          jsx: "transform",
+          jsxFactory: "React.createElement",
+          jsxFragment: "React.Fragment",
+        },
+      }),
   plugins: [
     {
       name: "scss-identity-proxy",

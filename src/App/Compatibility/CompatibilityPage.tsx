@@ -27,6 +27,7 @@ export interface TypesCompatibilityEntry {
   trackId: string;
   label: string;
   typesReact: string;
+  expectedStatus?: string;
   note: string;
   status: string;
   errorSummary: string | null;

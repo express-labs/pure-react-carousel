@@ -102,155 +102,169 @@ function clearModuleCache() {
 }
 
 async function testRuntimeVersion(ver, cacheDir) {
-  activeEnvDir = join(cacheDir, "envs", `v-${ver}`);
-  const activeEnvRequire = createRequire(join(activeEnvDir, "package.json"));
-  clearModuleCache();
+  let ssrStatus = "SKIPPED";
+  let clientRenderStatus = "SKIPPED";
+  let hydrationStatus = "SKIPPED";
+  let currentPhase = "ssr";
 
-  const React = activeEnvRequire("react");
-  const ReactPkg = activeEnvRequire("react/package.json");
-  const ReactDOM = activeEnvRequire("react-dom");
-  const ReactDOMPkg = activeEnvRequire("react-dom/package.json");
-  const ReactDOMServer = activeEnvRequire("react-dom/server");
-
-  if (ReactPkg.version !== ver || ReactDOMPkg.version !== ver) {
-    throw new Error(
-      `Version resolution mismatch: expected ${ver}, got react@${ReactPkg.version}, react-dom@${ReactDOMPkg.version}`,
-    );
-  }
-
-  const major = Number.parseInt(ver.split(".")[0], 10);
-  const ReactDOMClient = major >= 18 ? activeEnvRequire("react-dom/client") : null;
-
-  const cjsBundlePath = resolve(repoRoot, "dist/index.cjs.js");
-  delete localRequire.cache[cjsBundlePath];
-  const Carousel = localRequire(cjsBundlePath);
-
-  const {
-    CarouselProvider,
-    Slider,
-    Slide,
-    Image,
-    ImageWithZoom,
-    ButtonFirst,
-    ButtonBack,
-    ButtonNext,
-    ButtonLast,
-    ButtonPlay,
-    DotGroup,
-    Dot,
-    Spinner,
-    WithStore,
-  } = Carousel;
-
-  const CustomStatus = WithStore(
-    ({ currentSlide }) =>
-      React.createElement("div", { className: "custom-status" }, `Slide:${currentSlide}`),
-    (state) => ({ currentSlide: state.currentSlide }),
-  );
-
-  const buildTree = (extraProps = {}) =>
-    React.createElement(
-      CarouselProvider,
-      {
-        naturalSlideWidth: 100,
-        naturalSlideHeight: 125,
-        totalSlides: 3,
-        visibleSlides: 1,
-        ...extraProps,
-      },
-      React.createElement(
-        Slider,
-        null,
-        React.createElement(
-          Slide,
-          { index: 0 },
-          React.createElement(Image, { src: "https://example.com/1.jpg", alt: "Slide 1" }),
-        ),
-        React.createElement(
-          Slide,
-          { index: 1 },
-          React.createElement(ImageWithZoom, { src: "https://example.com/2.jpg", alt: "Slide 2" }),
-        ),
-        React.createElement(Slide, { index: 2 }, "Slide 3 Content"),
-      ),
-      React.createElement(ButtonFirst, null, "First"),
-      React.createElement(ButtonBack, null, "Back"),
-      React.createElement(ButtonNext, null, "Next"),
-      React.createElement(ButtonLast, null, "Last"),
-      React.createElement(ButtonPlay, { childrenPlaying: "Pause", childrenPaused: "Play" }),
-      React.createElement(DotGroup, { dotNumbers: true }),
-      React.createElement(Dot, { slide: 2, className: "standalone-dot-2" }, "Jump 2"),
-      React.createElement(Spinner, null),
-      React.createElement(CustomStatus, null),
-    );
-
-  // 1. SSR Check (renderToString & renderToStaticMarkup)
-  const ssrHtml = ReactDOMServer.renderToString(buildTree());
-  if (
-    !ssrHtml.includes("carousel__slider") ||
-    !ssrHtml.includes("carousel__slide") ||
-    !ssrHtml.includes("Slide:0")
-  ) {
-    throw new Error(`SSR renderToString output missing expected classes`);
-  }
-
-  const staticHtml = ReactDOMServer.renderToStaticMarkup(
-    buildTree({ orientation: "vertical", hasMasterSpinner: false }),
-  );
-  if (
-    !staticHtml.includes("carousel__slider--vertical") ||
-    !staticHtml.includes("Slide 3 Content")
-  ) {
-    throw new Error(`SSR renderToStaticMarkup output missing expected content`);
-  }
-
-  // 2. Client Render & Interactive Lifecycle in JSDOM
-  const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>", {
-    url: "http://localhost",
-  });
-  globalThis.window = dom.window;
-  globalThis.document = dom.window.document;
-  globalThis.HTMLElement = dom.window.HTMLElement;
-  globalThis.SVGElement = dom.window.SVGElement;
-  globalThis.Element = dom.window.Element;
-  globalThis.Node = dom.window.Node;
-  globalThis.Event = dom.window.Event;
-  globalThis.MouseEvent = dom.window.MouseEvent;
-  globalThis.KeyboardEvent = dom.window.KeyboardEvent;
-  globalThis.IS_REACT_ACT_ENVIRONMENT = true;
-  if (!dom.window.requestAnimationFrame) {
-    dom.window.requestAnimationFrame = (cb) => setTimeout(cb, 0);
-    dom.window.cancelAnimationFrame = (id) => clearTimeout(id);
-  }
-
-  const rawAct =
-    typeof React.act === "function"
-      ? React.act
-      : activeEnvRequire("react-dom/test-utils").act;
-  const runAct = async (cb) => {
-    if (ver === "16.8.0") {
-      rawAct(() => {
-        cb();
-      });
-    } else {
-      await rawAct(async () => {
-        cb();
-      });
-    }
-  };
-
-  const consoleErrors = [];
+  let dom = null;
+  let container = null;
+  let root = null;
+  let clientMounted = false;
+  let hydrateContainer = null;
+  let hydratedRoot = null;
+  let hydratedMounted = false;
   const origConsoleError = console.error;
-  console.error = (...args) => {
-    const msg = args.map(String).join(" ");
-    consoleErrors.push(msg);
-  };
 
   try {
-    const container = document.createElement("div");
+    activeEnvDir = join(cacheDir, "envs", `v-${ver}`);
+    const activeEnvRequire = createRequire(join(activeEnvDir, "package.json"));
+    clearModuleCache();
+
+    const React = activeEnvRequire("react");
+    const ReactPkg = activeEnvRequire("react/package.json");
+    const ReactDOM = activeEnvRequire("react-dom");
+    const ReactDOMPkg = activeEnvRequire("react-dom/package.json");
+    const ReactDOMServer = activeEnvRequire("react-dom/server");
+
+    if (ReactPkg.version !== ver || ReactDOMPkg.version !== ver) {
+      throw new Error(
+        `Version resolution mismatch: expected ${ver}, got react@${ReactPkg.version}, react-dom@${ReactDOMPkg.version}`,
+      );
+    }
+
+    const major = Number.parseInt(ver.split(".")[0], 10);
+    const ReactDOMClient = major >= 18 ? activeEnvRequire("react-dom/client") : null;
+
+    const cjsBundlePath = resolve(repoRoot, "dist/index.cjs.js");
+    delete localRequire.cache[cjsBundlePath];
+    const Carousel = localRequire(cjsBundlePath);
+
+    const {
+      CarouselProvider,
+      Slider,
+      Slide,
+      Image,
+      ImageWithZoom,
+      ButtonFirst,
+      ButtonBack,
+      ButtonNext,
+      ButtonLast,
+      ButtonPlay,
+      DotGroup,
+      Dot,
+      Spinner,
+      WithStore,
+    } = Carousel;
+
+    const CustomStatus = WithStore(
+      ({ currentSlide }) =>
+        React.createElement("div", { className: "custom-status" }, `Slide:${currentSlide}`),
+      (state) => ({ currentSlide: state.currentSlide }),
+    );
+
+    const buildTree = (extraProps = {}) =>
+      React.createElement(
+        CarouselProvider,
+        {
+          naturalSlideWidth: 100,
+          naturalSlideHeight: 125,
+          totalSlides: 3,
+          visibleSlides: 1,
+          ...extraProps,
+        },
+        React.createElement(
+          Slider,
+          null,
+          React.createElement(
+            Slide,
+            { index: 0 },
+            React.createElement(Image, { src: "https://example.com/1.jpg", alt: "Slide 1" }),
+          ),
+          React.createElement(
+            Slide,
+            { index: 1 },
+            React.createElement(ImageWithZoom, { src: "https://example.com/2.jpg", alt: "Slide 2" }),
+          ),
+          React.createElement(Slide, { index: 2 }, "Slide 3 Content"),
+        ),
+        React.createElement(ButtonFirst, null, "First"),
+        React.createElement(ButtonBack, null, "Back"),
+        React.createElement(ButtonNext, null, "Next"),
+        React.createElement(ButtonLast, null, "Last"),
+        React.createElement(ButtonPlay, { childrenPlaying: "Pause", childrenPaused: "Play" }),
+        React.createElement(DotGroup, { dotNumbers: true }),
+        React.createElement(Dot, { slide: 2, className: "standalone-dot-2" }, "Jump 2"),
+        React.createElement(Spinner, null),
+        React.createElement(CustomStatus, null),
+      );
+
+    // 1. SSR Check (renderToString & renderToStaticMarkup) in a DOM-free Node environment
+    const ssrHtml = ReactDOMServer.renderToString(buildTree());
+    if (
+      !ssrHtml.includes("carousel__slider") ||
+      !ssrHtml.includes("carousel__slide") ||
+      !ssrHtml.includes("Slide:0")
+    ) {
+      throw new Error(`SSR renderToString output missing expected classes`);
+    }
+
+    const staticHtml = ReactDOMServer.renderToStaticMarkup(
+      buildTree({ orientation: "vertical", hasMasterSpinner: false }),
+    );
+    if (
+      !staticHtml.includes("carousel__slider--vertical") ||
+      !staticHtml.includes("Slide 3 Content")
+    ) {
+      throw new Error(`SSR renderToStaticMarkup output missing expected content`);
+    }
+    ssrStatus = "PASS";
+
+    // 2. Client Render & Interactive Lifecycle in JSDOM
+    currentPhase = "clientRender";
+    dom = new JSDOM("<!DOCTYPE html><html><body></body></html>", {
+      url: "http://localhost",
+    });
+    globalThis.window = dom.window;
+    globalThis.document = dom.window.document;
+    globalThis.HTMLElement = dom.window.HTMLElement;
+    globalThis.SVGElement = dom.window.SVGElement;
+    globalThis.Element = dom.window.Element;
+    globalThis.Node = dom.window.Node;
+    globalThis.Event = dom.window.Event;
+    globalThis.MouseEvent = dom.window.MouseEvent;
+    globalThis.KeyboardEvent = dom.window.KeyboardEvent;
+    globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+    if (!dom.window.requestAnimationFrame) {
+      dom.window.requestAnimationFrame = (cb) => setTimeout(cb, 0);
+      dom.window.cancelAnimationFrame = (id) => clearTimeout(id);
+    }
+
+    const rawAct =
+      typeof React.act === "function"
+        ? React.act
+        : activeEnvRequire("react-dom/test-utils").act;
+    const runAct = async (cb) => {
+      if (ver === "16.8.0") {
+        rawAct(() => {
+          cb();
+        });
+      } else {
+        await rawAct(async () => {
+          cb();
+        });
+      }
+    };
+
+    const consoleErrors = [];
+    console.error = (...args) => {
+      const msg = args.map(String).join(" ");
+      consoleErrors.push(msg);
+    };
+
+    container = document.createElement("div");
     document.body.appendChild(container);
 
-    let root = null;
     await runAct(() => {
       if (major >= 18) {
         root = ReactDOMClient.createRoot(container);
@@ -258,6 +272,7 @@ async function testRuntimeVersion(ver, cacheDir) {
       } else {
         ReactDOM.render(buildTree(), container);
       }
+      clientMounted = true;
     });
 
     const slides = container.querySelectorAll(".carousel__slide");
@@ -327,22 +342,27 @@ async function testRuntimeVersion(ver, cacheDir) {
       } else {
         ReactDOM.unmountComponentAtNode(container);
       }
+      clientMounted = false;
+      root = null;
     });
     document.body.removeChild(container);
+    container = null;
+    clientRenderStatus = "PASS";
 
-    // 3. SSR Client Hydration Check
-    const hydrateContainer = document.createElement("div");
-    hydrateContainer.innerHTML = ReactDOMServer.renderToString(buildTree());
+    // 3. SSR Client Hydration Check (reusing DOM-free ssrHtml from Phase 1)
+    currentPhase = "hydration";
+    hydrateContainer = document.createElement("div");
+    hydrateContainer.innerHTML = ssrHtml;
     document.body.appendChild(hydrateContainer);
 
     const errorsBeforeHydrate = consoleErrors.length;
-    let hydratedRoot = null;
     await runAct(() => {
       if (major >= 18) {
         hydratedRoot = ReactDOMClient.hydrateRoot(hydrateContainer, buildTree());
       } else {
         ReactDOM.hydrate(buildTree(), hydrateContainer);
       }
+      hydratedMounted = true;
     });
     const hydrationErrors = consoleErrors
       .slice(errorsBeforeHydrate)
@@ -368,9 +388,62 @@ async function testRuntimeVersion(ver, cacheDir) {
       } else {
         ReactDOM.unmountComponentAtNode(hydrateContainer);
       }
+      hydratedMounted = false;
+      hydratedRoot = null;
     });
     document.body.removeChild(hydrateContainer);
+    hydrateContainer = null;
+    hydrationStatus = "PASS";
+  } catch (err) {
+    if (currentPhase === "ssr") {
+      ssrStatus = "FAIL";
+    } else if (currentPhase === "clientRender") {
+      clientRenderStatus = "FAIL";
+    } else if (currentPhase === "hydration") {
+      hydrationStatus = "FAIL";
+    }
+    return {
+      ssr: ssrStatus,
+      clientRender: clientRenderStatus,
+      hydration: hydrationStatus,
+      runtime: "FAIL",
+      error: err.message,
+    };
   } finally {
+    if (clientMounted) {
+      try {
+        if (major >= 18 && root) {
+          root.unmount();
+        } else if (container) {
+          ReactDOM.unmountComponentAtNode(container);
+        }
+      } catch {
+        // Ignore cleanup errors during failure teardown
+      }
+    }
+    if (container && container.parentNode) {
+      container.parentNode.removeChild(container);
+    }
+
+    if (hydratedMounted) {
+      try {
+        if (major >= 18 && hydratedRoot) {
+          hydratedRoot.unmount();
+        } else if (hydrateContainer) {
+          ReactDOM.unmountComponentAtNode(hydrateContainer);
+        }
+      } catch {
+        // Ignore cleanup errors during failure teardown
+      }
+    }
+    if (hydrateContainer && hydrateContainer.parentNode) {
+      hydrateContainer.parentNode.removeChild(hydrateContainer);
+    }
+
+    if (dom?.window) {
+      dom.window.close();
+    }
+
     console.error = origConsoleError;
     activeEnvDir = null;
     delete globalThis.window;
@@ -386,9 +459,9 @@ async function testRuntimeVersion(ver, cacheDir) {
   }
 
   return {
-    ssr: "PASS",
-    clientRender: "PASS",
-    hydration: "PASS",
+    ssr: ssrStatus,
+    clientRender: clientRenderStatus,
+    hydration: hydrationStatus,
     runtime: "PASS",
   };
 }
@@ -653,18 +726,8 @@ async function main() {
 
   console.log(`Running runtime, SSR, client DOM, and hydration checks across ${selectedVersions.length} React versions...`);
   for (const ver of selectedVersions) {
-    try {
-      const res = await testRuntimeVersion(ver, defaultCacheDir);
-      runtimeMap.set(ver, res);
-    } catch (err) {
-      runtimeMap.set(ver, {
-        ssr: "FAIL",
-        clientRender: "FAIL",
-        hydration: "FAIL",
-        runtime: "FAIL",
-        error: err.message,
-      });
-    }
+    const res = await testRuntimeVersion(ver, defaultCacheDir);
+    runtimeMap.set(ver, res);
   }
 
   const vitestMap = new Map();
@@ -721,6 +784,9 @@ async function main() {
   const passedVitestFullSuite = allVersionRows.filter((v) => v.vitestStatus === "PASS").length;
   const failedVitestCount = allVersionRows.filter((v) => v.vitestStatus === "FAIL").length;
   const passedTypesTracks = typesResults.filter((t) => t.status === "PASS").length;
+  const unexpectedTypesFailures = typesResults.filter(
+    (t) => t.status === "FAIL" && t.expectedStatus !== "FAIL",
+  ).length;
 
   const report = {
     generatedAt: new Date().toISOString().split("T")[0],
@@ -749,7 +815,11 @@ async function main() {
     printTerminalReport(report);
   }
 
-  if (passedRuntimeVersions !== allVersionRows.length || failedVitestCount > 0) {
+  if (
+    passedRuntimeVersions !== allVersionRows.length ||
+    failedVitestCount > 0 ||
+    unexpectedTypesFailures > 0
+  ) {
     process.exit(1);
   }
 }

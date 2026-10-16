@@ -73,6 +73,7 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "19",
     label: "React 19.3 (@types/react@19.3.0)",
     typesReact: "19.3.0",
+    expectedStatus: "PASS",
     note: "Full support for React.JSX namespace",
   },
   {
@@ -80,6 +81,7 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "19",
     label: "React 19.2 (@types/react@19.2.18)",
     typesReact: "19.2.18",
+    expectedStatus: "PASS",
     note: "Full support for React.JSX namespace",
   },
   {
@@ -87,6 +89,7 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "19",
     label: "React 19.1 (@types/react@19.1.17)",
     typesReact: "19.1.17",
+    expectedStatus: "PASS",
     note: "Full support for React.JSX namespace",
   },
   {
@@ -94,6 +97,7 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "19",
     label: "React 19.0 (@types/react@19.0.0)",
     typesReact: "19.0.0",
+    expectedStatus: "PASS",
     note: "Full support for React.JSX namespace",
   },
   {
@@ -101,6 +105,7 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "18",
     label: "React 18.3 (@types/react@18.3.31)",
     typesReact: "18.3.31",
+    expectedStatus: "PASS",
     note: "Full support for React.JSX namespace",
   },
   {
@@ -108,6 +113,7 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "18",
     label: "React 18.2 (pinned @types/react@18.2.0)",
     typesReact: "18.2.0",
+    expectedStatus: "FAIL",
     note: "Requires @types/react >= 18.2.9 where React.JSX was backported",
   },
   {
@@ -115,6 +121,7 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "18",
     label: "React 18.0 (pinned @types/react@18.0.0)",
     typesReact: "18.0.0",
+    expectedStatus: "FAIL",
     note: "Requires @types/react >= 18.2.9 where React.JSX was backported",
   },
   {
@@ -122,6 +129,7 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "17",
     label: "React 17 latest (@types/react@17.0.93)",
     typesReact: "17.0.93",
+    expectedStatus: "PASS",
     note: "React.JSX namespace backported in @types/react >= 17.0.62",
   },
   {
@@ -129,6 +137,7 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "17",
     label: "React 17.0.0 (pinned @types/react@17.0.0)",
     typesReact: "17.0.0",
+    expectedStatus: "FAIL",
     note: "Requires @types/react >= 17.0.62 where React.JSX was backported",
   },
   {
@@ -136,6 +145,8 @@ export const TYPES_REACT_VERSIONS = [
     trackId: "16",
     label: "React 16.8+ (@types/react@16.14.70)",
     typesReact: "16.14.70",
+    expectedStatus: "PASS",
     note: "React.JSX namespace backported in @types/react >= 16.14.43",
   },
 ];
+
