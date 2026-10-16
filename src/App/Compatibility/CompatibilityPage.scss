@@ -229,8 +229,10 @@ $borderSubtle: #e0dad1;
 
 .searchField {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.8rem;
+  max-inline-size: 100%;
 }
 
 .searchLabel {
@@ -244,7 +246,8 @@ $borderSubtle: #e0dad1;
   border-radius: 0.4rem;
   padding: 0.7rem 1.2rem;
   font-size: 1.3rem;
-  min-width: 20rem;
+  min-inline-size: min(20rem, 100%);
+  max-inline-size: 100%;
   background-color: $white;
   color: $dark;
 
@@ -306,6 +309,7 @@ $borderSubtle: #e0dad1;
 }
 
 .tableRow {
+  background-color: $white;
   border-bottom: 1px solid $borderSubtle;
 
   &:nth-child(even) {
