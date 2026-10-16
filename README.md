@@ -36,18 +36,19 @@ My goal was to create a 100% ReactJS carousel that doesn't try to impose structu
 
 Carousels: Love them or hate them.  However, if you are a React developer, and you have to use a carousel, why not use one that was...
 
-- Developed from the ground-up in React.
+- Developed from the ground-up in React with modern functional components, hooks, and native React Context.
+- Written in TypeScript with complete bundled type definitions and zero runtime dependencies.
 - Is not a wrapper or port of some non-React carousel like Slick or Flickity.
-- Fully supports touch events.
+- Fully supports touch and mouse drag events.
 - Is ARIA compliant.
 - Is responsive by default.
 - Lets you assemble the carousel components in the DOM in any order you desire so long as they are all children of a single &lt;CarouselProvider /> component.
 - Lets you put any class names, properties, attributes, or styles on any of the components that you need.
-- Supports ES6 and CommonJS.
+- Supports ES Modules and CommonJS.
 - Has 100% test coverage. Solid!
 
 ## Table of contents
-  * [🛠 Tutorial](#-tutorial)
+  * [🛠 Tutorial](#-tutorial-)
   * [Component Properties (props)](#component-properties-props)
   * [Components](#components)
     * [&lt;CarouselProvider /&gt;](#carouselprovider-)
@@ -56,16 +57,20 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
     * [&lt;Dot /&gt;](#dot-)
     * [&lt;DotGroup /&gt;](#dotgroup-)
     * [&lt;Image /&gt;](#image-)
+    * [&lt;ImageWithZoom /&gt;](#imagewithzoom-)
+    * [&lt;Spinner /&gt;](#spinner-)
     * [&lt;ButtonBack /&gt;](#buttonback-)
     * [&lt;ButtonNext /&gt;](#buttonnext-)
     * [&lt;ButtonFirst /&gt;](#buttonfirst-)
     * [&lt;ButtonLast /&gt;](#buttonlast-)
     * [&lt;ButtonPlay /&gt;](#buttonplay-)
-    * [WithStore() Higher Order Component](#withstore-higher-order-component)
     * [Hooks and `useContext`](#hooks-and-usecontext)
+    * [WithStore() Higher Order Component](#withstore-higher-order-component)
   * [TypeScript usage](#typescript-usage)
+    * [Hooks and `useContext`](#hooks-and-usecontext-1)
     * [WithStore() Higher Order Component](#withstore-higher-order-component-1)
     * [Examples](#examples)
+  * [Advanced Concept: Accessing the "View" Components Directly](#advanced-concept-accessing-the-view-components-directly)
   * [Dev Workflow](#dev-workflow)
   * [Contributors](#contributors)
 
@@ -79,96 +84,90 @@ Let's make a simple carousel with three slides, a next button, and a back button
 
 2. Import only the required components into your project.
 
-  ```JSX
+  ```jsx
   import React from 'react';
   import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
   ```
 
-3. Using Webpack or Rollup?  Does your Webpack config have a loader for "css" files?  If so, import the css as well.
+3. Using a bundler such as Webpack, Vite, or Rollup with a CSS loader? Import the stylesheet as well.
 
-  ```JSX
+  ```jsx
   import React from 'react';
   import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
   import 'pure-react-carousel/dist/react-carousel.es.css';
   ```
 
-4. Put a CarouselProvider component in your code.  This allows the other carousel components to communicate with each other.  The only required properties are the totalSlides, naturalSlideWidth, and naturalSlideHeight.  The naturalSlideWidth and naturalSlideHeight are used to create an aspect ratio for each slide.  Since the carousel is responsive by default, it will stretch to fill in the width of its parent container.  The CarouselProvider must also have children.  We'll add the children in the next step.
+4. Put a `CarouselProvider` component in your code. This allows the other carousel components to communicate with each other via React Context. The only required properties are `totalSlides`, `naturalSlideWidth`, and `naturalSlideHeight`. `naturalSlideWidth` and `naturalSlideHeight` are used to create an aspect ratio for each slide. Since the carousel is responsive by default, it will stretch to fill the width of its parent container. `CarouselProvider` must also have children. We'll add the children in the next step.
 
-  ```JSX
+  ```jsx
   import React from 'react';
   import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
   import 'pure-react-carousel/dist/react-carousel.es.css';
 
-  export default class extends React.Component {
-    render() {
-      return (
-        <CarouselProvider
-          naturalSlideWidth={100}
-          naturalSlideHeight={125}
-          totalSlides={3}
-        ></CarouselProvider>
-      );
-    }
+  export default function MyCarousel() {
+    return (
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={3}
+      />
+    );
   }
   ```
 
-5. Place the components in any order you wish as long as they are children of a single CarouselProvider component. Some components have ancestor/descendant relationships but they don't have to be direct relatives.  For example: Slides need to go inside of a Slider. Slides also require a sequentially numbered index prop starting at zero.  Chances are, a lot of the time, you're going to be populating the slides from data and looping through the data, so it would be easy to add an index in your loop.
+5. Place the components in any order you wish as long as they are children of a single `CarouselProvider` component. Some components have ancestor/descendant relationships, but they don't have to be direct relatives. For example: `Slide` components need to go inside of a `Slider`. `Slide` components also require a sequentially numbered `index` prop starting at zero. Chances are, a lot of the time, you're going to be populating the slides from data and looping through the data, so it is easy to pass the index in your loop.
 
-  ```JSX
+  ```jsx
   import React from 'react';
   import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
   import 'pure-react-carousel/dist/react-carousel.es.css';
 
-  export default class extends React.Component {
-    render() {
-      return (
-        <CarouselProvider
-          naturalSlideWidth={100}
-          naturalSlideHeight={125}
-          totalSlides={3}
-        >
-          <Slider>
-            <Slide index={0}>I am the first Slide.</Slide>
-            <Slide index={1}>I am the second Slide.</Slide>
-            <Slide index={2}>I am the third Slide.</Slide>
-          </Slider>
-        </CarouselProvider>
-      );
-    }
+  export default function MyCarousel() {
+    return (
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={3}
+      >
+        <Slider>
+          <Slide index={0}>I am the first Slide.</Slide>
+          <Slide index={1}>I am the second Slide.</Slide>
+          <Slide index={2}>I am the third Slide.</Slide>
+        </Slider>
+      </CarouselProvider>
+    );
   }
   ```
 
-6. Add some buttons so the user can navigate forward and backwards. In order to use left/right arrow keyboard navigation, the Slider component needs to be focused. See example in the [Slider section](#slider-)
+6. Add some buttons so the user can navigate forward and backward. In order to use left/right arrow keyboard navigation, the `Slider` component needs to be focused. See the example in the [Slider section](#slider-).
 
-  ```JSX
+  ```jsx
   import React from 'react';
   import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
   import 'pure-react-carousel/dist/react-carousel.es.css';
 
-  export default class extends React.Component {
-    render() {
-      return (
-        <CarouselProvider
-          naturalSlideWidth={100}
-          naturalSlideHeight={125}
-          totalSlides={3}
-        >
-          <Slider>
-            <Slide index={0}>I am the first Slide.</Slide>
-            <Slide index={1}>I am the second Slide.</Slide>
-            <Slide index={2}>I am the third Slide.</Slide>
-          </Slider>
-          <ButtonBack>Back</ButtonBack>
-          <ButtonNext>Next</ButtonNext>
-        </CarouselProvider>
-      );
-    }
+  export default function MyCarousel() {
+    return (
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={3}
+      >
+        <Slider>
+          <Slide index={0}>I am the first Slide.</Slide>
+          <Slide index={1}>I am the second Slide.</Slide>
+          <Slide index={2}>I am the third Slide.</Slide>
+        </Slider>
+        <ButtonBack>Back</ButtonBack>
+        <ButtonNext>Next</ButtonNext>
+      </CarouselProvider>
+    );
   }
   ```
 
 That's it. You have a super basic Carousel.
 
-There are other components you can add, like ButtonFirst, ButtonLast, an Image component, and even an ImageWithZoom component that zooms on mouse hover or finger tap.
+There are other components you can add, like `ButtonFirst`, `ButtonLast`, `ButtonPlay`, `Dot`, `DotGroup`, `Spinner`, an `Image` component, and even an `ImageWithZoom` component that zooms on mouse hover or two-finger pinch/touch.
 
 Obviously, you can customize the heck out of the layout.  If you need to bury your Slider component in 18 parent divs, go for it.  It will still do its job.  Feel free to add the className property to any of the Components to further customize your carousel.  Or, hook into the many BEM named default CSS class names built into the carousel components.
 
@@ -178,11 +177,11 @@ Some components have a ancestor / descendant relationship but they don't have to
 
 #### className
 
-You can attach your own className property to each and every component in this library and it will be appended to the list of classes.  It's appended so that it has more specificity in a tie, allowing your CSS to more easily override any internal styles without resorting to using !important.
+You can attach your own `className` property to each and every component in this library and it will be appended to the list of classes. It's appended so that it has more specificity in a tie, allowing your CSS to more easily override any internal styles without resorting to using `!important`.
 
-#### styles
+#### style
 
-You can attach your own styles property to each component in this library, however, any styles generated by the component take precedence over any styles you provide.  Some components, like the `<Slider />`, need their internal styles to function correctly.
+You can attach your own `style` property to components in this library; however, any required layout styles generated internally by a component take precedence where necessary for the carousel to function properly.
 
 #### event props (onClick, onFocus, onBlur, etc)
 
@@ -198,26 +197,29 @@ Any remaining props not consumed by the component are passed directly to the roo
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the CarouselProvider needs to wrap other Carousel components and JSX |
-| className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string |
-| currentSlide | number | 0 | No | &lt;Slide /> to display ONLY when CarouselProvider mounts. The indexing of &lt;Slide /> components starts with 0.  This is a poorly named variable and will be deprecated in a future version. |
-| hasMasterSpinner | bool | false | No | When true, a spinner will cover &lt;Slider /> component until all &lt;Image /> and &lt;ImageWithZoom /> are done loading images.  If there are no &lt;Image /> or &lt;ImageWithZoom /> components, the spinner will spin until this property is set to false |
-| interval | number | 5000 | No | Number of milliseconds to wait when the auto slideshow is active |
-| isPlaying | bool | false | No | Setting this to true starts an auto slideshow. After "interval" milliseconds, the slider will move by "step" slides either forward or backwards depending on the value of "playDirection". |
-| lockOnWindowScroll | bool | false | No | When set to true, scrolling of the carousel slides are disabled while the browser window is scrolling |
-| **naturalSlideHeight** | number | | **Yes** | The natural height of each <\Slide > component. ** |
-| **naturalSlideWidth** | number | | **Yes** | The natural width of each <\Slide > component. ** |
-| orientation | string | "horizontal" | No | Possible values are "horizontal" and "vertical".  Let's you have a horizontal or vertical carousel. |
-| playDirection | ['forward'&#124;'backward' ] | 'forward' | No | The direction for the auto slideshow |
-| step | number | 1 | No | The number of slides to move when pressing the &lt;ButtonBack /> and &lt;ButtonNext /> buttons.|
-| dragStep | number | 1 | No | The number of slides to move when performing a short touch drag.|
-| tag | string | 'div' | No | The HTML element to use for the provider. |`
-| **totalSlides** | number |  | **Yes** | Always set this to match the total number of &lt;Slide /> components in your carousel |
-| touchEnabled | boolean | true | No | Set to true to enable touch events |
-| dragEnabled | boolean | true | No | Set to true to enable mouse dragging events |
-| visibleSlides | number | 1 | No | The number of slides to show at once.  This number should be <= totalSlides |
-| infinite | boolean | false | No | Should the carousel continue or stop at the beginning or end of the slides |
-| isIntrinsicHeight | boolean | false | No | Disables the enforced height ratio, and instead uses the intrinsic height of the slides. This option can only be active in horizontal orientation, it will throw an error in vertical orientation. |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property. Basically, the CarouselProvider needs to wrap other Carousel components and JSX. |
+| className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
+| currentSlide | number | 0 | No | Sets the active &lt;Slide /> index (0-indexed) on mount and dynamically updates the active slide whenever this prop changes. |
+| disableAnimation | boolean | false | No | Disables the CSS transition animation when moving between slides. |
+| disableKeyboard | boolean | false | No | When set to true, disables left/right arrow keyboard navigation on the &lt;Slider />. |
+| hasMasterSpinner | boolean | false | No | When true, a spinner will cover the &lt;Slider /> component until all &lt;Image /> and &lt;ImageWithZoom /> components are done loading images. If there are no &lt;Image /> or &lt;ImageWithZoom /> components, the spinner will spin until this property is set to false. |
+| interval | number | 5000 | No | Number of milliseconds to wait when the auto slideshow is active. |
+| isPageScrollLocked | boolean | false | No | When true, locks scrolling on the nearest scrollable ancestor container (also managed automatically during vertical touch drags and pinch-zoom). |
+| isPlaying | boolean | false | No | Setting this to true starts an auto slideshow. After `interval` milliseconds, the slider will move by `step` slides either forward or backward depending on the value of `playDirection`. |
+| lockOnWindowScroll | boolean | false | No | When set to true, scrolling of the carousel slides is disabled while the browser window is scrolling. |
+| **naturalSlideHeight** | number | | **Yes** | The natural height of each &lt;Slide /> component. |
+| **naturalSlideWidth** | number | | **Yes** | The natural width of each &lt;Slide /> component. |
+| orientation | ['horizontal'&#124;'vertical'] | 'horizontal' | No | Possible values are `'horizontal'` and `'vertical'`. Lets you have a horizontal or vertical carousel. |
+| playDirection | ['forward'&#124;'backward'] | 'forward' | No | The direction for the auto slideshow. |
+| step | number | 1 | No | The number of slides to move when pressing the &lt;ButtonBack /> and &lt;ButtonNext /> buttons. |
+| dragStep | number | 1 | No | The number of slides to move when performing a short touch or mouse drag. |
+| tag | string | 'div' | No | The HTML element to use for the provider wrapper. |
+| **totalSlides** | number | | **Yes** | Always set this to match the total number of &lt;Slide /> components in your carousel. |
+| touchEnabled | boolean | true | No | Set to true to enable touch drag events. |
+| dragEnabled | boolean | true | No | Set to true to enable mouse dragging events. |
+| visibleSlides | number | 1 | No | The number of slides to show at once. This number should be `<= totalSlides`. |
+| infinite | boolean | false | No | Should the carousel continue (wrap around) or stop at the beginning or end of the slides. |
+| isIntrinsicHeight | boolean | false | No | Disables the enforced height aspect ratio, and instead uses the intrinsic height of the slides. This option can only be active in `'horizontal'` orientation; it will throw an error in `'vertical'` orientation. |
 
 #### The CarouselProvider component creates the following pseudo HTML by default:
 
@@ -236,27 +238,32 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| **children** | [string&#124;node] | | **Yes** | Children is a special React property.  Basically, the Slider needs to wrap other components and/or JSX |
-| ariaLabel | string |'slider' | N |  Optional sting that sets the "aria-label" attribute.|
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property. Basically, the Slider needs to wrap other components and/or JSX. |
+| ariaLabel | string | 'slider' | No | Optional string that sets the `aria-label` attribute. |
+| backwardKeyCode | number | 37 | No | Key code for moving backward via keyboard (defaults to `37`, Left Arrow). |
+| forwardKeyCode | number | 39 | No | Key code for moving forward via keyboard (defaults to `39`, Right Arrow). |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
-| classNameAnimation| [string&#124;null] | null | No |Optional className string. The slider uses the css transform property, applying translateX to move the slider tray east and west for a horizontal slider, and translateY to move the slider north and south for a vertical slider.   The actual animation is the result of applying a CSS3 transition effect.  If you supply your own classNameAnimation class, the default transition is disabled and ONLY the transitions specified by the classNameAnimation class are applied. Learn more about [CSS3 transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions). |
-| classNameTray | [string&#124;null] | null | No | Optional className string that is applied to the Slider's tray. The "tray" is the DOM element that contains the slides. The type of DOM element is specified by the trayTag property |
-| classNameTrayWrap | [string&#124;null] | null | No | Optional className string that is applied to a div that surrounds the Slider's tray |
-| moveThreshold | number | 0.1 | No | Threshold to control the drag distance that triggers a scroll to the next or previous slide. (slide width or height * moveThreshold = drag pixel distance required to scroll) |
-| preventVerticalScrollOnTouch | bool | true | No | When set to true and touch enabled, prevents vertical screen scroll based on touch move of the carousel|
-| horizontalPixelThreshold| number | 15 | No | The minimum amount of pixels moved horizontally, by touch on the carousel, which will block page scroll if the  movement in pixels is greater or equal than the amount of the provided value when preventVerticalScrollOnTouch is true.|
-| verticalPixelThreshold | number | 10 | No | The maximum amount of pixels moved vertically, by touch on the carousel, which will block page scroll if the movement in pixels is less than the provided value when preventVerticalScrollOnTouch is true.  |
-| onMasterSpinner | [function&#124;null] | null | No | Optional callback function that is called when the Master Spinner is visible.  Requires that &lt;CarouselProvider /> set hasMasterSpinner to true |
-| spinner | function | null | No |  Optional inline JSX (aka "render props") to render your own custom spinner.  Example `() => <MyCustomSpinnerComponent />`.  If left blank, the default spinner is used. |
-| style | object | {} | No | Optional css styles to add to the Slider.  Note: internal css properties take precedence over any styles specified in the styles object |
-| trayProps | object | {} | No | Any props you want to attach to the slider tray with the exception of className and style. The className prop is handled via classNameTray prop above.  Style is used internally. Any event handlers like onMouseDown or others are called after any of our internal event handlers. |
-| trayTag | string | 'div' | No | The HTML tag to used for the tray (the thing that holds all the slides and moves the slides back and forth). |
+| classNameAnimation | [string&#124;null] | null | No | Optional className string. The slider uses the CSS `transform` property, applying `translateX` to move the slider tray horizontally and `translateY` to move the slider tray vertically. The animation is the result of applying a CSS transition effect. If you supply your own `classNameAnimation` class, the default transition is disabled and ONLY the transitions specified by your `classNameAnimation` class are applied. Learn more about [CSS transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions). |
+| classNameTray | [string&#124;null] | null | No | Optional className string that is applied to the Slider's tray. The "tray" is the DOM element that contains the slides. The type of DOM element is specified by the `trayTag` property. |
+| classNameTrayWrap | [string&#124;null] | null | No | Optional className string that is applied to the `div` that surrounds the Slider's tray. |
+| disableAnimation | boolean | false | No | Inherited from `<CarouselProvider />` or overridden directly on `<Slider />` to disable slide transition animations. |
+| disableKeyboard | boolean | false | No | Inherited from `<CarouselProvider />` or overridden directly on `<Slider />` to disable keyboard arrow navigation. |
+| moveThreshold | number | 0.1 | No | Threshold to control the drag distance that triggers a scroll to the next or previous slide (`slideWidthOrHeight * moveThreshold` = drag pixel distance required to scroll). |
+| preventVerticalScrollOnTouch | boolean | true | No | When set to true and touch is enabled, prevents vertical screen scroll during horizontal touch drag gestures on the carousel. |
+| horizontalPixelThreshold | number | 15 | No | The minimum number of pixels moved horizontally by touch on the carousel to block vertical page scroll when `preventVerticalScrollOnTouch` is true. |
+| verticalPixelThreshold | number | 10 | No | The maximum number of pixels moved vertically by touch on the carousel within which vertical page scroll will be blocked when `preventVerticalScrollOnTouch` is true. |
+| onMasterSpinner | [function&#124;null] | null | No | Optional callback function that is called when the Master Spinner is visible. Requires that &lt;CarouselProvider /> has `hasMasterSpinner` set to true. |
+| role | string | 'listbox' | No | Optional string that sets the ARIA `role` attribute on the slider viewport element. |
+| spinner | [function&#124;null] | null | No | Optional render function to render your own custom spinner, e.g. `() => <MyCustomSpinnerComponent />`. If omitted, the default `<Spinner />` is used. |
+| style | object | {} | No | Optional CSS styles to add to the Slider root element. |
+| trayProps | object | {} | No | Any props you want to attach to the slider tray element, with the exception of `className`, `style`, and `ref`. `className` is handled via `classNameTray`, and `style`/`ref` are managed internally. Event handlers such as `onMouseDown`, `onTouchStart`, `onTouchMove`, `onTouchEnd`, `onTouchCancel`, and `onClickCapture` are called after the Slider's internal event handlers. |
+| trayTag | string | 'div' | No | The HTML tag to use for the tray (the element that holds all the slides and moves them back and forth). |
 
 #### The Slider component creates the following pseudo HTML by default.
 
 ```HTML
-<div class="carousel__slider [carousel__slider--vertical|carousel__slider--horizontal] [props.className]" aria-live="polite" style="[props.style]" ...props>
-  <div class="carousel__slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal][props.classNameTrayWrap]">
+<div class="carousel__slider [carousel__slider--vertical|carousel__slider--horizontal] [props.className]" aria-live="polite" aria-label="[props.ariaLabel]" role="[props.role]" style="[props.style]" ...props>
+  <div class="carousel__slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal] [props.classNameTrayWrap]">
     <props.trayTag|div class="carousel__slider-tray [props.classNameAnimation] [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]">
       [props.children]
     </props.trayTag|div>
@@ -268,24 +275,26 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 ```
 
 #### How to enable left/right arrow key navigation
-While keyboard navigation to scroll between slides is supported by default, the Slider needs to be given [`focus()`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) in order to make it work out of the box. There are several ways to accomplish this, but a simple solution could look like the following (note that this is not a full carousel example. It's meant solely to illustrate how to `focus()` the Slider):
+While keyboard navigation to scroll between slides is supported by default, the `Slider` (or an element inside it) needs focus and a `tabIndex` in order to receive keyboard events. A simple solution looks like the following:
 
-```
-  componentDidMount() {
+```jsx
+import React, { useEffect } from 'react';
+import { Slider } from 'pure-react-carousel';
+
+export function FocusableSlider() {
+  useEffect(() => {
     const slider = document.getElementById('mySlider');
-
     if (slider) {
       slider.focus();
     }
-  }
+  }, []);
 
-  render() {
-    return (
-      <Slider id='mySlider'>
-      // ...
-      </Slider>
-    )
-  }
+  return (
+    <Slider id="mySlider" tabIndex={0}>
+      {/* slides... */}
+    </Slider>
+  );
+}
 ```
 
 #### How to Change the Default Transition Animation
@@ -301,69 +310,75 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
+| ariaLabel | string | 'slide' | No | Optional string that sets the `aria-label` attribute. |
+| children | [string&#124;node&#124;null] | null | No | Optional slide content. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
-| ariaLabel | string |'slide' | N |  Optional string that sets the "aria-label" attribute.|
 | classNameHidden | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string when the slide is not visible. |
 | classNameVisible | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string when the slide is visible. |
 | **index** | number | | **Yes** | You must consecutively number the &lt;Slide /> components in order starting with zero. |
-| innerClassName | [string&#124;null] | null | No | Optional className string that will be appended to an internal HTML element created by the Component. Best to just use Chrome Dev Tools to inspect the demo app or check the source code for &lt;Slide /> |
+| innerClassName | [string&#124;null] | null | No | Optional className string that will be appended to the inner slide wrapper element (`carousel__inner-slide`). |
 | innerTag | string | 'div' | No | The inner HTML element for each Slide. |
-| onBlur | [function&#124;null] | null | No | Optional callback function that is called after the internal onBlur function is called. It is passed the React synthetic event |
-| onFocus | [function&#124;null] | null | No | Optional callback function that is called after the internal onFocus function is called. It is passed the React synthetic event |
-| tabIndex | [number&#124;null] | null | No | When null, the Carousel will set this automatically.  99.9% of the time, you're going to want to leave this alone and let the carousel handle tabIndex automatically. |
+| isIntrinsicHeight | boolean | false | No | Inherited from `<CarouselProvider />` or overridden on the Slide to use intrinsic height rather than aspect-ratio padding. |
+| onBlur | [function&#124;null] | null | No | Optional callback function that is called after the internal `onBlur` handler is called. Passed the React synthetic focus event. |
+| onFocus | [function&#124;null] | null | No | Optional callback function that is called after the internal `onFocus` handler is called. Passed the React synthetic focus event. |
+| role | string | 'option' | No | Optional string that sets the ARIA `role` attribute on the slide element. |
+| style | object | {} | No | Optional CSS styles to merge onto the outer slide element. |
+| tabIndex | number | undefined | No | Optional `tabIndex` passed through to the root slide element. |
 | tag | string | 'div' | No | The root HTML element for each Slide. |
 
 #### The Slide component creates the following pseudo HTML by default:
 
 ```HTML
-<props.tag|div class="carousel__slide [carousel__slide--focused] [props.className] [props.classNameVisible|props.classNameHidden] [carousel__slide--hidden|carousel__slide--visible]" tabIndex="[props.tabIndex]" aria-hidden="[computed internally]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
+<props.tag|div class="carousel__slide [carousel__slide--focused] [props.classNameVisible|props.classNameHidden] [carousel__slide--visible|carousel__slide--hidden] [props.className]" aria-selected="[isVisible]" aria-label="[props.ariaLabel]" role="[props.role]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
   <props.innerTag|div class="carousel__inner-slide [props.innerClassName]">
     [props.children]
+    <!-- rendered when focused -->
     <div class="carousel__slide-focus-ring" />
-  <props.innerTag|div>
+  </props.innerTag|div>
 </props.tag|div>
 ```
 
 ### &lt;Dot />
 
-A Dot component is a HTML button.  Dots directly correlate to slides.  Clicking on a dot causes its correlating slide to scroll into the left-most visible slot of slider. The dots for currently visible slides cause are disabled.  You can override the auto-disable feature by setting disabled to false (see table below)
+A Dot component is an HTML button. Dots directly correlate to slides. Clicking on a dot causes its correlating slide to scroll into the left-most visible slot of the slider. The dots for currently visible slides are automatically disabled unless overridden via the `disabled` prop.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| children | [string&#124;null&#124;node] | null | No | Children is a special React property.  Basically, the Dot component wraps other components and/or JSX |
+| children | [string&#124;null&#124;node] | null | No | Children is a special React property. Basically, the Dot component wraps other components and/or JSX. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
-| disabled | [boolean&#124;null] | null | No | Null means Dot will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
-| onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
-| **slide** | number | | **Yes** | There must be a matching &lt;Slide /> component with a matching index property. Example: `<Dot slide={0} />` will match `<Slide index={0} />`|
+| disabled | [boolean&#124;null] | null | No | `null` means Dot will automatically determine if this button is disabled (disabled when the slide is currently visible). Setting this to `true` forces the button to be disabled. Setting this to `false` prevents the button from being disabled. |
+| onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal `onClick` handler is called. It is passed the React synthetic event. |
+| selected | [boolean&#124;null] | null | No | `null` means Dot will automatically determine if it is selected (when `slide` is within the currently visible range). Setting this to `true` or `false` overrides the selected state and `carousel__dot--selected` class. |
+| **slide** | number | | **Yes** | There must be a matching &lt;Slide /> component with a matching `index` property. Example: `<Dot slide={0} />` matches `<Slide index={0} />`. |
 
 #### The Dot component creates the following pseudo HTML by default:
 
 ```HTML
-<button class="carousel__dot carousel__dot--[slide] [carousel__dot--selected] [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+<button type="button" aria-label="slide dot" class="carousel__dot carousel__dot--[slide] [carousel__dot--selected] [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
   [props.children]
 </button>
 ```
 
 ### &lt;DotGroup />
 
-A compound component that creates a bunch of Dots automatically for you.
+A compound component that creates a group of `<Dot />` buttons automatically for you.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | children | [string&#124;node&#124;null] | null | No | Any JSX wrapped by this component will appear AFTER the dots. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
-| dotNumbers | boolean | false | No | Setting to true automatically adds text numbers the dot buttons starting at 1. |
-| disableActiveDots | boolean | true | No | Setting to true makes all dots, including active dots, enabled. |
-| showAsSelectedForCurrentSlideOnly | boolean | false | No | Setting to true shows only the current slide dot as selected. |
-| renderDots | function| null | No | It accepts `props` and overrides renderDots() in &lt;DotGroup />. |
+| dotNumbers | boolean | false | No | Setting to `true` automatically adds text numbers to the dot buttons starting at `1`. |
+| disableActiveDots | boolean | true | No | When `true` (default), dots for currently active/selected slides are disabled. Setting to `false` makes all dots, including active dots, enabled. |
+| showAsSelectedForCurrentSlideOnly | boolean | false | No | Setting to `true` shows only the `currentSlide` dot as selected, rather than all `visibleSlides`. |
+| renderDots | [function&#124;null] | null | No | Optional render function `(props) => ReactNode` that overrides the default dot rendering in &lt;DotGroup />. |
 
 #### The DotGroup component creates the following pseudo HTML by default:
 
 ```HTML
 <div class="carousel__dot-group [props.className]" ...props>
   <!-- button repeats for each slide -->
-  <button class="carousel__dot carousel__dot--[slide] [carousel__dot--selected]">
-    [numbers or blank]
+  <button type="button" aria-label="slide dot" class="carousel__dot carousel__dot--[slide] [carousel__dot--selected]">
+    <span class="carousel__dot-group-dot">[numbers or blank]</span>
   </button>
   [props.children]
 </div>
@@ -371,19 +386,86 @@ A compound component that creates a bunch of Dots automatically for you.
 
 ### &lt;Image />
 
+An image component that preloads images in memory, applies loading/success/error CSS classes, optionally renders custom loading or error fallbacks, and integrates with `<CarouselProvider hasMasterSpinner />`.
+
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| alt | string | "" | No | Specifies an alternate text for an image, if the image cannot be displayed. |
-| children | [string&#124;node&#124;null] | null | Yes | Any optional JSX wrapped by the Image component |
+| alt | string | '' | No | Specifies alternate text for an image if the image cannot be displayed. |
+| children | [string&#124;node&#124;null] | null | No | Any optional JSX wrapped by the Image component. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
-| **hasMasterSpinner** | **bool** |  | **Yes** | **If set to true, a spinner will cover the entire slider viewport until all Image components with hasMasterSpinner set to true are finished loading images. It only takes one Image component with hasMasterSpinner to enable the master spinner.**  |
-| isBgImage | bool | false | No | Setting this to true makes the image load as a background image.  Any child JSX (see children property) will appear on top of the image. If set to false, no image will appear unless your child JSX displays the image via an image tag or some other means. |
-| onError | [func&#124;null] | null | No | Callback function called if the image defined by the src property fails to load.  This Callback is fired after the Image component's internal handleImageError method. |
-| onLoad |  [func&#124;null] | null | No | Callback function called if the image defined by the src property loads successfully.  This Callback is fired after the Image component's internal renderSuccess method. |
-| renderError| [func&#124;null] | null | No | When defined, if an image fails to load, this function is called.  It must return JSX which will be rendered instead of the broken image. |
-| renderLoading | [func&#124;null] | null | No | When defined, this function is called while the image is loading.  It must return JSX which will be rendered instead of the loading image. |
-| **src** | **string** | | **Yes** | **URL of the image** |
-| tag | string | "img" | No | The element that will receive the image. Another option might be to set this to "div". Any tag besides "img" will result in the image being loaded as the css background-image for that tag. |
+| hasMasterSpinner | boolean | false | No | Automatically inherited from `<CarouselProvider />` (or passed explicitly to `<ImageView />`). When `true`, the master spinner will cover the `<Slider />` viewport until all `<Image />` and `<ImageWithZoom />` components have finished loading. |
+| isBgImage | boolean | false | No | When set to `true` with a non-`img` `tag` (such as `div`), appends the `carousel__image--with-background` class and renders the image as a CSS `background-image`. Note: do not use `isBgImage` with `tag="img"`. |
+| onError | [function&#124;null] | null | No | Callback function called if the image defined by `src` fails to load. Fired after the Image component's internal error handler. |
+| onLoad | [function&#124;null] | null | No | Callback function called if the image defined by `src` loads successfully. Fired after the Image component's internal load handler. |
+| renderError | [function&#124;null] | null | No | When defined, if an image fails to load, this function is called and its returned JSX is rendered instead of `children`. |
+| renderLoading | [function&#124;null] | null | No | When defined, this function is called while the image is loading and its returned JSX is rendered instead of `children`. |
+| **src** | **string** | | **Yes** | **URL of the image.** |
+| style | [object&#124;null] | null | No | Optional CSS inline styles applied to the element. |
+| tag | string | 'img' | No | The element that will receive the image once loaded. While loading or in an error state, a `div` is rendered if `tag` is `'img'`. Any `tag` besides `'img'` (e.g. `'div'`) renders the loaded image via CSS `backgroundImage` and `backgroundSize: 'cover'`. |
+
+#### The Image component creates the following pseudo HTML by default:
+
+```HTML
+<!-- While loading (or error): -->
+<div class="carousel__image [carousel__image--with-background] carousel__image--loading|carousel__image--error [props.className]" src="[props.src]" alt="[props.alt]" ...props>
+  [props.renderLoading() | props.renderError() | props.children]
+</div>
+
+<!-- When loaded with tag="img": -->
+<img class="carousel__image carousel__image--success [props.className]" src="[props.src]" alt="[props.alt]" style="[props.style]" ...props />
+
+<!-- When loaded with tag="div" and isBgImage: -->
+<div class="carousel__image carousel__image--with-background carousel__image--success [props.className]" style="background-image: url('[props.src]'); background-size: cover; [props.style]" ...props>
+  [props.children]
+</div>
+```
+
+### &lt;ImageWithZoom />
+
+A compound component that wraps `<Image />` to provide hover zoom on desktop (mouse events) and two-finger pinch-to-zoom on touch devices.
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| alt | string | undefined | No | Alternate text passed to the underlying display `<Image />`. |
+| bgImageProps | object | {} | No | Additional props spread onto the underlying display `<Image />` component. |
+| bgImageTag | string | 'div' | No | The HTML tag used for the underlying display `<Image />` (e.g. `'div'` or `'img'`). |
+| className | [string&#124;null] | null | No | Optional className string appended to the outer container element. |
+| imageClassName | [string&#124;null] | null | No | Optional className string appended to the base `<Image />` (`carousel__zoom-image`). |
+| overlayClassName | [string&#124;null] | null | No | Optional className string appended to the zoom overlay `<Image />` (`carousel__zoom-image-overlay`). |
+| isPinchZoomEnabled | boolean | true | No | Enables two-finger pinch-to-zoom on touch-capable devices. |
+| onError | [function&#124;null] | null | No | Optional callback function called if the image fails to load. |
+| onLoad | [function&#124;null] | null | No | Optional callback function called when the image finishes loading. |
+| spinner | [function&#124;null] | null | No | Optional render function `() => ReactNode` to render a custom loading spinner while the image loads. Defaults to `<Spinner />`. |
+| **src** | **string** | | **Yes** | **URL of the standard resolution image.** |
+| srcZoomed | [string&#124;null] | null | No | Optional URL of a higher-resolution image to use for the zoom overlay. If omitted, `src` is used. |
+| tag | string | 'div' | No | The HTML tag to use for the outer wrapper element. |
+
+#### The ImageWithZoom component creates the following pseudo HTML by default:
+
+```HTML
+<props.tag|div class="[props.className]" ...props>
+  <props.bgImageTag|div class="carousel__image carousel__zoom-image [props.imageClassName]" ...props.bgImageProps />
+  <div class="carousel__image carousel__image--with-background carousel__zoom-image-overlay [carousel__zoom-image-overlay--hovering] [carousel__zoom-image-overlay--zooming] [props.overlayClassName]" />
+  <!-- rendered while image is loading -->
+  <div class="carousel__image-loading-spinner-container">
+    <div class="carousel__spinner" />
+  </div>
+</props.tag|div>
+```
+
+### &lt;Spinner />
+
+The default loading spinner component used by `<Slider />` and `<ImageWithZoom />`. Can also be imported and used standalone.
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| className | [string&#124;null] | null | No | Optional className string appended to the spinner element. |
+
+#### The Spinner component creates the following pseudo HTML by default:
+
+```HTML
+<div class="carousel__spinner [props.className]" ...props />
+```
 
 ### &lt;ButtonBack />
 
@@ -399,7 +481,7 @@ A button for moving the slider backwards. Backwards on a horizontal carousel mea
 #### The ButtonBack component creates the following pseudo HTML by default:
 
 ```HTML
-<button class="carousel__back-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+<button type="button" aria-label="previous" class="carousel__back-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
   [props.children]
 </button>
 ```
@@ -418,7 +500,7 @@ A button for moving the slider forwards. Forwards on a horizontal carousel means
 #### The ButtonNext component creates the following pseudo HTML by default:
 
 ```HTML
-<button class="carousel__next-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+<button type="button" aria-label="next" class="carousel__next-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
   [props.children]
 </button>
 ```
@@ -437,7 +519,7 @@ Moves the slider to the beginning of the slides.
 #### The ButtonFirst component creates the following pseudo HTML by default:
 
 ```HTML
-<button class="carousel__first-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+<button type="button" aria-label="first" class="carousel__first-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
   [props.children]
 </button>
 ```
@@ -456,7 +538,7 @@ Moves the slider to the end of the slides (totalSlides - visibleSlides).
 #### The ButtonLast component creates the following pseudo HTML by default:
 
 ```HTML
-<button class="carousel__last-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
+<button type="button" aria-label="last" class="carousel__last-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
   [props.children]
 </button>
 ```
@@ -471,123 +553,56 @@ Pressing this button causes the slides to automatically advance by CarouselProvi
 | childrenPaused | [string&#124;node] | null | No | Content to display when the slide show is paused. |
 | childrenPlaying | [string&#124;node] | null | No | Content to display when the slide show is playing. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
-| disabled | [boolean&#124;null] | null | No | Null means ButtonPlay will automatically determine if this button is disabled. Setting this to true will force the button to be disabled.  Setting this to false will prevent the button from ever being disabled. |
+| disabled | boolean | false | No | Optional boolean passed to the underlying `<button>` element to disable the play/pause button. |
 | onClick | [function&#124;null] | null | No | Optional callback function that is called after the internal onClick function is called. It is passed the React synthetic event |
 
 #### The ButtonPlay component creates the following pseudo HTML by default:
 
 ```HTML
-<button class="carousel__play-button [props.className]" onClick="[props.onClick]" disabled="[props.disabled]" ...props>
-  [props.childrenPaused]
-  [props.childrenPlaying]
+<button type="button" aria-label="play" class="carousel__play-button [props.className]" onClick="[props.onClick]" ...props>
+  [props.childrenPlaying | props.childrenPaused]
   [props.children]
 </button>
 ```
 
-### WithStore() Higher Order Component
-
-__NOTE: ADVANCED USE ONLY.__
-
-Use this HOC to pass CarouselProvider state properties as props to a component. Basically, your custom component must be an descendant of `<CarouselProvider>`.  It doesn't have to be a direct descendant, it just needs to be between some opening and closing CarouselProvider tags somewhere. For example...
-
-```html
-// pseudocode example
-<CarouselProvider>
-  <YourComponentHere />
-</CarouselProvider>
-```
-
-WithStore has two arguments:
-
-`WithStore([component], [mapstateToProps])`
-
-- The first argument is the component to wrap (ex: YourComponentHere) and it's required.
-
-- The second argument is optional. It is a "map state to props" function that you must create.  This function maps the state of the CarouselProvider to props used by your component.  Your "map state to props" function will receive one argument: an object with the current CarouselProvider state.  Your function must return an object where the keys are names of props to pass to your component and the values map to properties of the CarouselProvider's state.
-
-Here's more pseudocode.  I've listed a bunch of properties that exist in the CarouselProvider.
-
-```javascript
-  import React from 'react';
-  import { WithStore } from 'pure-react-carousel';
-
-  class YourComponentHere extends React.Component {
-    // ... stuff
-  }
-
-  export default WithStore(YourComponentHere, state => ({
-    // these are read only properties.  we use the "deepFreeze"
-    // npm package to make these properties immutable. You don't have to use
-    // all of these, just pick the ones you need.
-    currentSlide: state.currentSlide,
-    disableAnimation: state.disableAnimation,
-    hasMasterSpinner: state.hasMasterSpinner,
-    imageErrorCount: state.imageErrorCount,
-    imageSuccessCount: state.imageSuccessCount,
-    lockOnWindowScroll: state.lockOnWindowScroll,
-    masterSpinnerThreshold: state.masterSpinnerThreshold,
-    naturalSlideHeight: state.naturalSlideHeight,
-    naturalSlideWidth: state.naturalSlideWidth,
-    orientation: state.orientation,
-    slideSize: state.slideSize,
-    slideTraySize: state.slideTraySize,
-    step: state.step,
-    dragStep: state.dragStep,
-    totalSlides: state.totalSlides,
-    touchEnabled: state.touchEnabled,
-    dragEnabled: state.dragEnabled,
-    visibleSlides: state.visibleSlides,
-  }));
-```
-
-Any component wrapped with WithStore will also receive a prop called `carouselStore` which contains the method setStoreState which  you can use to "safely" (use at your own risk) mutate the CarouselProvider's state.  There are other methods in carouselStore.  Don't use them.
-
-__setStoreState__: 🦄 🌈 🎂 Use this to mutate any of the properties listed in the WithStore example above. For example, if you want to skip to slide 2 you can put `this.props.carouselStore.setStoreState({ currentSlide: 2 })` inside a class method in your component.
-
-More pseudocode.
-
-```javascript
-  import React from 'react';
-  import { WithStore } from 'pure-react-carousel';
-
-  class YourComponentHere extends React.Component {
-    // ... stuff
-
-    handleClick() {
-      this.props.carouselStore.setStoreState({ currentSlide: 2 });
-    }
-  }
-
-  export default WithStore(YourComponentHere);
-```
-
-Fun fact: you can add any arbitrary values that you want to the CarouselProvider's state.  So, if you have several custom components that need to share data, have at it.
-
-__masterSpinnerError__: 💀 DON'T USE THIS.
-
-__masterSpinnerSuccess__: ⚠️ DON'T USE THIS.
-
-__subscribeMasterSpinner__: 💩 DON'T USE THIS.
-
-__unsubscribeMasterSpinner__: 🔥 DON'T USE THIS.
-
-__unsubscribeAllMasterSpinner__: Don't call this manually unless you have some sort of super-customized carousel. This is called internally once all `<Image hasMasterSpinner />` and all `<ImageWithZoom hasMasterSpinner />` components are finished loading their images.  Calling this directly will force a "success" state and the master spinner (the spinner that covers the entire carousel while loading) will turn off.
-
 ### Hooks and `useContext`
 
-If you'd like to consume the context via hooks rather than using the HoC approach described above, the context is exported as `CarouselContext`.
+`CarouselProvider` uses React's native Context API (`CarouselContext`) and automatically triggers re-renders on consumers whenever the carousel store state updates.
 
-Note that you will likely need to subscribe/unsubscribe to changes in order to take advantage of the context.
+You can consume `CarouselContext` directly with `useContext(CarouselContext)` in any functional component rendered inside `<CarouselProvider>`:
 
-Example:
-
-```js
-import React, { useContext, useEffect, useState } from 'react';
+```jsx
+import React, { useContext } from 'react';
 import { CarouselContext } from 'pure-react-carousel';
 
 export function MyComponentUsingContext() {
   const carouselContext = useContext(CarouselContext);
+  const { currentSlide, totalSlides } = carouselContext.state;
+
+  return (
+    <div>
+      <p>Slide {currentSlide + 1} of {totalSlides}</p>
+      <button
+        type="button"
+        onClick={() => carouselContext.setStoreState({ currentSlide: 0 })}
+      >
+        Back to First Slide
+      </button>
+    </div>
+  );
+}
+```
+
+For backwards compatibility (or if you need an imperative callback when state changes), `carouselContext.subscribe(callback)` and `carouselContext.unsubscribe(callback)` are also supported:
+
+```jsx
+import React, { useContext, useEffect, useState } from 'react';
+import { CarouselContext } from 'pure-react-carousel';
+
+export function MySubscribedComponent() {
+  const carouselContext = useContext(CarouselContext);
   const [currentSlide, setCurrentSlide] = useState(carouselContext.state.currentSlide);
+
   useEffect(() => {
     function onChange() {
       setCurrentSlide(carouselContext.state.currentSlide);
@@ -595,155 +610,294 @@ export function MyComponentUsingContext() {
     carouselContext.subscribe(onChange);
     return () => carouselContext.unsubscribe(onChange);
   }, [carouselContext]);
+
   return `The current slide is: ${currentSlide}`;
 }
 ```
 
-## TypeScript usage
-
-The current bundled Typescript definitions are mostly complete. Certain edge cases could have been not accounted for! Pull requests to improve them are welcome and appreciated.
-
-If you've never contributed to open source before, then you may find [this free video course](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github) helpful.
-
-In case of provided components, it is pretty straightforward. Simply import them and pass necessary props. At the moment types will not prevent you from using the library incorrectly (for example rendering Slider outside CarouselProvider) therefore please check the documentation if something goes wrong.
-
 ### WithStore() Higher Order Component
 
-Following the documentation above, only props safe to use are exposed:
+__NOTE: ADVANCED USE ONLY.__ (For new functional components, prefer `useContext(CarouselContext)` above.)
 
-```TypeScript
-interface CarouselState {
-  readonly currentSlide: number
-  readonly disableAnimation: boolean
-  readonly disableKeyboard: boolean
-  readonly hasMasterSpinner: boolean
-  readonly imageErrorCount: number
-  readonly imageSuccessCount: number
-  readonly lockOnWindowScroll: boolean
-  readonly masterSpinnerThreshold: number
-  readonly naturalSlideHeight: number
-  readonly naturalSlideWidth: number
-  readonly orientation: 'horizontal' | 'vertical'
-  readonly slideSize: number
-  readonly slideTraySize: number
-  readonly step: number
-  readonly dragStep: number
-  readonly totalSlides: number
-  readonly touchEnabled: boolean
-  readonly dragEnabled: boolean
-  readonly visibleSlides: number
-}
+Use this HOC to pass `CarouselProvider` state properties as props to a component (either a functional component or a class component). Your custom component must be a descendant of `<CarouselProvider>`. It doesn't have to be a direct descendant; it just needs to be rendered somewhere inside `<CarouselProvider>`:
 
-export interface CarouselInjectedProps {
-  readonly carouselStore: {
-    readonly setStoreState: (state: CarouselState) => void
-    readonly unsubscribeAllMasterSpinner: () => void
-  }
-}
-```
-
-**Also the first argument which is the component to wrap, needs to be a `React.ComponentClass` to render properly and therefore stateless component are not possible.**
-
-### Examples:
-
-- Both with MapStateToProps and custom props
-
-```TypeScript
-import {
-  CarouselInjectedProps,
-  WithStore,
-} from 'pure-react-carousel'
-
-interface UpdateCheckProps extends CarouselInjectedProps {
-  readonly name: string,
-}
-
-interface UpdateCheckCarouselState {
-  readonly currentSlide: number,
-  readonly disableAnimation: boolean,
-}
-
-class InjectedComponent extends Component<
-  UpdateCheckProps & UpdateCheckCarouselState
-> {
-  public render() {
-    console.log(this.props)
-    return <div>I am a fancy class</div>
-  }
-}
-
-const DecoratedComponent = WithStore<UpdateCheckProps, UpdateCheckCarouselState>(
-  InjectedComponent,
-  state => ({
-    currentSlide: state.currentSlide,
-    disableAnimation: state.disableAnimation,
-  }),
-)
-
-<CarouselProvider>
-  <DecoratedComponent name="NewName" />
+```jsx
+<CarouselProvider
+  naturalSlideWidth={100}
+  naturalSlideHeight={125}
+  totalSlides={3}
+>
+  <YourComponentHere />
 </CarouselProvider>
 ```
 
-- No MapStateToProps
+`WithStore` accepts two arguments:
 
-```TypeScript
-interface UpdateCheckProps extends CarouselInjectedProps {
-  readonly name: string,
+`WithStore(Component, [mapStateToProps])`
+
+- The first argument is the component to wrap (e.g., `YourComponentHere`) and is required. Both functional and class components are supported.
+- The second argument is an optional `mapStateToProps` function `(state) => ({ ... })` that maps the current `CarouselProvider` state to props passed to your component.
+
+Here is an example showing the properties available on `CarouselProvider` state:
+
+```jsx
+import React from 'react';
+import { WithStore } from 'pure-react-carousel';
+
+function YourComponentHere(props) {
+  return <div>Current slide: {props.currentSlide}</div>;
 }
 
-class InjectedComponent extends Component<UpdateCheckProps> {
-  public render() {
-    console.log(this.props)
-    return <div>I am a fancy class</div>
-  }
+export default WithStore(YourComponentHere, (state) => ({
+  // State properties are deeply frozen (read-only).
+  // Pick only the properties your component needs:
+  currentSlide: state.currentSlide,
+  disableAnimation: state.disableAnimation,
+  disableKeyboard: state.disableKeyboard,
+  hasMasterSpinner: state.hasMasterSpinner,
+  imageErrorCount: state.imageErrorCount,
+  imageSuccessCount: state.imageSuccessCount,
+  infinite: state.infinite,
+  interval: state.interval,
+  isIntrinsicHeight: state.isIntrinsicHeight,
+  isPageScrollLocked: state.isPageScrollLocked,
+  isPlaying: state.isPlaying,
+  lockOnWindowScroll: state.lockOnWindowScroll,
+  masterSpinnerFinished: state.masterSpinnerFinished,
+  masterSpinnerThreshold: state.masterSpinnerThreshold,
+  naturalSlideHeight: state.naturalSlideHeight,
+  naturalSlideWidth: state.naturalSlideWidth,
+  orientation: state.orientation,
+  playDirection: state.playDirection,
+  slideSize: state.slideSize,
+  slideTraySize: state.slideTraySize,
+  step: state.step,
+  dragStep: state.dragStep,
+  totalSlides: state.totalSlides,
+  touchEnabled: state.touchEnabled,
+  dragEnabled: state.dragEnabled,
+  visibleSlides: state.visibleSlides,
+}));
+```
+
+Any component wrapped with `WithStore` also receives a prop called `carouselStore`, which exposes `getStoreState` and `setStoreState` to read or update the `CarouselProvider`'s state.
+
+__setStoreState__: 🦄 🌈 🎂 Use this to update any of the state properties listed above. For example, to skip to slide 2:
+
+```jsx
+import React from 'react';
+import { WithStore } from 'pure-react-carousel';
+
+function YourComponentHere({ carouselStore }) {
+  const handleClick = () => {
+    carouselStore.setStoreState({ currentSlide: 2 });
+  };
+
+  return (
+    <button type="button" onClick={handleClick}>
+      Go to slide 3
+    </button>
+  );
 }
 
-const DecoratedComponent = WithStore<UpdateCheckProps>(InjectedComponent)
+export default WithStore(YourComponentHere);
+```
 
-// This will work too, with or without custom props
+Fun fact: you can add any arbitrary values that you want to the `CarouselProvider`'s state. So, if you have several custom components that need to share data, have at it.
 
-const DecoratedComponent = WithStore(InjectedComponent)
+__masterSpinnerError__: 💀 DON'T USE THIS (internal use only).
+
+__masterSpinnerSuccess__: ⚠️ DON'T USE THIS (internal use only).
+
+__subscribeMasterSpinner__: 💩 DON'T USE THIS (internal use only).
+
+__unsubscribeMasterSpinner__: 🔥 DON'T USE THIS (internal use only).
+
+__unsubscribeAllMasterSpinner__: Don't call this manually unless you have some sort of super-customized carousel. This is called internally once all `<Image hasMasterSpinner />` and all `<ImageWithZoom hasMasterSpinner />` components are finished loading their images. Calling this directly will force a "success" state and the master spinner (the spinner that covers the entire carousel while loading) will turn off.
+
+## TypeScript usage
+
+Pure React Carousel is written in TypeScript and ships with complete type definitions in `typings/index.d.ts`. Simply import components, hooks, or types directly from `'pure-react-carousel'`.
+
+### Hooks and `useContext`
+
+`CarouselContext` is typed as `React.Context<CarouselStoreInterface>`, giving full type inference for `state` (`CarouselState`) and `setStoreState`:
+
+```tsx
+import React, { useContext } from 'react';
+import { CarouselContext } from 'pure-react-carousel';
+
+export function SlideCounter() {
+  const carouselStore = useContext(CarouselContext);
+
+  return (
+    <button
+      type="button"
+      onClick={() => carouselStore.setStoreState({ currentSlide: 0 })}
+    >
+      Slide {carouselStore.state.currentSlide + 1} of {carouselStore.state.totalSlides}
+    </button>
+  );
+}
+```
+
+### WithStore() Higher Order Component
+
+Both functional components and class components (`React.ComponentType`) are supported by `WithStore`. The state and injected store interfaces are exported from `'pure-react-carousel'`:
+
+```ts
+export interface CarouselState {
+  readonly currentSlide: number;
+  readonly disableAnimation: boolean;
+  readonly disableKeyboard: boolean;
+  readonly hasMasterSpinner: boolean;
+  readonly imageErrorCount: number;
+  readonly imageSuccessCount: number;
+  readonly infinite: boolean;
+  readonly interval?: number;
+  readonly isIntrinsicHeight: boolean;
+  readonly isPageScrollLocked?: boolean;
+  readonly isPlaying: boolean;
+  readonly lockOnWindowScroll: boolean;
+  readonly preventVerticalScrollOnTouch?: boolean;
+  readonly horizontalPixelThreshold?: number;
+  readonly verticalPixelThreshold?: number;
+  readonly masterSpinnerFinished: boolean;
+  readonly masterSpinnerThreshold?: number;
+  readonly MasterSpinnerThreshold?: number;
+  readonly naturalSlideHeight: number;
+  readonly naturalSlideWidth: number;
+  readonly orientation: 'horizontal' | 'vertical';
+  readonly playDirection?: 'forward' | 'backward';
+  readonly privateUnDisableAnimation?: boolean;
+  readonly slideSize: number;
+  readonly slideTraySize: number;
+  readonly step: number;
+  readonly dragStep: number;
+  readonly totalSlides: number;
+  readonly touchEnabled: boolean;
+  readonly dragEnabled: boolean;
+  readonly visibleSlides: number;
+}
+
+export interface CarouselInjectedProps {
+  readonly carouselStore: Pick<
+    CarouselStoreInterface,
+    | 'getStoreState'
+    | 'masterSpinnerError'
+    | 'masterSpinnerSuccess'
+    | 'setStoreState'
+    | 'subscribeMasterSpinner'
+    | 'unsubscribeAllMasterSpinner'
+    | 'unsubscribeMasterSpinner'
+  >;
+}
+```
+
+### Examples:
+
+- With `mapStateToProps` and custom props:
+
+```tsx
+import React from 'react';
+import {
+  CarouselInjectedProps,
+  CarouselProvider,
+  WithStore,
+} from 'pure-react-carousel';
+
+interface CustomProps {
+  readonly name: string;
+}
+
+interface MappedStateProps {
+  readonly currentSlide: number;
+  readonly disableAnimation: boolean;
+}
+
+function InjectedComponent({
+  name,
+  currentSlide,
+  disableAnimation,
+  carouselStore,
+}: CustomProps & MappedStateProps & CarouselInjectedProps) {
+  return (
+    <div>
+      <span>{name}: Slide {currentSlide} (animation disabled: {String(disableAnimation)})</span>
+      <button
+        type="button"
+        onClick={() => carouselStore.setStoreState({ currentSlide: 0 })}
+      >
+        Reset
+      </button>
+    </div>
+  );
+}
+
+const DecoratedComponent = WithStore<CustomProps, MappedStateProps>(
+  InjectedComponent,
+  (state) => ({
+    currentSlide: state.currentSlide,
+    disableAnimation: state.disableAnimation,
+  }),
+);
+
+// Usage inside <CarouselProvider>:
+// <DecoratedComponent name="MyCarousel" />
+```
+
+- Without `mapStateToProps`:
+
+```tsx
+import React from 'react';
+import { CarouselInjectedProps, WithStore } from 'pure-react-carousel';
+
+interface CustomProps extends CarouselInjectedProps {
+  readonly name: string;
+}
+
+function InjectedComponent({ name, carouselStore }: CustomProps) {
+  return (
+    <button
+      type="button"
+      onClick={() => carouselStore.setStoreState({ currentSlide: 0 })}
+    >
+      {name}
+    </button>
+  );
+}
+
+const DecoratedComponent = WithStore(InjectedComponent);
 ```
 
 ## Advanced Concept: Accessing the "View" Components Directly
-All the components in Pure React Carousel were designed using the model -> view approach.
-Meaning that the index file for each component gathers all the data required from sources external
-to that component (like context, or redux, or cookies, or fetched data from a rest api), organizes
-the data, and passes that data to the "view" component as a flattened props object.
+All the components in Pure React Carousel were designed using the container (model) -> presentation (view) pattern.
+The `index.ts` file for each component connects to `CarouselContext` via the `WithStore` HOC, selects the required state properties from the carousel store, and passes them to the presentation component as props.
 
-For example, look at the structure of the Slide component folder:
+For example, look at the structure of the `Slide` component folder:
 
 ```
 Slide/
-├─ index.js (model)
-├─ Slide.jsx (view)
+├─ index.ts (container / store connector)
+├─ Slide.tsx (view)
 ```
 
-The index file (model) in this instance uses the WithRouter HOC to provide the Slide (view) with
-all the data it needs from the carousel state. Stuff like the current slide, size width, height,
-etc.
+The `index.ts` file uses the `WithStore` HOC to provide `Slide.tsx` (the view) with all the data it needs from the carousel state—such as `currentSlide`, `naturalSlideWidth`, `naturalSlideHeight`, `slideSize`, `totalSlides`, `visibleSlides`, etc.
 
-If, for some reason, you want direct access to the "view" for Slider, you can import it directly
-by adding "View" to the end of the component name.  This works for all components except for
-CarouselProvider.
+If you want direct access to the unconnected view component (for example, in unit tests or custom state wrappers), you can import it directly by adding `View` to the end of the component name. This works for all components except `CarouselProvider`:
 
-So to access the "view" of Slide, `import { SlideView } from 'pure-react-carousel'`
-
-## More Documentation to Come
-
-I promise to add docs for every component.  In the meantime, feel free to download and run the demo app.  Looking at the code might help you out.
+`import { SlideView } from 'pure-react-carousel';`
 
 ## Dev Workflow
-**Note about Correct Node Version:**  You must switch to node version **10.16.1** and then run `npm ci` before developing pure-react-carousel on your local machine.  Use Node Version Manager (nvm) to switch between versions of node.  This project has an .nvmrc file.  You can set up Node Version Manager to automatically switch to the correct version of Node when working on this repo.  If you run `npm ci` and encounter fatal errors, it is because you're using the wrong version of Node and npm.
+**Note about Node Version:** Use Node **v22.22.2** (or `>=22.0.0`, as specified in `.nvmrc` and `package.json`) and run `npm ci` before developing `pure-react-carousel` on your local machine.
 
-- `npm ci` See note above about correct Node version.  This installs all the necessary dependencies for local development.<br><br>
-- `npm start` starts a local development server, opens the dev page with your default browser, and watches for changes via livereload.<br><br>
-- `npm test` runs unit and integration tests using Jest + Enzyme.  Also does coverage reporting.<br><br>
-- `npm lint` runs linting tests using ESLint & Airbnb linting.<br><br>
-- `npm test:watch` same as `npm test` but it will watch for updates and auto-run tests. Does not do coverage reporting.<br><br>
-- `npm run build` compiles CommonJS and ES modules and places them in the dist directory. See note above about correct node Version<br><br>
-- `npm run deploy` If you updated the demo app, you need to build the project and then deploy the updates to github.<br><br>
+- `npm ci` — Installs all dependencies for local development.<br><br>
+- `npm test` — Runs unit and integration tests using **Vitest** and **React Testing Library (RTL)** with V8 coverage reporting.<br><br>
+- `npm run test:watch` — Runs Vitest in interactive watch mode.<br><br>
+- `npm run typecheck` — Runs TypeScript type checking (`tsc --noEmit`).<br><br>
+- `npm run lint` / `npm run lint:fix` — Runs linting across `src` and `typings` using **Oxlint**.<br><br>
+- `npm run format` / `npm run format:check` — Formats or checks formatting across `src` and `typings` using **Oxfmt**.<br><br>
+- `npm run build` — Compiles the ES module (`dist/index.es.js`), CommonJS (`dist/index.cjs.js`), and CSS (`dist/react-carousel.es.css`, `dist/react-carousel.cjs.css`) bundles into the `dist` directory using **Rollup**.<br><br>
 
 ## Contributors
 
