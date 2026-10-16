@@ -107,6 +107,9 @@ async function testRuntimeVersion(ver, cacheDir) {
   let hydrationStatus = "SKIPPED";
   let currentPhase = "ssr";
 
+  const major = Number.parseInt(ver.split(".")[0], 10);
+  let ReactDOM = null;
+  let runAct = null;
   let dom = null;
   let container = null;
   let root = null;
@@ -123,7 +126,7 @@ async function testRuntimeVersion(ver, cacheDir) {
 
     const React = activeEnvRequire("react");
     const ReactPkg = activeEnvRequire("react/package.json");
-    const ReactDOM = activeEnvRequire("react-dom");
+    ReactDOM = activeEnvRequire("react-dom");
     const ReactDOMPkg = activeEnvRequire("react-dom/package.json");
     const ReactDOMServer = activeEnvRequire("react-dom/server");
 
@@ -133,7 +136,6 @@ async function testRuntimeVersion(ver, cacheDir) {
       );
     }
 
-    const major = Number.parseInt(ver.split(".")[0], 10);
     const ReactDOMClient = major >= 18 ? activeEnvRequire("react-dom/client") : null;
 
     const cjsBundlePath = resolve(repoRoot, "dist/index.cjs.js");
@@ -244,7 +246,7 @@ async function testRuntimeVersion(ver, cacheDir) {
       typeof React.act === "function"
         ? React.act
         : activeEnvRequire("react-dom/test-utils").act;
-    const runAct = async (cb) => {
+    runAct = async (cb) => {
       if (ver === "16.8.0") {
         rawAct(() => {
           cb();
@@ -266,13 +268,13 @@ async function testRuntimeVersion(ver, cacheDir) {
     document.body.appendChild(container);
 
     await runAct(() => {
+      clientMounted = true;
       if (major >= 18) {
         root = ReactDOMClient.createRoot(container);
         root.render(buildTree());
       } else {
         ReactDOM.render(buildTree(), container);
       }
-      clientMounted = true;
     });
 
     const slides = container.querySelectorAll(".carousel__slide");
@@ -357,12 +359,12 @@ async function testRuntimeVersion(ver, cacheDir) {
 
     const errorsBeforeHydrate = consoleErrors.length;
     await runAct(() => {
+      hydratedMounted = true;
       if (major >= 18) {
         hydratedRoot = ReactDOMClient.hydrateRoot(hydrateContainer, buildTree());
       } else {
         ReactDOM.hydrate(buildTree(), hydrateContainer);
       }
-      hydratedMounted = true;
     });
     const hydrationErrors = consoleErrors
       .slice(errorsBeforeHydrate)
@@ -412,33 +414,53 @@ async function testRuntimeVersion(ver, cacheDir) {
   } finally {
     if (clientMounted) {
       try {
-        if (major >= 18 && root) {
-          root.unmount();
-        } else if (container) {
-          ReactDOM.unmountComponentAtNode(container);
+        const unmountClient = () => {
+          if (major >= 18) {
+            root?.unmount();
+          } else if (container && ReactDOM) {
+            ReactDOM.unmountComponentAtNode(container);
+          }
+        };
+        if (runAct) {
+          await runAct(unmountClient);
+        } else {
+          unmountClient();
         }
       } catch {
         // Ignore cleanup errors during failure teardown
       }
+      clientMounted = false;
+      root = null;
     }
-    if (container && container.parentNode) {
+    if (container?.parentNode) {
       container.parentNode.removeChild(container);
     }
+    container = null;
 
     if (hydratedMounted) {
       try {
-        if (major >= 18 && hydratedRoot) {
-          hydratedRoot.unmount();
-        } else if (hydrateContainer) {
-          ReactDOM.unmountComponentAtNode(hydrateContainer);
+        const unmountHydrated = () => {
+          if (major >= 18) {
+            hydratedRoot?.unmount();
+          } else if (hydrateContainer && ReactDOM) {
+            ReactDOM.unmountComponentAtNode(hydrateContainer);
+          }
+        };
+        if (runAct) {
+          await runAct(unmountHydrated);
+        } else {
+          unmountHydrated();
         }
       } catch {
         // Ignore cleanup errors during failure teardown
       }
+      hydratedMounted = false;
+      hydratedRoot = null;
     }
-    if (hydrateContainer && hydrateContainer.parentNode) {
+    if (hydrateContainer?.parentNode) {
       hydrateContainer.parentNode.removeChild(hydrateContainer);
     }
+    hydrateContainer = null;
 
     if (dom?.window) {
       dom.window.close();
