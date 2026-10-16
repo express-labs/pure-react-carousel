@@ -4,19 +4,19 @@
   "description": "A minimal dependency, highly customizable, carousel component for React.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
-  "typings": "typings/index.d.ts",
-  "types": "typings/index.d.ts",
+  "typings": "dist/types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "files": [
-    "dist",
-    "typings"
+    "dist"
   ],
   "engines": {
     "node": ">=22.0.0"
   },
   "scripts": {
-    "build": "npm run build:es && npm run build:cjs",
+    "build": "npm run build:es && npm run build:cjs && npm run build:types",
     "build:cjs": "rollup -c rollup.config.cjs.mjs",
     "build:es": "rollup -c rollup.config.es.mjs",
+    "build:types": "tsc -p tsconfig.build.json",
     "format": "oxfmt --write src typings",
     "format:check": "oxfmt --check src typings",
     "lint": "oxlint src typings",
@@ -24,7 +24,7 @@
     "prepublishOnly": "npm run typecheck && npm run lint && npm test && npm run build",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "npm run build:types && tsc --noEmit"
   },
   "repository": {
     "type": "git",
