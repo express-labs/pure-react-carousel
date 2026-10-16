@@ -1,4 +1,5 @@
-import React, { memo, useContext } from "react";
+import * as React from "react";
+import { memo, useContext } from "react";
 import { CarouselContext } from "../CarouselProvider/context";
 import { equal } from "../helpers";
 import type {

@@ -1,4 +1,4 @@
-import type React from "react";
+import type * as React from "react";
 
 export type Orientation = "horizontal" | "vertical";
 export type OrientationType = Orientation;
@@ -16,40 +16,44 @@ export interface MasterSpinnerSubscription {
 }
 
 export interface CarouselState {
-  currentSlide: number;
-  disableAnimation: boolean;
-  disableKeyboard: boolean;
-  hasMasterSpinner: boolean;
-  imageErrorCount: number;
-  imageSuccessCount: number;
-  infinite: boolean;
-  interval?: number;
-  isIntrinsicHeight: boolean;
-  isPageScrollLocked?: boolean;
-  isPlaying: boolean;
-  lockOnWindowScroll: boolean;
-  preventVerticalScrollOnTouch?: boolean;
-  horizontalPixelThreshold?: number;
-  verticalPixelThreshold?: number;
-  masterSpinnerFinished: boolean;
-  masterSpinnerThreshold?: number;
-  MasterSpinnerThreshold?: number;
-  naturalSlideHeight: number;
-  naturalSlideWidth: number;
-  orientation: Orientation;
-  playDirection?: PlayDirection;
-  privateUnDisableAnimation?: boolean;
-  slideSize: number;
-  slideTraySize: number;
-  step: number;
-  dragStep: number;
-  totalSlides: number;
-  touchEnabled: boolean;
-  dragEnabled: boolean;
-  visibleSlides: number;
+  readonly currentSlide: number;
+  readonly disableAnimation: boolean;
+  readonly disableKeyboard: boolean;
+  readonly hasMasterSpinner: boolean;
+  readonly imageErrorCount: number;
+  readonly imageSuccessCount: number;
+  readonly infinite: boolean;
+  readonly interval?: number;
+  readonly isIntrinsicHeight: boolean;
+  readonly isPageScrollLocked?: boolean;
+  readonly isPlaying: boolean;
+  readonly lockOnWindowScroll: boolean;
+  readonly preventVerticalScrollOnTouch?: boolean;
+  readonly horizontalPixelThreshold?: number;
+  readonly verticalPixelThreshold?: number;
+  readonly masterSpinnerFinished: boolean;
+  readonly masterSpinnerThreshold?: number;
+  readonly MasterSpinnerThreshold?: number;
+  readonly naturalSlideHeight: number;
+  readonly naturalSlideWidth: number;
+  readonly orientation: Orientation;
+  readonly playDirection?: PlayDirection;
+  readonly privateUnDisableAnimation?: boolean;
+  readonly slideSize: number;
+  readonly slideTraySize: number;
+  readonly step: number;
+  readonly dragStep: number;
+  readonly totalSlides: number;
+  readonly touchEnabled: boolean;
+  readonly dragEnabled: boolean;
+  readonly visibleSlides: number;
 }
 
 export type CarouselStoreState = CarouselState;
+
+export type MutableCarouselStatePatch = {
+  -readonly [K in keyof CarouselState]?: CarouselState[K];
+};
 
 export interface CarouselStoreInterface {
   readonly state: CarouselState;

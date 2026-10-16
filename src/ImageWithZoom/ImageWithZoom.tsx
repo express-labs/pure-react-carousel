@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "../Image";
 import Spinner from "../Spinner";
 import { boundedRange, cn, pct } from "../helpers";

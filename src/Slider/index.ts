@@ -1,4 +1,4 @@
-import type React from "react";
+import type * as React from "react";
 import Slider from "./Slider";
 import WithStore from "../Store/WithStore";
 import type { CarouselState, SliderProps, SliderViewProps } from "../types";

@@ -1,9 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import Context from "./context";
 import { Store } from "../Store/Store";
 import { cn } from "../helpers";
 import { defaultProps, slideSize, slideTraySize } from "../helpers/component-config";
-import type { CarouselProviderProps, CarouselState, CarouselStoreInterface } from "../types";
+import type {
+  CarouselProviderProps,
+  CarouselStoreInterface,
+  MutableCarouselStatePatch,
+} from "../types";
 
 const CarouselProvider = (props: CarouselProviderProps) => {
   const {
@@ -101,7 +106,7 @@ const CarouselProvider = (props: CarouselProviderProps) => {
 
   useEffect(() => {
     const prevProps = prevPropsRef.current;
-    const newState: Partial<CarouselState> = {};
+    const newState: MutableCarouselStatePatch = {};
 
     if (prevProps.totalSlides !== totalSlides || prevProps.visibleSlides !== visibleSlides) {
       newState.totalSlides = totalSlides;

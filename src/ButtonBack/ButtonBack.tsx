@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { cn } from "../helpers";
 import type { ButtonBackViewProps } from "../types";
 import s from "./ButtonBack.scss";

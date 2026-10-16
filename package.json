@@ -24,7 +24,7 @@
     "prepublishOnly": "npm run typecheck && npm run lint && npm test && npm run build",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "typecheck": "npm run build:types && tsc --noEmit"
+    "typecheck": "npm run build:types && tsc --noEmit && tsc -p tsconfig.consumer.json --noEmit"
   },
   "repository": {
     "type": "git",

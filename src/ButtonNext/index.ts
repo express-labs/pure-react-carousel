@@ -1,4 +1,4 @@
-import type React from "react";
+import type * as React from "react";
 import ButtonNext from "./ButtonNext";
 import WithStore from "../Store/WithStore";
 import type { ButtonNextProps, ButtonNextViewProps, CarouselState } from "../types";

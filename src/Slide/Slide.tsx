@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import { cn, pct } from "../helpers";
 import type { SlideViewProps } from "../types";
 import s from "./Slide.scss";

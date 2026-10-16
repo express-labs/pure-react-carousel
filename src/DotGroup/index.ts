@@ -1,4 +1,4 @@
-import type React from "react";
+import type * as React from "react";
 import DotGroup from "./DotGroup";
 import WithStore from "../Store/WithStore";
 import type { CarouselState, DotGroupProps, DotGroupViewProps } from "../types";

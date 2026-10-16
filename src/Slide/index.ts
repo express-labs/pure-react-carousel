@@ -1,4 +1,4 @@
-import type React from "react";
+import type * as React from "react";
 import Slide from "./Slide";
 import WithStore from "../Store/WithStore";
 import type { CarouselState, SlideProps, SlideViewProps } from "../types";

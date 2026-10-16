@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import {
   ButtonBack,
   ButtonBackView,
@@ -383,3 +383,16 @@ export type VerifyExportedTypes = [
   typeof SpinnerView,
   typeof CarouselContext,
 ];
+
+// 6. Verify CarouselState & Store.state Fields Are Readonly
+export const verifyReadonlyCarouselState = (): void => {
+  const store = new Store({});
+  const stateFromGetter = store.getStoreState();
+
+  // @ts-expect-error -- CarouselState fields returned by getStoreState() are readonly because Store deep-freezes state
+  stateFromGetter.currentSlide = 1;
+  // @ts-expect-error -- CarouselState fields on store.state are readonly
+  store.state.currentSlide = 1;
+  // @ts-expect-error -- CarouselState fields on CarouselStoreInterface.state are readonly
+  mockFullCarouselStore.state.isPlaying = true;
+};

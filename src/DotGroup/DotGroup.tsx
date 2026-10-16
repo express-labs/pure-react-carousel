@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Dot from "../Dot";
 import { cn } from "../helpers";
 import type { DotGroupViewProps } from "../types";

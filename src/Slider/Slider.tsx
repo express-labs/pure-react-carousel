@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import * as React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import GetScrollParent from "./GetScrollParent";
 import { cn, pct, boundedRange } from "../helpers";
-import type { Orientation, SliderViewProps } from "../types";
+import type { MutableCarouselStatePatch, Orientation, SliderViewProps } from "../types";
 import s from "./Slider.scss";
 
 export function slideSizeInPx(
@@ -558,7 +559,7 @@ const Slider = (props: SliderViewProps) => {
         visibleSlides: vis,
       } = latestPropsRef.current;
 
-      const newStoreState: { currentSlide?: number; isPlaying?: boolean } = {};
+      const newStoreState: MutableCarouselStatePatch = {};
 
       if (noKb === true || tot <= vis) return;
 

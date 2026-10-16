@@ -1,7 +1,7 @@
 // @vitest-environment node
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
-import React from "react";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join, resolve } from "node:path";
+import * as React from "react";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import {
@@ -20,6 +20,19 @@ import {
   Spinner,
 } from "../index";
 import GetScrollParent from "../Slider/GetScrollParent";
+
+function collectFiles(dir: string, predicate: (filePath: string) => boolean): string[] {
+  const results: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...collectFiles(fullPath, predicate));
+    } else if (predicate(fullPath)) {
+      results.push(fullPath);
+    }
+  }
+  return results;
+}
 
 const buildCarouselTree = (props?: Partial<React.ComponentProps<typeof CarouselProvider>>) => (
   <CarouselProvider
@@ -115,5 +128,37 @@ describe("SSR compatibility (Node environment without DOM globals)", () => {
     expect(esConfig).toContain("directives: false");
     expect(cjsConfig).toContain("banner: '\"use client\";'");
     expect(cjsConfig).toContain("directives: false");
+  });
+
+  it("uses namespace React imports across source and emitted declaration files for consumers without default-import interop", () => {
+    const defaultReactImportPattern =
+      /^\s*import\s+(?:type\s+)?React(?:\s*,|\s+from)\s*["']react["']/m;
+
+    const srcFiles = collectFiles(
+      resolve(process.cwd(), "src"),
+      (filePath) =>
+        (filePath.endsWith(".ts") || filePath.endsWith(".tsx")) &&
+        !filePath.includes("__tests__") &&
+        !filePath.includes("/App/") &&
+        !filePath.endsWith("/app.tsx") &&
+        !filePath.endsWith(".test.ts") &&
+        !filePath.endsWith(".test.tsx"),
+    );
+
+    expect(srcFiles.length).toBeGreaterThan(0);
+    for (const filePath of srcFiles) {
+      const content = readFileSync(filePath, "utf8");
+      expect(content).not.toMatch(defaultReactImportPattern);
+    }
+
+    const distTypesDir = resolve(process.cwd(), "dist/types");
+    if (existsSync(distTypesDir)) {
+      const dtsFiles = collectFiles(distTypesDir, (filePath) => filePath.endsWith(".d.ts"));
+      expect(dtsFiles.length).toBeGreaterThan(0);
+      for (const filePath of dtsFiles) {
+        const content = readFileSync(filePath, "utf8");
+        expect(content).not.toMatch(defaultReactImportPattern);
+      }
+    }
   });
 });

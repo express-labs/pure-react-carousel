@@ -37,6 +37,7 @@ export type {
   MasterSpinnerSubscription,
   CarouselState,
   CarouselStoreState,
+  MutableCarouselStatePatch,
   CarouselStoreInterface,
   CarouselInjectedProps,
   CarouselProviderProps,

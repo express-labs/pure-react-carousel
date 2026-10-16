@@ -1,4 +1,4 @@
-import type React from "react";
+import type * as React from "react";
 import Image from "./Image";
 import WithStore from "../Store/WithStore";
 import type { CarouselState, ImageProps, ImageViewProps } from "../types";
