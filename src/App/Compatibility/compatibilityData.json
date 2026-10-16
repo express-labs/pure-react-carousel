@@ -10,7 +10,7 @@
     "totalRuntimeVersions": 43,
     "passedRuntimeVersions": 43,
     "totalVitestVersions": 43,
-    "passedVitestFullSuite": 25,
+    "passedVitestFullSuite": 37,
     "totalTypesTracks": 10,
     "passedTypesTracks": 7
   },
@@ -28,9 +28,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 5 failed | 195 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.3.0",
@@ -40,9 +40,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 5 failed | 195 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.9",
@@ -52,9 +52,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 5 failed | 195 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.8",
@@ -64,9 +64,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 5 failed | 195 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.7",
@@ -76,9 +76,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 3 failed | 197 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.6",
@@ -88,9 +88,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "1 failed | 17 passed (18) | 1 failed | 199 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.5",
@@ -100,9 +100,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 4 failed | 196 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.4",
@@ -112,9 +112,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 3 failed | 197 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.3",
@@ -124,9 +124,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 2 failed | 198 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.2",
@@ -136,9 +136,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 2 failed | 198 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.1",
@@ -148,9 +148,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 2 failed | 198 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.2.0",
@@ -160,9 +160,9 @@
           "clientRender": "PASS",
           "hydration": "PASS",
           "runtime": "PASS",
-          "vitestStatus": "FAIL",
-          "vitestSummary": "2 failed | 16 passed (18) | 3 failed | 197 passed (200)",
-          "note": "Vitest failure"
+          "vitestStatus": "PASS",
+          "vitestSummary": "18/18 files (200/200 tests)",
+          "note": "All runtime, SSR, hydration, and Vitest checks pass"
         },
         {
           "version": "19.1.10",
@@ -499,7 +499,7 @@
           "hydration": "PASS",
           "runtime": "PASS",
           "vitestStatus": "SSR_ONLY",
-          "vitestSummary": "1/18 files (6/6 tests SSR)",
+          "vitestSummary": "1/1 files (6/6 tests SSR)",
           "note": "Runtime & hydration pass; repo JSDOM test harness uses @testing-library/react@16 which imports React 18+ react-dom/client"
         },
         {
@@ -511,7 +511,7 @@
           "hydration": "PASS",
           "runtime": "PASS",
           "vitestStatus": "SSR_ONLY",
-          "vitestSummary": "1/18 files (6/6 tests SSR)",
+          "vitestSummary": "1/1 files (6/6 tests SSR)",
           "note": "Runtime & hydration pass; repo JSDOM test harness uses @testing-library/react@16 which imports React 18+ react-dom/client"
         },
         {
@@ -523,7 +523,7 @@
           "hydration": "PASS",
           "runtime": "PASS",
           "vitestStatus": "SSR_ONLY",
-          "vitestSummary": "1/18 files (6/6 tests SSR)",
+          "vitestSummary": "1/1 files (6/6 tests SSR)",
           "note": "Runtime & hydration pass; repo JSDOM test harness uses @testing-library/react@16 which imports React 18+ react-dom/client"
         }
       ]
@@ -542,7 +542,7 @@
           "hydration": "PASS",
           "runtime": "PASS",
           "vitestStatus": "SSR_ONLY",
-          "vitestSummary": "1/18 files (6/6 tests SSR)",
+          "vitestSummary": "1/1 files (6/6 tests SSR)",
           "note": "Runtime & hydration pass; repo JSDOM test harness uses @testing-library/react@16 which imports React 18+ react-dom/client"
         },
         {
@@ -554,7 +554,7 @@
           "hydration": "PASS",
           "runtime": "PASS",
           "vitestStatus": "SSR_ONLY",
-          "vitestSummary": "1/18 files (6/6 tests SSR)",
+          "vitestSummary": "1/1 files (6/6 tests SSR)",
           "note": "Runtime & hydration pass; repo JSDOM test harness uses @testing-library/react@16 which imports React 18+ react-dom/client"
         }
       ]

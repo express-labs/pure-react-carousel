@@ -79,6 +79,25 @@ const CompatibilityPage = ({
     [data.tracks],
   );
 
+  const runtimePercentage =
+    data.summary.totalRuntimeVersions > 0
+      ? Math.round((data.summary.passedRuntimeVersions / data.summary.totalRuntimeVersions) * 100)
+      : 0;
+
+  const vitestBreakdown = React.useMemo(() => {
+    let warn = 0;
+    let ssrOnly = 0;
+    let fail = 0;
+    let skipped = 0;
+    for (const entry of allVersions) {
+      if (entry.vitestStatus === "WARN") warn += 1;
+      else if (entry.vitestStatus === "SSR_ONLY") ssrOnly += 1;
+      else if (entry.vitestStatus === "FAIL") fail += 1;
+      else if (entry.vitestStatus === "SKIPPED") skipped += 1;
+    }
+    return { warn, ssrOnly, fail, skipped };
+  }, [allVersions]);
+
   const filteredVersions = React.useMemo<VersionCompatibilityEntry[]>(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
     return allVersions.filter((entry) => {
@@ -147,8 +166,9 @@ const CompatibilityPage = ({
               {data.summary.passedRuntimeVersions} / {data.summary.totalRuntimeVersions}
             </p>
             <p className={s.summaryCardDesc}>
-              100% of tested React 19, 18, 17, and 16.8+ releases pass SSR, client mount, hydration,
-              and interactive slide navigation checks as-is.
+              {data.summary.passedRuntimeVersions} of {data.summary.totalRuntimeVersions} tested
+              React releases ({runtimePercentage}%) pass SSR, client mount, hydration, and
+              interactive slide navigation checks. See the per-version statuses below for details.
             </p>
           </div>
 
@@ -158,9 +178,12 @@ const CompatibilityPage = ({
               {data.summary.passedVitestFullSuite} / {data.summary.totalVitestVersions}
             </p>
             <p className={s.summaryCardDesc}>
-              All React 19 and React 18 releases pass the repository&apos;s Vitest suite (18.3.0 has
-              one upstream React.act warning; React 17/16 pass SSR tests as
-              @testing-library/react@16 requires react-dom/client).
+              {data.summary.passedVitestFullSuite} of {data.summary.totalVitestVersions} versions
+              pass the full repository Vitest suite ({vitestBreakdown.warn} with upstream React.act
+              warnings, {vitestBreakdown.ssrOnly} SSR-only on legacy React 17/16
+              {vitestBreakdown.fail > 0 ? `, ${vitestBreakdown.fail} failed` : ""}
+              {vitestBreakdown.skipped > 0 ? `, ${vitestBreakdown.skipped} skipped` : ""}). Refer to
+              per-version statuses below.
             </p>
           </div>
 
@@ -170,8 +193,9 @@ const CompatibilityPage = ({
               {data.summary.passedTypesTracks} / {data.summary.totalTypesTracks}
             </p>
             <p className={s.summaryCardDesc}>
-              Passes tsc --noEmit on @types/react 19.x, 18.3+, 17.0.62+, and 16.14.43+ where the
-              React.JSX namespace is available.
+              {data.summary.passedTypesTracks} of {data.summary.totalTypesTracks} tested
+              @types/react tracks pass tsc --noEmit where the React.JSX namespace is available
+              (19.x, 18.3+, 17.0.62+, and 16.14.43+).
             </p>
           </div>
         </section>

@@ -467,9 +467,14 @@ function testTypesTracks(cacheDir) {
 function runVitestForVersion(ver, cacheDir) {
   const vitestBin = resolve(repoRoot, "node_modules/.bin/vitest");
   const configPath = resolve(currentDir, "vitest.compat.config.mts");
+  const major = Number.parseInt(ver.split(".")[0], 10);
+  const vitestArgs =
+    major < 18
+      ? ["run", "-c", configPath, "--maxWorkers=2", "src/__tests__/ssr.node.test.tsx"]
+      : ["run", "-c", configPath, "--maxWorkers=2"];
 
   return new Promise((resolvePromise) => {
-    const child = spawn(vitestBin, ["run", "-c", configPath], {
+    const child = spawn(vitestBin, vitestArgs, {
       cwd: repoRoot,
       env: {
         ...process.env,
@@ -492,30 +497,40 @@ function runVitestForVersion(ver, cacheDir) {
       const passedTestsMatch = combined.match(
         /Tests\s+(?:\d+\s+failed\s+\|\s+)?(\d+)\s+passed\s+\((\d+)\)/,
       );
-      const major = Number.parseInt(ver.split(".")[0], 10);
 
       const filesRatio = passedFilesMatch
         ? `${passedFilesMatch[1]}/${passedFilesMatch[2]} files`
-        : "all files";
+        : "0/0 files";
       const testsRatio = passedTestsMatch
         ? `${passedTestsMatch[1]}/${passedTestsMatch[2]} tests`
-        : "all tests";
+        : "0/0 tests";
+
+      const isExpected1830ActWarning =
+        ver === "18.3.0" &&
+        code !== 0 &&
+        passedFilesMatch &&
+        passedTestsMatch &&
+        Number(passedFilesMatch[2]) - Number(passedFilesMatch[1]) === 1 &&
+        Number(passedTestsMatch[2]) - Number(passedTestsMatch[1]) === 1 &&
+        combined.includes("ssr.hydration.test.tsx") &&
+        /ReactDOMTestUtils\.act`?\s+is deprecated in favor of `React\.act/i.test(combined);
 
       let vitestStatus = code === 0 ? "PASS" : "FAIL";
       let vitestSummary = `${filesRatio} (${testsRatio})`;
       let note = "All runtime, SSR, hydration, and Vitest checks pass";
 
-      if (ver === "18.3.0" && code !== 0 && passedTestsMatch) {
-        vitestStatus = "WARN";
-        vitestSummary = `${filesRatio} (${testsRatio})`;
-        note =
-          "Upstream react@18.3.0 omitted React.act, causing @testing-library/react fallback deprecation warning in ssr.hydration.test.tsx (fixed in 18.3.1)";
-      } else if (major < 18 && passedTestsMatch) {
+      if (major < 18 && code === 0 && passedTestsMatch) {
         vitestStatus = "SSR_ONLY";
         vitestSummary = `${filesRatio} (${testsRatio} SSR)`;
         note =
           "Runtime & hydration pass; repo JSDOM test harness uses @testing-library/react@16 which imports React 18+ react-dom/client";
+      } else if (isExpected1830ActWarning) {
+        vitestStatus = "WARN";
+        vitestSummary = `${filesRatio} (${testsRatio})`;
+        note =
+          "Upstream react@18.3.0 omitted React.act, causing @testing-library/react fallback deprecation warning in ssr.hydration.test.tsx (fixed in 18.3.1)";
       } else if (code !== 0) {
+        vitestStatus = "FAIL";
         vitestSummary = `${testFilesMatch ? testFilesMatch[1].trim() : "failed"} | ${testsMatch ? testsMatch[1].trim() : "failed"}`;
         note = "Vitest failure";
       }
@@ -531,6 +546,12 @@ function runVitestForVersion(ver, cacheDir) {
 
 export function printTerminalReport(report) {
   const divider = "─".repeat(112);
+  const runtimePct =
+    report.summary.totalRuntimeVersions > 0
+      ? Math.round(
+          (report.summary.passedRuntimeVersions / report.summary.totalRuntimeVersions) * 100,
+        )
+      : 0;
   console.log(`\n╔${"═".repeat(112)}╗`);
   console.log(
     `║  PURE REACT CAROUSEL — REACT VERSION COMPATIBILITY REPORT`.padEnd(113) + "║",
@@ -543,7 +564,7 @@ export function printTerminalReport(report) {
     `  Node Version    : ${report.nodeVersion}     |   Generated At    : ${report.generatedAt}`,
   );
   console.log(
-    `  Runtime Summary : ${report.summary.passedRuntimeVersions}/${report.summary.totalRuntimeVersions} versions passed (100% SSR, Client Render & Hydration)`,
+    `  Runtime Summary : ${report.summary.passedRuntimeVersions}/${report.summary.totalRuntimeVersions} versions passed (${runtimePct}% SSR, Client Render & Hydration)`,
   );
   console.log(
     `  TypeScript      : ${report.summary.passedTypesTracks}/${report.summary.totalTypesTracks} @types/react tracks passed\n`,
@@ -605,35 +626,6 @@ async function main() {
     return;
   }
 
-  // Ensure build artifacts exist
-  if (
-    !existsSync(resolve(repoRoot, "dist/index.cjs.js")) ||
-    !existsSync(resolve(repoRoot, "dist/index.es.js")) ||
-    !existsSync(resolve(repoRoot, "dist/types/index.d.ts"))
-  ) {
-    console.log("Building dist bundles and TypeScript declarations...");
-    execSync("npm run build", { cwd: repoRoot, stdio: "inherit" });
-  }
-
-  ensureCompatEnvs({ cacheDir: defaultCacheDir, reinstall: options.reinstall });
-
-  const pkgJson = JSON.parse(readFileSync(resolve(repoRoot, "package.json"), "utf8"));
-  const existingReport = existsSync(demoDataPath)
-    ? JSON.parse(readFileSync(demoDataPath, "utf8"))
-    : null;
-  const existingVitestMap = new Map();
-  if (existingReport?.tracks) {
-    for (const track of existingReport.tracks) {
-      for (const v of track.versions) {
-        existingVitestMap.set(v.version, {
-          vitestStatus: v.vitestStatus,
-          vitestSummary: v.vitestSummary,
-          note: v.note,
-        });
-      }
-    }
-  }
-
   const targetTracks = REACT_TRACKS.filter((track) => !options.track || track.id === options.track)
     .map((track) => ({
       ...track,
@@ -642,6 +634,21 @@ async function main() {
     .filter((track) => track.versions.length > 0);
 
   const selectedVersions = targetTracks.flatMap((t) => t.versions);
+  if (selectedVersions.length === 0) {
+    console.error(
+      `Error: No configured React versions matched the requested filter (${options.track ? `track=${options.track}` : ""}${options.track && options.version ? ", " : ""}${options.version ? `version=${options.version}` : ""}).`,
+    );
+    process.exit(1);
+  }
+
+  // Always rebuild dist bundles and TypeScript declarations before running compatibility checks
+  // so runtime, SSR, hydration, and consumer type checks test current source artifacts.
+  console.log("Building dist bundles and TypeScript declarations...");
+  execSync("npm run build", { cwd: repoRoot, stdio: "inherit" });
+
+  ensureCompatEnvs({ cacheDir: defaultCacheDir, reinstall: options.reinstall });
+
+  const pkgJson = JSON.parse(readFileSync(resolve(repoRoot, "package.json"), "utf8"));
   const runtimeMap = new Map();
 
   console.log(`Running runtime, SSR, client DOM, and hydration checks across ${selectedVersions.length} React versions...`);
@@ -664,7 +671,7 @@ async function main() {
   if (!options.skipVitest) {
     console.log(`Running repository Vitest suite across ${selectedVersions.length} React versions...`);
     const queue = [...selectedVersions];
-    const concurrency = 4;
+    const concurrency = 2;
     const workers = Array.from({ length: concurrency }, async () => {
       while (queue.length > 0) {
         const ver = queue.shift();
@@ -676,15 +683,11 @@ async function main() {
     await Promise.all(workers);
   } else {
     for (const ver of selectedVersions) {
-      const cached = existingVitestMap.get(ver);
-      vitestMap.set(
-        ver,
-        cached || {
-          vitestStatus: "SKIPPED",
-          vitestSummary: "Skipped (--skip-vitest)",
-          note: "Runtime, SSR & Hydration verified",
-        },
-      );
+      vitestMap.set(ver, {
+        vitestStatus: "SKIPPED",
+        vitestSummary: "Skipped (--skip-vitest)",
+        note: "Runtime, SSR & Hydration verified (Vitest skipped)",
+      });
     }
   }
 
@@ -716,6 +719,7 @@ async function main() {
   const allVersionRows = reportTracks.flatMap((t) => t.versions);
   const passedRuntimeVersions = allVersionRows.filter((v) => v.runtime === "PASS").length;
   const passedVitestFullSuite = allVersionRows.filter((v) => v.vitestStatus === "PASS").length;
+  const failedVitestCount = allVersionRows.filter((v) => v.vitestStatus === "FAIL").length;
   const passedTypesTracks = typesResults.filter((t) => t.status === "PASS").length;
 
   const report = {
@@ -745,9 +749,10 @@ async function main() {
     printTerminalReport(report);
   }
 
-  if (passedRuntimeVersions !== allVersionRows.length) {
+  if (passedRuntimeVersions !== allVersionRows.length || failedVitestCount > 0) {
     process.exit(1);
   }
 }
 
 await main();
+
