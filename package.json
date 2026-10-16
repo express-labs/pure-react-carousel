@@ -15,6 +15,7 @@
   "scripts": {
     "build": "npm run build:es && npm run build:cjs && npm run build:types",
     "build:cjs": "rollup -c rollup.config.cjs.mjs",
+    "build:demo": "vite build",
     "build:es": "rollup -c rollup.config.es.mjs",
     "build:types": "tsc -p tsconfig.build.json",
     "format": "oxfmt --write src typings",
@@ -22,6 +23,7 @@
     "lint": "oxlint src typings",
     "lint:fix": "oxlint --fix src typings",
     "prepublishOnly": "npm run typecheck && npm run lint && npm test && npm run build",
+    "start": "vite",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "typecheck": "npm run build:types && tsc --noEmit && tsc -p tsconfig.consumer.json --noEmit"
@@ -81,6 +83,7 @@
     "sass": "^1.92.1",
     "terser": "^5.48.0",
     "typescript": "^7.0.2",
+    "vite": "^8.3.4",
     "vitest": "^5.0.0"
   }
 }
