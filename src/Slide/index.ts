@@ -1,10 +1,10 @@
+import type * as React from "react";
 import Slide from "./Slide";
 import WithStore from "../Store/WithStore";
-import type { SlideProps as PublicSlideProps } from "../../typings";
-import type { CarouselState, SlideProps } from "../types";
+import type { CarouselState, SlideProps, SlideViewProps } from "../types";
 
-export default WithStore<
-  SlideProps,
+const ConnectedSlide: React.ComponentType<SlideProps> = WithStore<
+  SlideViewProps,
   Pick<
     CarouselState,
     | "currentSlide"
@@ -25,4 +25,6 @@ export default WithStore<
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
   isIntrinsicHeight: state.isIntrinsicHeight,
-})) as React.ComponentType<PublicSlideProps>;
+}));
+
+export default ConnectedSlide;

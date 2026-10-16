@@ -17,6 +17,9 @@
     "skipLibCheck": true,
     "noEmit": true,
     "resolveJsonModule": true,
+    "paths": {
+      "pure-react-carousel": ["./dist/types/index.d.ts"]
+    },
     "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src", "typings", "vitest.config.ts"],

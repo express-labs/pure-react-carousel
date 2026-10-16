@@ -5,7 +5,7 @@ import ButtonNext from "../ButtonNext";
 import Store from "../../Store/Store";
 import { CarouselProvider, CarouselContext } from "../..";
 import ButtonNextWithStore from "..";
-import { ButtonNextProps } from "../../types";
+import type { ButtonNextViewProps } from "../../types";
 
 const ContextCapture = ({
   onCapture,
@@ -20,7 +20,7 @@ const ContextCapture = ({
 };
 
 describe("<ButtonNext />", () => {
-  let props: ButtonNextProps;
+  let props: ButtonNextViewProps;
 
   beforeEach(() => {
     props = {

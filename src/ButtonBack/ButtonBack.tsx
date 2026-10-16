@@ -1,6 +1,6 @@
-import React from "react";
+import * as React from "react";
 import { cn } from "../helpers";
-import type { ButtonBackProps } from "../types";
+import type { ButtonBackViewProps } from "../types";
 import s from "./ButtonBack.scss";
 
 function setDisabled(
@@ -13,7 +13,7 @@ function setDisabled(
   return false;
 }
 
-const ButtonBack = (props: ButtonBackProps) => {
+const ButtonBack = (props: ButtonBackViewProps) => {
   const {
     carouselStore,
     children,

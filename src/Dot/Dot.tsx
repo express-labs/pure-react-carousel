@@ -1,9 +1,9 @@
-import React from "react";
+import * as React from "react";
 import { cn } from "../helpers";
-import type { DotProps } from "../types";
+import type { DotViewProps } from "../types";
 import s from "./Dot.scss";
 
-const Dot = (props: DotProps) => {
+const Dot = (props: DotViewProps) => {
   const {
     carouselStore,
     children = null,

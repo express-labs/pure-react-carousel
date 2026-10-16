@@ -1,13 +1,15 @@
+import type * as React from "react";
 import DotGroup from "./DotGroup";
 import WithStore from "../Store/WithStore";
-import type { DotGroupProps as PublicDotGroupProps } from "../../typings";
-import type { CarouselState, DotGroupProps } from "../types";
+import type { CarouselState, DotGroupProps, DotGroupViewProps } from "../types";
 
-export default WithStore<
-  DotGroupProps,
+const ConnectedDotGroup: React.ComponentType<DotGroupProps> = WithStore<
+  DotGroupViewProps,
   Pick<CarouselState, "currentSlide" | "totalSlides" | "visibleSlides">
 >(DotGroup, (state) => ({
   currentSlide: state.currentSlide,
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
-})) as React.ComponentType<PublicDotGroupProps>;
+}));
+
+export default ConnectedDotGroup;

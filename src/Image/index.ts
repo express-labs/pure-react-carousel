@@ -1,8 +1,13 @@
+import type * as React from "react";
 import Image from "./Image";
 import WithStore from "../Store/WithStore";
-import type { ImageProps as PublicImageProps } from "../../typings";
-import type { CarouselState, ImageProps } from "../types";
+import type { CarouselState, ImageProps, ImageViewProps } from "../types";
 
-export default WithStore<ImageProps, Pick<CarouselState, "hasMasterSpinner">>(Image, (state) => ({
+const ConnectedImage: React.ComponentType<ImageProps> = WithStore<
+  ImageViewProps,
+  Pick<CarouselState, "hasMasterSpinner">
+>(Image, (state) => ({
   hasMasterSpinner: state.hasMasterSpinner,
-})) as React.ComponentType<PublicImageProps>;
+}));
+
+export default ConnectedImage;

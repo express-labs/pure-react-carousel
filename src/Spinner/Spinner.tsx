@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { cn, cleanProps } from "../helpers";
 import type { SpinnerProps } from "../types";
 import s from "./Spinner.scss";

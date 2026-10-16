@@ -1,12 +1,14 @@
+import type * as React from "react";
 import ButtonFirst from "./ButtonFirst";
 import WithStore from "../Store/WithStore";
-import type { ButtonFirstProps as PublicButtonFirstProps } from "../../typings";
-import type { ButtonFirstProps, CarouselState } from "../types";
+import type { ButtonFirstProps, ButtonFirstViewProps, CarouselState } from "../types";
 
-export default WithStore<ButtonFirstProps, Pick<CarouselState, "currentSlide" | "totalSlides">>(
-  ButtonFirst,
-  (state) => ({
-    currentSlide: state.currentSlide,
-    totalSlides: state.totalSlides,
-  }),
-) as React.ComponentType<PublicButtonFirstProps>;
+const ConnectedButtonFirst: React.ComponentType<ButtonFirstProps> = WithStore<
+  ButtonFirstViewProps,
+  Pick<CarouselState, "currentSlide" | "totalSlides">
+>(ButtonFirst, (state) => ({
+  currentSlide: state.currentSlide,
+  totalSlides: state.totalSlides,
+}));
+
+export default ConnectedButtonFirst;

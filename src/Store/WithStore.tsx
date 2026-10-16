@@ -1,10 +1,16 @@
-import React, { memo, useContext } from "react";
+import * as React from "react";
+import { memo, useContext } from "react";
 import { CarouselContext } from "../CarouselProvider/context";
 import { equal } from "../helpers";
-import type { CarouselInjectedProps, CarouselState, CarouselStoreInterface } from "../types";
+import type {
+  CarouselInjectedProps,
+  CarouselState,
+  CarouselStoreInterface,
+  MapStateToProps,
+  WithStoreProps,
+} from "../types";
 
-export type WithStoreProps<P, T> = Omit<P, keyof (T & CarouselInjectedProps)> &
-  Partial<T & CarouselInjectedProps>;
+export type { WithStoreProps } from "../types";
 
 function shallowEqual(objA: Record<string, unknown>, objB: Record<string, unknown>): boolean {
   if (Object.is(objA, objB)) return true;
@@ -26,9 +32,17 @@ interface MemoizedPresenterProps<T> {
   carouselStore: CarouselStoreInterface;
 }
 
+export default function WithStore<P extends object, T = Record<never, never>>(
+  WrappedComponent: React.ComponentType<P>,
+  mapStateToProps?: MapStateToProps<T>,
+): React.ComponentType<WithStoreProps<P, T>>;
+export default function WithStore<CustomProps, CustomStateProps = Record<never, never>>(
+  WrappedComponent: React.ComponentType<CustomProps & CustomStateProps & CarouselInjectedProps>,
+  mapStateToProps?: MapStateToProps<CustomStateProps>,
+): React.ComponentType<CustomProps>;
 export default function WithStore<
   P extends object = Record<string, unknown>,
-  T = Record<string, unknown>,
+  T = Record<never, never>,
 >(
   WrappedComponent: React.ComponentType<P>,
   mapStateToProps: (state: CarouselState) => T = () => ({}) as T,

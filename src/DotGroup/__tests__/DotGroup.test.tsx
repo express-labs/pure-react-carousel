@@ -4,7 +4,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import DotGroup from "../DotGroup";
 import Store from "../../Store/Store";
 import { CarouselProvider } from "../..";
-import { DotGroupProps } from "../../types";
+import type { DotGroupViewProps } from "../../types";
 
 const renderWithProvider = (ui: React.ReactElement) =>
   render(
@@ -19,7 +19,7 @@ const renderWithProvider = (ui: React.ReactElement) =>
     </CarouselProvider>,
   );
 
-const renderCustomDots = ({ totalSlides }: DotGroupProps): React.ReactElement[] => {
+const renderCustomDots = ({ totalSlides }: DotGroupViewProps): React.ReactElement[] => {
   const dots: React.ReactElement[] = [];
 
   for (let i = 0; i < totalSlides; i += 1) {
@@ -29,7 +29,7 @@ const renderCustomDots = ({ totalSlides }: DotGroupProps): React.ReactElement[] 
 };
 
 describe("<DotGroup />", () => {
-  let props: DotGroupProps;
+  let props: DotGroupViewProps;
 
   beforeEach(() => {
     props = {

@@ -1,10 +1,10 @@
-import React from "react";
+import * as React from "react";
 import Dot from "../Dot";
 import { cn } from "../helpers";
-import type { DotGroupProps } from "../types";
+import type { DotGroupViewProps } from "../types";
 import s from "./DotGroup.scss";
 
-const DotGroup = (props: DotGroupProps) => {
+const DotGroup = (props: DotGroupViewProps) => {
   const {
     carouselStore: _carouselStore,
     children = null,

@@ -3,10 +3,10 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import ButtonPlay from "../ButtonPlay";
 import Store from "../../Store/Store";
-import { ButtonPlayProps } from "../../types";
+import type { ButtonPlayViewProps } from "../../types";
 
 describe("<ButtonPlay />", () => {
-  let props: ButtonPlayProps;
+  let props: ButtonPlayViewProps;
 
   beforeEach(() => {
     props = {
@@ -27,10 +27,10 @@ describe("<ButtonPlay />", () => {
     const { rerender } = render(<ButtonPlay {...props} />);
     const button = screen.getByRole("button");
     fireEvent.click(button);
-    expect(props.carouselStore.state.isPlaying).toBe(true);
-    rerender(<ButtonPlay {...props} isPlaying={props.carouselStore.state.isPlaying} />);
+    expect(props.carouselStore.getStoreState().isPlaying).toBe(true);
+    rerender(<ButtonPlay {...props} isPlaying={props.carouselStore.getStoreState().isPlaying} />);
     fireEvent.click(button);
-    expect(props.carouselStore.state.isPlaying).toBe(false);
+    expect(props.carouselStore.getStoreState().isPlaying).toBe(false);
   });
 
   it("should call any supplied onClick function on click", () => {

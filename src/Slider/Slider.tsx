@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import * as React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import GetScrollParent from "./GetScrollParent";
 import { cn, pct, boundedRange } from "../helpers";
-import type { Orientation, SliderProps } from "../types";
+import type { MutableCarouselStatePatch, Orientation, SliderViewProps } from "../types";
 import s from "./Slider.scss";
 
 export function slideSizeInPx(
@@ -44,14 +45,7 @@ interface SliderDragState {
   startY: number;
 }
 
-export interface ExtendedSliderProps extends SliderProps {
-  interval?: number;
-  preventVerticalScrollOnTouch?: boolean;
-  horizontalPixelThreshold?: number;
-  verticalPixelThreshold?: number;
-}
-
-const Slider = (props: ExtendedSliderProps) => {
+const Slider = (props: SliderViewProps) => {
   const {
     ariaLabel = "slider",
     backwardKeyCode = 37,
@@ -129,7 +123,7 @@ const Slider = (props: ExtendedSliderProps) => {
   const moveTimerRef = useRef<number | null>(null);
   const originalOverflowRef = useRef<string | null>(null);
   const scrollParentRef = useRef<HTMLElement | Element | null>(null);
-  const scrollStopTimerRef = useRef<number | null>(null);
+  const scrollStopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const latestPropsRef = useRef({
     backwardKeyCode,
@@ -235,7 +229,7 @@ const Slider = (props: ExtendedSliderProps) => {
 
   const stop = useCallback(() => {
     if (intervalRef.current !== null) {
-      window.clearInterval(intervalRef.current);
+      clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
   }, []);
@@ -501,9 +495,9 @@ const Slider = (props: ExtendedSliderProps) => {
     if (!latestPropsRef.current.touchEnabled) return;
     isDocumentScrollingRef.current = true;
     if (scrollStopTimerRef.current !== null) {
-      window.clearTimeout(scrollStopTimerRef.current);
+      clearTimeout(scrollStopTimerRef.current);
     }
-    scrollStopTimerRef.current = window.setTimeout(() => {
+    scrollStopTimerRef.current = setTimeout(() => {
       isDocumentScrollingRef.current = false;
     }, 66);
   }, []);
@@ -565,7 +559,7 @@ const Slider = (props: ExtendedSliderProps) => {
         visibleSlides: vis,
       } = latestPropsRef.current;
 
-      const newStoreState: { currentSlide?: number; isPlaying?: boolean } = {};
+      const newStoreState: MutableCarouselStatePatch = {};
 
       if (noKb === true || tot <= vis) return;
 
@@ -625,7 +619,7 @@ const Slider = (props: ExtendedSliderProps) => {
         window.cancelAnimationFrame.call(window, moveTimerRef.current);
       }
       if (scrollStopTimerRef.current !== null) {
-        window.clearTimeout(scrollStopTimerRef.current);
+        clearTimeout(scrollStopTimerRef.current);
       }
 
       isDocumentScrollingRef.current = null;

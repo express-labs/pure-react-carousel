@@ -3,10 +3,10 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import ButtonFirst from "../ButtonFirst";
 import Store from "../../Store/Store";
-import { ButtonFirstProps } from "../../types";
+import type { ButtonFirstViewProps } from "../../types";
 
 describe("<ButtonFirst />", () => {
-  let props: ButtonFirstProps;
+  let props: ButtonFirstViewProps;
 
   beforeEach(() => {
     props = {
