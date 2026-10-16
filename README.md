@@ -889,7 +889,7 @@ If you want direct access to the unconnected view component (for example, in uni
 `import { SlideView } from 'pure-react-carousel';`
 
 ## Dev Workflow
-**Note about Node Version:** Use Node **v22.22.2** (or `>=22.0.0`, as specified in `.nvmrc` and `package.json`) and run `npm ci` before developing `pure-react-carousel` on your local machine.
+**Note about Node Version:** Use Node **v24.18.0** (or `>=24.0.0`, as specified in `.nvmrc` and `package.json`) and run `npm ci` before developing `pure-react-carousel` on your local machine.
 
 - `npm ci` — Installs all dependencies for local development.<br><br>
 - `npm test` — Runs unit and integration tests using **Vitest** and **React Testing Library (RTL)** with V8 coverage reporting.<br><br>
