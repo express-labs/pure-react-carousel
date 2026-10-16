@@ -1,48 +1,40 @@
-name: Build
+name: Build and publish
 on:
   push:
     branches: [ master ]
+  release:
+    types: [ published ]
   workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v7.0.1
         with:
-          node-version: 10.16.1
-      - run: npm i
-      - run: npm run test
+          persist-credentials: false
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm run typecheck
       - run: npm run lint
-      - run: npm run prebuild
-  
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14.17
-          registry-url: https://registry.npmjs.org/
-      - run: npm i
-      - run: npx semantic-release
+      - run: npm test
+      - run: npm run build
+      - name: Verify release version
+        if: github.event_name == 'release' && !github.event.release.prerelease
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          test "$RELEASE_TAG" = "$VERSION" || test "$RELEASE_TAG" = "v$VERSION"
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  deploy:
-    needs: publish-npm
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 10.16.1
-          registry-url: https://registry.npmjs.org/
-      - run: npm i
-      - run: |
-              git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/express-labs/pure-react-carousel.git
-              npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+      - name: Publish to npm
+        if: github.event_name == 'release' && !github.event.release.prerelease
+        run: npm publish --ignore-scripts
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
