@@ -1,4 +1,5 @@
 import * as React from "react";
+import pkg from "../../../package.json";
 import rawCompatibilityData from "./compatibilityData.json";
 import s from "./CompatibilityPage.scss";
 
@@ -68,9 +69,15 @@ const getBadgeClassName = (status: string): string => {
   return s.badgeWarn;
 };
 
+const defaultCompatibilityData: CompatibilityReportData = {
+  ...(rawCompatibilityData as CompatibilityReportData),
+  packageVersion: pkg.version,
+  peerDependencies: pkg.peerDependencies,
+};
+
 const CompatibilityPage = ({
   onBack,
-  data = rawCompatibilityData as CompatibilityReportData,
+  data = defaultCompatibilityData,
 }: CompatibilityPageProps): React.ReactElement => {
   const [selectedTrack, setSelectedTrack] = React.useState<string>("all");
   const [searchQuery, setSearchQuery] = React.useState<string>("");

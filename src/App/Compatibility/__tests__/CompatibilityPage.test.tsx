@@ -157,4 +157,11 @@ describe("<CompatibilityPage />", () => {
 
     expect(onBack).toHaveBeenCalledTimes(1);
   });
+
+  it("displays the current package.json version when rendered with default data", async () => {
+    const pkg = await import("../../../../package.json");
+    render(<CompatibilityPage />);
+
+    expect(screen.getByText(`v${pkg.default.version}`)).toBeInTheDocument();
+  });
 });
