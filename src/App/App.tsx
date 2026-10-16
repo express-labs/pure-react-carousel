@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import CompatibilityPage from "./Compatibility";
 import {
   Example1,
   Example2,
@@ -16,12 +17,55 @@ import {
 } from "./examples";
 import s from "./style.scss";
 
+const getInitialPage = (): "demo" | "compatibility" => {
+  if (typeof window === "undefined") {
+    return "demo";
+  }
+  const params = new URLSearchParams(window.location.search);
+  if (window.location.hash === "#compatibility" || params.get("page") === "compatibility") {
+    return "compatibility";
+  }
+  return "demo";
+};
+
 const DevelopmentApp = (): React.ReactElement => {
   const [value, setValue] = useState("0");
+  const [activePage, setActivePage] = useState<"demo" | "compatibility">(getInitialPage);
+
+  useEffect(() => {
+    const syncPageFromLocation = (): void => {
+      setActivePage(getInitialPage());
+    };
+    window.addEventListener("hashchange", syncPageFromLocation);
+    window.addEventListener("popstate", syncPageFromLocation);
+    return () => {
+      window.removeEventListener("hashchange", syncPageFromLocation);
+      window.removeEventListener("popstate", syncPageFromLocation);
+    };
+  }, []);
 
   const handleChange = (ev: React.ChangeEvent<HTMLSelectElement>): void => {
     setValue(ev.target.value);
   };
+
+  const handleOpenCompatibility = (ev: React.MouseEvent<HTMLAnchorElement>): void => {
+    ev.preventDefault();
+    if (typeof window !== "undefined") {
+      window.history.pushState(null, "", "#compatibility");
+    }
+    setActivePage("compatibility");
+  };
+
+  const handleBackToDemo = (): void => {
+    if (typeof window !== "undefined") {
+      window.history.pushState(null, "", window.location.pathname);
+    }
+    setActivePage("demo");
+  };
+
+  if (activePage === "compatibility") {
+    return <CompatibilityPage onBack={handleBackToDemo} />;
+  }
 
   return (
     <div>
@@ -46,6 +90,11 @@ const DevelopmentApp = (): React.ReactElement => {
               </li>
               <li>
                 <a href="#de">Demo Examples</a>
+              </li>
+              <li>
+                <a href="./compatibility.html" onClick={handleOpenCompatibility}>
+                  React Compatibility Chart
+                </a>
               </li>
               <li>
                 <a href="https://github.com/express-labs/pure-react-carousel">

@@ -1,0 +1,546 @@
+$dark: #373737;
+$light: #f4f4f4;
+$white: #fefefe;
+$highlight1: #c0b283;
+$highlight2: #dcd0c0;
+$passBg: #e6f4ea;
+$passText: #137333;
+$passBorder: #ceead6;
+$failBg: #fce8e6;
+$failText: #c5221f;
+$failBorder: #fad2cf;
+$warnBg: #fef7e0;
+$warnText: #b06000;
+$warnBorder: #feefc3;
+$borderSubtle: #e0dad1;
+
+.page {
+  min-height: 100vh;
+  background-color: $light;
+  color: $dark;
+}
+
+.hero {
+  background-color: $dark;
+  color: $light;
+  padding: 3.2rem 2rem 4rem;
+}
+
+.heroInner {
+  max-width: 112rem;
+  margin: 0 auto;
+}
+
+.topNav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-bottom: 2.4rem;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: $highlight2;
+  background: transparent;
+  border: 1px solid $highlight1;
+  border-radius: 0.4rem;
+  padding: 0.8rem 1.4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background-color: rgba(192, 178, 131, 0.15);
+    color: $white;
+  }
+}
+
+.repoLink {
+  color: $highlight2;
+  font-size: 1.4rem;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: $white;
+    text-decoration: underline;
+  }
+}
+
+.heroTitle {
+  font-size: 3.4rem;
+  line-height: 1.2;
+  color: $highlight1;
+  margin: 0 0 1.2rem;
+
+  @media all and (min-width: 768px) {
+    font-size: 4.2rem;
+  }
+}
+
+.heroSubtitle {
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: $light;
+  max-width: 84rem;
+  margin: 0 0 2rem;
+}
+
+.metaBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.metaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(192, 178, 131, 0.4);
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1.2rem;
+  color: $highlight2;
+}
+
+.metaLabel {
+  font-weight: 700;
+  color: $highlight1;
+}
+
+.mainContent {
+  max-width: 112rem;
+  margin: 0 auto;
+  padding: 3.2rem 2rem 6rem;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+  gap: 1.6rem;
+  margin-bottom: 3.2rem;
+}
+
+.summaryCard {
+  background-color: $white;
+  border: 1px solid $borderSubtle;
+  border-top: 4px solid $highlight1;
+  border-radius: 0.6rem;
+  padding: 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.summaryCardTitle {
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #666666;
+  margin: 0 0 0.8rem;
+}
+
+.summaryCardValue {
+  font-size: 3rem;
+  font-weight: 700;
+  color: $dark;
+  margin: 0 0 0.6rem;
+}
+
+.summaryCardDesc {
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: #555555;
+  margin: 0;
+}
+
+.section {
+  background-color: $white;
+  border: 1px solid $borderSubtle;
+  border-radius: 0.6rem;
+  padding: 2.4rem;
+  margin-bottom: 3.2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.6rem;
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 2.2rem;
+  color: $dark;
+  margin: 0 0 0.6rem;
+}
+
+.sectionDescription {
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: #555555;
+  margin: 0;
+}
+
+.controlsBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-bottom: 1.6rem;
+}
+
+.trackTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.trackTab {
+  background-color: $light;
+  color: $dark;
+  border: 1px solid $borderSubtle;
+  border-radius: 0.4rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    border-color: $highlight1;
+  }
+}
+
+.trackTabActive {
+  background-color: $dark;
+  color: $highlight1;
+  border-color: $dark;
+}
+
+.searchField {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.searchLabel {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: $dark;
+}
+
+.searchInput {
+  border: 1px solid $borderSubtle;
+  border-radius: 0.4rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.3rem;
+  min-width: 20rem;
+  background-color: $white;
+  color: $dark;
+
+  &:focus {
+    outline: 2px solid $highlight1;
+    border-color: $highlight1;
+  }
+}
+
+.tableWrapper {
+  overflow: auto;
+  max-inline-size: 100%;
+  max-block-size: 72vh;
+  container-type: inline-size;
+  border: 1px solid $borderSubtle;
+  border-radius: 0.6rem;
+  background-color: $white;
+}
+
+.compatTable {
+  --label-1: "Version";
+  --label-2: "Track";
+  --label-3: "SSR";
+  --label-4: "Client Mount";
+  --label-5: "Hydration";
+  --label-6: "Interactive Runtime";
+  --label-7: "Vitest Suite";
+  --label-8: "Notes";
+
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 1.3rem;
+  text-align: left;
+}
+
+.typesTable {
+  --label-1: "Track / Label";
+  --label-2: "@types/react";
+  --label-3: "Status";
+  --label-4: "Details & Notes";
+
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 1.3rem;
+  text-align: left;
+}
+
+.tableHead {
+  background-color: $dark;
+  color: $light;
+
+  @container (width < 600px) {
+    display: none;
+  }
+}
+
+.tableBody {
+  background-color: $white;
+}
+
+.tableRow {
+  border-bottom: 1px solid $borderSubtle;
+
+  &:nth-child(even) {
+    background-color: #faf9f7;
+  }
+
+  @container (width < 600px) {
+    display: block;
+    padding: 1.2rem;
+  }
+}
+
+.cornerHeaderCell {
+  position: sticky;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 2;
+  background-color: $dark;
+  color: $highlight1;
+  padding: 1.2rem 1.4rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tableHeaderCell {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  background-color: $dark;
+  color: $highlight2;
+  padding: 1.2rem 1.4rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rowHeaderCell {
+  position: sticky;
+  inset-inline-start: 0;
+  background-color: inherit;
+  padding: 1rem 1.4rem;
+  font-weight: 700;
+  font-family: monospace;
+  font-size: 1.35rem;
+  color: $dark;
+  white-space: nowrap;
+
+  @container (width < 600px) {
+    position: static;
+    display: block;
+    padding: 0.4rem 0 0.8rem;
+    font-size: 1.5rem;
+    border-bottom: 1px dashed $borderSubtle;
+    margin-bottom: 0.6rem;
+  }
+}
+
+.tableCell {
+  padding: 1rem 1.4rem;
+  vertical-align: middle;
+
+  @container (width < 600px) {
+    display: block;
+    padding: 0.4rem 0;
+  }
+}
+
+.cellCol2 {
+  @container (width < 600px) {
+    &::before {
+      content: var(--label-2) ": " / var(--label-2);
+      font-weight: 700;
+    }
+  }
+}
+
+.cellCol3 {
+  @container (width < 600px) {
+    &::before {
+      content: var(--label-3) ": " / var(--label-3);
+      font-weight: 700;
+    }
+  }
+}
+
+.cellCol4 {
+  @container (width < 600px) {
+    &::before {
+      content: var(--label-4) ": " / var(--label-4);
+      font-weight: 700;
+    }
+  }
+}
+
+.cellCol5 {
+  @container (width < 600px) {
+    &::before {
+      content: var(--label-5) ": " / var(--label-5);
+      font-weight: 700;
+    }
+  }
+}
+
+.cellCol6 {
+  @container (width < 600px) {
+    &::before {
+      content: var(--label-6) ": " / var(--label-6);
+      font-weight: 700;
+    }
+  }
+}
+
+.cellCol7 {
+  @container (width < 600px) {
+    &::before {
+      content: var(--label-7) ": " / var(--label-7);
+      font-weight: 700;
+    }
+  }
+}
+
+.cellCol8 {
+  @container (width < 600px) {
+    &::before {
+      content: var(--label-8) ": " / var(--label-8);
+      font-weight: 700;
+    }
+  }
+}
+
+.badgePass {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  background-color: $passBg;
+  color: $passText;
+  border: 1px solid $passBorder;
+  white-space: nowrap;
+}
+
+.badgeFail {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  background-color: $failBg;
+  color: $failText;
+  border: 1px solid $failBorder;
+  white-space: nowrap;
+}
+
+.badgeWarn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  background-color: $warnBg;
+  color: $warnText;
+  border: 1px solid $warnBorder;
+  white-space: nowrap;
+}
+
+.trackBadge {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border-radius: 0.4rem;
+  background-color: $light;
+  border: 1px solid $borderSubtle;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: $dark;
+  white-space: nowrap;
+}
+
+.noteText {
+  font-size: 1.25rem;
+  color: #555555;
+}
+
+.errorCode {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: monospace;
+  font-size: 1.2rem;
+  color: $failText;
+}
+
+.emptyState {
+  padding: 3.2rem;
+  text-align: center;
+  font-size: 1.4rem;
+  color: #666666;
+}
+
+.cliGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+  gap: 1.6rem;
+}
+
+.cliCard {
+  background-color: $light;
+  border: 1px solid $borderSubtle;
+  border-radius: 0.6rem;
+  padding: 1.6rem;
+}
+
+.cliTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: $dark;
+  margin: 0 0 0.6rem;
+}
+
+.cliCommand {
+  display: block;
+  background-color: $dark;
+  color: $highlight2;
+  padding: 1rem 1.2rem;
+  border-radius: 0.4rem;
+  font-family: monospace;
+  font-size: 1.25rem;
+  margin: 0 0 0.8rem;
+  overflow-x: auto;
+}
+
+.cliDesc {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: #555555;
+  margin: 0;
+}

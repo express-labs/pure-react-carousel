@@ -17,6 +17,7 @@
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
     "src/app.tsx",
+    "src/compatibility.tsx",
     "src/App",
     "src/setupTests.ts"
   ]

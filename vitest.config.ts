@@ -33,6 +33,7 @@ export default defineConfig({
         'src/scss.d.ts',
         'src/types.ts',
         'src/app.tsx',
+        'src/compatibility.tsx',
         'src/App/**',
         'src/**/index.ts',
       ],

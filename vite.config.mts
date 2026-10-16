@@ -23,6 +23,12 @@ export default defineConfig({
   build: {
     outDir: "../dist-demo",
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: path.resolve(import.meta.dirname, "dev/index.html"),
+        compatibility: path.resolve(import.meta.dirname, "dev/compatibility.html"),
+      },
+    },
   },
   plugins: [
     {
