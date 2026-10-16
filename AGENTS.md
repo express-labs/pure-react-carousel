@@ -16,6 +16,8 @@
 
 - **Git & Branching Protocols**: `docs/GITHUB_CONVENTIONS.md`
   - Conventional Commit branch prefixes for Release Please and push restrictions (`main`/`master` protection).
+- **Pull Request Conventions**: `docs/PULL_REQUEST_CONVENTIONS.md`
+  - PR title rules for Release Please, required `.github/PULL_REQUEST_TEMPLATE.md` sections (`What`, `Why`, `How`, `Checklist`), and `gh pr create` / artifact workflows.
 - **CSS & SCSS Styling Standards**: `docs/CSS_CONVENTIONS.md`
   - Strict flat selectors (no nested class selectors), no HTML tag selectors, and modular styling.
 
