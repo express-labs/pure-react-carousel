@@ -333,7 +333,7 @@ export interface SliderProps extends CarouselElement<"div"> {
   spinner?: () => React.ReactNode;
   style?: React.CSSProperties;
   tabIndex?: number;
-  trayProps?: CarouselElement<"div"> & { ref?: React.Ref<HTMLElement> };
+  trayProps?: CarouselElement<"div"> & { ref?: never };
   trayTag?: Tag;
 }
 

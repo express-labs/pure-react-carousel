@@ -396,3 +396,16 @@ export const verifyReadonlyCarouselState = (): void => {
   // @ts-expect-error -- CarouselState fields on CarouselStoreInterface.state are readonly
   mockFullCarouselStore.state.isPlaying = true;
 };
+
+// 7. Verify Slider trayProps Rejects Unsupported ref Prop
+export const verifySliderTrayPropsRejectsRef = (): React.ReactElement => {
+  const trayRef = React.createRef<HTMLDivElement>();
+  return (
+    <Slider
+      // @ts-expect-error -- trayProps.ref is discarded at runtime and unsupported in the public SliderProps contract
+      trayProps={{ ref: trayRef }}
+    >
+      <div>Slide</div>
+    </Slider>
+  );
+};
