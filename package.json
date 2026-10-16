@@ -25,6 +25,10 @@
     "prepublishOnly": "npm run typecheck && npm run lint && npm test && npm run build",
     "start": "vite",
     "test": "vitest run --coverage",
+    "test:compat": "node scripts/react-compat/index.mjs",
+    "test:compat:demo": "node scripts/react-compat/index.mjs --update-demo",
+    "test:compat:fast": "node scripts/react-compat/index.mjs --skip-vitest",
+    "test:compat:report": "node scripts/react-compat/index.mjs --report-only",
     "test:watch": "vitest",
     "typecheck": "npm run build:types && tsc --noEmit && tsc -p tsconfig.consumer.json --noEmit"
   },
