@@ -3,7 +3,7 @@
 ## Core Workflow & Critical Guardrails
 
 - **Environment**: Node `v22.22.2` (pinned by `.nvmrc` and `package.json`). All commands must run in this environment.
-- **Public Types Sync**: Rollup does not generate `.d.ts` files. When modifying public component props or exports, update both `src/types.ts` and `typings/index.d.ts` (and `typings/index.test-d.tsx`).
+- **Single Source of Truth for Types**: `src/types.ts` is the single source of truth for all public (`*Props`) and unconnected view (`*ViewProps`) component types, re-exported via `src/index.ts`. Declaration files (`dist/types/index.d.ts`) are generated automatically during `npm run build` (`npm run build:types` via `tsconfig.build.json`). When modifying public component props or exports, update `src/types.ts` (and `src/index.ts` if adding new types) and cover new contracts in `typings/index.test-d.tsx`.
 - **Component & Styling Contract**:
   - Each component folder separates the unconnected component (`Component.tsx`) from the context-connected export (`index.ts` using `WithStore`).
   - Preserve existing global `.carousel__*` class names alongside scoped CSS Module classes (`s.*`).
