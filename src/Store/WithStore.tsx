@@ -31,17 +31,17 @@ interface MemoizedPresenterProps<T> {
   carouselStore: CarouselStoreInterface;
 }
 
-export default function WithStore<P extends object, T = Record<string, unknown>>(
+export default function WithStore<P extends object, T = Record<never, never>>(
   WrappedComponent: React.ComponentType<P>,
   mapStateToProps?: MapStateToProps<T>,
 ): React.ComponentType<WithStoreProps<P, T>>;
-export default function WithStore<CustomProps, CustomStateProps = Record<string, unknown>>(
+export default function WithStore<CustomProps, CustomStateProps = Record<never, never>>(
   WrappedComponent: React.ComponentType<CustomProps & CustomStateProps & CarouselInjectedProps>,
   mapStateToProps?: MapStateToProps<CustomStateProps>,
 ): React.ComponentType<CustomProps>;
 export default function WithStore<
   P extends object = Record<string, unknown>,
-  T = Record<string, unknown>,
+  T = Record<never, never>,
 >(
   WrappedComponent: React.ComponentType<P>,
   mapStateToProps: (state: CarouselState) => T = () => ({}) as T,

@@ -364,17 +364,22 @@ export interface SpinnerProps extends CarouselElement<"div"> {
 
 export type SpinnerViewProps = SpinnerProps;
 
-export type MapStateToProps<TStateProps> = (state: CarouselState) => TStateProps;
+export type MapStateToProps<TStateProps = Record<never, never>> = (
+  state: CarouselState,
+) => TStateProps;
 
-export type WithStoreProps<P, T> = Omit<P, keyof (T & CarouselInjectedProps)> &
+export type WithStoreProps<P, T = Record<never, never>> = Omit<
+  P,
+  keyof (T & CarouselInjectedProps)
+> &
   Partial<T & CarouselInjectedProps>;
 
 export interface WithStoreInterface {
-  <P extends object, T = Record<string, unknown>>(
+  <P extends object, T = Record<never, never>>(
     component: React.ComponentType<P>,
     mapStateToProps?: MapStateToProps<T>,
   ): React.ComponentType<WithStoreProps<P, T>>;
-  <CustomProps, CustomStateProps = Record<string, unknown>>(
+  <CustomProps, CustomStateProps = Record<never, never>>(
     component: React.ComponentType<CustomProps & CustomStateProps & CarouselInjectedProps>,
     mapStateToProps?: MapStateToProps<CustomStateProps>,
   ): React.ComponentType<CustomProps>;

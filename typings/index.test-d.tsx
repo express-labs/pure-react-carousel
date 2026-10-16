@@ -201,7 +201,53 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
   );
 };
 
-// 2. Verify WithStore Overload 1 (Inferred View Component) & Overload 2 (Explicit CustomProps from raven-ui)
+// 2. Verify WithStore Overloads: Inferred No-Mapper, Single-Type-Argument, and Two-Type-Argument Contracts
+interface CustomNoMapperViewProps extends CarouselInjectedProps {
+  items: string[];
+  label?: string;
+}
+
+const CustomNoMapperView = ({ items, label }: CustomNoMapperViewProps) => (
+  <div data-label={label}>{items.length}</div>
+);
+
+export const ConnectedNoMapper = WithStore(CustomNoMapperView);
+
+interface SingleArgOwnProps {
+  items: string[];
+  deviceWidth?: number;
+}
+
+interface SingleArgMappedState {
+  currentSlide: number;
+  visibleSlides: number;
+}
+
+const SingleArgView = ({
+  items,
+  deviceWidth,
+  currentSlide,
+  visibleSlides,
+}: SingleArgOwnProps & Partial<SingleArgMappedState> & CarouselInjectedProps) => (
+  <div data-width={deviceWidth} data-slide={currentSlide} data-visible={visibleSlides}>
+    {items.length}
+  </div>
+);
+
+const mapSingleArgState = (state: CarouselState): SingleArgMappedState => ({
+  currentSlide: state.currentSlide,
+  visibleSlides: state.visibleSlides,
+});
+
+export const ConnectedSingleArg = WithStore<SingleArgOwnProps>(SingleArgView, mapSingleArgState);
+
+const withStoreViaInterface: WithStoreInterface = WithStore;
+export const ConnectedNoMapperViaInterface = withStoreViaInterface(CustomNoMapperView);
+export const ConnectedSingleArgViaInterface = withStoreViaInterface<SingleArgOwnProps>(
+  SingleArgView,
+  mapSingleArgState,
+);
+
 interface CustomThumbnailsProps extends CarouselInjectedProps {
   items: string[];
   currentSlide?: number;
@@ -216,6 +262,33 @@ export const ConnectedThumbnails = WithStore<CustomThumbnailsProps, { currentSli
   (state: CarouselState) => ({
     currentSlide: state.currentSlide,
   }),
+);
+
+export const VerifyWithStoreOwnPropChecking = (): React.ReactElement => (
+  <div>
+    <ConnectedNoMapper items={["a", "b"]} label="valid" />
+    <ConnectedNoMapperViaInterface items={["a"]} />
+    <ConnectedSingleArg items={["a", "b"]} deviceWidth={1024} />
+    <ConnectedSingleArgViaInterface items={["a"]} />
+    <ConnectedThumbnails items={["a", "b"]} />
+
+    {/* @ts-expect-error -- required own prop `items` cannot be omitted on inferred no-mapper WithStore component */}
+    <ConnectedNoMapper label="missing-items" />
+    {/* @ts-expect-error -- own prop `items` must be string[] on inferred no-mapper WithStore component */}
+    <ConnectedNoMapper items={123} />
+    {/* @ts-expect-error -- required own prop `items` cannot be omitted on WithStoreInterface no-mapper component */}
+    <ConnectedNoMapperViaInterface />
+    {/* @ts-expect-error -- required own prop `items` cannot be omitted on single-type-arg WithStore component */}
+    <ConnectedSingleArg deviceWidth={1024} />
+    {/* @ts-expect-error -- own prop `items` must be string[] on single-type-arg WithStore component */}
+    <ConnectedSingleArg items="invalid" />
+    {/* @ts-expect-error -- required own prop `items` cannot be omitted on WithStoreInterface single-type-arg component */}
+    <ConnectedSingleArgViaInterface />
+    {/* @ts-expect-error -- required own prop `items` cannot be omitted on two-type-arg WithStore component */}
+    <ConnectedThumbnails />
+    {/* @ts-expect-error -- own prop `items` must be string[] on two-type-arg WithStore component */}
+    <ConnectedThumbnails items={[123]} />
+  </div>
 );
 
 // 3. Verify CarouselInjectedProps['carouselStore'] Mock Shape (used by raven-ui CurrentSlideIndicator.test.tsx)
