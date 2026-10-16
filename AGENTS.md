@@ -3,6 +3,7 @@
 ## Core Workflow & Critical Guardrails
 
 - **Environment**: Node `v22.22.2` (pinned by `.nvmrc` and `package.json`). All commands must run in this environment.
+- **Commits & Git Safety**: Conventional & Atomic Commits (`<type>(<scope>): <subject>` or `<type>: <subject>`) with a mandatory title and body explaining the technical rationale. Group related changes into focused, buildable commits (make multiple commits when needed). **NEVER** push directly to `master` or `main`. See `docs/GITHUB_CONVENTIONS.md`.
 - **Single Source of Truth for Types**: `src/types.ts` is the single source of truth for all public (`*Props`) and unconnected view (`*ViewProps`) component types, re-exported via `src/index.ts`. Declaration files (`dist/types/index.d.ts`) are generated automatically during `npm run build` (`npm run build:types` via `tsconfig.build.json`). When modifying public component props or exports, update `src/types.ts` (and `src/index.ts` if adding new types) and cover new contracts in `typings/index.test-d.tsx`.
 - **Component & Styling Contract**:
   - Each component folder separates the unconnected component (`Component.tsx`) from the context-connected export (`index.ts` using `WithStore`).
@@ -15,7 +16,7 @@
 > Consult only when actively modifying the relevant subsystem; do not pre-read.
 
 - **Git & Branching Protocols**: `docs/GITHUB_CONVENTIONS.md`
-  - Conventional Commit branch prefixes for Release Please and push restrictions (`main`/`master` protection).
+  - Conventional & atomic commit requirements, branch prefixes for Release Please, and push restrictions (`main`/`master` protection).
 - **Pull Request Conventions**: `docs/PULL_REQUEST_CONVENTIONS.md`
   - PR title rules for Release Please, required `.github/PULL_REQUEST_TEMPLATE.md` sections (`What`, `Why`, `How`, `Checklist`), and `gh pr create` / artifact workflows.
 - **CSS & SCSS Styling Standards**: `docs/CSS_CONVENTIONS.md`
