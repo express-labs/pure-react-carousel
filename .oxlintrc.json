@@ -12,5 +12,5 @@
     "unicorn/no-null": "off",
     "unicorn/prefer-add-event-listener": "off"
   },
-  "ignorePatterns": ["dist/**", "dev/**", "node_modules/**", "coverage/**"]
+  "ignorePatterns": ["dist/**", "dist-demo/**", "dev/**", "node_modules/**", "coverage/**"]
 }

@@ -48,6 +48,7 @@ node_modules
 
 # dist folder
 /dist
+/dist-demo
 
 # Bamboo Artifacts
 eslint.json
