@@ -3,26 +3,24 @@ on:
   pull_request:
     branches: [ master ]
   workflow_dispatch:
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      
-      - name: Setup Node
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v7.0.1
         with:
-          node-version: '10.16.1'
-          
-      - name: Install Dependencies, run build, lint, and tests
-        run: |
-            npm i
-            npm run lint
-            npm run test
-            npm run build
-            
+          persist-credentials: false
+      - name: Setup Node
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
