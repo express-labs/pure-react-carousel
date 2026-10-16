@@ -1,5 +1,7 @@
 name: CI
 on:
+  push:
+    branches: [ master ]
   pull_request:
     branches: [ master ]
   workflow_dispatch:
@@ -20,6 +22,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - run: npm run format:check
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
