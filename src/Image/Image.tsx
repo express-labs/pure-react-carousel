@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { cn, LOADING, SUCCESS, ERROR } from "../helpers";
-import type { ImageProps } from "../types";
+import type { ImageViewProps } from "../types";
 import s from "./Image.scss";
 
 export function subscribeMasterSpinner(
-  props: Pick<ImageProps, "hasMasterSpinner" | "carouselStore" | "src">,
+  props: Pick<ImageViewProps, "hasMasterSpinner" | "carouselStore" | "src">,
 ): void {
   if (props.hasMasterSpinner) {
     props.carouselStore.subscribeMasterSpinner(props.src);
@@ -12,14 +12,14 @@ export function subscribeMasterSpinner(
 }
 
 export function unsubscribeMasterSpinner(
-  props: Pick<ImageProps, "hasMasterSpinner" | "carouselStore" | "src">,
+  props: Pick<ImageViewProps, "hasMasterSpinner" | "carouselStore" | "src">,
 ): void {
   if (props.hasMasterSpinner) {
     props.carouselStore.unsubscribeMasterSpinner(props.src);
   }
 }
 
-const Image = (props: ImageProps) => {
+const Image = (props: ImageViewProps) => {
   const {
     alt = "",
     bgImageProps: _bgImageProps,

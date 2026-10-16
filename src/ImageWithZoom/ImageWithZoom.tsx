@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "../Image";
 import Spinner from "../Spinner";
 import { boundedRange, cn, pct } from "../helpers";
-import type { ImageWithZoomProps } from "../types";
+import type { ImageWithZoomViewProps } from "../types";
 import s from "./ImageWithZoom.scss";
 
 const MOUSE_SCALE = 2;
@@ -34,7 +34,7 @@ interface TouchPointCacheEntry {
   clientY: number;
 }
 
-const ImageWithZoom = (props: ImageWithZoomProps & { spinner?: () => React.ReactNode }) => {
+const ImageWithZoom = (props: ImageWithZoomViewProps) => {
   const {
     alt = undefined,
     bgImageProps = {},

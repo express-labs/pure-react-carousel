@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { cn, pct } from "../helpers";
-import type { SlideProps } from "../types";
+import type { SlideViewProps } from "../types";
 import s from "./Slide.scss";
 
-const Slide = (props: SlideProps) => {
+const Slide = (props: SlideViewProps) => {
   const {
     ariaLabel = "slide",
     carouselStore: _carouselStore = null,

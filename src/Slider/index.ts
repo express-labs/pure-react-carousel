@@ -1,11 +1,10 @@
+import type React from "react";
 import Slider from "./Slider";
 import WithStore from "../Store/WithStore";
-import type { SliderProps as PublicSliderProps } from "../../typings";
-import type { CarouselState } from "../types";
-import type { ExtendedSliderProps } from "./Slider";
+import type { CarouselState, SliderProps, SliderViewProps } from "../types";
 
-export default WithStore<
-  ExtendedSliderProps,
+const ConnectedSlider: React.ComponentType<SliderProps> = WithStore<
+  SliderViewProps,
   Pick<
     CarouselState,
     | "currentSlide"
@@ -58,4 +57,6 @@ export default WithStore<
   touchEnabled: state.touchEnabled,
   dragEnabled: state.dragEnabled,
   visibleSlides: state.visibleSlides,
-})) as React.ComponentType<PublicSliderProps>;
+}));
+
+export default ConnectedSlider;

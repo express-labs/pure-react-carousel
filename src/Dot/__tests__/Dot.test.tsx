@@ -3,10 +3,10 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import Dot from "../Dot";
 import Store from "../../Store/Store";
-import { DotProps } from "../../types";
+import type { DotViewProps } from "../../types";
 
 describe("<Dot />", () => {
-  let props: DotProps;
+  let props: DotViewProps;
 
   beforeEach(() => {
     props = {

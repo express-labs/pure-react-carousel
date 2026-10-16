@@ -1,10 +1,10 @@
+import type React from "react";
 import ButtonNext from "./ButtonNext";
 import WithStore from "../Store/WithStore";
-import type { ButtonNextProps as PublicButtonNextProps } from "../../typings";
-import type { ButtonNextProps, CarouselState } from "../types";
+import type { ButtonNextProps, ButtonNextViewProps, CarouselState } from "../types";
 
-export default WithStore<
-  ButtonNextProps,
+const ConnectedButtonNext: React.ComponentType<ButtonNextProps> = WithStore<
+  ButtonNextViewProps,
   Pick<CarouselState, "currentSlide" | "step" | "totalSlides" | "visibleSlides" | "infinite">
 >(ButtonNext, (state) => ({
   currentSlide: state.currentSlide,
@@ -12,4 +12,6 @@ export default WithStore<
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
   infinite: state.infinite,
-})) as React.ComponentType<PublicButtonNextProps>;
+}));
+
+export default ConnectedButtonNext;

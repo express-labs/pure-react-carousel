@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import GetScrollParent from "./GetScrollParent";
 import { cn, pct, boundedRange } from "../helpers";
-import type { Orientation, SliderProps } from "../types";
+import type { Orientation, SliderViewProps } from "../types";
 import s from "./Slider.scss";
 
 export function slideSizeInPx(
@@ -44,14 +44,7 @@ interface SliderDragState {
   startY: number;
 }
 
-export interface ExtendedSliderProps extends SliderProps {
-  interval?: number;
-  preventVerticalScrollOnTouch?: boolean;
-  horizontalPixelThreshold?: number;
-  verticalPixelThreshold?: number;
-}
-
-const Slider = (props: ExtendedSliderProps) => {
+const Slider = (props: SliderViewProps) => {
   const {
     ariaLabel = "slider",
     backwardKeyCode = 37,

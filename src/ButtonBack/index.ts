@@ -1,10 +1,10 @@
+import type React from "react";
 import ButtonBack from "./ButtonBack";
 import WithStore from "../Store/WithStore";
-import type { ButtonBackProps as PublicButtonBackProps } from "../../typings";
-import type { ButtonBackProps, CarouselState } from "../types";
+import type { ButtonBackProps, ButtonBackViewProps, CarouselState } from "../types";
 
-export default WithStore<
-  ButtonBackProps,
+const ConnectedButtonBack: React.ComponentType<ButtonBackProps> = WithStore<
+  ButtonBackViewProps,
   Pick<CarouselState, "currentSlide" | "step" | "totalSlides" | "visibleSlides" | "infinite">
 >(ButtonBack, (state) => ({
   currentSlide: state.currentSlide,
@@ -12,4 +12,6 @@ export default WithStore<
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
   infinite: state.infinite,
-})) as React.ComponentType<PublicButtonBackProps>;
+}));
+
+export default ConnectedButtonBack;

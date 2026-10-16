@@ -1,9 +1,9 @@
 import React from "react";
 import { cn } from "../helpers";
-import type { ButtonLastProps } from "../types";
+import type { ButtonLastViewProps } from "../types";
 import s from "./ButtonLast.scss";
 
-const ButtonLast = (props: ButtonLastProps) => {
+const ButtonLast = (props: ButtonLastViewProps) => {
   const {
     carouselStore,
     children,

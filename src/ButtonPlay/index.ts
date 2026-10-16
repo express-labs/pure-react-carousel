@@ -1,11 +1,13 @@
+import type React from "react";
 import ButtonPlay from "./ButtonPlay";
 import WithStore from "../Store/WithStore";
-import type { ButtonPlayProps as PublicButtonPlayProps } from "../../typings";
-import type { ButtonPlayProps, CarouselState } from "../types";
+import type { ButtonPlayProps, ButtonPlayViewProps, CarouselState } from "../types";
 
-export default WithStore<ButtonPlayProps, Pick<CarouselState, "isPlaying">>(
-  ButtonPlay,
-  (state) => ({
-    isPlaying: state.isPlaying,
-  }),
-) as React.ComponentType<PublicButtonPlayProps>;
+const ConnectedButtonPlay: React.ComponentType<ButtonPlayProps> = WithStore<
+  ButtonPlayViewProps,
+  Pick<CarouselState, "isPlaying">
+>(ButtonPlay, (state) => ({
+  isPlaying: state.isPlaying,
+}));
+
+export default ConnectedButtonPlay;

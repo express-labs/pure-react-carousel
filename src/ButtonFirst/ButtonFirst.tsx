@@ -1,9 +1,9 @@
 import React from "react";
 import { cn } from "../helpers";
-import type { ButtonFirstProps } from "../types";
+import type { ButtonFirstViewProps } from "../types";
 import s from "./ButtonFirst.scss";
 
-const ButtonFirst = (props: ButtonFirstProps) => {
+const ButtonFirst = (props: ButtonFirstViewProps) => {
   const {
     carouselStore,
     children,

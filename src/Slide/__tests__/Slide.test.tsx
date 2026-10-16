@@ -2,10 +2,10 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import Slide from "../Slide";
-import { SlideProps } from "../../types";
+import type { SlideViewProps } from "../../types";
 
 describe("<Slide />", () => {
-  let props: SlideProps;
+  let props: SlideViewProps;
 
   beforeEach(() => {
     props = {

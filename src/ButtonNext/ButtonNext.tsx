@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "../helpers";
-import type { ButtonNextProps } from "../types";
+import type { ButtonNextViewProps } from "../types";
 import s from "./ButtonNext.scss";
 
 export function setDisabled(
@@ -15,7 +15,7 @@ export function setDisabled(
   return false;
 }
 
-const ButtonNext = (props: ButtonNextProps) => {
+const ButtonNext = (props: ButtonNextViewProps) => {
   const {
     carouselStore,
     children,

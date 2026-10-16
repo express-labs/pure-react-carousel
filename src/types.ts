@@ -23,18 +23,22 @@ export interface CarouselState {
   imageErrorCount: number;
   imageSuccessCount: number;
   infinite: boolean;
-  interval: number;
+  interval?: number;
   isIntrinsicHeight: boolean;
-  isPageScrollLocked: boolean;
+  isPageScrollLocked?: boolean;
   isPlaying: boolean;
   lockOnWindowScroll: boolean;
+  preventVerticalScrollOnTouch?: boolean;
+  horizontalPixelThreshold?: number;
+  verticalPixelThreshold?: number;
   masterSpinnerFinished: boolean;
-  MasterSpinnerThreshold: number;
+  masterSpinnerThreshold?: number;
+  MasterSpinnerThreshold?: number;
   naturalSlideHeight: number;
   naturalSlideWidth: number;
   orientation: Orientation;
-  playDirection: PlayDirection;
-  privateUnDisableAnimation: boolean;
+  playDirection?: PlayDirection;
+  privateUnDisableAnimation?: boolean;
   slideSize: number;
   slideTraySize: number;
   step: number;
@@ -55,143 +59,185 @@ export interface CarouselStoreInterface {
   unsubscribe(callback: () => void): void;
   updateSubscribers(callback?: () => void): void;
   subscribeMasterSpinner(src: string): void;
-  unsubscribeMasterSpinner(src: string): boolean | void;
+  unsubscribeMasterSpinner(src: string): false | object | boolean | void;
   unsubscribeAllMasterSpinner(): void;
   masterSpinnerSuccess(src: string): void;
   masterSpinnerError(src: string): void;
+  setMasterSpinnerFinished?(): void;
   isMasterSpinnerFinished(): boolean;
-  masterSpinnerSubscriptions: Record<string, MasterSpinnerSubscription>;
-  subscriptions: Array<() => void>;
+  masterSpinnerSubscriptions?: Record<string, MasterSpinnerSubscription>;
+  subscriptions?: Array<() => void>;
   masterStore?: CarouselStoreInterface;
 }
 
 export interface CarouselInjectedProps {
-  carouselStore: CarouselStoreInterface;
+  readonly carouselStore: Pick<
+    CarouselStoreInterface,
+    | "getStoreState"
+    | "masterSpinnerError"
+    | "masterSpinnerSuccess"
+    | "setStoreState"
+    | "subscribeMasterSpinner"
+    | "unsubscribeAllMasterSpinner"
+    | "unsubscribeMasterSpinner"
+  >;
 }
 
-export interface CarouselProviderProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
+export interface CarouselProviderProps extends Omit<CarouselElement<"div">, "children"> {
   children: React.ReactNode;
   className?: string;
-  currentSlide?: number;
-  disableAnimation?: boolean;
-  disableKeyboard?: boolean;
-  hasMasterSpinner?: boolean;
-  infinite?: boolean;
-  interval?: number;
-  isIntrinsicHeight?: boolean;
-  isPageScrollLocked?: boolean;
-  isPlaying?: boolean;
-  lockOnWindowScroll?: boolean;
-  naturalSlideHeight: number;
-  naturalSlideWidth: number;
-  orientation?: Orientation;
-  playDirection?: PlayDirection;
-  step?: number;
-  dragStep?: number;
+  currentSlide?: CarouselState["currentSlide"];
+  disableAnimation?: CarouselState["disableAnimation"];
+  disableKeyboard?: CarouselState["disableKeyboard"];
+  hasMasterSpinner?: CarouselState["hasMasterSpinner"];
+  infinite?: CarouselState["infinite"];
+  interval?: CarouselState["interval"];
+  isIntrinsicHeight?: CarouselState["isIntrinsicHeight"];
+  isPageScrollLocked?: CarouselState["isPageScrollLocked"];
+  isPlaying?: CarouselState["isPlaying"];
+  lockOnWindowScroll?: CarouselState["lockOnWindowScroll"];
+  preventVerticalScrollOnTouch?: CarouselState["preventVerticalScrollOnTouch"];
+  horizontalPixelThreshold?: CarouselState["horizontalPixelThreshold"];
+  verticalPixelThreshold?: CarouselState["verticalPixelThreshold"];
+  naturalSlideHeight: CarouselState["naturalSlideHeight"];
+  naturalSlideWidth: CarouselState["naturalSlideWidth"];
+  orientation?: CarouselState["orientation"];
+  playDirection?: CarouselState["playDirection"];
+  step?: CarouselState["step"];
+  dragStep?: CarouselState["dragStep"];
   tag?: Tag;
-  totalSlides: number;
-  touchEnabled?: boolean;
-  dragEnabled?: boolean;
-  visibleSlides?: number;
+  totalSlides: CarouselState["totalSlides"];
+  touchEnabled?: CarouselState["touchEnabled"];
+  dragEnabled?: CarouselState["dragEnabled"];
+  visibleSlides?: CarouselState["visibleSlides"];
 }
 
-export interface ButtonBackProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, CarouselInjectedProps {
+export interface ButtonBackProps extends CarouselElement<"button"> {
   children?: React.ReactNode;
   className?: string;
-  currentSlide: number;
   disabled?: boolean;
-  infinite?: boolean;
   onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export interface ButtonBackViewProps extends ButtonBackProps, CarouselInjectedProps {
+  currentSlide: number;
+  infinite?: boolean;
   step: number;
   totalSlides: number;
   visibleSlides: number;
 }
 
-export interface ButtonFirstProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, CarouselInjectedProps {
+export interface ButtonFirstProps extends CarouselElement<"button"> {
   children?: React.ReactNode;
   className?: string;
-  currentSlide: number;
   disabled?: boolean;
-  infinite?: boolean;
   onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export interface ButtonFirstViewProps extends ButtonFirstProps, CarouselInjectedProps {
+  currentSlide: number;
+  infinite?: boolean;
   totalSlides: number;
 }
 
-export interface ButtonLastProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, CarouselInjectedProps {
+export interface ButtonLastProps extends CarouselElement<"button"> {
   children?: React.ReactNode;
   className?: string;
-  currentSlide: number;
   disabled?: boolean;
-  infinite?: boolean;
   onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export interface ButtonLastViewProps extends ButtonLastProps, CarouselInjectedProps {
+  currentSlide: number;
+  infinite?: boolean;
   totalSlides: number;
   visibleSlides: number;
 }
 
-export interface ButtonNextProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, CarouselInjectedProps {
+export interface ButtonNextProps extends CarouselElement<"button"> {
   children?: React.ReactNode;
   className?: string;
-  currentSlide: number;
   disabled?: boolean;
-  infinite?: boolean;
   onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export interface ButtonNextViewProps extends ButtonNextProps, CarouselInjectedProps {
+  currentSlide: number;
+  infinite?: boolean;
   step: number;
   totalSlides: number;
   visibleSlides: number;
 }
 
-export interface ButtonPlayProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, CarouselInjectedProps {
+export interface ButtonPlayProps extends CarouselElement<"button"> {
   children?: React.ReactNode;
   childrenPaused?: React.ReactNode;
   childrenPlaying?: React.ReactNode;
   className?: string;
-  isPlaying: boolean;
+  disabled?: boolean;
   onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export interface DotProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, CarouselInjectedProps {
+export interface ButtonPlayViewProps extends ButtonPlayProps, CarouselInjectedProps {
+  isPlaying: boolean;
+}
+
+export interface DotProps extends CarouselElement<"button"> {
   children?: React.ReactNode;
   className?: string;
-  currentSlide: number;
   disabled?: boolean;
   onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void;
   selected?: boolean;
   slide: number;
+}
+
+export interface DotViewProps extends DotProps, CarouselInjectedProps {
+  currentSlide: number;
   totalSlides: number;
   visibleSlides: number;
 }
 
-export interface DotGroupProps extends React.HTMLAttributes<HTMLElement>, CarouselInjectedProps {
+export interface RenderDotsProps {
+  currentSlide?: number;
+  totalSlides?: number;
+  visibleSlides?: number;
+  disableActiveDots?: boolean;
+  showAsSelectedForCurrentSlideOnly?: boolean;
+}
+
+export interface DotGroupProps extends CarouselElement<"div"> {
   children?: React.ReactNode;
   className?: string;
-  currentSlide: number;
+  currentSlide?: number;
   dotNumbers?: boolean;
   disableActiveDots?: boolean;
   showAsSelectedForCurrentSlideOnly?: boolean;
-  totalSlides: number;
-  visibleSlides: number;
-  renderDots?: (props: DotGroupProps) => React.ReactNode;
+  totalSlides?: number;
+  visibleSlides?: number;
+  renderDots?: (props: DotGroupViewProps) => React.ReactNode;
 }
 
-export interface ImageProps
-  extends
-    Omit<React.ImgHTMLAttributes<HTMLImageElement>, "onError" | "onLoad" | "src">,
-    CarouselInjectedProps {
+export interface DotGroupViewProps extends DotGroupProps, CarouselInjectedProps {
+  currentSlide: number;
+  totalSlides: number;
+  visibleSlides: number;
+}
+
+export interface ImageProps extends Omit<CarouselElement<"img">, "onError" | "onLoad" | "src"> {
   alt?: string;
-  bgImageProps?: Omit<React.HTMLAttributes<HTMLElement>, "onError" | "onLoad">;
+  bgImageProps?: Omit<CarouselElement<"div">, "onError" | "onLoad"> & {
+    hasMasterSpinner?: boolean;
+    onError?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
+    onLoad?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
+    [key: string]: unknown;
+  };
   bgImageTag?: Tag;
   children?: React.ReactNode;
   className?: string;
   classNameError?: string;
   classNameLoading?: string;
   classNameSuccess?: string;
-  hasMasterSpinner: boolean;
+  hasMasterSpinner?: boolean;
   isBgImage?: boolean;
   onError?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
   onLoad?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
@@ -200,12 +246,23 @@ export interface ImageProps
   src: string;
   style?: React.CSSProperties;
   tag?: Tag;
+  width?: number | string;
+  height?: number | string;
 }
 
-export interface ImageWithZoomProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, "onError" | "onLoad">, CarouselInjectedProps {
+export interface ImageViewProps extends ImageProps, CarouselInjectedProps {
+  hasMasterSpinner: boolean;
+  orientation?: Orientation;
+}
+
+export interface ImageWithZoomProps extends Omit<CarouselElement<"div">, "onError" | "onLoad"> {
   alt?: string;
-  bgImageProps?: Omit<React.HTMLAttributes<HTMLElement>, "onError" | "onLoad">;
+  bgImageProps?: Omit<CarouselElement<"div">, "onError" | "onLoad"> & {
+    hasMasterSpinner?: boolean;
+    onError?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
+    onLoad?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
+    [key: string]: unknown;
+  };
   bgImageTag?: Tag;
   className?: string;
   hasMasterSpinner?: boolean;
@@ -218,34 +275,42 @@ export interface ImageWithZoomProps
   src: string;
   srcZoomed?: string;
   tag?: Tag;
+  spinner?: () => React.ReactNode;
+  width?: number | string;
+  height?: number | string;
 }
 
-export interface SlideProps extends Omit<React.HTMLAttributes<HTMLElement>, "onBlur" | "onFocus"> {
+export interface ImageWithZoomViewProps extends ImageWithZoomProps, CarouselInjectedProps {}
+
+export interface SlideProps extends Omit<CarouselElement<"div">, "onBlur" | "onFocus"> {
   ariaLabel?: string;
-  carouselStore?: CarouselStoreInterface;
   children?: React.ReactNode;
   className?: string;
   classNameHidden?: string;
   classNameVisible?: string;
-  currentSlide: number;
   index: number;
   innerClassName?: string;
   innerTag?: Tag;
   isIntrinsicHeight?: boolean;
-  naturalSlideHeight: number;
-  naturalSlideWidth: number;
   onBlur?: (ev: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (ev: React.FocusEvent<HTMLElement>) => void;
-  orientation: Orientation;
-  slideSize: number;
   style?: React.CSSProperties;
   tabIndex?: number;
   tag?: Tag;
+}
+
+export interface SlideViewProps extends SlideProps {
+  carouselStore?: CarouselInjectedProps["carouselStore"];
+  currentSlide: number;
+  naturalSlideHeight: number;
+  naturalSlideWidth: number;
+  orientation: Orientation;
+  slideSize: number;
   totalSlides: number;
   visibleSlides: number;
 }
 
-export interface SliderProps extends React.HTMLAttributes<HTMLElement>, CarouselInjectedProps {
+export interface SliderProps extends CarouselElement<"div"> {
   ariaLabel?: string;
   backwardKeyCode?: number;
   children: React.ReactNode;
@@ -253,40 +318,64 @@ export interface SliderProps extends React.HTMLAttributes<HTMLElement>, Carousel
   classNameAnimation?: string;
   classNameTray?: string;
   classNameTrayWrap?: string;
-  currentSlide: number;
   disableAnimation?: boolean;
   disableKeyboard?: boolean;
+  forwardKeyCode?: number;
+  moveThreshold?: number;
+  preventVerticalScrollOnTouch?: boolean;
+  horizontalPixelThreshold?: number;
+  verticalPixelThreshold?: number;
+  onMasterSpinner?: () => React.ReactNode;
+  spinner?: () => React.ReactNode;
+  style?: React.CSSProperties;
+  tabIndex?: number;
+  trayProps?: CarouselElement<"div"> & { ref?: React.Ref<HTMLElement> };
+  trayTag?: Tag;
+}
+
+export interface SliderViewProps extends SliderProps, CarouselInjectedProps {
+  currentSlide: number;
   dragEnabled: boolean;
   dragStep?: number;
-  forwardKeyCode?: number;
   hasMasterSpinner: boolean;
   infinite?: boolean;
+  interval?: number;
   isIntrinsicHeight?: boolean;
-  isPageScrollLocked: boolean;
+  isPageScrollLocked?: boolean;
   isPlaying: boolean;
   lockOnWindowScroll: boolean;
   masterSpinnerFinished: boolean;
-  moveThreshold?: number;
   naturalSlideHeight: number;
   naturalSlideWidth: number;
-  onMasterSpinner?: () => React.ReactNode;
   orientation: Orientation;
-  playDirection: PlayDirection;
+  playDirection?: PlayDirection;
   privateUnDisableAnimation?: boolean;
   slideSize: number;
   slideTraySize: number;
-  spinner?: () => React.ReactNode;
   step: number;
-  style?: React.CSSProperties;
-  tabIndex?: number;
   totalSlides: number;
   touchEnabled: boolean;
-  trayProps?: React.HTMLAttributes<HTMLElement> & { ref?: React.Ref<HTMLElement> };
-  trayTag?: Tag;
-  verticalPixelThreshold?: number;
   visibleSlides?: number;
 }
 
-export interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SpinnerProps extends CarouselElement<"div"> {
   className?: string;
+}
+
+export type SpinnerViewProps = SpinnerProps;
+
+export type MapStateToProps<TStateProps> = (state: CarouselState) => TStateProps;
+
+export type WithStoreProps<P, T> = Omit<P, keyof (T & CarouselInjectedProps)> &
+  Partial<T & CarouselInjectedProps>;
+
+export interface WithStoreInterface {
+  <P extends object, T = Record<string, unknown>>(
+    component: React.ComponentType<P>,
+    mapStateToProps?: MapStateToProps<T>,
+  ): React.ComponentType<WithStoreProps<P, T>>;
+  <CustomProps, CustomStateProps = Record<string, unknown>>(
+    component: React.ComponentType<CustomProps & CustomStateProps & CarouselInjectedProps>,
+    mapStateToProps?: MapStateToProps<CustomStateProps>,
+  ): React.ComponentType<CustomProps>;
 }

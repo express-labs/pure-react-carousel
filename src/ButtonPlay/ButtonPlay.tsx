@@ -1,9 +1,9 @@
 import React from "react";
 import { cn } from "../helpers";
-import type { ButtonPlayProps } from "../types";
+import type { ButtonPlayViewProps } from "../types";
 import s from "./ButtonPlay.scss";
 
-const ButtonPlay = (props: ButtonPlayProps) => {
+const ButtonPlay = (props: ButtonPlayViewProps) => {
   const {
     carouselStore,
     children = null,
