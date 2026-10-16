@@ -2,7 +2,7 @@
 
 ## Core Workflow & Critical Guardrails
 
-- **Environment**: Node `v22.22.2` (pinned by `.nvmrc` and `package.json`). All commands must run in this environment.
+- **Environment**: Node `v24.18.0` (pinned by `.nvmrc` and `package.json`). All commands must run in this environment.
 - **Commits & Git Safety**: Conventional & Atomic Commits (`<type>(<scope>): <subject>` or `<type>: <subject>`) with a mandatory title and body explaining the technical rationale. Group related changes into focused, buildable commits (make multiple commits when needed). **NEVER** push directly to `master` or `main`. See `docs/GITHUB_CONVENTIONS.md`.
 - **Single Source of Truth for Types**: `src/types.ts` is the single source of truth for all public (`*Props`) and unconnected view (`*ViewProps`) component types, re-exported via `src/index.ts`. Declaration files (`dist/types/index.d.ts`) are generated automatically during `npm run build` (`npm run build:types` via `tsconfig.build.json`). When modifying public component props or exports, update `src/types.ts` (and `src/index.ts` if adding new types) and cover new contracts in `typings/index.test-d.tsx`.
 - **Component & Styling Contract**:
