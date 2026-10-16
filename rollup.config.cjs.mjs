@@ -61,6 +61,9 @@ function createTerserPlugin() {
       const result = await minify(code, {
         module: outputOptions.format === 'es',
         toplevel: outputOptions.format === 'cjs',
+        compress: {
+          directives: false,
+        },
         sourceMap: true,
       });
       return {
@@ -78,6 +81,7 @@ export default {
     format: 'cjs',
     sourcemap: true,
     exports: 'named',
+    banner: '"use client";',
   },
   external: ['react', 'react-dom', 'react/jsx-runtime'],
   plugins: [

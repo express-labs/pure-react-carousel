@@ -23,7 +23,9 @@ export default class GetScrollParent {
   }
 
   static isNodeValid(node: unknown): node is HTMLElement | SVGElement {
-    return node instanceof HTMLElement || node instanceof SVGElement;
+    const isHTMLElement = typeof HTMLElement !== "undefined" && node instanceof HTMLElement;
+    const isSVGElement = typeof SVGElement !== "undefined" && node instanceof SVGElement;
+    return isHTMLElement || isSVGElement;
   }
 
   parents(node: Node | null, ps: Element[]): Element[] {
