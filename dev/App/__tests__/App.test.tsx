@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "vite-plus/test";
 import App from "../App";
 
 describe("<App />", () => {

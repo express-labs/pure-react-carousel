@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "vite-plus/test";
 import { createComponentConfig } from "./component-config";
 
 const components = createComponentConfig();

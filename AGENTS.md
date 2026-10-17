@@ -10,9 +10,10 @@
   - Preserve existing global `.carousel__*` class names alongside scoped CSS Module classes (`s.*`).
 - **SSR & Next.js Compatibility**:
   - Never reference browser globals (`window`, `document`, `HTMLElement`, `SVGElement`) during module evaluation or render; keep DOM access inside `useEffect`, event handlers, or guarded with `typeof ... !== "undefined"`.
-  - Preserve the `"use client";` banner in `rollup.config.es.mjs` and `rollup.config.cjs.mjs`.
+  - Preserve the `"use client";` banner in `vite.config.ts` (`pack.banner`).
 
 ## On-Demand Documentation
+
 > Consult only when actively modifying the relevant subsystem; do not pre-read.
 
 - **Git & Branching Protocols**: `docs/GITHUB_CONVENTIONS.md`

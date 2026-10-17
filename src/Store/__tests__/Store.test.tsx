@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, act } from "@testing-library/react";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vite-plus/test";
 import Store from "../Store";
 import WithStore from "../WithStore";
 import CarouselProvider from "../../CarouselProvider";

@@ -3,13 +3,12 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import React from "react";
 import ReactDOM from "react-dom";
-import { beforeAll, expect } from "vitest";
+import { beforeAll, expect } from "vite-plus/test";
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(currentDir, "../..");
 const targetVersion = process.env.TARGET_REACT_VERSION;
-const cacheDir =
-  process.env.REACT_COMPAT_CACHE_DIR || resolve(repoRoot, ".cache/react-compat");
+const cacheDir = process.env.REACT_COMPAT_CACHE_DIR || resolve(repoRoot, ".cache/react-compat");
 const activeEnvDir = join(cacheDir, "envs", `v-${targetVersion}`);
 
 const origResolveFilename = (
@@ -49,4 +48,5 @@ const origResolveFilename = (
 
 beforeAll(() => {
   expect(React.version.startsWith(targetVersion ?? "")).toBe(true);
+  expect(ReactDOM.version.startsWith(targetVersion ?? "")).toBe(true);
 });

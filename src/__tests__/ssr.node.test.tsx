@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import * as React from "react";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import {
   ButtonBack,
   ButtonFirst,
@@ -120,14 +120,18 @@ describe("SSR compatibility (Node environment without DOM globals)", () => {
     expect(scrollParent.getScrollParent({})).toBeNull();
   });
 
-  it("configures Rollup ESM and CJS outputs with the 'use client' directive banner for Next.js App Router", () => {
-    const esConfig = readFileSync(resolve(process.cwd(), "rollup.config.es.mjs"), "utf8");
-    const cjsConfig = readFileSync(resolve(process.cwd(), "rollup.config.cjs.mjs"), "utf8");
+  it("configures Vite Plus pack ESM and CJS outputs with the 'use client' directive banner for Next.js App Router", () => {
+    const viteConfig = readFileSync(resolve(process.cwd(), "vite.config.ts"), "utf8");
 
-    expect(esConfig).toContain("banner: '\"use client\";'");
-    expect(esConfig).toContain("directives: false");
-    expect(cjsConfig).toContain("banner: '\"use client\";'");
-    expect(cjsConfig).toContain("directives: false");
+    expect(viteConfig).toContain("banner: '\"use client\";'");
+    expect(viteConfig).toContain('format: ["esm", "cjs"]');
+
+    const esBundlePath = resolve(process.cwd(), "dist/index.es.js");
+    const cjsBundlePath = resolve(process.cwd(), "dist/index.cjs.js");
+    if (existsSync(esBundlePath) && existsSync(cjsBundlePath)) {
+      expect(readFileSync(esBundlePath, "utf8").startsWith('"use client";')).toBe(true);
+      expect(readFileSync(cjsBundlePath, "utf8").startsWith('"use client";')).toBe(true);
+    }
   });
 
   it("uses namespace React imports across source and emitted declaration files for consumers without default-import interop", () => {
