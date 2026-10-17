@@ -13,7 +13,7 @@ const repoRequire = createRequire(join(repoRoot, "package.json"));
 const { JSDOM } = repoRequire("jsdom");
 const defaultCacheDir =
   process.env.REACT_COMPAT_CACHE_DIR || resolve(repoRoot, ".cache/react-compat");
-const demoDataPath = resolve(repoRoot, "src/App/Compatibility/compatibilityData.json");
+const demoDataPath = resolve(repoRoot, "dev/App/Compatibility/compatibilityData.json");
 
 function parseArgs(argv) {
   const options = {
@@ -64,7 +64,7 @@ Usage:
 Options:
   --terminal         Print formatted compatibility report to the terminal (default)
   --no-terminal      Suppress terminal table output
-  --update-demo      Write compatibility report JSON to src/App/Compatibility/compatibilityData.json
+  --update-demo      Write compatibility report JSON to dev/App/Compatibility/compatibilityData.json
   --report-only      Display the saved compatibility report in the terminal without re-running tests
   --skip-vitest      Skip the per-version Vitest sweep and run Runtime + SSR + Hydration + TypeScript checks only
   --track=<19|18|17|16>  Filter runtime tests to a specific React major version track

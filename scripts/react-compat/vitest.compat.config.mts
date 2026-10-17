@@ -94,7 +94,7 @@ export default defineConfig({
       join(currentDir, "setup-compat.ts"),
       resolve(repoRoot, "src/setupTests.ts"),
     ],
-    include: ["src/**/__tests__/**/*.test.{ts,tsx}"],
+    include: ["src/**/__tests__/**/*.test.{ts,tsx}", "dev/**/__tests__/**/*.test.{ts,tsx}"],
     server: {
       deps: {
         inline: [/@testing-library\/react/],

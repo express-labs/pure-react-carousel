@@ -9,27 +9,28 @@ import {
   ImageWithZoom,
   Slide,
   Slider,
-} from "../../..";
+} from "../../../../src";
 
-import CustomSpinner from "./CustomSpinner";
 import s from "../../style.scss";
 
-const renderCustomSpinner = (): React.ReactElement => <CustomSpinner />;
-
-const Example10 = (): React.ReactElement => (
+const Example2 = (): React.ReactElement => (
   <CarouselProvider
-    visibleSlides={3}
+    visibleSlides={2}
     totalSlides={6}
-    step={3}
+    step={2}
+    dragStep={2}
     naturalSlideWidth={400}
     naturalSlideHeight={500}
-    hasMasterSpinner
   >
-    <h1 className={s.headline}>Carousel (Custom Spinner)</h1>
-    <p>This uses a customized spinner.</p>
-    <Slider className={s.slider} spinner={renderCustomSpinner}>
+    <h2 className={s.headline}>Carousel (With Individual Spinners)</h2>
+    <p>
+      Each ImageWithZoom component has it&apos;s own spinner. You might want to use Chrome dev tools
+      to throttle the network connection so you can see the spinners.
+    </p>
+    <p>Also, we added the boolean prop dotNumbers to the DotGroup for displaying slide numbers.</p>
+    <Slider className={s.slider}>
       <Slide index={0}>
-        <ImageWithZoom src="./media/img01.jpeg" spinner={renderCustomSpinner} />
+        <ImageWithZoom src="./media/img01.jpeg" />
       </Slide>
       <Slide index={1}>
         <ImageWithZoom src="./media/img02.jpeg" />
@@ -51,8 +52,8 @@ const Example10 = (): React.ReactElement => (
     <ButtonBack>Back</ButtonBack>
     <ButtonNext>Next</ButtonNext>
     <ButtonLast>Last</ButtonLast>
-    <DotGroup />
+    <DotGroup dotNumbers />
   </CarouselProvider>
 );
 
-export default Example10;
+export default Example2;

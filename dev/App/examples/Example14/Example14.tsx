@@ -9,7 +9,7 @@ import {
   Slider,
   ImageWithZoom,
   DotGroup,
-} from "../../..";
+} from "../../../../src";
 
 import s from "../../style.scss";
 

@@ -15,7 +15,7 @@
   <p>A highly impartial suite of React components that can be assembled by the consumer to create a responsive and aria compliant carousel with almost no limits on DOM structure or CSS styles.</p>
 
   [**See Live Examples**](https://express-labs.github.io/pure-react-carousel/) |
-  [See Example Code](src/App/examples) |
+  [See Example Code](dev/App/examples) |
   [React Compatibility Chart](https://express-labs.github.io/pure-react-carousel/compatibility.html)
 </div>
 

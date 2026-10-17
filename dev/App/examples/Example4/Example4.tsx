@@ -9,27 +9,26 @@ import {
   ImageWithZoom,
   Slide,
   Slider,
-} from "../../..";
+} from "../../../../src";
 
 import s from "../../style.scss";
 
-const Example12 = (): React.ReactElement => (
+const Example4 = (): React.ReactElement => (
   <CarouselProvider
-    visibleSlides={3}
-    totalSlides={8}
-    step={2}
+    visibleSlides={2}
+    totalSlides={6}
+    orientation="vertical"
     naturalSlideWidth={400}
     naturalSlideHeight={500}
-    hasMasterSpinner
-    infinite
+    step={2}
   >
-    <h2 className={s.headline}>Infinite Carousel</h2>
+    <h2 className={s.headline}>Vertical Carousel (With Master Loading Spinner)</h2>
+    <p>This is a vertical carousel.</p>
     <p>
-      A carousel that returns to the first slide if the user clicks the Next button while on the
-      last slide and returns to the last slide if the user clicks the Back button while on the first
-      slide. Also behaves similarly with swiping left on the first image or right on the last image.
+      TODO: make vertical carousels responsive based on image. It can be done but it&apos;s not part
+      of the requirements for now.
     </p>
-    <Slider className={s.slider}>
+    <Slider className={s.verticalSlider}>
       <Slide index={0}>
         <ImageWithZoom src="./media/img01.jpeg" />
       </Slide>
@@ -48,12 +47,6 @@ const Example12 = (): React.ReactElement => (
       <Slide index={5}>
         <ImageWithZoom src="./media/img06.jpeg" />
       </Slide>
-      <Slide index={6}>
-        <ImageWithZoom src="./media/img07.jpeg" />
-      </Slide>
-      <Slide index={7}>
-        <ImageWithZoom src="./media/img08.jpeg" />
-      </Slide>
     </Slider>
     <ButtonFirst>First</ButtonFirst>
     <ButtonBack>Back</ButtonBack>
@@ -63,4 +56,4 @@ const Example12 = (): React.ReactElement => (
   </CarouselProvider>
 );
 
-export default Example12;
+export default Example4;

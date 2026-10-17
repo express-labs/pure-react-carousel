@@ -23,7 +23,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/setupTests.ts'],
-    include: ['src/**/__tests__/**/*.test.{ts,tsx}'],
+    include: ['src/**/__tests__/**/*.test.{ts,tsx}', 'dev/**/__tests__/**/*.test.{ts,tsx}'],
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
@@ -32,9 +32,6 @@ export default defineConfig({
         'src/setupTests.ts',
         'src/scss.d.ts',
         'src/types.ts',
-        'src/app.tsx',
-        'src/compatibility.tsx',
-        'src/App/**',
         'src/**/index.ts',
       ],
     },

@@ -139,8 +139,6 @@ describe("SSR compatibility (Node environment without DOM globals)", () => {
       (filePath) =>
         (filePath.endsWith(".ts") || filePath.endsWith(".tsx")) &&
         !filePath.includes("__tests__") &&
-        !filePath.includes("/App/") &&
-        !filePath.endsWith("/app.tsx") &&
         !filePath.endsWith(".test.ts") &&
         !filePath.endsWith(".test.tsx"),
     );

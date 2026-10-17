@@ -10,7 +10,7 @@ import {
   ImageWithZoom,
   Slide,
   Slider,
-} from "../../..";
+} from "../../../../src";
 
 import s from "../../style.scss";
 

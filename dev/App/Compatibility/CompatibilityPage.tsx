@@ -426,7 +426,7 @@ const CompatibilityPage = ({
               <code className={s.cliCommand}>npm run test:compat:demo</code>
               <p className={s.cliDesc}>
                 Executes the full compatibility suite and writes updated results to
-                src/App/Compatibility/compatibilityData.json for this demo page.
+                dev/App/Compatibility/compatibilityData.json for this demo page.
               </p>
             </div>
 

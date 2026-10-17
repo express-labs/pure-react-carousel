@@ -7,7 +7,7 @@
       "extra-files": [
         {
           "type": "json",
-          "path": "src/App/Compatibility/compatibilityData.json",
+          "path": "dev/App/Compatibility/compatibilityData.json",
           "jsonpath": "$.packageVersion"
         }
       ]

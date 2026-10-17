@@ -9,25 +9,26 @@ import {
   ImageWithZoom,
   Slide,
   Slider,
-} from "../../..";
+} from "../../../../src";
 
 import s from "../../style.scss";
 
-const Example2 = (): React.ReactElement => (
+const Example12 = (): React.ReactElement => (
   <CarouselProvider
-    visibleSlides={2}
-    totalSlides={6}
+    visibleSlides={3}
+    totalSlides={8}
     step={2}
-    dragStep={2}
     naturalSlideWidth={400}
     naturalSlideHeight={500}
+    hasMasterSpinner
+    infinite
   >
-    <h2 className={s.headline}>Carousel (With Individual Spinners)</h2>
+    <h2 className={s.headline}>Infinite Carousel</h2>
     <p>
-      Each ImageWithZoom component has it&apos;s own spinner. You might want to use Chrome dev tools
-      to throttle the network connection so you can see the spinners.
+      A carousel that returns to the first slide if the user clicks the Next button while on the
+      last slide and returns to the last slide if the user clicks the Back button while on the first
+      slide. Also behaves similarly with swiping left on the first image or right on the last image.
     </p>
-    <p>Also, we added the boolean prop dotNumbers to the DotGroup for displaying slide numbers.</p>
     <Slider className={s.slider}>
       <Slide index={0}>
         <ImageWithZoom src="./media/img01.jpeg" />
@@ -47,13 +48,19 @@ const Example2 = (): React.ReactElement => (
       <Slide index={5}>
         <ImageWithZoom src="./media/img06.jpeg" />
       </Slide>
+      <Slide index={6}>
+        <ImageWithZoom src="./media/img07.jpeg" />
+      </Slide>
+      <Slide index={7}>
+        <ImageWithZoom src="./media/img08.jpeg" />
+      </Slide>
     </Slider>
     <ButtonFirst>First</ButtonFirst>
     <ButtonBack>Back</ButtonBack>
     <ButtonNext>Next</ButtonNext>
     <ButtonLast>Last</ButtonLast>
-    <DotGroup dotNumbers />
+    <DotGroup />
   </CarouselProvider>
 );
 
-export default Example2;
+export default Example12;

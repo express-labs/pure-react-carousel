@@ -9,28 +9,27 @@ import {
   ImageWithZoom,
   Slide,
   Slider,
-} from "../../..";
+} from "../../../../src";
 
+import CustomSpinner from "./CustomSpinner";
 import s from "../../style.scss";
 
-const Example4 = (): React.ReactElement => (
+const renderCustomSpinner = (): React.ReactElement => <CustomSpinner />;
+
+const Example10 = (): React.ReactElement => (
   <CarouselProvider
-    visibleSlides={2}
+    visibleSlides={3}
     totalSlides={6}
-    orientation="vertical"
+    step={3}
     naturalSlideWidth={400}
     naturalSlideHeight={500}
-    step={2}
+    hasMasterSpinner
   >
-    <h2 className={s.headline}>Vertical Carousel (With Master Loading Spinner)</h2>
-    <p>This is a vertical carousel.</p>
-    <p>
-      TODO: make vertical carousels responsive based on image. It can be done but it&apos;s not part
-      of the requirements for now.
-    </p>
-    <Slider className={s.verticalSlider}>
+    <h1 className={s.headline}>Carousel (Custom Spinner)</h1>
+    <p>This uses a customized spinner.</p>
+    <Slider className={s.slider} spinner={renderCustomSpinner}>
       <Slide index={0}>
-        <ImageWithZoom src="./media/img01.jpeg" />
+        <ImageWithZoom src="./media/img01.jpeg" spinner={renderCustomSpinner} />
       </Slide>
       <Slide index={1}>
         <ImageWithZoom src="./media/img02.jpeg" />
@@ -56,4 +55,4 @@ const Example4 = (): React.ReactElement => (
   </CarouselProvider>
 );
 
-export default Example4;
+export default Example10;

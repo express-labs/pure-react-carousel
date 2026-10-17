@@ -7,7 +7,7 @@ import {
   ImageWithZoom,
   Slide,
   Slider,
-} from "../../..";
+} from "../../../../src";
 
 import s from "./Example6.scss";
 
