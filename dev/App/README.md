@@ -1,4 +1,5 @@
-# App
+# Demo App Components (`dev/App`)
 
-The App component is for development only. Rollup Tree-shaking should exclude this folder and it's
-contents from the final product.
+This folder contains the interactive showcase and example components used by the local development server (`npm start`) and the GitHub Pages demo (`npm run build:demo`).
+
+Because it lives under `dev/` rather than `src/`, it is isolated from the published `pure-react-carousel` library bundle (`dist/`).

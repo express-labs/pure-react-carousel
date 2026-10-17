@@ -718,7 +718,7 @@ __unsubscribeAllMasterSpinner__: Don't call this manually unless you have some s
 
 ## TypeScript usage
 
-Pure React Carousel is written in TypeScript and ships with complete type definitions in `typings/index.d.ts`. Simply import components, hooks, or types directly from `'pure-react-carousel'`.
+Pure React Carousel is written in TypeScript and ships with complete type definitions in `dist/types/index.d.ts`. Simply import components, hooks, or types directly from `'pure-react-carousel'`.
 
 ### Hooks and `useContext`
 
@@ -890,15 +890,48 @@ If you want direct access to the unconnected view component (for example, in uni
 `import { SlideView } from 'pure-react-carousel';`
 
 ## Dev Workflow
-**Note about Node Version:** Use Node **v24.18.0** (or `>=24.0.0`, as specified in `.nvmrc` and `package.json`) and run `npm ci` before developing `pure-react-carousel` on your local machine.
 
-- `npm ci` — Installs all dependencies for local development.<br><br>
-- `npm test` — Runs unit and integration tests using **Vitest** and **React Testing Library (RTL)** with V8 coverage reporting.<br><br>
-- `npm run test:watch` — Runs Vitest in interactive watch mode.<br><br>
-- `npm run typecheck` — Runs TypeScript type checking (`tsc --noEmit`).<br><br>
-- `npm run lint` / `npm run lint:fix` — Runs linting across `src` and `typings` using **Oxlint**.<br><br>
-- `npm run format` / `npm run format:check` — Formats or checks formatting across `src` and `typings` using **Oxfmt**.<br><br>
-- `npm run build` — Compiles the ES module (`dist/index.es.js`), CommonJS (`dist/index.cjs.js`), and CSS (`dist/react-carousel.es.css`, `dist/react-carousel.cjs.css`) bundles into the `dist` directory using **Rollup**.<br><br>
+### Prerequisites
+
+- **Node.js**: **v24.18.0** (`>=24.0.0`), pinned in `.nvmrc`, `.node-version`, and `package.json`.
+- **Vite Plus (`vp`)** *(optional global CLI)*: This repository uses **[Vite Plus](https://viteplus.dev)** (`vite-plus`) for its dev server, bundler, test runner, linter, formatter, and git hooks. All workflows run out of the box via standard `npm run <script>` commands using the local `vite-plus` dependency, or you can optionally install the global `vp` CLI (`npm install -g vite-plus`) to run `vp` commands directly.
+
+### Contributor Installation & Setup
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/express-labs/pure-react-carousel.git
+cd pure-react-carousel
+
+# 2. Activate the pinned Node.js version (v24.18.0)
+nvm use # or: vp env use
+
+# 3. Install dependencies (also configures pre-commit hooks via `vp config`)
+npm install # or `npm ci` for a clean lockfile install
+
+# 4. Start the local interactive demo app
+npm start
+```
+
+### Project Structure
+
+- `src/` — Published library source code, component SCSS modules, and co-located unit/SSR tests (`__tests__/`).
+- `dev/` — Interactive local development and GitHub Pages demo SPA (`dev/index.html`, `dev/app.tsx`, `dev/compatibility.tsx`, and `dev/App/`). Excluded from the published npm package.
+- `typings/` — Compile-time TypeScript consumer contract tests (`typings/index.test-d.tsx`).
+- `vite.config.ts` — Unified **Vite Plus** configuration for the dev server (`vp dev`), demo build (`vp build`), library packaging (`vp pack`), Vitest (`vp test`), Oxlint (`vp lint`), Oxfmt (`vp fmt`), and pre-commit hooks (`staged`).
+
+### Development Commands
+
+- `npm start` (`vp dev`) — Starts the local development server for the interactive demo app (`dev/`).<br><br>
+- `npm test` (`vp test run --coverage`) — Runs unit, integration, and SSR tests using **Vitest** and **React Testing Library (RTL)** with V8 coverage reporting.<br><br>
+- `npm run test:watch` (`vp test`) — Runs Vitest in interactive watch mode.<br><br>
+- `npm run typecheck` — Generates TypeScript declarations (`dist/types/index.d.ts`) and type-checks the library, demo app, and consumer typing contract (`tsconfig.json` & `tsconfig.consumer.json`).<br><br>
+- `npm run lint` / `npm run lint:fix` (`vp lint`) — Runs linting across `src`, `dev`, `typings`, and `vite.config.ts` using **Oxlint**.<br><br>
+- `npm run format` / `npm run format:check` (`vp fmt`) — Formats or checks formatting across `src`, `dev`, `typings`, and `vite.config.ts` using **Oxfmt**.<br><br>
+- `npm run build` (`vp pack && npm run build:types`) — Bundles the ES module (`dist/index.es.js`), CommonJS (`dist/index.cjs.js`), CSS (`dist/react-carousel.es.css`, `dist/react-carousel.cjs.css`), and TypeScript declaration (`dist/types/index.d.ts`) artifacts into `dist/` using **Vite Plus (`vp pack`)** and **TypeScript (`tsc`)**.<br><br>
+- `npm run build:demo` (`vp build`) — Builds the static demo SPA (`dev/`) into `demo-dist/` for GitHub Pages deployment.<br><br>
+- `npm run test:compat` — Runs the automated multi-version React peer-dependency compatibility matrix across React 16.8, 17, 18, and 19.<br><br>
+- `npm run prepublishOnly` — Runs all verification gates in sequence (`typecheck`, `lint`, `test`, `build`).<br><br>
 
 ## Contributors
 

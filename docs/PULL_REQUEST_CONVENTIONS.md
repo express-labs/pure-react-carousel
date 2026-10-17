@@ -18,6 +18,8 @@ Before generating a PR description or opening a pull request, ensure:
 2. **Branch Safety**:
    - Confirm you are on a properly named feature branch (`<type>/<short-description>`) per [`docs/GITHUB_CONVENTIONS.md`](./GITHUB_CONVENTIONS.md).
    - **NEVER** push directly to `master` or `main`.
+3. **Documentation Validated**:
+   - Audit and update all documentation surfaces affected by the branch's changes prior to pushing, per [`docs/DOCUMENTATION_CONVENTIONS.md`](./DOCUMENTATION_CONVENTIONS.md).
 
 ---
 
