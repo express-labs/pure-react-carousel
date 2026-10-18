@@ -294,7 +294,6 @@ const Slider = (props: SliderViewProps) => {
       if (scrollbarWidth > 0) {
         const computedStyle = window.getComputedStyle(scrollParent, null);
         const widthBeforePadding = parseFloat(computedStyle.getPropertyValue("width")) || 0;
-        const minWidthBeforePadding = parseFloat(computedStyle.getPropertyValue("min-width")) || 0;
         const isLeftScrollbar = scrollParent.clientLeft < prevClientLeft;
         if (isLeftScrollbar) {
           originalPaddingLeftRef.current = scrollParent.style.paddingLeft;
@@ -308,15 +307,19 @@ const Slider = (props: SliderViewProps) => {
           scrollParent.style.paddingRight = `${computedPaddingRight + scrollbarWidth}px`;
         }
         const widthAfterPadding = parseFloat(computedStyle.getPropertyValue("width")) || 0;
+        const targetWidth = widthBeforePadding - scrollbarWidth;
         if (
           computedStyle.getPropertyValue("box-sizing") !== "border-box" &&
-          widthBeforePadding > scrollbarWidth &&
-          widthAfterPadding === widthBeforePadding
+          targetWidth > 0 &&
+          widthAfterPadding > targetWidth
         ) {
-          const targetWidth = widthBeforePadding - scrollbarWidth;
           originalWidthRef.current = scrollParent.style.width;
           scrollParent.style.width = `${targetWidth}px`;
-          if (minWidthBeforePadding > targetWidth) {
+          const minWidthValue = computedStyle.getPropertyValue("min-width");
+          const shouldAdjustMinWidth = minWidthValue.endsWith("px")
+            ? parseFloat(minWidthValue) > targetWidth
+            : Boolean(minWidthValue && minWidthValue !== "auto");
+          if (shouldAdjustMinWidth) {
             originalMinWidthRef.current = scrollParent.style.minWidth;
             scrollParent.style.minWidth = `${targetWidth}px`;
           }

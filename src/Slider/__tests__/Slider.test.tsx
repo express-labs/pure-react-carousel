@@ -426,17 +426,24 @@ describe("<Slider />", () => {
       scrollContainer.style.paddingRight = "20px";
       document.body.appendChild(scrollContainer);
 
+      const parentWidth = 400;
       const getBoxMetrics = () => {
         const scrollbar = scrollContainer.style.overflow === "hidden" ? 0 : 15;
-        const cssWidth = Math.max(
-          parseFloat(scrollContainer.style.width) || 0,
-          parseFloat(scrollContainer.style.minWidth) || 0,
-        );
         const padLeft = parseFloat(scrollContainer.style.paddingLeft) || 0;
         const padRight = parseFloat(scrollContainer.style.paddingRight) || 0;
+        const resolvedMinWidth =
+          scrollContainer.style.minWidth === "100%"
+            ? parentWidth
+            : parseFloat(scrollContainer.style.minWidth) || 0;
+        const baseCssWidth =
+          scrollContainer.style.width === "auto"
+            ? parentWidth - padLeft - padRight
+            : parseFloat(scrollContainer.style.width) || 0;
+        const cssWidth = Math.max(baseCssWidth, resolvedMinWidth);
         if (scrollContainer.style.boxSizing === "border-box") {
           const contentWidth = cssWidth - padLeft - padRight - scrollbar;
           return {
+            cssWidth,
             contentWidth,
             clientWidth: contentWidth + padLeft + padRight,
             offsetWidth: cssWidth,
@@ -445,11 +452,34 @@ describe("<Slider />", () => {
         // content-box: scrollbar is carved out of the CSS width box when present
         const contentWidth = cssWidth - scrollbar;
         return {
+          cssWidth,
           contentWidth,
           clientWidth: contentWidth + padLeft + padRight,
           offsetWidth: contentWidth + padLeft + padRight + scrollbar,
         };
       };
+
+      const origGetComputedStyle = window.getComputedStyle.bind(window);
+      vi.spyOn(window, "getComputedStyle").mockImplementation((el, pseudoElt) => {
+        const style = origGetComputedStyle(el, pseudoElt);
+        if (el === scrollContainer) {
+          const origGetPropertyValue = style.getPropertyValue.bind(style);
+          return new Proxy(style, {
+            get(target, prop, receiver) {
+              if (prop === "getPropertyValue") {
+                return (name: string) => {
+                  if (name === "width" && scrollContainer.style.width === "auto") {
+                    return `${getBoxMetrics().cssWidth}px`;
+                  }
+                  return origGetPropertyValue(name);
+                };
+              }
+              return Reflect.get(target, prop, receiver);
+            },
+          });
+        }
+        return style;
+      });
 
       Object.defineProperty(scrollContainer, "clientWidth", {
         configurable: true,
@@ -465,6 +495,7 @@ describe("<Slider />", () => {
       });
 
       expect(getBoxMetrics()).toEqual({
+        cssWidth: 400,
         contentWidth: 385,
         clientWidth: 405,
         offsetWidth: 420,
@@ -481,6 +512,7 @@ describe("<Slider />", () => {
       expect(scrollContainer.style.width).toBe("385px");
       expect(scrollContainer.style.minWidth).toBe("");
       expect(getBoxMetrics()).toEqual({
+        cssWidth: 385,
         contentWidth: 385,
         clientWidth: 420,
         offsetWidth: 420,
@@ -492,6 +524,7 @@ describe("<Slider />", () => {
       expect(scrollContainer.style.width).toBe("400px");
       expect(scrollContainer.style.minWidth).toBe("");
       expect(getBoxMetrics()).toEqual({
+        cssWidth: 400,
         contentWidth: 385,
         clientWidth: 405,
         offsetWidth: 420,
@@ -505,6 +538,7 @@ describe("<Slider />", () => {
       expect(scrollContainer.style.width).toBe("385px");
       expect(scrollContainer.style.minWidth).toBe("385px");
       expect(getBoxMetrics()).toEqual({
+        cssWidth: 385,
         contentWidth: 385,
         clientWidth: 420,
         offsetWidth: 420,
@@ -516,21 +550,58 @@ describe("<Slider />", () => {
       expect(scrollContainer.style.width).toBe("400px");
       expect(scrollContainer.style.minWidth).toBe("400px");
 
-      // Re-lock with minWidth = "400px" and verify unmount restores minWidth as well
+      // 3. content-box with non-pixel minWidth = "100%": reduces both width and minWidth to 385px and restores "100%" on unlock
+      scrollContainer.style.minWidth = "100%";
       rerender(<Slider {...props} orientation="vertical" isPageScrollLocked />);
       expect(scrollContainer.style.width).toBe("385px");
       expect(scrollContainer.style.minWidth).toBe("385px");
+      expect(getBoxMetrics()).toEqual({
+        cssWidth: 385,
+        contentWidth: 385,
+        clientWidth: 420,
+        offsetWidth: 420,
+      });
+
       rerender(<Slider {...props} orientation="vertical" isPageScrollLocked={false} />);
       expect(scrollContainer.style.width).toBe("400px");
-      expect(scrollContainer.style.minWidth).toBe("400px");
+      expect(scrollContainer.style.minWidth).toBe("100%");
 
-      // 3. border-box container with explicit width should NOT have style.width or style.minWidth reduced
+      // 4. content-box with width = "auto" and minWidth = "370px" (partial reduction 380 -> 370 clamped above targetWidth 365)
+      scrollContainer.style.width = "auto";
+      scrollContainer.style.minWidth = "370px";
+      expect(getBoxMetrics()).toEqual({
+        cssWidth: 380,
+        contentWidth: 365,
+        clientWidth: 385,
+        offsetWidth: 400,
+      });
+
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked />);
+      expect(scrollContainer.style.paddingRight).toBe("35px");
+      expect(scrollContainer.style.width).toBe("365px");
+      expect(scrollContainer.style.minWidth).toBe("365px");
+      expect(getBoxMetrics()).toEqual({
+        cssWidth: 365,
+        contentWidth: 365,
+        clientWidth: 400,
+        offsetWidth: 400,
+      });
+
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked={false} />);
+      expect(scrollContainer.style.paddingRight).toBe("20px");
+      expect(scrollContainer.style.width).toBe("auto");
+      expect(scrollContainer.style.minWidth).toBe("370px");
+
+      // 5. border-box container with explicit width should NOT have style.width or style.minWidth reduced
+      scrollContainer.style.width = "400px";
+      scrollContainer.style.minWidth = "400px";
       scrollContainer.style.boxSizing = "border-box";
       rerender(<Slider {...props} orientation="vertical" isPageScrollLocked />);
       expect(scrollContainer.style.paddingRight).toBe("35px");
       expect(scrollContainer.style.width).toBe("400px");
       expect(scrollContainer.style.minWidth).toBe("400px");
       expect(getBoxMetrics()).toEqual({
+        cssWidth: 400,
         contentWidth: 365,
         clientWidth: 400,
         offsetWidth: 400,
