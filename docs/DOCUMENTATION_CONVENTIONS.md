@@ -19,7 +19,7 @@ When preparing to push a branch, inspect the files modified relative to `master`
 | **Components, Props, Store State, or Public Types** (`src/**`, `typings/**`) | [`README.md`](../README.md) | Prop tables, default values, required flags, pseudo-HTML output snippets, and TypeScript usage examples. |
 | **Build Toolchain, Scripts, Dependencies, or Node Version** (`package.json`, `vite.config.ts`, `.nvmrc`, `.node-version`) | [`README.md`](../README.md) (`## Dev Workflow`), [`AGENTS.md`](../AGENTS.md) | Prerequisite versions, contributor installation steps, `npm run` / `vp` command descriptions, and build output paths. |
 | **Demo SPA or Directory Structure** (`dev/**`) | [`dev/README.md`](../dev/README.md), [`dev/App/README.md`](../dev/App/README.md), [`README.md`](../README.md) | Directory layout descriptions, entry points (`dev/index.html`, `dev/app.tsx`, `dev/compatibility.tsx`), and demo scripts. |
-| **Git, PR, CSS, or Agent Workflows** (`.github/**`, `docs/**`, `AGENTS.md`) | [`docs/GITHUB_CONVENTIONS.md`](./GITHUB_CONVENTIONS.md), [`docs/PULL_REQUEST_CONVENTIONS.md`](./PULL_REQUEST_CONVENTIONS.md), [`docs/CSS_CONVENTIONS.md`](./CSS_CONVENTIONS.md), [`AGENTS.md`](../AGENTS.md) | Ensure workflow documentation matches CI/CD configs and that `CLAUDE.md` remains a symlink to `AGENTS.md`. |
+| **Git, PR, CSS, or Agent Workflows** (`.github/**`, `.agents/**`, `docs/**`, `AGENTS.md`) | [`docs/GITHUB_CONVENTIONS.md`](./GITHUB_CONVENTIONS.md), [`docs/PULL_REQUEST_CONVENTIONS.md`](./PULL_REQUEST_CONVENTIONS.md), [`docs/CSS_CONVENTIONS.md`](./CSS_CONVENTIONS.md), [`AGENTS.md`](../AGENTS.md) | Ensure workflow documentation matches CI/CD configs, workspace skills in `.agents/skills/` have valid frontmatter and relative links, and `CLAUDE.md` remains a symlink to `AGENTS.md`. |
 
 ---
 
@@ -28,7 +28,7 @@ When preparing to push a branch, inspect the files modified relative to `master`
 To minimize baseline token usage for AI coding agents:
 
 1. **Keep `AGENTS.md` Lean**: `AGENTS.md` (and its `CLAUDE.md` symlink) is loaded into every agent session automatically. Keep it restricted to core guardrails, environment constraints, quality gate commands, and brief pointers to `docs/*.md`.
-2. **Use `docs/*.md` for Detailed Protocols**: Place detailed checklists, examples, and subsystem conventions in `docs/` so agents only read them on demand when performing the relevant task.
+2. **Use `docs/*.md` and `.agents/skills/` for Detailed Protocols**: Place detailed checklists, examples, and subsystem conventions in `docs/` and multi-step agent workflows (`address-pr-review`, `sandbox-lessons`, `tdd`, `triage-issue`) in `.agents/skills/<name>/SKILL.md` so agents only load them on demand via progressive disclosure.
 
 ---
 

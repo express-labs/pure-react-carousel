@@ -66,3 +66,6 @@ coverage.json
 .cache
 
 .vitest/
+
+# Machine-local agent sandbox lessons (never commit to repository)
+.agents/skills/sandbox-lessons/lessons/
