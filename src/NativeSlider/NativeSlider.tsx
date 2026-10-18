@@ -56,10 +56,11 @@ const NativeSlider = (props: NativeSliderViewProps) => {
   const trayRef = useRef<HTMLElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const observedSlidesRef = useRef<Set<HTMLElement>>(new Set());
+  const slideRatiosRef = useRef<Map<Element, number>>(new Map());
   const playTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isProgrammaticScrollRef = useRef<boolean>(false);
   const programmaticTargetRef = useRef<number | null>(null);
-  const lastObservedSlideRef = useRef<number>(currentSlide);
+  const lastObservedSlideRef = useRef<number>(0);
   const latestStateRef = useRef({
     carouselStore,
     currentSlide,
@@ -119,20 +120,42 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     }
 
     const observedSlides = observedSlidesRef.current;
+    const slideRatios = slideRatiosRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
-        let bestEntry: IntersectionObserverEntry | null = null;
+        const slides = getSlideElements();
+        const visibleCount = Math.max(1, latestStateRef.current.visibleSlides);
+        let hasValidSlideEntry = false;
+
         for (const entry of entries) {
+          const idx = slides.indexOf(entry.target as HTMLElement);
+          if (idx < 0) continue;
+          hasValidSlideEntry = true;
+
           if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-            if (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio) {
-              bestEntry = entry;
-            }
+            slideRatios.set(entry.target, entry.intersectionRatio);
+            slideRatios.forEach((_, otherTarget) => {
+              const otherIdx = slides.indexOf(otherTarget as HTMLElement);
+              if (Math.abs(otherIdx - idx) >= visibleCount) {
+                slideRatios.delete(otherTarget);
+              }
+            });
+          } else {
+            slideRatios.delete(entry.target);
           }
         }
-        if (!bestEntry) return;
 
-        const slideIndex = getSlideIndexFromElement(bestEntry.target);
-        if (slideIndex < 0) return;
+        if (!hasValidSlideEntry || slideRatios.size === 0) return;
+
+        let slideIndex = -1;
+        let bestRatio = -1;
+        slides.forEach((slide, idx) => {
+          const ratio = slideRatios.get(slide);
+          if (ratio !== undefined && (visibleCount > 1 ? slideIndex < 0 : ratio > bestRatio)) {
+            slideIndex = idx;
+            bestRatio = ratio;
+          }
+        });
 
         if (isProgrammaticScrollRef.current) {
           if (slideIndex === programmaticTargetRef.current) {
@@ -146,7 +169,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       },
       {
         root: trayWrap,
-        threshold: [0.5, 0.75, 1.0],
+        threshold: [0, 0.5, 0.75, 1.0],
       },
     );
 
@@ -156,8 +179,9 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       observer.disconnect();
       observerRef.current = null;
       observedSlides.clear();
+      slideRatios.clear();
     };
-  }, [clearProgrammaticLockout, commitObservedSlide, getSlideIndexFromElement]);
+  }, [clearProgrammaticLockout, commitObservedSlide, getSlideElements]);
 
   // Synchronize observed slide elements when rendered slides change
   useEffect(() => {
@@ -167,11 +191,13 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     const currentSlides = getSlideElements();
     const currentSlideSet = new Set(currentSlides);
     const observedSlides = observedSlidesRef.current;
+    const slideRatios = slideRatiosRef.current;
 
     observedSlides.forEach((slide) => {
       if (!currentSlideSet.has(slide)) {
         observer.unobserve(slide);
         observedSlides.delete(slide);
+        slideRatios.delete(slide);
       }
     });
 
@@ -273,6 +299,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
           : (trayWrap.scrollHeight / totalSlides) * currentSlide
         : 0;
 
+    slideRatiosRef.current.clear();
     isProgrammaticScrollRef.current = true;
     programmaticTargetRef.current = currentSlide;
 

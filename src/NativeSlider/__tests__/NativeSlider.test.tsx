@@ -369,6 +369,40 @@ describe("<NativeSlider />", () => {
       expect(observedElements).toHaveLength(2);
       expect(observedElements).not.toContain(removedSlide);
     });
+
+    it("commits the leading visible slide when visibleSlides > 1 and a trailing slide crosses the 0.5 threshold", () => {
+      const store = new Store({ currentSlide: 0, totalSlides: 5, visibleSlides: 2 });
+      renderWithSlides({
+        carouselStore: store,
+        currentSlide: 0,
+        totalSlides: 5,
+        visibleSlides: 2,
+      });
+
+      // Slide 1 enters at ratio 1.0 -> currentSlide becomes 1
+      act(() => {
+        observerCallback?.([
+          { target: observedElements[1], isIntersecting: true, intersectionRatio: 1.0 },
+        ]);
+      });
+      expect(store.getStoreState().currentSlide).toBe(1);
+
+      // Subsequent callback reports only trailing slide 2 crossing 0.5 while slide 1 remains at 1.0
+      act(() => {
+        observerCallback?.([
+          { target: observedElements[2], isIntersecting: true, intersectionRatio: 0.6 },
+        ]);
+      });
+      expect(store.getStoreState().currentSlide).toBe(1);
+
+      // Once slide 1 drops below 0.5, currentSlide advances to leading visible slide 2
+      act(() => {
+        observerCallback?.([
+          { target: observedElements[1], isIntersecting: true, intersectionRatio: 0.2 },
+        ]);
+      });
+      expect(store.getStoreState().currentSlide).toBe(2);
+    });
   });
 
   describe("scrollsnapchange and scrollend events", () => {
@@ -707,6 +741,42 @@ describe("<NativeSlider />", () => {
 
       fireEvent.click(container.querySelector(".carousel__next-button") as HTMLElement);
       expect(scrollToSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("scrolls to initial nonzero currentSlide on mount and locks out initial slide 0 observer callbacks", () => {
+      const scrollToSpy = vi.fn();
+      const originalScrollTo = HTMLElement.prototype.scrollTo;
+      HTMLElement.prototype.scrollTo = scrollToSpy;
+
+      try {
+        const store = new Store({ currentSlide: 2, totalSlides: 5, visibleSlides: 1 });
+        renderWithSlides({
+          carouselStore: store,
+          currentSlide: 2,
+          totalSlides: 5,
+          visibleSlides: 1,
+        });
+
+        expect(scrollToSpy).toHaveBeenCalledTimes(1);
+
+        // Initial IntersectionObserver callback for slide 0 at offset 0 is suppressed by lockout
+        act(() => {
+          observerCallback?.([
+            { target: observedElements[0], isIntersecting: true, intersectionRatio: 1.0 },
+          ]);
+        });
+        expect(store.getStoreState().currentSlide).toBe(2);
+
+        // Target slide 2 intersecting releases lockout
+        act(() => {
+          observerCallback?.([
+            { target: observedElements[2], isIntersecting: true, intersectionRatio: 1.0 },
+          ]);
+        });
+        expect(store.getStoreState().currentSlide).toBe(2);
+      } finally {
+        HTMLElement.prototype.scrollTo = originalScrollTo;
+      }
     });
   });
 
