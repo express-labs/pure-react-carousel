@@ -28,9 +28,6 @@ export interface CarouselState {
   readonly isPageScrollLocked?: boolean;
   readonly isPlaying: boolean;
   readonly lockOnWindowScroll: boolean;
-  readonly preventVerticalScrollOnTouch?: boolean;
-  readonly horizontalPixelThreshold?: number;
-  readonly verticalPixelThreshold?: number;
   readonly masterSpinnerFinished: boolean;
   readonly masterSpinnerThreshold?: number;
   readonly MasterSpinnerThreshold?: number;
@@ -100,9 +97,6 @@ export interface CarouselProviderProps extends Omit<CarouselElement<"div">, "chi
   isPageScrollLocked?: CarouselState["isPageScrollLocked"];
   isPlaying?: CarouselState["isPlaying"];
   lockOnWindowScroll?: CarouselState["lockOnWindowScroll"];
-  preventVerticalScrollOnTouch?: CarouselState["preventVerticalScrollOnTouch"];
-  horizontalPixelThreshold?: CarouselState["horizontalPixelThreshold"];
-  verticalPixelThreshold?: CarouselState["verticalPixelThreshold"];
   naturalSlideHeight: CarouselState["naturalSlideHeight"];
   naturalSlideWidth: CarouselState["naturalSlideWidth"];
   orientation?: CarouselState["orientation"];
