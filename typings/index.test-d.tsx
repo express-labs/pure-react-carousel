@@ -56,10 +56,15 @@ import {
   type ImageWithZoomViewProps,
   type MapStateToProps,
   type MasterSpinnerSubscription,
+  type NativeSliderProps,
+  type NativeSliderViewProps,
   type Orientation,
   type OrientationType,
   type PlayDirection,
   type RenderDotsProps,
+  type ScrollSnapAlign,
+  type ScrollSnapStop,
+  type ScrollSnapType,
   type SlideProps,
   type SliderProps,
   type SliderViewProps,
@@ -88,6 +93,9 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
     orientation: "horizontal",
     pauseOnInteract: false,
     playDirection: "forward",
+    snapAlign: "start",
+    snapStop: "normal",
+    snapType: "mandatory",
     step: 1,
     dragStep: 1,
     tag: "section",
@@ -126,6 +134,8 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
     innerClassName: "inner",
     innerTag: "div",
     isIntrinsicHeight: true,
+    snapAlign: "center",
+    snapStop: "always",
     tabIndex: 0,
     tag: "div",
   };
@@ -198,6 +208,28 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
       <Spinner {...spinnerProps} />
     </CarouselProvider>
   );
+};
+
+export const nativeSliderPropsContract: NativeSliderProps = {
+  ariaLabel: "native-slider",
+  backwardKeyCode: 37,
+  className: "custom-native-slider",
+  classNameTray: "custom-native-tray",
+  classNameTrayWrap: "custom-native-tray-wrap",
+  disableAnimation: false,
+  disableKeyboard: false,
+  forwardKeyCode: 39,
+  hideScrollbar: true,
+  onMasterSpinner: () => <span>Loading...</span>,
+  role: "listbox",
+  snapType: "mandatory",
+  spinner: () => <Spinner className="custom-spinner" />,
+  tabIndex: 0,
+  trayProps: {
+    "aria-label": "native-tray",
+  },
+  trayTag: "div",
+  children: null,
 };
 
 // 2. Verify WithStore Overloads: Inferred No-Mapper, Single-Type-Argument, and Two-Type-Argument Contracts
@@ -352,6 +384,7 @@ export type VerifyExportedTypes = [
   DotGroupViewProps,
   ImageViewProps,
   ImageWithZoomViewProps,
+  NativeSliderViewProps,
   SlideViewProps,
   SliderViewProps,
   SpinnerViewProps,
@@ -365,6 +398,9 @@ export type VerifyExportedTypes = [
   OrientationType,
   PlayDirection,
   RenderDotsProps,
+  ScrollSnapAlign,
+  ScrollSnapStop,
+  ScrollSnapType,
   Tag,
   WithStoreInterface,
   WithStoreProps<ButtonBackViewProps, { currentSlide: number }>,

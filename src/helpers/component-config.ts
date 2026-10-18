@@ -1,4 +1,10 @@
-import type { Orientation, PlayDirection } from "../types";
+import type {
+  Orientation,
+  PlayDirection,
+  ScrollSnapAlign,
+  ScrollSnapStop,
+  ScrollSnapType,
+} from "../types";
 
 // Calculates the width (horizontal) or height (vertical) of each slide as a percentage of the slideTray
 export const slideSize = (totalSlides: number, _visibleSlides?: number): number =>
@@ -24,6 +30,9 @@ export interface DefaultCarouselConfig {
   pauseOnInteract: boolean;
   playDirection: PlayDirection;
   privateUnDisableAnimation: boolean;
+  snapAlign: ScrollSnapAlign;
+  snapStop: ScrollSnapStop;
+  snapType: ScrollSnapType;
   step: number;
   dragStep: number;
   tag: "div";
@@ -47,6 +56,9 @@ export const defaultProps: DefaultCarouselConfig = {
   pauseOnInteract: true,
   playDirection: "forward",
   privateUnDisableAnimation: false,
+  snapAlign: "start",
+  snapStop: "normal",
+  snapType: "mandatory",
   step: 1,
   dragStep: 1,
   tag: "div",

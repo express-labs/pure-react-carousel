@@ -1,8 +1,20 @@
 import * as React from "react";
 import { useState } from "react";
 import { cn, pct } from "../helpers";
-import type { SlideViewProps } from "../types";
+import type { ScrollSnapAlign, ScrollSnapStop, SlideViewProps } from "../types";
 import s from "./Slide.scss";
+
+const SNAP_ALIGN_CLASS_MAP: Record<ScrollSnapAlign, string> = {
+  start: s.snapAlignStart,
+  center: s.snapAlignCenter,
+  end: s.snapAlignEnd,
+  none: s.snapAlignNone,
+};
+
+const SNAP_STOP_CLASS_MAP: Record<ScrollSnapStop, string> = {
+  normal: s.snapStopNormal,
+  always: s.snapStopAlways,
+};
 
 const Slide = (props: SlideViewProps) => {
   const {
@@ -22,6 +34,8 @@ const Slide = (props: SlideViewProps) => {
     onFocus = null,
     orientation,
     slideSize,
+    snapAlign = "start",
+    snapStop = "normal",
     role = "option",
     style = {},
     tag: Tag = "div",
@@ -91,6 +105,10 @@ const Slide = (props: SlideViewProps) => {
     isVisible && "carousel__slide--visible",
     !isVisible && classNameHidden,
     !isVisible && "carousel__slide--hidden",
+    SNAP_ALIGN_CLASS_MAP[snapAlign],
+    `carousel__slide--snap-align-${snapAlign}`,
+    SNAP_STOP_CLASS_MAP[snapStop],
+    `carousel__slide--snap-stop-${snapStop}`,
     className,
   ]);
 

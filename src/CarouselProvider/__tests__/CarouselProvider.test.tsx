@@ -274,4 +274,44 @@ describe("<CarouselProvider />", () => {
     );
     expect(contextRef?.state.pauseOnInteract).toBe(false);
   });
+
+  it("should initialize snapType, snapAlign, and snapStop by default, sync changes to the store, and not leak them to the root DOM element", () => {
+    let contextRef!: React.ContextType<typeof CarouselContext>;
+    const capture = (ctx: React.ContextType<typeof CarouselContext>) => {
+      contextRef = ctx;
+    };
+
+    const { container, rerender } = render(
+      <CarouselProvider {...props} data-testid="provider-root">
+        <ContextCapture onCapture={capture} />
+      </CarouselProvider>,
+    );
+    expect(contextRef?.state.snapType).toBe("mandatory");
+    expect(contextRef?.state.snapAlign).toBe("start");
+    expect(contextRef?.state.snapStop).toBe("normal");
+
+    rerender(
+      <CarouselProvider
+        {...props}
+        data-testid="provider-root"
+        snapType="proximity"
+        snapAlign="center"
+        snapStop="always"
+      >
+        <ContextCapture onCapture={capture} />
+      </CarouselProvider>,
+    );
+    expect(contextRef?.state.snapType).toBe("proximity");
+    expect(contextRef?.state.snapAlign).toBe("center");
+    expect(contextRef?.state.snapStop).toBe("always");
+
+    const providerEl = container.querySelector('[data-testid="provider-root"]');
+    expect(providerEl).not.toBeNull();
+    expect(providerEl?.hasAttribute("snapType")).toBe(false);
+    expect(providerEl?.hasAttribute("snaptype")).toBe(false);
+    expect(providerEl?.hasAttribute("snapAlign")).toBe(false);
+    expect(providerEl?.hasAttribute("snapalign")).toBe(false);
+    expect(providerEl?.hasAttribute("snapStop")).toBe(false);
+    expect(providerEl?.hasAttribute("snapstop")).toBe(false);
+  });
 });

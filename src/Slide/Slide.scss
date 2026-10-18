@@ -44,3 +44,27 @@
     outline-color: -webkit-focus-ring-color;
   }
 }
+
+.snapAlignStart {
+  scroll-snap-align: start;
+}
+
+.snapAlignCenter {
+  scroll-snap-align: center;
+}
+
+.snapAlignEnd {
+  scroll-snap-align: end;
+}
+
+.snapAlignNone {
+  scroll-snap-align: none;
+}
+
+.snapStopNormal {
+  scroll-snap-stop: normal;
+}
+
+.snapStopAlways {
+  scroll-snap-stop: always;
+}

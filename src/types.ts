@@ -5,6 +5,9 @@ export type OrientationType = Orientation;
 export type PlayDirection = "forward" | "backward";
 export type DirectionType = PlayDirection;
 export type ImageStatus = "loading" | "success" | "error";
+export type ScrollSnapType = "mandatory" | "proximity" | "none";
+export type ScrollSnapAlign = "start" | "center" | "end" | "none";
+export type ScrollSnapStop = "normal" | "always";
 export type Tag = keyof React.JSX.IntrinsicElements;
 
 export type CarouselElement<T extends Tag = "div"> = Omit<React.JSX.IntrinsicElements[T], "ref">;
@@ -39,6 +42,9 @@ export interface CarouselState {
   readonly privateUnDisableAnimation?: boolean;
   readonly slideSize: number;
   readonly slideTraySize: number;
+  readonly snapAlign?: ScrollSnapAlign;
+  readonly snapStop?: ScrollSnapStop;
+  readonly snapType?: ScrollSnapType;
   readonly step: number;
   readonly dragStep: number;
   readonly totalSlides: number;
@@ -103,6 +109,9 @@ export interface CarouselProviderProps extends Omit<CarouselElement<"div">, "chi
   orientation?: CarouselState["orientation"];
   pauseOnInteract?: CarouselState["pauseOnInteract"];
   playDirection?: CarouselState["playDirection"];
+  snapAlign?: CarouselState["snapAlign"];
+  snapStop?: CarouselState["snapStop"];
+  snapType?: CarouselState["snapType"];
   step?: CarouselState["step"];
   dragStep?: CarouselState["dragStep"];
   tag?: Tag;
@@ -299,6 +308,8 @@ export interface SlideProps extends Omit<CarouselElement<"div">, "onBlur" | "onF
   isIntrinsicHeight?: boolean;
   onBlur?: (ev: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (ev: React.FocusEvent<HTMLElement>) => void;
+  snapAlign?: ScrollSnapAlign;
+  snapStop?: ScrollSnapStop;
   style?: React.CSSProperties;
   tabIndex?: number;
   tag?: Tag;
@@ -313,6 +324,52 @@ export interface SlideViewProps extends SlideProps {
   slideSize: number;
   totalSlides: number;
   visibleSlides: number;
+}
+
+export interface NativeSliderProps extends CarouselElement<"div"> {
+  ariaLabel?: string;
+  backwardKeyCode?: number;
+  children: React.ReactNode;
+  className?: string;
+  classNameTray?: string;
+  classNameTrayWrap?: string;
+  disableAnimation?: boolean;
+  disableKeyboard?: boolean;
+  forwardKeyCode?: number;
+  hideScrollbar?: boolean;
+  onMasterSpinner?: () => React.ReactNode;
+  role?: string;
+  snapType?: ScrollSnapType;
+  spinner?: () => React.ReactNode;
+  style?: React.CSSProperties;
+  tabIndex?: number;
+  trayProps?: CarouselElement<"div"> & { ref?: never };
+  trayTag?: Tag;
+}
+
+export interface NativeSliderViewProps extends NativeSliderProps, CarouselInjectedProps {
+  currentSlide: number;
+  hasMasterSpinner: boolean;
+  infinite?: boolean;
+  interval?: number;
+  isIntrinsicHeight?: boolean;
+  isPageScrollLocked?: boolean;
+  isPlaying: boolean;
+  lockOnWindowScroll: boolean;
+  masterSpinnerFinished: boolean;
+  naturalSlideHeight: number;
+  naturalSlideWidth: number;
+  orientation: Orientation;
+  pauseOnInteract?: boolean;
+  playDirection?: PlayDirection;
+  privateUnDisableAnimation?: boolean;
+  slideSize: number;
+  slideTraySize: number;
+  snapType?: ScrollSnapType;
+  step: number;
+  totalSlides: number;
+  touchEnabled: boolean;
+  visibleSlides?: number;
 }
 
 export interface SliderProps extends CarouselElement<"div"> {
