@@ -86,6 +86,7 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
     isPlaying: false,
     lockOnWindowScroll: true,
     orientation: "horizontal",
+    pauseOnInteract: false,
     playDirection: "forward",
     step: 1,
     dragStep: 1,

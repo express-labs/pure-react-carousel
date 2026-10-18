@@ -211,6 +211,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | **naturalSlideHeight** | number | | **Yes** | The natural height of each &lt;Slide /> component. |
 | **naturalSlideWidth** | number | | **Yes** | The natural width of each &lt;Slide /> component. |
 | orientation | ['horizontal'&#124;'vertical'] | 'horizontal' | No | Possible values are `'horizontal'` and `'vertical'`. Lets you have a horizontal or vertical carousel. |
+| pauseOnInteract | boolean | true | No | When set to `true` (default), user interactions (navigation buttons, dots, keyboard arrow keys, and dragging) pause the auto slideshow (`isPlaying` becomes `false`). When set to `false`, user interactions keep the auto slideshow playing and reset the interval timer. |
 | playDirection | ['forward'&#124;'backward'] | 'forward' | No | The direction for the auto slideshow. |
 | step | number | 1 | No | The number of slides to move when pressing the &lt;ButtonBack /> and &lt;ButtonNext /> buttons. |
 | dragStep | number | 1 | No | The number of slides to move when performing a short touch or mouse drag. |
@@ -669,6 +670,7 @@ export default WithStore(YourComponentHere, (state) => ({
   naturalSlideHeight: state.naturalSlideHeight,
   naturalSlideWidth: state.naturalSlideWidth,
   orientation: state.orientation,
+  pauseOnInteract: state.pauseOnInteract,
   playDirection: state.playDirection,
   slideSize: state.slideSize,
   slideTraySize: state.slideTraySize,
@@ -766,6 +768,7 @@ export interface CarouselState {
   readonly naturalSlideHeight: number;
   readonly naturalSlideWidth: number;
   readonly orientation: 'horizontal' | 'vertical';
+  readonly pauseOnInteract?: boolean;
   readonly playDirection?: 'forward' | 'backward';
   readonly privateUnDisableAnimation?: boolean;
   readonly slideSize: number;

@@ -22,6 +22,7 @@ const ButtonBack = (props: ButtonBackViewProps) => {
     disabled = null,
     infinite = false,
     onClick = null,
+    pauseOnInteract = true,
     step,
     totalSlides,
     visibleSlides,
@@ -38,7 +39,7 @@ const ButtonBack = (props: ButtonBackViewProps) => {
     carouselStore.setStoreState(
       {
         currentSlide: isOnFirstSlide ? maxSlide : newCurrentSlide,
-        isPlaying: false,
+        ...(pauseOnInteract ? { isPlaying: false } : {}),
       },
       onClick !== null ? () => onClick(ev) : undefined,
     );

@@ -12,6 +12,7 @@ const ButtonLast = (props: ButtonLastViewProps) => {
     disabled = null,
     infinite: _infinite = false,
     onClick = null,
+    pauseOnInteract = true,
     totalSlides,
     visibleSlides = 1,
     ...restProps
@@ -26,7 +27,7 @@ const ButtonLast = (props: ButtonLastViewProps) => {
     carouselStore.setStoreState(
       {
         currentSlide: totalSlides - visibleSlides,
-        isPlaying: false,
+        ...(pauseOnInteract ? { isPlaying: false } : {}),
       },
       onClick !== null ? () => onClick(ev) : undefined,
     );

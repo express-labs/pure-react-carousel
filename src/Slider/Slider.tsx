@@ -77,6 +77,7 @@ const Slider = (props: SliderViewProps) => {
     naturalSlideWidth,
     onMasterSpinner = null,
     orientation,
+    pauseOnInteract = true,
     playDirection,
     privateUnDisableAnimation = false,
     role = "listbox",
@@ -141,6 +142,7 @@ const Slider = (props: SliderViewProps) => {
     lockOnWindowScroll,
     moveThreshold,
     orientation,
+    pauseOnInteract,
     playDirection,
     preventVerticalScrollOnTouch,
     privateUnDisableAnimation,
@@ -168,6 +170,7 @@ const Slider = (props: SliderViewProps) => {
       lockOnWindowScroll,
       moveThreshold,
       orientation,
+      pauseOnInteract,
       playDirection,
       preventVerticalScrollOnTouch,
       privateUnDisableAnimation,
@@ -332,11 +335,20 @@ const Slider = (props: SliderViewProps) => {
       touchDrag?: boolean;
       mouseDrag?: boolean;
     }) => {
-      const { carouselStore: store, orientation: orient } = latestPropsRef.current;
+      const {
+        carouselStore: store,
+        isPlaying: playing,
+        orientation: orient,
+        pauseOnInteract: pauseOnInt,
+      } = latestPropsRef.current;
 
-      store.setStoreState({
-        isPlaying: false,
-      });
+      if (pauseOnInt) {
+        store.setStoreState({
+          isPlaying: false,
+        });
+      } else if (playing) {
+        stop();
+      }
 
       if (moveTimerRef.current !== null) {
         window.cancelAnimationFrame.call(window, moveTimerRef.current);
@@ -355,7 +367,7 @@ const Slider = (props: SliderViewProps) => {
         startY: screenY,
       });
     },
-    [updateDragState],
+    [stop, updateDragState],
   );
 
   const fakeOnDragMove = useCallback(
@@ -388,13 +400,19 @@ const Slider = (props: SliderViewProps) => {
     const {
       orientation: orient,
       carouselStore: store,
+      isPlaying: playing,
       lockOnWindowScroll: lockScrollOnWin,
+      pauseOnInteract: pauseOnInt,
     } = latestPropsRef.current;
 
     if (orient === "vertical") {
       store.setStoreState({
         isPageScrollLocked: false,
       });
+    }
+
+    if (!pauseOnInt && playing) {
+      play();
     }
 
     updateDragState({
@@ -405,7 +423,7 @@ const Slider = (props: SliderViewProps) => {
     });
 
     isDocumentScrollingRef.current = lockScrollOnWin ? false : null;
-  }, [computeCurrentSlide, updateDragState]);
+  }, [computeCurrentSlide, play, updateDragState]);
 
   const callCallback = useCallback((propName: string, ev: unknown) => {
     const { trayProps: tProps } = latestPropsRef.current;
@@ -561,6 +579,8 @@ const Slider = (props: SliderViewProps) => {
         currentSlide: cur,
         disableKeyboard: noKb,
         forwardKeyCode: fwdKey,
+        isPlaying: playing,
+        pauseOnInteract: pauseOnInt,
         totalSlides: tot,
         visibleSlides: vis,
       } = latestPropsRef.current;
@@ -573,19 +593,27 @@ const Slider = (props: SliderViewProps) => {
         ev.preventDefault();
         focus();
         newStoreState.currentSlide = Math.max(0, cur - 1);
-        newStoreState.isPlaying = false;
+        if (pauseOnInt) {
+          newStoreState.isPlaying = false;
+        } else if (playing) {
+          play();
+        }
       }
 
       if (keyCode === fwdKey) {
         ev.preventDefault();
         focus();
         newStoreState.currentSlide = Math.min(tot - vis, cur + 1);
-        newStoreState.isPlaying = false;
+        if (pauseOnInt) {
+          newStoreState.isPlaying = false;
+        } else if (playing) {
+          play();
+        }
       }
 
       store.setStoreState(newStoreState);
     },
-    [focus],
+    [focus, play],
   );
 
   const blockWindowScroll = useCallback((ev: TouchEvent) => {
@@ -635,6 +663,7 @@ const Slider = (props: SliderViewProps) => {
   }, [blockWindowScroll, handleDocumentScroll, handleOnMouseMove, handleOnMouseUp, play, stop]);
 
   const prevEffectsRef = useRef({
+    currentSlide,
     isPlaying,
     playDirection,
     interval,
@@ -646,7 +675,10 @@ const Slider = (props: SliderViewProps) => {
     const prev = prevEffectsRef.current;
     if (
       (!prev.isPlaying && isPlaying) ||
-      (isPlaying && (prev.playDirection !== playDirection || prev.interval !== interval))
+      (isPlaying &&
+        (prev.playDirection !== playDirection ||
+          prev.interval !== interval ||
+          prev.currentSlide !== currentSlide))
     ) {
       play();
     }
@@ -660,6 +692,7 @@ const Slider = (props: SliderViewProps) => {
       });
     }
     prevEffectsRef.current = {
+      currentSlide,
       isPlaying,
       playDirection,
       interval,
@@ -667,6 +700,7 @@ const Slider = (props: SliderViewProps) => {
       privateUnDisableAnimation,
     };
   }, [
+    currentSlide,
     isPlaying,
     playDirection,
     interval,

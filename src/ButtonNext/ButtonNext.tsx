@@ -24,6 +24,7 @@ const ButtonNext = (props: ButtonNextViewProps) => {
     disabled = null,
     infinite = false,
     onClick = null,
+    pauseOnInteract = true,
     step,
     totalSlides,
     visibleSlides = 1,
@@ -41,7 +42,7 @@ const ButtonNext = (props: ButtonNextViewProps) => {
     carouselStore.setStoreState(
       {
         currentSlide: isOnLastSlide ? 0 : newCurrentSlide,
-        isPlaying: false,
+        ...(pauseOnInteract ? { isPlaying: false } : {}),
       },
       onClick !== null ? () => onClick(ev) : undefined,
     );

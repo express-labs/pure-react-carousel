@@ -600,6 +600,128 @@ describe("<Slider />", () => {
       });
       expect(props.carouselStore.state.currentSlide).toBe(2);
     });
+
+    it("should reset the interval timer instead of pausing autoplay on keyboard, drag, and slide changes when pauseOnInteract is false", () => {
+      const carouselStore = new Store({
+        currentSlide: 0,
+        isPlaying: true,
+        pauseOnInteract: false,
+        totalSlides: 5,
+        visibleSlides: 1,
+        step: 1,
+      });
+
+      const { container, rerender } = render(
+        <Slider
+          {...props}
+          carouselStore={carouselStore}
+          currentSlide={0}
+          isPlaying
+          pauseOnInteract={false}
+          interval={5000}
+          totalSlides={5}
+          visibleSlides={1}
+          step={1}
+        />,
+      );
+
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      const tray = container.querySelector(".carousel__slider-tray") as HTMLElement;
+
+      Object.defineProperty(tray, "clientWidth", {
+        configurable: true,
+        value: 500,
+      });
+
+      // Advance 3000ms of 5000ms interval, then press Right arrow
+      act(() => {
+        vi.advanceTimersByTime(3000);
+      });
+      fireEvent.keyDown(slider, { keyCode: 39 });
+      expect(carouselStore.state.currentSlide).toBe(1);
+      expect(carouselStore.state.isPlaying).toBe(true);
+
+      rerender(
+        <Slider
+          {...props}
+          carouselStore={carouselStore}
+          currentSlide={1}
+          isPlaying
+          pauseOnInteract={false}
+          interval={5000}
+          totalSlides={5}
+          visibleSlides={1}
+          step={1}
+        />,
+      );
+
+      // 3000ms after key press should NOT have advanced yet because interval was reset to 5000ms
+      act(() => {
+        vi.advanceTimersByTime(3000);
+      });
+      expect(carouselStore.state.currentSlide).toBe(1);
+
+      // Remaining 2000ms completes the 5000ms reset interval -> advances to slide 2
+      act(() => {
+        vi.advanceTimersByTime(2000);
+      });
+      expect(carouselStore.state.currentSlide).toBe(2);
+
+      // Left arrow key with pauseOnInteract={false} also keeps isPlaying true and resets timer
+      rerender(
+        <Slider
+          {...props}
+          carouselStore={carouselStore}
+          currentSlide={2}
+          isPlaying
+          pauseOnInteract={false}
+          interval={5000}
+          totalSlides={5}
+          visibleSlides={1}
+          step={1}
+        />,
+      );
+      fireEvent.keyDown(slider, { keyCode: 37 });
+      expect(carouselStore.state.currentSlide).toBe(1);
+      expect(carouselStore.state.isPlaying).toBe(true);
+
+      // Touch drag start pauses interval during drag without setting isPlaying: false,
+      // and touch drag end restarts fresh interval
+      rerender(
+        <Slider
+          {...props}
+          carouselStore={carouselStore}
+          currentSlide={1}
+          isPlaying
+          pauseOnInteract={false}
+          interval={5000}
+          totalSlides={5}
+          visibleSlides={1}
+          step={1}
+        />,
+      );
+      fireEvent.touchStart(tray, {
+        targetTouches: [{ screenX: 100, screenY: 0 }],
+      });
+      expect(carouselStore.state.isPlaying).toBe(true);
+
+      // While dragging, timer is paused even past full interval
+      act(() => {
+        vi.advanceTimersByTime(10000);
+      });
+      expect(carouselStore.state.currentSlide).toBe(1);
+
+      // End drag -> timer restarts fresh 5000ms interval
+      fireEvent.touchEnd(tray, { targetTouches: [] });
+      act(() => {
+        vi.advanceTimersByTime(3000);
+      });
+      expect(carouselStore.state.currentSlide).toBe(1);
+      act(() => {
+        vi.advanceTimersByTime(2000);
+      });
+      expect(carouselStore.state.currentSlide).toBe(2);
+    });
   });
 
   describe("classes, styles & privateUnDisableAnimation", () => {

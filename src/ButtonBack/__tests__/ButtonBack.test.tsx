@@ -245,4 +245,30 @@ describe("<ButtonBack />", () => {
     fireEvent.click(screen.getByRole("button"));
     expect(contextRef?.getStoreState().isPlaying).toBe(false);
   });
+
+  it("should not pause autoplay when clicked and pauseOnInteract is false", () => {
+    let contextRef!: React.ContextType<typeof CarouselContext>;
+
+    render(
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={3}
+        currentSlide={1}
+        step={1}
+        isPlaying
+        pauseOnInteract={false}
+      >
+        <ContextCapture
+          onCapture={(ctx) => {
+            contextRef = ctx;
+          }}
+        />
+        <ButtonBackWithStore>Hello</ButtonBackWithStore>
+      </CarouselProvider>,
+    );
+    fireEvent.click(screen.getByRole("button"));
+    expect(contextRef?.getStoreState().currentSlide).toBe(0);
+    expect(contextRef?.getStoreState().isPlaying).toBe(true);
+  });
 });

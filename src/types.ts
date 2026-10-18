@@ -34,6 +34,7 @@ export interface CarouselState {
   readonly naturalSlideHeight: number;
   readonly naturalSlideWidth: number;
   readonly orientation: Orientation;
+  readonly pauseOnInteract?: boolean;
   readonly playDirection?: PlayDirection;
   readonly privateUnDisableAnimation?: boolean;
   readonly slideSize: number;
@@ -100,6 +101,7 @@ export interface CarouselProviderProps extends Omit<CarouselElement<"div">, "chi
   naturalSlideHeight: CarouselState["naturalSlideHeight"];
   naturalSlideWidth: CarouselState["naturalSlideWidth"];
   orientation?: CarouselState["orientation"];
+  pauseOnInteract?: CarouselState["pauseOnInteract"];
   playDirection?: CarouselState["playDirection"];
   step?: CarouselState["step"];
   dragStep?: CarouselState["dragStep"];
@@ -120,6 +122,7 @@ export interface ButtonBackProps extends CarouselElement<"button"> {
 export interface ButtonBackViewProps extends ButtonBackProps, CarouselInjectedProps {
   currentSlide: number;
   infinite?: boolean;
+  pauseOnInteract?: boolean;
   step: number;
   totalSlides: number;
   visibleSlides: number;
@@ -135,6 +138,7 @@ export interface ButtonFirstProps extends CarouselElement<"button"> {
 export interface ButtonFirstViewProps extends ButtonFirstProps, CarouselInjectedProps {
   currentSlide: number;
   infinite?: boolean;
+  pauseOnInteract?: boolean;
   totalSlides: number;
 }
 
@@ -148,6 +152,7 @@ export interface ButtonLastProps extends CarouselElement<"button"> {
 export interface ButtonLastViewProps extends ButtonLastProps, CarouselInjectedProps {
   currentSlide: number;
   infinite?: boolean;
+  pauseOnInteract?: boolean;
   totalSlides: number;
   visibleSlides: number;
 }
@@ -162,6 +167,7 @@ export interface ButtonNextProps extends CarouselElement<"button"> {
 export interface ButtonNextViewProps extends ButtonNextProps, CarouselInjectedProps {
   currentSlide: number;
   infinite?: boolean;
+  pauseOnInteract?: boolean;
   step: number;
   totalSlides: number;
   visibleSlides: number;
@@ -191,6 +197,7 @@ export interface DotProps extends CarouselElement<"button"> {
 
 export interface DotViewProps extends DotProps, CarouselInjectedProps {
   currentSlide: number;
+  pauseOnInteract?: boolean;
   totalSlides: number;
   visibleSlides: number;
 }
@@ -346,6 +353,7 @@ export interface SliderViewProps extends SliderProps, CarouselInjectedProps {
   naturalSlideHeight: number;
   naturalSlideWidth: number;
   orientation: Orientation;
+  pauseOnInteract?: boolean;
   playDirection?: PlayDirection;
   privateUnDisableAnimation?: boolean;
   slideSize: number;
