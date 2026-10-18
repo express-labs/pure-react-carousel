@@ -651,6 +651,164 @@ describe("<Slider />", () => {
       expect(onButtonClick).toHaveBeenCalledTimes(2);
     });
 
+    it("should suppress compatibility click when touchend changedTouches drifts from last touchmove or sourceCapabilities.firesTouchEvents is true", () => {
+      const onButtonClick = vi.fn();
+      const { getByTestId } = render(
+        <Slider {...props} dragClickThreshold={1}>
+          <div className="carousel__slide">
+            <button type="button" data-testid="touch-drift-btn" onClick={onButtonClick}>
+              Action
+            </button>
+          </div>
+        </Slider>,
+      );
+
+      const btn = getByTestId("touch-drift-btn");
+
+      // 1a. touchend release-coordinate drift: touchmove at (102, 0), touchend changedTouches at (104, 0)
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 0 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 102, screenY: 0 }],
+      });
+      fireEvent.touchEnd(btn, {
+        targetTouches: [],
+        changedTouches: [{ screenX: 104, screenY: 0 }],
+      });
+
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 104, screenY: 0 }),
+        );
+      });
+      fireEvent.mouseDown(btn, { screenX: 104, screenY: 0 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mouseup", { screenX: 104, screenY: 0 }),
+        );
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).not.toHaveBeenCalled();
+
+      // Also verify when touchstart -> touchend changedTouches alone exceeds dragClickThreshold
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 0 }],
+      });
+      fireEvent.touchEnd(btn, {
+        targetTouches: [],
+        changedTouches: [{ screenX: 103, screenY: 0 }],
+      });
+      fireEvent.mouseDown(btn, { screenX: 103, screenY: 0 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mouseup", { screenX: 103, screenY: 0 }),
+        );
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).not.toHaveBeenCalled();
+
+      // 1b. Compatibility mousemove/mousedown with sourceCapabilities.firesTouchEvents === true even with slight coordinate shift
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 0 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 102, screenY: 0 }],
+      });
+      fireEvent.touchEnd(btn, {
+        targetTouches: [],
+        changedTouches: [{ screenX: 102, screenY: 0 }],
+      });
+
+      act(() => {
+        const compatMouseMoveEv = new MouseEvent("mousemove", {
+          bubbles: true,
+          cancelable: true,
+          screenX: 106,
+          screenY: 0,
+        });
+        Object.defineProperty(compatMouseMoveEv, "sourceCapabilities", {
+          value: { firesTouchEvents: true },
+        });
+        document.documentElement.dispatchEvent(compatMouseMoveEv);
+      });
+
+      const compatMouseDownEv = new MouseEvent("mousedown", {
+        bubbles: true,
+        cancelable: true,
+        screenX: 106,
+        screenY: 0,
+      });
+      Object.defineProperty(compatMouseDownEv, "sourceCapabilities", {
+        value: { firesTouchEvents: true },
+      });
+      fireEvent(btn, compatMouseDownEv);
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mouseup", { screenX: 106, screenY: 0 }),
+        );
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).not.toHaveBeenCalled();
+    });
+
+    it("should allow clicking a child element that calls stopPropagation in onMouseDown after a touch swipe", () => {
+      const onButtonClick = vi.fn();
+      const { getByTestId } = render(
+        <Slider {...props}>
+          <div className="carousel__slide">
+            <button
+              type="button"
+              data-testid="stop-prop-btn"
+              onMouseDown={(ev) => ev.stopPropagation()}
+              onClick={onButtonClick}
+            >
+              Interactive Control
+            </button>
+          </div>
+        </Slider>,
+      );
+
+      const btn = getByTestId("stop-prop-btn");
+
+      // 1. Touch swipe beyond dragClickThreshold without a compatibility click, then pointerdown(mouse) + stopped mousedown + click
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 140, screenY: 100 }],
+      });
+      fireEvent.touchEnd(btn, { targetTouches: [] });
+
+      act(() => {
+        const mousePtrDown = new Event("pointerdown", { bubbles: true }) as PointerEvent;
+        Object.defineProperty(mousePtrDown, "pointerType", { value: "mouse" });
+        btn.dispatchEvent(mousePtrDown);
+      });
+      fireEvent.mouseDown(btn, { screenX: 140, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(1);
+
+      // 2. Touch swipe beyond dragClickThreshold without a compatibility click, then stopped mousedown + click directly (no pointerdown)
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 140, screenY: 100 }],
+      });
+      fireEvent.touchEnd(btn, { targetTouches: [] });
+
+      fireEvent.mouseDown(btn, { screenX: 140, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(2);
+    });
+
     it("should allow a genuine mouse click immediately after a touch swipe without an intervening compatibility click", () => {
       const onButtonClick = vi.fn();
       const { getByTestId, rerender } = render(
