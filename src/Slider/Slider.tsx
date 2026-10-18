@@ -236,8 +236,14 @@ const Slider = (props: SliderViewProps) => {
 
   const play = useCallback(() => {
     stop();
-    const { playDirection: dir, interval: intv } = latestPropsRef.current;
-    intervalRef.current = setInterval(dir === "forward" ? playForward : playBackward, intv);
+    const { interval: intv } = latestPropsRef.current;
+    intervalRef.current = setInterval(() => {
+      if (latestPropsRef.current.playDirection === "forward") {
+        playForward();
+      } else {
+        playBackward();
+      }
+    }, intv);
   }, [playBackward, playForward, stop]);
 
   const lockScroll = useCallback(() => {
@@ -630,13 +636,20 @@ const Slider = (props: SliderViewProps) => {
 
   const prevEffectsRef = useRef({
     isPlaying,
+    playDirection,
+    interval,
     isPageScrollLocked,
     privateUnDisableAnimation,
   });
 
   useEffect(() => {
     const prev = prevEffectsRef.current;
-    if (!prev.isPlaying && isPlaying) play();
+    if (
+      (!prev.isPlaying && isPlaying) ||
+      (isPlaying && (prev.playDirection !== playDirection || prev.interval !== interval))
+    ) {
+      play();
+    }
     if (prev.isPlaying && !isPlaying) stop();
     if (!prev.isPageScrollLocked && isPageScrollLocked) lockScroll();
     if (prev.isPageScrollLocked && !isPageScrollLocked) unlockScroll();
@@ -648,11 +661,15 @@ const Slider = (props: SliderViewProps) => {
     }
     prevEffectsRef.current = {
       isPlaying,
+      playDirection,
+      interval,
       isPageScrollLocked,
       privateUnDisableAnimation,
     };
   }, [
     isPlaying,
+    playDirection,
+    interval,
     isPageScrollLocked,
     privateUnDisableAnimation,
     carouselStore,

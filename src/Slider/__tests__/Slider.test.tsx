@@ -562,6 +562,44 @@ describe("<Slider />", () => {
       });
       expect(props.carouselStore.state.currentSlide).toBe(2);
     });
+
+    it("should dynamically reverse autoplay direction when playDirection changes while isPlaying is true", () => {
+      const { rerender } = render(<Slider {...props} isPlaying playDirection="forward" />);
+
+      // First tick moves forward from 0 -> 2
+      act(() => {
+        vi.advanceTimersByTime(props.interval);
+      });
+      expect(props.carouselStore.state.currentSlide).toBe(2);
+
+      // Change playDirection to "backward" while still playing
+      rerender(<Slider {...props} isPlaying currentSlide={2} playDirection="backward" />);
+
+      act(() => {
+        vi.advanceTimersByTime(props.interval);
+      });
+      expect(props.carouselStore.state.currentSlide).toBe(0);
+
+      // Change playDirection back to "forward" while still playing
+      rerender(<Slider {...props} isPlaying currentSlide={0} playDirection="forward" />);
+
+      act(() => {
+        vi.advanceTimersByTime(props.interval);
+      });
+      expect(props.carouselStore.state.currentSlide).toBe(2);
+    });
+
+    it("should dynamically update timer interval when interval prop changes while isPlaying is true", () => {
+      const { rerender } = render(<Slider {...props} isPlaying interval={5000} />);
+
+      // Change interval to 1000ms while already playing
+      rerender(<Slider {...props} isPlaying interval={1000} />);
+
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+      expect(props.carouselStore.state.currentSlide).toBe(2);
+    });
   });
 
   describe("classes, styles & privateUnDisableAnimation", () => {
