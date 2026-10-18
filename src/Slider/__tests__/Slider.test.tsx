@@ -725,6 +725,32 @@ describe("<Slider />", () => {
   });
 
   describe("classes, styles & privateUnDisableAnimation", () => {
+    it("should apply horizontal classes and define display: flex on .sliderTray in Slider.scss", async () => {
+      const sass = await import("sass");
+      const path = await import("node:path");
+      const compiled = sass.compile(path.resolve(import.meta.dirname, "../Slider.scss"));
+      expect(compiled.css).toMatch(/\.sliderTray\s*\{[^}]*display:\s*flex/);
+      expect(compiled.css).toMatch(/\.horizontalTray\s*\{/);
+      expect(compiled.css).toMatch(/\.verticalTray\s*\{/);
+
+      const { container } = render(<Slider {...props} orientation="horizontal" />);
+
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      const trayWrap = container.querySelector(".carousel__slider-tray-wrapper") as HTMLElement;
+      const tray = container.querySelector(".carousel__slider-tray") as HTMLElement;
+
+      expect(slider).toHaveClass("horizontalSlider", "carousel__slider--horizontal");
+      expect(trayWrap).toHaveClass("carousel__slider-tray-wrap--horizontal");
+      expect(trayWrap).not.toHaveClass("verticalSlideTrayWrap");
+      expect(tray).toHaveClass(
+        "sliderTray",
+        "sliderAnimation",
+        "horizontalTray",
+        "carousel__slider-tray--horizontal",
+      );
+      expect(tray.style.flexDirection).toBe("row");
+    });
+
     it('should apply vertical classes and styles when orientation="vertical" and isIntrinsicHeight is true', () => {
       const { container } = render(
         <Slider

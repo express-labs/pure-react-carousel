@@ -1,32 +1,30 @@
 .horizontalSlider {
   position: relative;
   overflow: hidden;
-  &:not(.touchDisabled) {
-    touch-action: pan-y pinch-zoom;
-  }
+}
 
-  [dir="rtl"] & {
-    direction: ltr;
-    transform: scaleX(-1);
-  }
+.horizontalSlider:not(.touchDisabled) {
+  touch-action: pan-y pinch-zoom;
+}
 
-  &Tray {
-    overflow: hidden;
-    width: 100%;
-  }
+[dir="rtl"] .horizontalSlider {
+  direction: ltr;
+  transform: scaleX(-1);
+}
+
+.horizontalTray {
+  overflow: hidden;
+  width: 100%;
 }
 
 .verticalSlider {
   position: relative;
   overflow: hidden;
-
-  &Tray {
-    overflow: hidden;
-  }
 }
 
 .verticalTray {
   float: left;
+  overflow: hidden;
 }
 
 .verticalSlideTrayWrap {
@@ -34,7 +32,7 @@
 }
 
 .sliderTray {
-  display: block;
+  display: flex;
   list-style: none;
   padding: 0;
   margin: 0;

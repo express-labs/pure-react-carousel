@@ -770,9 +770,8 @@ const Slider = (props: SliderViewProps) => {
   ]);
 
   const trayWrapClasses = cn([
-    s.sliderTrayWrap,
     "carousel__slider-tray-wrapper",
-    orientation === "vertical" ? s.verticalSlideTrayWrap : s.horizontalTrayWrap,
+    orientation === "vertical" && s.verticalSlideTrayWrap,
     orientation === "vertical"
       ? "carousel__slider-tray-wrap--vertical"
       : "carousel__slider-tray-wrap--horizontal",
