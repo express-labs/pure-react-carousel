@@ -45,6 +45,10 @@ interface SliderDragState {
   startY: number;
 }
 
+const DEFAULT_DRAG_CLICK_THRESHOLD = 5;
+const TOUCH_COMPAT_TAP_SLOP_PX = 10;
+const TOUCH_COMPAT_MAX_DELAY_MS = 500;
+
 const Slider = (props: SliderViewProps) => {
   const {
     ariaLabel = "slider",
@@ -58,6 +62,7 @@ const Slider = (props: SliderViewProps) => {
     currentSlide,
     disableAnimation = false,
     disableKeyboard = false,
+    dragClickThreshold = DEFAULT_DRAG_CLICK_THRESHOLD,
     dragEnabled,
     dragStep = 1,
     forwardKeyCode = 39,
@@ -125,12 +130,34 @@ const Slider = (props: SliderViewProps) => {
   const originalOverflowRef = useRef<string | null>(null);
   const scrollParentRef = useRef<HTMLElement | Element | null>(null);
   const scrollStopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clickGuardRef = useRef<{
+    pendingTouchCompat: {
+      screenX: number;
+      screenY: number;
+      timestamp: number;
+    } | null;
+    lastTouchPoint: { screenX: number; screenY: number };
+    maxTouchDistance: number;
+    touchPointerActive: boolean;
+    keyboardActivation: boolean;
+    lastMouseDownDetail: number;
+    lastMouseDownWasTouchCompat: boolean;
+  }>({
+    pendingTouchCompat: null,
+    lastTouchPoint: { screenX: 0, screenY: 0 },
+    maxTouchDistance: 0,
+    touchPointerActive: false,
+    keyboardActivation: false,
+    lastMouseDownDetail: 0,
+    lastMouseDownWasTouchCompat: false,
+  });
 
   const latestPropsRef = useRef({
     backwardKeyCode,
     carouselStore,
     currentSlide,
     disableKeyboard,
+    dragClickThreshold,
     dragEnabled,
     dragStep,
     forwardKeyCode,
@@ -159,6 +186,7 @@ const Slider = (props: SliderViewProps) => {
       carouselStore,
       currentSlide,
       disableKeyboard,
+      dragClickThreshold,
       dragEnabled,
       dragStep,
       forwardKeyCode,
@@ -329,11 +357,13 @@ const Slider = (props: SliderViewProps) => {
       screenY,
       touchDrag = false,
       mouseDrag = false,
+      preserveCancelClick = false,
     }: {
       screenX: number;
       screenY: number;
       touchDrag?: boolean;
       mouseDrag?: boolean;
+      preserveCancelClick?: boolean;
     }) => {
       const {
         carouselStore: store,
@@ -360,7 +390,10 @@ const Slider = (props: SliderViewProps) => {
         });
       }
 
+      clickGuardRef.current.keyboardActivation = false;
+
       updateDragState({
+        cancelNextClick: preserveCancelClick ? dragStateRef.current.cancelNextClick : false,
         isBeingTouchDragged: touchDrag,
         isBeingMouseDragged: mouseDrag,
         startX: screenX,
@@ -441,8 +474,52 @@ const Slider = (props: SliderViewProps) => {
     }
   }, []);
 
+  const classifyTouchCompatMouseDown = useCallback((ev: React.MouseEvent<HTMLElement>) => {
+    const nativeMouseEv = ev.nativeEvent as
+      | (MouseEvent & {
+          sourceCapabilities?: { firesTouchEvents?: boolean };
+        })
+      | undefined;
+    if (nativeMouseEv?.sourceCapabilities?.firesTouchEvents === false) {
+      clickGuardRef.current.pendingTouchCompat = null;
+    }
+    const pendingTouchCompat = clickGuardRef.current.pendingTouchCompat;
+    const isTouchCompatMouseDown =
+      pendingTouchCompat !== null &&
+      Date.now() - pendingTouchCompat.timestamp < TOUCH_COMPAT_MAX_DELAY_MS &&
+      (nativeMouseEv?.sourceCapabilities?.firesTouchEvents === true ||
+        Math.hypot(
+          ev.screenX - pendingTouchCompat.screenX,
+          ev.screenY - pendingTouchCompat.screenY,
+        ) <= 1);
+    clickGuardRef.current.pendingTouchCompat = null;
+    return isTouchCompatMouseDown;
+  }, []);
+
+  const handleOnMouseDownCapture = useCallback(
+    (ev: React.MouseEvent<HTMLElement>) => {
+      clickGuardRef.current.lastMouseDownDetail = ev.detail;
+      clickGuardRef.current.keyboardActivation = false;
+      const isTouchCompatMouseDown = classifyTouchCompatMouseDown(ev);
+      clickGuardRef.current.lastMouseDownWasTouchCompat = isTouchCompatMouseDown;
+      if (!isTouchCompatMouseDown && dragStateRef.current.cancelNextClick) {
+        updateDragState({ cancelNextClick: false });
+      }
+      callCallback("onMouseDownCapture", ev);
+    },
+    [callCallback, classifyTouchCompatMouseDown, updateDragState],
+  );
+
   const handleOnMouseDown = useCallback(
     (ev: React.MouseEvent<HTMLElement>) => {
+      clickGuardRef.current.lastMouseDownDetail = ev.detail;
+      clickGuardRef.current.keyboardActivation = false;
+      const isTouchCompatMouseDown =
+        clickGuardRef.current.pendingTouchCompat !== null
+          ? classifyTouchCompatMouseDown(ev)
+          : clickGuardRef.current.lastMouseDownWasTouchCompat;
+      clickGuardRef.current.lastMouseDownWasTouchCompat = false;
+
       if (!latestPropsRef.current.dragEnabled) {
         callCallback("onMouseDown", ev);
         return;
@@ -452,16 +529,40 @@ const Slider = (props: SliderViewProps) => {
         screenX: ev.screenX,
         screenY: ev.screenY,
         mouseDrag: true,
+        preserveCancelClick: isTouchCompatMouseDown,
       });
       callCallback("onMouseDown", ev);
     },
-    [callCallback, fakeOnDragStart],
+    [callCallback, classifyTouchCompatMouseDown, fakeOnDragStart],
   );
 
   const handleOnMouseMove = useCallback(
     (ev: MouseEvent) => {
-      if (!dragStateRef.current.isBeingMouseDragged) return;
-      updateDragState({ cancelNextClick: true });
+      if (!dragStateRef.current.isBeingMouseDragged) {
+        const mouseEvWithCap = ev as MouseEvent & {
+          sourceCapabilities?: { firesTouchEvents?: boolean };
+        };
+        const pendingTouchCompat = clickGuardRef.current.pendingTouchCompat;
+        if (
+          pendingTouchCompat !== null &&
+          mouseEvWithCap.sourceCapabilities?.firesTouchEvents !== true &&
+          Math.hypot(
+            ev.screenX - pendingTouchCompat.screenX,
+            ev.screenY - pendingTouchCompat.screenY,
+          ) > 1
+        ) {
+          clickGuardRef.current.pendingTouchCompat = null;
+        }
+        return;
+      }
+      if (
+        Math.hypot(
+          ev.screenX - dragStateRef.current.startX,
+          ev.screenY - dragStateRef.current.startY,
+        ) > latestPropsRef.current.dragClickThreshold
+      ) {
+        updateDragState({ cancelNextClick: true });
+      }
       ev.preventDefault();
       fakeOnDragMove(ev.screenX, ev.screenY);
     },
@@ -479,11 +580,22 @@ const Slider = (props: SliderViewProps) => {
 
   const handleOnClickCapture = useCallback(
     (ev: React.MouseEvent<HTMLElement>) => {
-      if (!dragStateRef.current.cancelNextClick) {
+      const isKeyboardClick =
+        clickGuardRef.current.keyboardActivation ||
+        (ev.detail === 0 && clickGuardRef.current.lastMouseDownDetail > 0);
+      clickGuardRef.current.keyboardActivation = false;
+      clickGuardRef.current.pendingTouchCompat = null;
+      clickGuardRef.current.lastMouseDownWasTouchCompat = false;
+
+      if (!dragStateRef.current.cancelNextClick || isKeyboardClick) {
+        if (dragStateRef.current.cancelNextClick) {
+          updateDragState({ cancelNextClick: false });
+        }
         callCallback("onClickCapture", ev);
         return;
       }
       ev.preventDefault();
+      ev.stopPropagation();
       updateDragState({ cancelNextClick: false });
       callCallback("onClickCapture", ev);
     },
@@ -492,8 +604,15 @@ const Slider = (props: SliderViewProps) => {
 
   const handleOnTouchStart = useCallback(
     (ev: React.TouchEvent<HTMLElement>) => {
+      clickGuardRef.current.pendingTouchCompat = null;
+      clickGuardRef.current.maxTouchDistance = 0;
+      clickGuardRef.current.lastMouseDownDetail = 0;
+      clickGuardRef.current.lastMouseDownWasTouchCompat = false;
       const { touchEnabled: tEnabled, orientation: orient } = latestPropsRef.current;
       if (!tEnabled) {
+        if (dragStateRef.current.cancelNextClick) {
+          updateDragState({ cancelNextClick: false });
+        }
         callCallback("onTouchStart", ev);
         return;
       }
@@ -504,6 +623,10 @@ const Slider = (props: SliderViewProps) => {
 
       const touch = ev.targetTouches[0];
       if (touch) {
+        clickGuardRef.current.lastTouchPoint = {
+          screenX: touch.screenX,
+          screenY: touch.screenY,
+        };
         fakeOnDragStart({
           screenX: touch.screenX,
           screenY: touch.screenY,
@@ -512,7 +635,7 @@ const Slider = (props: SliderViewProps) => {
       }
       callCallback("onTouchStart", ev);
     },
-    [callCallback, fakeOnDragStart],
+    [callCallback, fakeOnDragStart, updateDragState],
   );
 
   const handleDocumentScroll = useCallback(() => {
@@ -536,11 +659,26 @@ const Slider = (props: SliderViewProps) => {
 
       const touch = ev.targetTouches[0];
       if (touch) {
+        const distance = Math.hypot(
+          touch.screenX - dragStateRef.current.startX,
+          touch.screenY - dragStateRef.current.startY,
+        );
+        clickGuardRef.current.maxTouchDistance = Math.max(
+          clickGuardRef.current.maxTouchDistance,
+          distance,
+        );
+        clickGuardRef.current.lastTouchPoint = {
+          screenX: touch.screenX,
+          screenY: touch.screenY,
+        };
+        if (distance > latestPropsRef.current.dragClickThreshold) {
+          updateDragState({ cancelNextClick: true });
+        }
         fakeOnDragMove(touch.screenX, touch.screenY);
         callCallback("onTouchMove", ev);
       }
     },
-    [callCallback, fakeOnDragMove],
+    [callCallback, fakeOnDragMove, updateDragState],
   );
 
   const endTouchMove = useCallback(() => {
@@ -550,18 +688,117 @@ const Slider = (props: SliderViewProps) => {
 
   const handleOnTouchEnd = useCallback(
     (ev: React.TouchEvent<HTMLElement>) => {
+      const compatSlopLimit = clickGuardRef.current.touchPointerActive
+        ? TOUCH_COMPAT_TAP_SLOP_PX
+        : DEFAULT_DRAG_CLICK_THRESHOLD;
+      clickGuardRef.current.touchPointerActive = false;
+
+      const changedTouch = ev.changedTouches?.[0];
+      if (
+        changedTouch &&
+        typeof changedTouch.screenX === "number" &&
+        typeof changedTouch.screenY === "number"
+      ) {
+        clickGuardRef.current.lastTouchPoint = {
+          screenX: changedTouch.screenX,
+          screenY: changedTouch.screenY,
+        };
+        if (dragStateRef.current.isBeingTouchDragged) {
+          const endDistance = Math.hypot(
+            changedTouch.screenX - dragStateRef.current.startX,
+            changedTouch.screenY - dragStateRef.current.startY,
+          );
+          clickGuardRef.current.maxTouchDistance = Math.max(
+            clickGuardRef.current.maxTouchDistance,
+            endDistance,
+          );
+          if (
+            endDistance > latestPropsRef.current.dragClickThreshold &&
+            !dragStateRef.current.cancelNextClick
+          ) {
+            updateDragState({ cancelNextClick: true });
+          }
+        }
+      }
+
+      if (
+        latestPropsRef.current.touchEnabled &&
+        dragStateRef.current.cancelNextClick &&
+        clickGuardRef.current.maxTouchDistance <= compatSlopLimit
+      ) {
+        clickGuardRef.current.pendingTouchCompat = {
+          screenX: clickGuardRef.current.lastTouchPoint.screenX,
+          screenY: clickGuardRef.current.lastTouchPoint.screenY,
+          timestamp: Date.now(),
+        };
+      } else {
+        clickGuardRef.current.pendingTouchCompat = null;
+      }
       endTouchMove();
       callCallback("onTouchEnd", ev);
     },
-    [callCallback, endTouchMove],
+    [callCallback, endTouchMove, updateDragState],
   );
 
   const handleOnTouchCancel = useCallback(
     (ev: React.TouchEvent<HTMLElement>) => {
+      clickGuardRef.current.touchPointerActive = false;
+      clickGuardRef.current.pendingTouchCompat = null;
+      clickGuardRef.current.lastMouseDownWasTouchCompat = false;
+      if (dragStateRef.current.cancelNextClick) {
+        updateDragState({ cancelNextClick: false });
+      }
       endTouchMove();
       callCallback("onTouchCancel", ev);
     },
-    [callCallback, endTouchMove],
+    [callCallback, endTouchMove, updateDragState],
+  );
+
+  const handleDocumentPointerDown = useCallback(
+    (ev: PointerEvent) => {
+      if (ev.pointerType === "touch") {
+        clickGuardRef.current.touchPointerActive = true;
+        clickGuardRef.current.pendingTouchCompat = null;
+        clickGuardRef.current.lastMouseDownWasTouchCompat = false;
+      } else if (ev.pointerType === "mouse" || ev.pointerType === "pen") {
+        clickGuardRef.current.touchPointerActive = false;
+        clickGuardRef.current.pendingTouchCompat = null;
+        clickGuardRef.current.lastMouseDownWasTouchCompat = false;
+        if (
+          !dragStateRef.current.isBeingMouseDragged &&
+          !dragStateRef.current.isBeingTouchDragged &&
+          dragStateRef.current.cancelNextClick
+        ) {
+          updateDragState({ cancelNextClick: false });
+        }
+      }
+    },
+    [updateDragState],
+  );
+
+  const handleDocumentKeyDown = useCallback(
+    (ev: KeyboardEvent) => {
+      if (dragStateRef.current.isBeingMouseDragged || dragStateRef.current.isBeingTouchDragged) {
+        return;
+      }
+      if (
+        ev.key === "Enter" ||
+        ev.key === " " ||
+        ev.key === "Spacebar" ||
+        ev.key === "Tab" ||
+        ev.keyCode === 13 ||
+        ev.keyCode === 32 ||
+        ev.keyCode === 9
+      ) {
+        clickGuardRef.current.keyboardActivation = true;
+        clickGuardRef.current.pendingTouchCompat = null;
+        clickGuardRef.current.lastMouseDownWasTouchCompat = false;
+        if (dragStateRef.current.cancelNextClick) {
+          updateDragState({ cancelNextClick: false });
+        }
+      }
+    },
+    [updateDragState],
   );
 
   const focus = useCallback(() => {
@@ -633,6 +870,8 @@ const Slider = (props: SliderViewProps) => {
     ) {
       window.addEventListener("touchmove", blockWindowScroll, false);
     }
+    document.documentElement.addEventListener("pointerdown", handleDocumentPointerDown, true);
+    document.documentElement.addEventListener("keydown", handleDocumentKeyDown, true);
     document.documentElement.addEventListener("mouseleave", handleOnMouseUp, false);
     document.documentElement.addEventListener("mousemove", handleOnMouseMove, false);
     document.documentElement.addEventListener("mouseup", handleOnMouseUp, false);
@@ -642,6 +881,8 @@ const Slider = (props: SliderViewProps) => {
     }
 
     return () => {
+      document.documentElement.removeEventListener("pointerdown", handleDocumentPointerDown, true);
+      document.documentElement.removeEventListener("keydown", handleDocumentKeyDown, true);
       document.documentElement.removeEventListener("mouseleave", handleOnMouseUp, false);
       document.documentElement.removeEventListener("mousemove", handleOnMouseMove, false);
       document.documentElement.removeEventListener("mouseup", handleOnMouseUp, false);
@@ -660,7 +901,16 @@ const Slider = (props: SliderViewProps) => {
       moveTimerRef.current = null;
       scrollStopTimerRef.current = null;
     };
-  }, [blockWindowScroll, handleDocumentScroll, handleOnMouseMove, handleOnMouseUp, play, stop]);
+  }, [
+    blockWindowScroll,
+    handleDocumentKeyDown,
+    handleDocumentPointerDown,
+    handleDocumentScroll,
+    handleOnMouseMove,
+    handleOnMouseUp,
+    play,
+    stop,
+  ]);
 
   const prevEffectsRef = useRef({
     currentSlide,
@@ -793,6 +1043,7 @@ const Slider = (props: SliderViewProps) => {
     className: _ignoreClassName,
     onClickCapture: _onClickCapture,
     onMouseDown: _onMouseDown,
+    onMouseDownCapture: _onMouseDownCapture,
     onTouchCancel: _onTouchCancel,
     onTouchEnd: _onTouchEnd,
     onTouchMove: _onTouchMove,
@@ -824,6 +1075,7 @@ const Slider = (props: SliderViewProps) => {
           onTouchMove={handleOnTouchMove}
           onTouchEnd={handleOnTouchEnd}
           onTouchCancel={handleOnTouchCancel}
+          onMouseDownCapture={handleOnMouseDownCapture}
           onMouseDown={handleOnMouseDown}
           onClickCapture={handleOnClickCapture}
           {...filteredTrayProps}

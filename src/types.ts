@@ -325,6 +325,7 @@ export interface SliderProps extends CarouselElement<"div"> {
   classNameTrayWrap?: string;
   disableAnimation?: boolean;
   disableKeyboard?: boolean;
+  dragClickThreshold?: number;
   forwardKeyCode?: number;
   moveThreshold?: number;
   preventVerticalScrollOnTouch?: boolean;

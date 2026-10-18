@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { act, render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect } from "vite-plus/test";
 import App from "../App";
 
@@ -17,6 +17,49 @@ describe("<App />", () => {
     expect(select.value).toBe("5");
     expect(container.querySelector("#example--5")).toBeInTheDocument();
     expect(container.querySelector("#example--1")).not.toBeInTheDocument();
+  });
+
+  it("should render Example15 and demo dragClickThreshold with slide buttons and links", () => {
+    const { container, getByTestId } = render(<App />);
+    const select = container.querySelector(".select") as HTMLSelectElement;
+    fireEvent.change(select, { target: { value: "15" } });
+
+    expect(container.querySelector("#example--15")).toBeInTheDocument();
+    const log = getByTestId("interactive-click-log");
+    expect(log).toHaveTextContent("No slide buttons or links clicked yet.");
+
+    const btn0 = getByTestId("slide-action-btn-0");
+    const link0 = getByTestId("slide-action-link-0");
+
+    // Normal click on slide button updates log
+    fireEvent.click(btn0);
+    expect(log).toHaveTextContent("Clicked button on Slide 1 (total clicks: 1)");
+
+    // Normal click on slide link updates log
+    fireEvent.click(link0);
+    expect(log).toHaveTextContent("Clicked link on Slide 1 (total clicks: 2)");
+
+    // Dragging > 5px across the button suppresses its click handler
+    fireEvent.mouseDown(btn0, { screenX: 100, screenY: 100 });
+    act(() => {
+      document.documentElement.dispatchEvent(
+        new MouseEvent("mousemove", { screenX: 140, screenY: 100 }),
+      );
+      document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+    });
+    fireEvent.click(btn0);
+    expect(log).toHaveTextContent("Clicked link on Slide 1 (total clicks: 2)");
+
+    // Update dragClickThreshold input and reset log
+    const thresholdInput = getByTestId("drag-click-threshold-input") as HTMLInputElement;
+    fireEvent.change(thresholdInput, { target: { value: "25" } });
+    expect(thresholdInput.value).toBe("25");
+
+    fireEvent.change(thresholdInput, { target: { value: "-5" } });
+    expect(thresholdInput.value).toBe("0");
+
+    fireEvent.click(getByTestId("reset-click-log"));
+    expect(log).toHaveTextContent("No slide buttons or links clicked yet.");
   });
 
   it("should navigate to the React Compatibility Chart page and back to the demo app", () => {

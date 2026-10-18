@@ -250,6 +250,7 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 | classNameTrayWrap | [string&#124;null] | null | No | Optional className string that is applied to the `div` that surrounds the Slider's tray. |
 | disableAnimation | boolean | false | No | Inherited from `<CarouselProvider />` or overridden directly on `<Slider />` to disable slide transition animations. |
 | disableKeyboard | boolean | false | No | Inherited from `<CarouselProvider />` or overridden directly on `<Slider />` to disable keyboard arrow navigation. |
+| dragClickThreshold | number | 5 | No | Pointer movement threshold in pixels beyond which a mouse or touch drag gesture suppresses subsequent `click` events on child elements inside `<Slide />`. |
 | moveThreshold | number | 0.1 | No | Threshold to control the drag distance that triggers a scroll to the next or previous slide (`slideWidthOrHeight * moveThreshold` = drag pixel distance required to scroll). |
 | preventVerticalScrollOnTouch | boolean | true | No | When set to true and touch is enabled, prevents vertical screen scroll during horizontal touch drag gestures on the carousel. |
 | horizontalPixelThreshold | number | 15 | No | The minimum number of pixels moved horizontally by touch on the carousel to block vertical page scroll when `preventVerticalScrollOnTouch` is true. |
