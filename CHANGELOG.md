@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.1](https://github.com/express-labs/pure-react-carousel/compare/v3.2.0...v3.2.1) (2026-10-18)
+
+
+### Bug Fixes
+
+* **slider:** use display flex on sliderTray and align CSS module classes ([#506](https://github.com/express-labs/pure-react-carousel/issues/506)) ([9437d38](https://github.com/express-labs/pure-react-carousel/commit/9437d389343258190f29dbe15b9f43fcee940307))
+
 ## [3.2.0](https://github.com/express-labs/pure-react-carousel/compare/v3.1.1...v3.2.0) (2026-10-18)
 
 
