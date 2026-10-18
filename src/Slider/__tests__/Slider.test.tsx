@@ -611,7 +611,12 @@ describe("<Slider />", () => {
       });
       fireEvent.touchEnd(btn, { targetTouches: [] });
 
-      // Browser synthesizes compatibility mousedown -> mouseup -> click after touchend
+      // Browser synthesizes compatibility mousemove -> mousedown -> mouseup -> click at same coordinates
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 102, screenY: 100 }),
+        );
+      });
       fireEvent.mouseDown(btn, { screenX: 102, screenY: 100 });
       act(() => {
         document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
@@ -644,6 +649,163 @@ describe("<Slider />", () => {
       fireEvent.touchCancel(btn, { targetTouches: [] });
       fireEvent.click(btn);
       expect(onButtonClick).toHaveBeenCalledTimes(2);
+    });
+
+    it("should allow a genuine mouse click immediately after a touch swipe without an intervening compatibility click", () => {
+      const onButtonClick = vi.fn();
+      const { getByTestId, rerender } = render(
+        <Slider {...props}>
+          <div className="carousel__slide">
+            <button type="button" data-testid="hybrid-mouse-btn" onClick={onButtonClick}>
+              Action
+            </button>
+          </div>
+        </Slider>,
+      );
+
+      const btn = getByTestId("hybrid-mouse-btn");
+
+      // 1. Touch swipe beyond threshold without generating a compatibility click, followed immediately by a real mouse click
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 140, screenY: 100 }],
+      });
+      fireEvent.touchEnd(btn, { targetTouches: [] });
+
+      // Immediate mouse click within < 1s (even at the same ending coordinates) should NOT be swallowed
+      fireEvent.mouseDown(btn, { screenX: 140, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(1);
+
+      // 2. Small touch drag (with pointerdown touch) followed by a genuine mouse click with pointerdown (pointerType: "mouse")
+      rerender(
+        <Slider {...props} dragClickThreshold={1}>
+          <div className="carousel__slide">
+            <button type="button" data-testid="hybrid-mouse-btn" onClick={onButtonClick}>
+              Action
+            </button>
+          </div>
+        </Slider>,
+      );
+
+      act(() => {
+        const touchPtrDown = new Event("pointerdown", { bubbles: true }) as PointerEvent;
+        Object.defineProperty(touchPtrDown, "pointerType", { value: "touch" });
+        btn.dispatchEvent(touchPtrDown);
+      });
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 103, screenY: 100 }],
+      });
+      fireEvent.touchEnd(btn, { targetTouches: [] });
+
+      act(() => {
+        const mousePtrDown = new Event("pointerdown", { bubbles: true }) as PointerEvent;
+        Object.defineProperty(mousePtrDown, "pointerType", { value: "mouse" });
+        btn.dispatchEvent(mousePtrDown);
+      });
+      fireEvent.mouseDown(btn, { screenX: 103, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(2);
+
+      // 3. Small touch drag followed by a genuine mouse click with sourceCapabilities.firesTouchEvents === false
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 102, screenY: 100 }],
+      });
+      fireEvent.touchEnd(btn, { targetTouches: [] });
+
+      const realMouseDownEv = new MouseEvent("mousedown", {
+        bubbles: true,
+        cancelable: true,
+        screenX: 102,
+        screenY: 100,
+      });
+      Object.defineProperty(realMouseDownEv, "sourceCapabilities", {
+        value: { firesTouchEvents: false },
+      });
+      fireEvent(btn, realMouseDownEv);
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(3);
+
+      // 4. Small touch drag followed by independent cursor movement (mousemove away from touch point) and mouse click
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 102, screenY: 100 }],
+      });
+      fireEvent.touchEnd(btn, { targetTouches: [] });
+
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 115, screenY: 100 }),
+        );
+      });
+      fireEvent.mouseDown(btn, { screenX: 102, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(4);
+
+      // 5. Touch swipe when dragEnabled={false} followed by genuine mouse click, and mouse drag when touchEnabled={false} followed by touch tap
+      rerender(
+        <Slider {...props} dragEnabled={false} touchEnabled>
+          <div className="carousel__slide">
+            <button type="button" data-testid="hybrid-mouse-btn" onClick={onButtonClick}>
+              Action
+            </button>
+          </div>
+        </Slider>,
+      );
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 140, screenY: 100 }],
+      });
+      fireEvent.touchEnd(btn, { targetTouches: [] });
+      fireEvent.mouseDown(btn, { screenX: 140, screenY: 100 });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(5);
+
+      rerender(
+        <Slider {...props} dragEnabled touchEnabled={false}>
+          <div className="carousel__slide">
+            <button type="button" data-testid="hybrid-mouse-btn" onClick={onButtonClick}>
+              Action
+            </button>
+          </div>
+        </Slider>,
+      );
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 140, screenY: 100 }),
+        );
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(6);
     });
 
     it("should not block keyboard activation after dragging beyond threshold and releasing outside without a click", () => {

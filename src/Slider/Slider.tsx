@@ -45,6 +45,10 @@ interface SliderDragState {
   startY: number;
 }
 
+const DEFAULT_DRAG_CLICK_THRESHOLD = 5;
+const TOUCH_COMPAT_TAP_SLOP_PX = 10;
+const TOUCH_COMPAT_MAX_DELAY_MS = 500;
+
 const Slider = (props: SliderViewProps) => {
   const {
     ariaLabel = "slider",
@@ -58,7 +62,7 @@ const Slider = (props: SliderViewProps) => {
     currentSlide,
     disableAnimation = false,
     disableKeyboard = false,
-    dragClickThreshold = 5,
+    dragClickThreshold = DEFAULT_DRAG_CLICK_THRESHOLD,
     dragEnabled,
     dragStep = 1,
     forwardKeyCode = 39,
@@ -126,7 +130,17 @@ const Slider = (props: SliderViewProps) => {
   const originalOverflowRef = useRef<string | null>(null);
   const scrollParentRef = useRef<HTMLElement | Element | null>(null);
   const scrollStopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const touchEndCancelTimestampRef = useRef<number | null>(null);
+  const pendingTouchCompatRef = useRef<{
+    screenX: number;
+    screenY: number;
+    timestamp: number;
+  } | null>(null);
+  const lastTouchPointRef = useRef<{ screenX: number; screenY: number }>({
+    screenX: 0,
+    screenY: 0,
+  });
+  const maxTouchDistanceRef = useRef<number>(0);
+  const touchPointerActiveRef = useRef<boolean>(false);
   const keyboardActivationRef = useRef<boolean>(false);
   const lastMouseDownDetailRef = useRef<number>(0);
 
@@ -335,11 +349,13 @@ const Slider = (props: SliderViewProps) => {
       screenY,
       touchDrag = false,
       mouseDrag = false,
+      preserveCancelClick = false,
     }: {
       screenX: number;
       screenY: number;
       touchDrag?: boolean;
       mouseDrag?: boolean;
+      preserveCancelClick?: boolean;
     }) => {
       const {
         carouselStore: store,
@@ -366,15 +382,10 @@ const Slider = (props: SliderViewProps) => {
         });
       }
 
-      const shouldPreserveTouchCancel =
-        mouseDrag &&
-        touchEndCancelTimestampRef.current !== null &&
-        Date.now() - touchEndCancelTimestampRef.current < 1000;
-      touchEndCancelTimestampRef.current = null;
       keyboardActivationRef.current = false;
 
       updateDragState({
-        cancelNextClick: shouldPreserveTouchCancel ? dragStateRef.current.cancelNextClick : false,
+        cancelNextClick: preserveCancelClick ? dragStateRef.current.cancelNextClick : false,
         isBeingTouchDragged: touchDrag,
         isBeingMouseDragged: mouseDrag,
         startX: screenX,
@@ -458,7 +469,25 @@ const Slider = (props: SliderViewProps) => {
   const handleOnMouseDown = useCallback(
     (ev: React.MouseEvent<HTMLElement>) => {
       lastMouseDownDetailRef.current = ev.detail;
+      const nativeMouseEv = ev.nativeEvent as MouseEvent & {
+        sourceCapabilities?: { firesTouchEvents?: boolean };
+      };
+      if (nativeMouseEv.sourceCapabilities?.firesTouchEvents === false) {
+        pendingTouchCompatRef.current = null;
+      }
+      const isTouchCompatMouseDown =
+        pendingTouchCompatRef.current !== null &&
+        Date.now() - pendingTouchCompatRef.current.timestamp < TOUCH_COMPAT_MAX_DELAY_MS &&
+        Math.hypot(
+          ev.screenX - pendingTouchCompatRef.current.screenX,
+          ev.screenY - pendingTouchCompatRef.current.screenY,
+        ) <= 1;
+      pendingTouchCompatRef.current = null;
+
       if (!latestPropsRef.current.dragEnabled) {
+        if (!isTouchCompatMouseDown && dragStateRef.current.cancelNextClick) {
+          updateDragState({ cancelNextClick: false });
+        }
         callCallback("onMouseDown", ev);
         return;
       }
@@ -467,15 +496,27 @@ const Slider = (props: SliderViewProps) => {
         screenX: ev.screenX,
         screenY: ev.screenY,
         mouseDrag: true,
+        preserveCancelClick: isTouchCompatMouseDown,
       });
       callCallback("onMouseDown", ev);
     },
-    [callCallback, fakeOnDragStart],
+    [callCallback, fakeOnDragStart, updateDragState],
   );
 
   const handleOnMouseMove = useCallback(
     (ev: MouseEvent) => {
-      if (!dragStateRef.current.isBeingMouseDragged) return;
+      if (!dragStateRef.current.isBeingMouseDragged) {
+        if (
+          pendingTouchCompatRef.current !== null &&
+          Math.hypot(
+            ev.screenX - pendingTouchCompatRef.current.screenX,
+            ev.screenY - pendingTouchCompatRef.current.screenY,
+          ) > 1
+        ) {
+          pendingTouchCompatRef.current = null;
+        }
+        return;
+      }
       if (
         Math.hypot(
           ev.screenX - dragStateRef.current.startX,
@@ -504,7 +545,7 @@ const Slider = (props: SliderViewProps) => {
       const isKeyboardClick =
         keyboardActivationRef.current || (ev.detail === 0 && lastMouseDownDetailRef.current > 0);
       keyboardActivationRef.current = false;
-      touchEndCancelTimestampRef.current = null;
+      pendingTouchCompatRef.current = null;
 
       if (!dragStateRef.current.cancelNextClick || isKeyboardClick) {
         if (dragStateRef.current.cancelNextClick) {
@@ -523,10 +564,14 @@ const Slider = (props: SliderViewProps) => {
 
   const handleOnTouchStart = useCallback(
     (ev: React.TouchEvent<HTMLElement>) => {
-      touchEndCancelTimestampRef.current = null;
+      pendingTouchCompatRef.current = null;
+      maxTouchDistanceRef.current = 0;
       lastMouseDownDetailRef.current = 0;
       const { touchEnabled: tEnabled, orientation: orient } = latestPropsRef.current;
       if (!tEnabled) {
+        if (dragStateRef.current.cancelNextClick) {
+          updateDragState({ cancelNextClick: false });
+        }
         callCallback("onTouchStart", ev);
         return;
       }
@@ -537,6 +582,7 @@ const Slider = (props: SliderViewProps) => {
 
       const touch = ev.targetTouches[0];
       if (touch) {
+        lastTouchPointRef.current = { screenX: touch.screenX, screenY: touch.screenY };
         fakeOnDragStart({
           screenX: touch.screenX,
           screenY: touch.screenY,
@@ -545,7 +591,7 @@ const Slider = (props: SliderViewProps) => {
       }
       callCallback("onTouchStart", ev);
     },
-    [callCallback, fakeOnDragStart],
+    [callCallback, fakeOnDragStart, updateDragState],
   );
 
   const handleDocumentScroll = useCallback(() => {
@@ -569,12 +615,13 @@ const Slider = (props: SliderViewProps) => {
 
       const touch = ev.targetTouches[0];
       if (touch) {
-        if (
-          Math.hypot(
-            touch.screenX - dragStateRef.current.startX,
-            touch.screenY - dragStateRef.current.startY,
-          ) > latestPropsRef.current.dragClickThreshold
-        ) {
+        const distance = Math.hypot(
+          touch.screenX - dragStateRef.current.startX,
+          touch.screenY - dragStateRef.current.startY,
+        );
+        maxTouchDistanceRef.current = Math.max(maxTouchDistanceRef.current, distance);
+        lastTouchPointRef.current = { screenX: touch.screenX, screenY: touch.screenY };
+        if (distance > latestPropsRef.current.dragClickThreshold) {
           updateDragState({ cancelNextClick: true });
         }
         fakeOnDragMove(touch.screenX, touch.screenY);
@@ -591,10 +638,23 @@ const Slider = (props: SliderViewProps) => {
 
   const handleOnTouchEnd = useCallback(
     (ev: React.TouchEvent<HTMLElement>) => {
-      if (latestPropsRef.current.touchEnabled && dragStateRef.current.cancelNextClick) {
-        touchEndCancelTimestampRef.current = Date.now();
+      const compatSlopLimit = touchPointerActiveRef.current
+        ? TOUCH_COMPAT_TAP_SLOP_PX
+        : DEFAULT_DRAG_CLICK_THRESHOLD;
+      touchPointerActiveRef.current = false;
+
+      if (
+        latestPropsRef.current.touchEnabled &&
+        dragStateRef.current.cancelNextClick &&
+        maxTouchDistanceRef.current <= compatSlopLimit
+      ) {
+        pendingTouchCompatRef.current = {
+          screenX: lastTouchPointRef.current.screenX,
+          screenY: lastTouchPointRef.current.screenY,
+          timestamp: Date.now(),
+        };
       } else {
-        touchEndCancelTimestampRef.current = null;
+        pendingTouchCompatRef.current = null;
       }
       endTouchMove();
       callCallback("onTouchEnd", ev);
@@ -604,7 +664,8 @@ const Slider = (props: SliderViewProps) => {
 
   const handleOnTouchCancel = useCallback(
     (ev: React.TouchEvent<HTMLElement>) => {
-      touchEndCancelTimestampRef.current = null;
+      touchPointerActiveRef.current = false;
+      pendingTouchCompatRef.current = null;
       if (dragStateRef.current.cancelNextClick) {
         updateDragState({ cancelNextClick: false });
       }
@@ -613,6 +674,16 @@ const Slider = (props: SliderViewProps) => {
     },
     [callCallback, endTouchMove, updateDragState],
   );
+
+  const handleDocumentPointerDown = useCallback((ev: PointerEvent) => {
+    if (ev.pointerType === "touch") {
+      touchPointerActiveRef.current = true;
+      pendingTouchCompatRef.current = null;
+    } else if (ev.pointerType === "mouse" || ev.pointerType === "pen") {
+      touchPointerActiveRef.current = false;
+      pendingTouchCompatRef.current = null;
+    }
+  }, []);
 
   const handleDocumentKeyDown = useCallback(
     (ev: KeyboardEvent) => {
@@ -629,7 +700,7 @@ const Slider = (props: SliderViewProps) => {
         ev.keyCode === 9
       ) {
         keyboardActivationRef.current = true;
-        touchEndCancelTimestampRef.current = null;
+        pendingTouchCompatRef.current = null;
         if (dragStateRef.current.cancelNextClick) {
           updateDragState({ cancelNextClick: false });
         }
@@ -707,6 +778,7 @@ const Slider = (props: SliderViewProps) => {
     ) {
       window.addEventListener("touchmove", blockWindowScroll, false);
     }
+    document.documentElement.addEventListener("pointerdown", handleDocumentPointerDown, true);
     document.documentElement.addEventListener("keydown", handleDocumentKeyDown, true);
     document.documentElement.addEventListener("mouseleave", handleOnMouseUp, false);
     document.documentElement.addEventListener("mousemove", handleOnMouseMove, false);
@@ -717,6 +789,7 @@ const Slider = (props: SliderViewProps) => {
     }
 
     return () => {
+      document.documentElement.removeEventListener("pointerdown", handleDocumentPointerDown, true);
       document.documentElement.removeEventListener("keydown", handleDocumentKeyDown, true);
       document.documentElement.removeEventListener("mouseleave", handleOnMouseUp, false);
       document.documentElement.removeEventListener("mousemove", handleOnMouseMove, false);
@@ -739,6 +812,7 @@ const Slider = (props: SliderViewProps) => {
   }, [
     blockWindowScroll,
     handleDocumentKeyDown,
+    handleDocumentPointerDown,
     handleDocumentScroll,
     handleOnMouseMove,
     handleOnMouseUp,
