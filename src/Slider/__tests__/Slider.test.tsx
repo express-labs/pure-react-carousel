@@ -587,6 +587,119 @@ describe("<Slider />", () => {
       fireEvent.click(btn);
       expect(onButtonClick).toHaveBeenCalledTimes(1);
     });
+
+    it("should preserve touch click suppression through compatibility mousedown -> mouseup -> click events", () => {
+      const onButtonClick = vi.fn();
+      const { getByTestId } = render(
+        <Slider {...props} dragClickThreshold={1}>
+          <div className="carousel__slide">
+            <button type="button" data-testid="touch-compat-btn" onClick={onButtonClick}>
+              Action
+            </button>
+          </div>
+        </Slider>,
+      );
+
+      const btn = getByTestId("touch-compat-btn");
+
+      // Touch movement of 2px exceeds dragClickThreshold={1}, followed by compatibility mouse events
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 102, screenY: 100 }],
+      });
+      fireEvent.touchEnd(btn, { targetTouches: [] });
+
+      // Browser synthesizes compatibility mousedown -> mouseup -> click after touchend
+      fireEvent.mouseDown(btn, { screenX: 102, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      const compatClickEv = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      });
+      const preventDefaultSpy = vi.spyOn(compatClickEv, "preventDefault");
+      fireEvent(btn, compatClickEv);
+
+      expect(preventDefaultSpy).toHaveBeenCalledTimes(1);
+      expect(onButtonClick).not.toHaveBeenCalled();
+
+      // Subsequent normal click should work normally
+      fireEvent.mouseDown(btn, { screenX: 102, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(1);
+
+      // touchCancel after a touch drag should clear suppression so subsequent click is allowed
+      fireEvent.touchStart(btn, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(btn, {
+        targetTouches: [{ screenX: 110, screenY: 100 }],
+      });
+      fireEvent.touchCancel(btn, { targetTouches: [] });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(2);
+    });
+
+    it("should not block keyboard activation after dragging beyond threshold and releasing outside without a click", () => {
+      const onButtonClick = vi.fn();
+      const { container, getByTestId } = render(
+        <Slider {...props}>
+          <div className="carousel__slide">
+            <button type="button" data-testid="kb-slide-btn" onClick={onButtonClick}>
+              Action
+            </button>
+          </div>
+        </Slider>,
+      );
+
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      const btn = getByTestId("kb-slide-btn");
+
+      // 1. Drag beyond threshold and release outside (no click event fired), then Tab to button and press Enter
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100, detail: 1 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 150, screenY: 100 }),
+        );
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+
+      // User Tabs to the slide button and presses Enter
+      fireEvent.keyDown(slider, { key: "Tab", code: "Tab", keyCode: 9 });
+      btn.focus();
+      fireEvent.keyDown(btn, { key: "Enter", code: "Enter", keyCode: 13 });
+      fireEvent.click(btn, { detail: 0 });
+      expect(onButtonClick).toHaveBeenCalledTimes(1);
+
+      // 2. Drag beyond threshold and release outside, then trigger a keyboard-synthesized click (detail === 0) directly
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100, detail: 1 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 150, screenY: 100 }),
+        );
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      // Modifier keys during an active drag should not clear suppression
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100, detail: 1 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 150, screenY: 100 }),
+        );
+      });
+      fireEvent.keyDown(btn, { key: "Shift", keyCode: 16 });
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      // Keyboard-generated click (detail: 0) is exempted and clears stale cancelNextClick
+      fireEvent.click(btn, { detail: 0 });
+      expect(onButtonClick).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe("keyboard navigation", () => {
