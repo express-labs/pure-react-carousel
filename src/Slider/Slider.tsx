@@ -131,6 +131,7 @@ const Slider = (props: SliderViewProps) => {
   const originalPaddingLeftRef = useRef<string | null>(null);
   const originalPaddingRightRef = useRef<string | null>(null);
   const originalWidthRef = useRef<string | null>(null);
+  const originalMinWidthRef = useRef<string | null>(null);
   const scrollParentRef = useRef<HTMLElement | Element | null>(null);
   const scrollStopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clickGuardRef = useRef<{
@@ -293,9 +294,8 @@ const Slider = (props: SliderViewProps) => {
       if (scrollbarWidth > 0) {
         const computedStyle = window.getComputedStyle(scrollParent, null);
         const widthBeforePadding = parseFloat(computedStyle.getPropertyValue("width")) || 0;
-        const isLeftScrollbar =
-          scrollParent.clientLeft < prevClientLeft ||
-          computedStyle.getPropertyValue("direction") === "rtl";
+        const minWidthBeforePadding = parseFloat(computedStyle.getPropertyValue("min-width")) || 0;
+        const isLeftScrollbar = scrollParent.clientLeft < prevClientLeft;
         if (isLeftScrollbar) {
           originalPaddingLeftRef.current = scrollParent.style.paddingLeft;
           const computedPaddingLeft =
@@ -313,8 +313,13 @@ const Slider = (props: SliderViewProps) => {
           widthBeforePadding > scrollbarWidth &&
           widthAfterPadding === widthBeforePadding
         ) {
+          const targetWidth = widthBeforePadding - scrollbarWidth;
           originalWidthRef.current = scrollParent.style.width;
-          scrollParent.style.width = `${widthBeforePadding - scrollbarWidth}px`;
+          scrollParent.style.width = `${targetWidth}px`;
+          if (minWidthBeforePadding > targetWidth) {
+            originalMinWidthRef.current = scrollParent.style.minWidth;
+            scrollParent.style.minWidth = `${targetWidth}px`;
+          }
         }
       }
     }
@@ -336,10 +341,14 @@ const Slider = (props: SliderViewProps) => {
       if (originalWidthRef.current !== null) {
         scrollParentRef.current.style.width = originalWidthRef.current;
       }
+      if (originalMinWidthRef.current !== null) {
+        scrollParentRef.current.style.minWidth = originalMinWidthRef.current;
+      }
       originalOverflowRef.current = null;
       originalPaddingLeftRef.current = null;
       originalPaddingRightRef.current = null;
       originalWidthRef.current = null;
+      originalMinWidthRef.current = null;
       scrollParentRef.current = null;
     }
   }, []);
