@@ -20,6 +20,8 @@ import {
   ImageView,
   ImageWithZoom,
   ImageWithZoomView,
+  NativeSlider,
+  NativeSliderView,
   Slide,
   Slider,
   SliderView,
@@ -198,6 +200,9 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
           <ImageWithZoom {...imageWithZoomProps} />
         </Slide>
       </Slider>
+      <NativeSlider {...nativeSliderPropsContract}>
+        <Slide {...slideProps} />
+      </NativeSlider>
       <ButtonFirst {...firstProps}>First</ButtonFirst>
       <ButtonBack {...backProps}>Back</ButtonBack>
       <ButtonNext {...nextProps}>Next</ButtonNext>
@@ -413,6 +418,7 @@ export type VerifyExportedTypes = [
   typeof DotGroupView,
   typeof ImageView,
   typeof ImageWithZoomView,
+  typeof NativeSliderView,
   typeof SlideView,
   typeof SliderView,
   typeof SpinnerView,
@@ -432,16 +438,24 @@ export const verifyReadonlyCarouselState = (): void => {
   mockFullCarouselStore.state.isPlaying = true;
 };
 
-// 7. Verify Slider trayProps Rejects Unsupported ref Prop
+// 7. Verify Slider and NativeSlider trayProps Reject Unsupported ref Prop
 export const verifySliderTrayPropsRejectsRef = (): React.ReactElement => {
   const trayRef = React.createRef<HTMLDivElement>();
   return (
-    <Slider
-      // @ts-expect-error -- trayProps.ref is discarded at runtime and unsupported in the public SliderProps contract
-      trayProps={{ ref: trayRef }}
-    >
-      <div>Slide</div>
-    </Slider>
+    <>
+      <Slider
+        // @ts-expect-error -- trayProps.ref is discarded at runtime and unsupported in the public SliderProps contract
+        trayProps={{ ref: trayRef }}
+      >
+        <div>Slide</div>
+      </Slider>
+      <NativeSlider
+        // @ts-expect-error -- trayProps.ref is discarded at runtime and unsupported in the public NativeSliderProps contract
+        trayProps={{ ref: trayRef }}
+      >
+        <div>Slide</div>
+      </NativeSlider>
+    </>
   );
 };
 

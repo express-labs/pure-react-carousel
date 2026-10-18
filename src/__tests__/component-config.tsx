@@ -9,6 +9,7 @@ import Dot from "../Dot/Dot";
 import DotGroup from "../DotGroup/DotGroup";
 import Image from "../Image/Image";
 import ImageWithZoom from "../ImageWithZoom/ImageWithZoom";
+import NativeSlider from "../NativeSlider/NativeSlider";
 import Slide from "../Slide/Slide";
 import Slider from "../Slider/Slider";
 import Spinner from "../Spinner/Spinner";
@@ -123,6 +124,37 @@ export const createComponentConfig = () => ({
     props: {
       carouselStore: new Store({}),
       src: "bob.jpg",
+    },
+  },
+  NativeSlider: {
+    component: NativeSlider,
+    props: {
+      carouselStore: new Store({
+        currentSlide: 0,
+      }),
+      children: "hello",
+      currentSlide: 0,
+      disableAnimation: false,
+      disableKeyboard: false,
+      hasMasterSpinner: false,
+      hideScrollbar: true,
+      interval: 5000,
+      infinite: false,
+      isPageScrollLocked: false,
+      isPlaying: false,
+      lockOnWindowScroll: false,
+      masterSpinnerFinished: false,
+      naturalSlideHeight: 100,
+      naturalSlideWidth: 100,
+      orientation: "horizontal" as const,
+      playDirection: "forward" as const,
+      slideSize: 50,
+      slideTraySize: 250,
+      snapType: "mandatory" as const,
+      step: 2,
+      totalSlides: 5,
+      touchEnabled: true,
+      visibleSlides: 2,
     },
   },
   Slide: {

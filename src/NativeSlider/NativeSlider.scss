@@ -1,0 +1,99 @@
+.horizontalSlider {
+  position: relative;
+  overflow: hidden;
+}
+
+[dir="rtl"] .horizontalSlider {
+  direction: ltr;
+  transform: scaleX(-1);
+}
+
+.verticalSlider {
+  position: relative;
+  overflow: hidden;
+}
+
+.trayWrap {
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.horizontalSlideTrayWrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x var(--carousel-snap-strictness, mandatory);
+}
+
+.verticalSlideTrayWrap {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y var(--carousel-snap-strictness, mandatory);
+}
+
+.snapMandatory {
+  --carousel-snap-strictness: mandatory;
+}
+
+.snapProximity {
+  --carousel-snap-strictness: proximity;
+}
+
+.snapNone {
+  scroll-snap-type: none;
+}
+
+.smoothScroll {
+  scroll-behavior: smooth;
+}
+
+.instantScroll {
+  scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smoothScroll {
+    scroll-behavior: auto;
+  }
+}
+
+.hideScrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hideScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.touchDisabled {
+  overflow: hidden;
+  touch-action: none;
+}
+
+.sliderTray {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.horizontalTray {
+  flex-direction: row;
+  width: 100%;
+}
+
+.verticalTray {
+  flex-direction: column;
+  width: 100%;
+}
+
+.masterSpinnerContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #f4f4f4;
+}

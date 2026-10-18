@@ -17,6 +17,8 @@ export { default as Image } from "./Image";
 export { default as ImageView } from "./Image/Image";
 export { default as ImageWithZoom } from "./ImageWithZoom";
 export { default as ImageWithZoomView } from "./ImageWithZoom/ImageWithZoom";
+export { default as NativeSlider } from "./NativeSlider";
+export { default as NativeSliderView } from "./NativeSlider/NativeSlider";
 export { default as Slide } from "./Slide";
 export { default as Slider } from "./Slider";
 export { default as SliderView } from "./Slider/Slider";

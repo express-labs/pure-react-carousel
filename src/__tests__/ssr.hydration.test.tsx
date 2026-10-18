@@ -14,6 +14,7 @@ import {
   DotGroup,
   Image,
   ImageWithZoom,
+  NativeSlider,
   Slide,
   Slider,
   Spinner,
@@ -36,6 +37,11 @@ const buildHydrationTree = () => (
       </Slide>
       <Slide index={2}>Slide 3 Content</Slide>
     </Slider>
+    <NativeSlider>
+      <Slide index={0}>Native Slide 1</Slide>
+      <Slide index={1}>Native Slide 2</Slide>
+      <Slide index={2}>Native Slide 3</Slide>
+    </NativeSlider>
     <ButtonFirst>First</ButtonFirst>
     <ButtonBack>Back</ButtonBack>
     <ButtonNext>Next</ButtonNext>
