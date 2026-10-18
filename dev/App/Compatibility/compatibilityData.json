@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-10-16",
-  "packageVersion": "3.1.1",
+  "packageVersion": "3.2.0",
   "nodeVersion": "v24.18.0",
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",

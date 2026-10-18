@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/express-labs/pure-react-carousel/compare/v3.1.1...v3.2.0) (2026-10-18)
+
+
+### Features
+
+* **autoplay:** add pauseOnInteract prop to reset interval on interaction ([#504](https://github.com/express-labs/pure-react-carousel/issues/504)) ([7e64367](https://github.com/express-labs/pure-react-carousel/commit/7e64367b70a995c62efe5c5fb1438b103c0002d0)), closes [#456](https://github.com/express-labs/pure-react-carousel/issues/456)
+
 ## [3.1.1](https://github.com/express-labs/pure-react-carousel/compare/v3.1.0...v3.1.1) (2026-10-18)
 
 
