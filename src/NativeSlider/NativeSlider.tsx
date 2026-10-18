@@ -130,7 +130,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       }
 
       if (targetElement.classList.contains("carousel__slide--snap-align-center")) {
-        return Math.max(0, snappedIndex - Math.floor((visibleCount - 1) / 2));
+        return Math.max(0, snappedIndex - Math.floor(visibleCount / 2));
       }
       if (targetElement.classList.contains("carousel__slide--snap-align-end")) {
         return Math.max(0, snappedIndex - (visibleCount - 1));

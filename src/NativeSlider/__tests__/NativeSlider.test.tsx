@@ -527,7 +527,7 @@ describe("<NativeSlider />", () => {
         visibleSlides: 3,
         snapAlign: "center",
       });
-      const { container } = render(
+      const { container, rerender } = render(
         <NativeSliderView
           {...props}
           carouselStore={store}
@@ -568,6 +568,54 @@ describe("<NativeSlider />", () => {
         trayWrap.dispatchEvent(endSnapEvent);
       });
       expect(store.getStoreState().currentSlide).toBe(1);
+
+      // Even visibleSlides=2 with center-aligned slide 2 -> leading visible slide is 2 - Math.floor(2 / 2) = 1
+      store.setStoreState({ currentSlide: 0, visibleSlides: 2 });
+      rerender(
+        <NativeSliderView
+          {...props}
+          carouselStore={store}
+          currentSlide={0}
+          totalSlides={5}
+          visibleSlides={2}
+          orientation="horizontal"
+          snapType="mandatory"
+        >
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 0</div>
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 1</div>
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 2</div>
+          <div className="carousel__slide carousel__slide--snap-align-end">Slide 3</div>
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 4</div>
+        </NativeSliderView>,
+      );
+      fireEvent.pointerDown(trayWrap);
+      const evenCenterSnapEvent = new Event("scrollsnapchange");
+      Object.defineProperty(evenCenterSnapEvent, "snapTargetInline", { value: slides[2] });
+      act(() => {
+        trayWrap.dispatchEvent(evenCenterSnapEvent);
+      });
+      expect(store.getStoreState().currentSlide).toBe(1);
+
+      // Restore visibleSlides=3 and verify IntersectionObserver active ratios take precedence
+      store.setStoreState({ currentSlide: 0, visibleSlides: 3 });
+      rerender(
+        <NativeSliderView
+          {...props}
+          carouselStore={store}
+          currentSlide={0}
+          totalSlides={5}
+          visibleSlides={3}
+          orientation="horizontal"
+          snapType="mandatory"
+        >
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 0</div>
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 1</div>
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 2</div>
+          <div className="carousel__slide carousel__slide--snap-align-end">Slide 3</div>
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 4</div>
+        </NativeSliderView>,
+      );
+      fireEvent.pointerDown(trayWrap);
 
       // When IntersectionObserver has active ratios for slides 2, 3, 4, scrollsnapchange on slide 3 uses observed leading slide 2
       act(() => {
