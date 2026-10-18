@@ -327,7 +327,165 @@ describe("<Slider />", () => {
       expect(scrollParent.style.overflow).toBe("scroll");
       expect(scrollParent.style.paddingRight).toBe("20px");
 
+      // Also compensate from 0px when initial paddingRight is empty
+      scrollParent.style.paddingRight = "";
+      const { unmount: unmountEmptyPad } = render(
+        <Slider {...props} orientation="vertical" isPageScrollLocked />,
+      );
+      // Initial mount with isPageScrollLocked=true does not trigger transition, rerender from false -> true:
+      unmountEmptyPad();
+
+      const { rerender: rerenderEmpty, unmount: unmountEmpty } = render(
+        <Slider {...props} orientation="vertical" />,
+      );
+      rerenderEmpty(<Slider {...props} orientation="vertical" isPageScrollLocked />);
+      expect(scrollParent.style.paddingRight).toBe("15px");
+      unmountEmpty();
+      expect(scrollParent.style.paddingRight).toBe("");
+
       Reflect.deleteProperty(scrollParent, "clientWidth");
+    });
+
+    it("should compensate paddingLeft instead of paddingRight when scrollbar is on the left (RTL or clientLeft delta)", () => {
+      const scrollParent = document.documentElement;
+      scrollParent.style.overflow = "scroll";
+      scrollParent.style.direction = "rtl";
+      scrollParent.style.paddingLeft = "10px";
+      scrollParent.style.paddingRight = "20px";
+
+      Object.defineProperty(scrollParent, "clientWidth", {
+        configurable: true,
+        get() {
+          return scrollParent.style.overflow === "hidden" ? 1015 : 1000;
+        },
+      });
+
+      const { rerender, unmount } = render(<Slider {...props} orientation="vertical" />);
+
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked />);
+      expect(scrollParent.style.overflow).toBe("hidden");
+      expect(scrollParent.style.paddingLeft).toBe("25px");
+      expect(scrollParent.style.paddingRight).toBe("20px");
+
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked={false} />);
+      expect(scrollParent.style.overflow).toBe("scroll");
+      expect(scrollParent.style.paddingLeft).toBe("10px");
+      expect(scrollParent.style.paddingRight).toBe("20px");
+
+      // Also detect left scrollbar via clientLeft delta even when direction is ltr and initial paddingLeft is empty
+      scrollParent.style.direction = "ltr";
+      scrollParent.style.paddingLeft = "";
+      Object.defineProperty(scrollParent, "clientLeft", {
+        configurable: true,
+        get() {
+          return scrollParent.style.overflow === "hidden" ? 0 : 15;
+        },
+      });
+
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked />);
+      expect(scrollParent.style.paddingLeft).toBe("15px");
+      expect(scrollParent.style.paddingRight).toBe("20px");
+
+      unmount();
+      expect(scrollParent.style.overflow).toBe("scroll");
+      expect(scrollParent.style.paddingLeft).toBe("");
+      expect(scrollParent.style.paddingRight).toBe("20px");
+
+      scrollParent.style.direction = "";
+      Reflect.deleteProperty(scrollParent, "clientWidth");
+      Reflect.deleteProperty(scrollParent, "clientLeft");
+    });
+
+    it("should preserve outer geometry and pre-lock content width for box-sizing: content-box containers without shrinking border-box containers", () => {
+      const scrollContainer = document.createElement("div");
+      scrollContainer.style.overflow = "scroll";
+      scrollContainer.style.boxSizing = "content-box";
+      scrollContainer.style.width = "400px";
+      scrollContainer.style.paddingRight = "20px";
+      document.body.appendChild(scrollContainer);
+
+      const getBoxMetrics = () => {
+        const scrollbar = scrollContainer.style.overflow === "hidden" ? 0 : 15;
+        const cssWidth = parseFloat(scrollContainer.style.width) || 0;
+        const padLeft = parseFloat(scrollContainer.style.paddingLeft) || 0;
+        const padRight = parseFloat(scrollContainer.style.paddingRight) || 0;
+        if (scrollContainer.style.boxSizing === "border-box") {
+          const contentWidth = cssWidth - padLeft - padRight - scrollbar;
+          return {
+            contentWidth,
+            clientWidth: contentWidth + padLeft + padRight,
+            offsetWidth: cssWidth,
+          };
+        }
+        // content-box: scrollbar is carved out of the CSS width box when present
+        const contentWidth = cssWidth - scrollbar;
+        return {
+          contentWidth,
+          clientWidth: contentWidth + padLeft + padRight,
+          offsetWidth: contentWidth + padLeft + padRight + scrollbar,
+        };
+      };
+
+      Object.defineProperty(scrollContainer, "clientWidth", {
+        configurable: true,
+        get() {
+          return getBoxMetrics().clientWidth;
+        },
+      });
+      Object.defineProperty(scrollContainer, "offsetWidth", {
+        configurable: true,
+        get() {
+          return getBoxMetrics().offsetWidth;
+        },
+      });
+
+      expect(getBoxMetrics()).toEqual({
+        contentWidth: 385,
+        clientWidth: 405,
+        offsetWidth: 420,
+      });
+
+      const { rerender, unmount } = render(<Slider {...props} orientation="vertical" />, {
+        container: scrollContainer,
+      });
+
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked />);
+      expect(scrollContainer.style.overflow).toBe("hidden");
+      expect(scrollContainer.style.paddingRight).toBe("35px");
+      expect(scrollContainer.style.width).toBe("385px");
+      expect(getBoxMetrics()).toEqual({
+        contentWidth: 385,
+        clientWidth: 420,
+        offsetWidth: 420,
+      });
+
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked={false} />);
+      expect(scrollContainer.style.overflow).toBe("scroll");
+      expect(scrollContainer.style.paddingRight).toBe("20px");
+      expect(scrollContainer.style.width).toBe("400px");
+      expect(getBoxMetrics()).toEqual({
+        contentWidth: 385,
+        clientWidth: 405,
+        offsetWidth: 420,
+      });
+
+      // border-box container with explicit width should NOT have style.width reduced
+      scrollContainer.style.boxSizing = "border-box";
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked />);
+      expect(scrollContainer.style.paddingRight).toBe("35px");
+      expect(scrollContainer.style.width).toBe("400px");
+      expect(getBoxMetrics()).toEqual({
+        contentWidth: 365,
+        clientWidth: 400,
+        offsetWidth: 400,
+      });
+
+      unmount();
+      expect(scrollContainer.style.overflow).toBe("scroll");
+      expect(scrollContainer.style.paddingRight).toBe("20px");
+      expect(scrollContainer.style.width).toBe("400px");
+
+      scrollContainer.remove();
     });
 
     it("should ignore touchmove while document is scrolling when lockOnWindowScroll is true", () => {

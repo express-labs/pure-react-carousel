@@ -128,7 +128,9 @@ const Slider = (props: SliderViewProps) => {
   const isDocumentScrollingRef = useRef<boolean | null>(null);
   const moveTimerRef = useRef<number | null>(null);
   const originalOverflowRef = useRef<string | null>(null);
+  const originalPaddingLeftRef = useRef<string | null>(null);
   const originalPaddingRightRef = useRef<string | null>(null);
+  const originalWidthRef = useRef<string | null>(null);
   const scrollParentRef = useRef<HTMLElement | Element | null>(null);
   const scrollStopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clickGuardRef = useRef<{
@@ -283,20 +285,37 @@ const Slider = (props: SliderViewProps) => {
     const scrollParent = getScrollParent.getScrollParent(sliderTrayElementRef.current);
     scrollParentRef.current = scrollParent;
     if (scrollParent && "style" in scrollParent && scrollParent.style) {
-      originalOverflowRef.current = originalOverflowRef.current || scrollParent.style.overflow;
+      originalOverflowRef.current = scrollParent.style.overflow;
       const prevClientWidth = scrollParent.clientWidth;
+      const prevClientLeft = scrollParent.clientLeft;
       scrollParent.style.overflow = "hidden";
       const scrollbarWidth = scrollParent.clientWidth - prevClientWidth;
       if (scrollbarWidth > 0) {
-        originalPaddingRightRef.current =
-          originalPaddingRightRef.current ?? scrollParent.style.paddingRight;
-        const computedPaddingRight =
-          typeof window !== "undefined" && typeof window.getComputedStyle === "function"
-            ? parseFloat(
-                window.getComputedStyle(scrollParent, null).getPropertyValue("padding-right"),
-              ) || 0
-            : 0;
-        scrollParent.style.paddingRight = `${computedPaddingRight + scrollbarWidth}px`;
+        const computedStyle = window.getComputedStyle(scrollParent, null);
+        const widthBeforePadding = parseFloat(computedStyle.getPropertyValue("width")) || 0;
+        const isLeftScrollbar =
+          scrollParent.clientLeft < prevClientLeft ||
+          computedStyle.getPropertyValue("direction") === "rtl";
+        if (isLeftScrollbar) {
+          originalPaddingLeftRef.current = scrollParent.style.paddingLeft;
+          const computedPaddingLeft =
+            parseFloat(computedStyle.getPropertyValue("padding-left")) || 0;
+          scrollParent.style.paddingLeft = `${computedPaddingLeft + scrollbarWidth}px`;
+        } else {
+          originalPaddingRightRef.current = scrollParent.style.paddingRight;
+          const computedPaddingRight =
+            parseFloat(computedStyle.getPropertyValue("padding-right")) || 0;
+          scrollParent.style.paddingRight = `${computedPaddingRight + scrollbarWidth}px`;
+        }
+        const widthAfterPadding = parseFloat(computedStyle.getPropertyValue("width")) || 0;
+        if (
+          computedStyle.getPropertyValue("box-sizing") !== "border-box" &&
+          widthBeforePadding > scrollbarWidth &&
+          widthAfterPadding === widthBeforePadding
+        ) {
+          originalWidthRef.current = scrollParent.style.width;
+          scrollParent.style.width = `${widthBeforePadding - scrollbarWidth}px`;
+        }
       }
     }
   }, []);
@@ -308,11 +327,19 @@ const Slider = (props: SliderViewProps) => {
       scrollParentRef.current.style
     ) {
       scrollParentRef.current.style.overflow = originalOverflowRef.current || "";
+      if (originalPaddingLeftRef.current !== null) {
+        scrollParentRef.current.style.paddingLeft = originalPaddingLeftRef.current;
+      }
       if (originalPaddingRightRef.current !== null) {
         scrollParentRef.current.style.paddingRight = originalPaddingRightRef.current;
       }
+      if (originalWidthRef.current !== null) {
+        scrollParentRef.current.style.width = originalWidthRef.current;
+      }
       originalOverflowRef.current = null;
+      originalPaddingLeftRef.current = null;
       originalPaddingRightRef.current = null;
+      originalWidthRef.current = null;
       scrollParentRef.current = null;
     }
   }, []);
