@@ -81,4 +81,11 @@ describe("<Dot />", () => {
     fireEvent.click(screen.getByRole("button"));
     expect(props.carouselStore.getStoreState().isPlaying).toBe(false);
   });
+
+  it("should not pause autoplay when clicked and pauseOnInteract is false", () => {
+    render(<Dot {...props} slide={2} pauseOnInteract={false} />);
+    fireEvent.click(screen.getByRole("button"));
+    expect(props.carouselStore.getStoreState().currentSlide).toBe(2);
+    expect(props.carouselStore.getStoreState().isPlaying).toBe(true);
+  });
 });

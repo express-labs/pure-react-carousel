@@ -5,10 +5,11 @@ import type { ButtonFirstProps, ButtonFirstViewProps, CarouselState } from "../t
 
 const ConnectedButtonFirst: React.ComponentType<ButtonFirstProps> = WithStore<
   ButtonFirstViewProps,
-  Pick<CarouselState, "currentSlide" | "totalSlides">
+  Pick<CarouselState, "currentSlide" | "totalSlides" | "pauseOnInteract">
 >(ButtonFirst, (state) => ({
   currentSlide: state.currentSlide,
   totalSlides: state.totalSlides,
+  pauseOnInteract: state.pauseOnInteract,
 }));
 
 export default ConnectedButtonFirst;

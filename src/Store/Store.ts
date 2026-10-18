@@ -30,6 +30,7 @@ export function createInitialState(initial: Partial<CarouselState> = {}): Carous
     naturalSlideHeight: initial.naturalSlideHeight ?? DEFAULT_NATURAL_SLIDE_HEIGHT,
     naturalSlideWidth: initial.naturalSlideWidth ?? DEFAULT_NATURAL_SLIDE_WIDTH,
     orientation: initial.orientation ?? defaultProps.orientation,
+    pauseOnInteract: initial.pauseOnInteract ?? defaultProps.pauseOnInteract,
     playDirection: initial.playDirection ?? defaultProps.playDirection,
     privateUnDisableAnimation:
       initial.privateUnDisableAnimation ?? defaultProps.privateUnDisableAnimation,

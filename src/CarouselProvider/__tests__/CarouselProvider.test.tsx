@@ -253,4 +253,25 @@ describe("<CarouselProvider />", () => {
     expect(providerEl?.hasAttribute("verticalPixelThreshold")).toBe(false);
     expect(providerEl?.hasAttribute("verticalpixelthreshold")).toBe(false);
   });
+
+  it("should initialize pauseOnInteract to true by default and sync changes to the store", () => {
+    let contextRef!: React.ContextType<typeof CarouselContext>;
+    const capture = (ctx: React.ContextType<typeof CarouselContext>) => {
+      contextRef = ctx;
+    };
+
+    const { rerender } = render(
+      <CarouselProvider {...props}>
+        <ContextCapture onCapture={capture} />
+      </CarouselProvider>,
+    );
+    expect(contextRef?.state.pauseOnInteract).toBe(true);
+
+    rerender(
+      <CarouselProvider {...props} pauseOnInteract={false}>
+        <ContextCapture onCapture={capture} />
+      </CarouselProvider>,
+    );
+    expect(contextRef?.state.pauseOnInteract).toBe(false);
+  });
 });

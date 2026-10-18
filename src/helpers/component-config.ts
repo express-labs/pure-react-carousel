@@ -21,6 +21,7 @@ export interface DefaultCarouselConfig {
   isPlaying: boolean;
   lockOnWindowScroll: boolean;
   orientation: Orientation;
+  pauseOnInteract: boolean;
   playDirection: PlayDirection;
   privateUnDisableAnimation: boolean;
   step: number;
@@ -43,6 +44,7 @@ export const defaultProps: DefaultCarouselConfig = {
   isPlaying: false,
   lockOnWindowScroll: false,
   orientation: "horizontal",
+  pauseOnInteract: true,
   playDirection: "forward",
   privateUnDisableAnimation: false,
   step: 1,

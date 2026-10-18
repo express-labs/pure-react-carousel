@@ -94,4 +94,14 @@ describe("<ButtonLast />", () => {
     fireEvent.click(screen.getByRole("button"));
     expect(customStore.getStoreState().isPlaying).toBe(false);
   });
+
+  it("should not pause autoplay when clicked and pauseOnInteract is false", () => {
+    const customStore = new Store({
+      isPlaying: true,
+    });
+    render(<ButtonLast {...props} carouselStore={customStore} pauseOnInteract={false} />);
+    fireEvent.click(screen.getByRole("button"));
+    expect(customStore.getStoreState().currentSlide).toBe(props.totalSlides - 1);
+    expect(customStore.getStoreState().isPlaying).toBe(true);
+  });
 });

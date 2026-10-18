@@ -5,13 +5,17 @@ import type { ButtonBackProps, ButtonBackViewProps, CarouselState } from "../typ
 
 const ConnectedButtonBack: React.ComponentType<ButtonBackProps> = WithStore<
   ButtonBackViewProps,
-  Pick<CarouselState, "currentSlide" | "step" | "totalSlides" | "visibleSlides" | "infinite">
+  Pick<
+    CarouselState,
+    "currentSlide" | "step" | "totalSlides" | "visibleSlides" | "infinite" | "pauseOnInteract"
+  >
 >(ButtonBack, (state) => ({
   currentSlide: state.currentSlide,
   step: state.step,
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
   infinite: state.infinite,
+  pauseOnInteract: state.pauseOnInteract,
 }));
 
 export default ConnectedButtonBack;

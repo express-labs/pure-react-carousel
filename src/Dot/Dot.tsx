@@ -11,6 +11,7 @@ const Dot = (props: DotViewProps) => {
     currentSlide,
     disabled = null,
     onClick = null,
+    pauseOnInteract = true,
     selected = null,
     slide,
     totalSlides,
@@ -30,7 +31,7 @@ const Dot = (props: DotViewProps) => {
     carouselStore.setStoreState(
       {
         currentSlide: newCurrentSlide,
-        isPlaying: false,
+        ...(pauseOnInteract ? { isPlaying: false } : {}),
       },
       onClick !== null ? () => onClick(ev) : undefined,
     );

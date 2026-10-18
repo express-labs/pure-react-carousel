@@ -5,11 +5,12 @@ import type { ButtonLastProps, ButtonLastViewProps, CarouselState } from "../typ
 
 const ConnectedButtonLast: React.ComponentType<ButtonLastProps> = WithStore<
   ButtonLastViewProps,
-  Pick<CarouselState, "currentSlide" | "totalSlides" | "visibleSlides">
+  Pick<CarouselState, "currentSlide" | "totalSlides" | "visibleSlides" | "pauseOnInteract">
 >(ButtonLast, (state) => ({
   currentSlide: state.currentSlide,
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
+  pauseOnInteract: state.pauseOnInteract,
 }));
 
 export default ConnectedButtonLast;

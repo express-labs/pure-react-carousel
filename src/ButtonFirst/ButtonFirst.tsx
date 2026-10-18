@@ -12,6 +12,7 @@ const ButtonFirst = (props: ButtonFirstViewProps) => {
     disabled = null,
     infinite: _infinite = false,
     onClick = null,
+    pauseOnInteract = true,
     totalSlides: _totalSlides,
     ...restProps
   } = props;
@@ -22,7 +23,7 @@ const ButtonFirst = (props: ButtonFirstViewProps) => {
     carouselStore.setStoreState(
       {
         currentSlide: 0,
-        isPlaying: false,
+        ...(pauseOnInteract ? { isPlaying: false } : {}),
       },
       onClick !== null ? () => onClick(ev) : undefined,
     );

@@ -21,6 +21,7 @@ const ConnectedSlider: React.ComponentType<SliderProps> = WithStore<
     | "naturalSlideHeight"
     | "naturalSlideWidth"
     | "orientation"
+    | "pauseOnInteract"
     | "playDirection"
     | "privateUnDisableAnimation"
     | "slideSize"
@@ -47,6 +48,7 @@ const ConnectedSlider: React.ComponentType<SliderProps> = WithStore<
   naturalSlideHeight: state.naturalSlideHeight,
   naturalSlideWidth: state.naturalSlideWidth,
   orientation: state.orientation,
+  pauseOnInteract: state.pauseOnInteract,
   playDirection: state.playDirection,
   privateUnDisableAnimation: state.privateUnDisableAnimation,
   slideSize: state.slideSize,
