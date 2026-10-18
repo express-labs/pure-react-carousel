@@ -149,4 +149,3 @@ export const TYPES_REACT_VERSIONS = [
     note: "React.JSX namespace backported in @types/react >= 16.14.43",
   },
 ];
-

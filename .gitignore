@@ -65,3 +65,4 @@ coverage.json
 # React compatibility test suite cache
 .cache
 
+.vitest/

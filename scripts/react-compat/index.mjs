@@ -5,7 +5,7 @@ import Module, { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ensureCompatEnvs } from "./setup-envs.mjs";
-import { ALL_REACT_VERSIONS, REACT_TRACKS, TYPES_REACT_VERSIONS } from "./versions.mjs";
+import { REACT_TRACKS, TYPES_REACT_VERSIONS } from "./versions.mjs";
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(currentDir, "../..");
@@ -13,7 +13,7 @@ const repoRequire = createRequire(join(repoRoot, "package.json"));
 const { JSDOM } = repoRequire("jsdom");
 const defaultCacheDir =
   process.env.REACT_COMPAT_CACHE_DIR || resolve(repoRoot, ".cache/react-compat");
-const demoDataPath = resolve(repoRoot, "src/App/Compatibility/compatibilityData.json");
+const demoDataPath = resolve(repoRoot, "dev/App/Compatibility/compatibilityData.json");
 
 function parseArgs(argv) {
   const options = {
@@ -64,7 +64,7 @@ Usage:
 Options:
   --terminal         Print formatted compatibility report to the terminal (default)
   --no-terminal      Suppress terminal table output
-  --update-demo      Write compatibility report JSON to src/App/Compatibility/compatibilityData.json
+  --update-demo      Write compatibility report JSON to dev/App/Compatibility/compatibilityData.json
   --report-only      Display the saved compatibility report in the terminal without re-running tests
   --skip-vitest      Skip the per-version Vitest sweep and run Runtime + SSR + Hydration + TypeScript checks only
   --track=<19|18|17|16>  Filter runtime tests to a specific React major version track
@@ -186,7 +186,10 @@ async function testRuntimeVersion(ver, cacheDir) {
           React.createElement(
             Slide,
             { index: 1 },
-            React.createElement(ImageWithZoom, { src: "https://example.com/2.jpg", alt: "Slide 2" }),
+            React.createElement(ImageWithZoom, {
+              src: "https://example.com/2.jpg",
+              alt: "Slide 2",
+            }),
           ),
           React.createElement(Slide, { index: 2 }, "Slide 3 Content"),
         ),
@@ -243,9 +246,7 @@ async function testRuntimeVersion(ver, cacheDir) {
     }
 
     const rawAct =
-      typeof React.act === "function"
-        ? React.act
-        : activeEnvRequire("react-dom/test-utils").act;
+      typeof React.act === "function" ? React.act : activeEnvRequire("react-dom/test-utils").act;
     runAct = async (cb) => {
       if (ver === "16.8.0") {
         rawAct(() => {
@@ -290,7 +291,9 @@ async function testRuntimeVersion(ver, cacheDir) {
 
     const nextBtn = container.querySelector(".carousel__next-button");
     await runAct(() => {
-      nextBtn.dispatchEvent(new dom.window.MouseEvent("click", { bubbles: true, cancelable: true }));
+      nextBtn.dispatchEvent(
+        new dom.window.MouseEvent("click", { bubbles: true, cancelable: true }),
+      );
     });
     if (slides[1].getAttribute("aria-selected") !== "true") {
       throw new Error(`After Next click, expected slide 1 aria-selected=true`);
@@ -319,7 +322,9 @@ async function testRuntimeVersion(ver, cacheDir) {
 
     const playBtn = container.querySelector(".carousel__play-button");
     await runAct(() => {
-      playBtn.dispatchEvent(new dom.window.MouseEvent("click", { bubbles: true, cancelable: true }));
+      playBtn.dispatchEvent(
+        new dom.window.MouseEvent("click", { bubbles: true, cancelable: true }),
+      );
     });
     if (playBtn.textContent !== "Pause") {
       throw new Error(`Expected toggled play button text 'Pause', got '${playBtn.textContent}'`);
@@ -535,10 +540,13 @@ function testTypesTracks(cacheDir) {
     );
 
     try {
-      execSync(`${JSON.stringify(tscBin)} -p ${JSON.stringify(tsconfigPath)} --noEmit --pretty false`, {
-        cwd: repoRoot,
-        stdio: "pipe",
-      });
+      execSync(
+        `${JSON.stringify(tscBin)} -p ${JSON.stringify(tsconfigPath)} --noEmit --pretty false`,
+        {
+          cwd: repoRoot,
+          stdio: "pipe",
+        },
+      );
       results.push({
         ...t,
         status: "PASS",
@@ -648,9 +656,7 @@ export function printTerminalReport(report) {
         )
       : 0;
   console.log(`\n╔${"═".repeat(112)}╗`);
-  console.log(
-    `║  PURE REACT CAROUSEL — REACT VERSION COMPATIBILITY REPORT`.padEnd(113) + "║",
-  );
+  console.log(`║  PURE REACT CAROUSEL — REACT VERSION COMPATIBILITY REPORT`.padEnd(113) + "║");
   console.log(`╚${"═".repeat(112)}╝`);
   console.log(
     `  Package Version : v${report.packageVersion}   |   Peer Dependency : ${report.peerDependencies.react}`,
@@ -667,7 +673,9 @@ export function printTerminalReport(report) {
 
   for (const track of report.tracks) {
     const passedCount = track.versions.filter((v) => v.runtime === "PASS").length;
-    console.log(`▸ ${track.name} (${track.peerRange}) — ${passedCount}/${track.versions.length} Runtime Compatible`);
+    console.log(
+      `▸ ${track.name} (${track.peerRange}) — ${passedCount}/${track.versions.length} Runtime Compatible`,
+    );
     console.log(`  ${divider}`);
     console.log(
       `  ${"Version".padEnd(10)} | ${"SSR".padEnd(6)} | ${"Client DOM".padEnd(10)} | ${"Hydration".padEnd(9)} | ${"Vitest Suite".padEnd(28)} | Notes`,
@@ -713,7 +721,9 @@ async function main() {
 
   if (options.reportOnly) {
     if (!existsSync(demoDataPath)) {
-      console.error(`Saved compatibility report not found at ${demoDataPath}. Run 'npm run test:compat:demo' first.`);
+      console.error(
+        `Saved compatibility report not found at ${demoDataPath}. Run 'npm run test:compat:demo' first.`,
+      );
       process.exit(1);
     }
     const savedReport = JSON.parse(readFileSync(demoDataPath, "utf8"));
@@ -746,7 +756,9 @@ async function main() {
   const pkgJson = JSON.parse(readFileSync(resolve(repoRoot, "package.json"), "utf8"));
   const runtimeMap = new Map();
 
-  console.log(`Running runtime, SSR, client DOM, and hydration checks across ${selectedVersions.length} React versions...`);
+  console.log(
+    `Running runtime, SSR, client DOM, and hydration checks across ${selectedVersions.length} React versions...`,
+  );
   for (const ver of selectedVersions) {
     const res = await testRuntimeVersion(ver, defaultCacheDir);
     runtimeMap.set(ver, res);
@@ -754,7 +766,9 @@ async function main() {
 
   const vitestMap = new Map();
   if (!options.skipVitest) {
-    console.log(`Running repository Vitest suite across ${selectedVersions.length} React versions...`);
+    console.log(
+      `Running repository Vitest suite across ${selectedVersions.length} React versions...`,
+    );
     const queue = [...selectedVersions];
     const concurrency = 2;
     const workers = Array.from({ length: concurrency }, async () => {
@@ -776,7 +790,9 @@ async function main() {
     }
   }
 
-  console.log(`Running TypeScript declaration checks across ${TYPES_REACT_VERSIONS.length} @types/react tracks...`);
+  console.log(
+    `Running TypeScript declaration checks across ${TYPES_REACT_VERSIONS.length} @types/react tracks...`,
+  );
   const typesResults = testTypesTracks(defaultCacheDir);
 
   const reportTracks = targetTracks.map((track) => ({
@@ -847,4 +863,3 @@ async function main() {
 }
 
 await main();
-

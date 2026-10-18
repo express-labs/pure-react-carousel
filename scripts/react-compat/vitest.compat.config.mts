@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vitest/config";
+import { defineConfig } from "vite-plus";
 
 const targetVersion = process.env.TARGET_REACT_VERSION;
 if (!targetVersion) {
@@ -10,8 +10,7 @@ if (!targetVersion) {
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(currentDir, "../..");
-const cacheDir =
-  process.env.REACT_COMPAT_CACHE_DIR || resolve(repoRoot, ".cache/react-compat");
+const cacheDir = process.env.REACT_COMPAT_CACHE_DIR || resolve(repoRoot, ".cache/react-compat");
 const envRequire = createRequire(join(cacheDir, "envs", `v-${targetVersion}`, "package.json"));
 
 const reactDir = dirname(envRequire.resolve("react/package.json"));
@@ -90,11 +89,8 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: [
-      join(currentDir, "setup-compat.ts"),
-      resolve(repoRoot, "src/setupTests.ts"),
-    ],
-    include: ["src/**/__tests__/**/*.test.{ts,tsx}"],
+    setupFiles: [join(currentDir, "setup-compat.ts"), resolve(repoRoot, "src/setupTests.ts")],
+    include: ["src/**/__tests__/**/*.test.{ts,tsx}", "dev/**/__tests__/**/*.test.{ts,tsx}"],
     server: {
       deps: {
         inline: [/@testing-library\/react/],
