@@ -709,6 +709,61 @@ describe("<Slider />", () => {
       fireEvent.touchEnd(tray, { targetTouches: [] });
       expect(props.carouselStore.state.currentSlide).toBe(0);
     });
+
+    it("should suppress live drag translation when disableAnimation is true while still advancing currentSlide on touchend and mouseup", () => {
+      const { container, rerender } = render(<Slider {...props} disableAnimation />);
+      const tray = container.querySelector(".carousel__slider-tray") as HTMLElement;
+
+      Object.defineProperty(tray, "clientWidth", {
+        configurable: true,
+        value: 500,
+      });
+      Object.defineProperty(tray, "clientHeight", {
+        configurable: true,
+        value: 500,
+      });
+
+      // Horizontal touch drag: tray stays at translateX(0px) during move, then advances slide on touchend
+      fireEvent.touchStart(tray, {
+        targetTouches: [{ screenX: 100, screenY: 0 }],
+      });
+      fireEvent.touchMove(tray, {
+        targetTouches: [{ screenX: 40, screenY: 0 }],
+      });
+      expect(tray.style.transition).toBe("none");
+      expect(tray.style.transform).toBe("translateX(0%) translateX(0px)");
+
+      fireEvent.touchEnd(tray, { targetTouches: [] });
+      expect(props.carouselStore.state.currentSlide).toBe(1);
+
+      // Horizontal mouse drag: tray stays at translateX(0px) during move, then advances slide on mouseup
+      rerender(<Slider {...props} disableAnimation currentSlide={1} />);
+      fireEvent.mouseDown(tray, { screenX: 100, screenY: 0 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 40, screenY: 0 }),
+        );
+      });
+      expect(tray.style.transform).toBe("translateX(-50%) translateX(0px)");
+
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      expect(props.carouselStore.state.currentSlide).toBe(2);
+
+      // Vertical touch drag: tray stays at translateY(0px) during move, then advances slide on touchend
+      rerender(<Slider {...props} disableAnimation orientation="vertical" currentSlide={2} />);
+      fireEvent.touchStart(tray, {
+        targetTouches: [{ screenX: 0, screenY: 100 }],
+      });
+      fireEvent.touchMove(tray, {
+        targetTouches: [{ screenX: 0, screenY: 40 }],
+      });
+      expect(tray.style.transform).toBe("translateY(-100%) translateY(0px)");
+
+      fireEvent.touchEnd(tray, { targetTouches: [] });
+      expect(props.carouselStore.state.currentSlide).toBe(3);
+    });
   });
 
   describe("mouse dragging & click capture", () => {

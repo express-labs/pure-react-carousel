@@ -1056,13 +1056,16 @@ const Slider = (props: SliderViewProps) => {
     trayStyle.alignItems = "stretch";
   }
 
+  const dragX = disableAnimation ? 0 : dragState.deltaX;
+  const dragY = disableAnimation ? 0 : dragState.deltaY;
+
   if (orientation === "vertical") {
-    trayStyle.transform = `translateY(${trans}) translateY(${dragState.deltaY}px)`;
+    trayStyle.transform = `translateY(${trans}) translateY(${dragY}px)`;
     trayStyle.width = pct(100);
     trayStyle.flexDirection = "column";
   } else {
     trayStyle.width = pct(slideTraySize);
-    trayStyle.transform = `translateX(${trans}) translateX(${dragState.deltaX}px)`;
+    trayStyle.transform = `translateX(${trans}) translateX(${dragX}px)`;
     trayStyle.flexDirection = "row";
   }
 
