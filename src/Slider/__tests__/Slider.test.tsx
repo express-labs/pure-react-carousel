@@ -465,6 +465,91 @@ describe("<Slider />", () => {
       });
       expect(tray.style.transform).toContain("translateX(0px)");
     });
+
+    it("should suppress child button/link clicks after dragging > 5px, allow clicks with <= 5px micro-movement, and reset stale cancelNextClick on new press", () => {
+      const onButtonClick = vi.fn();
+      const onLinkClick = vi.fn();
+      const { getByTestId } = render(
+        <Slider {...props}>
+          <div className="carousel__slide">
+            <button type="button" data-testid="slide-btn" onClick={onButtonClick}>
+              Action
+            </button>
+            <a href="#target" data-testid="slide-link" onClick={onLinkClick}>
+              Link
+            </a>
+          </div>
+        </Slider>,
+      );
+
+      const btn = getByTestId("slide-btn");
+      const link = getByTestId("slide-link");
+
+      // 1. Micro-movement <= 5px (e.g., 3px, 4px -> hypot = 5px) should NOT suppress child button click
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 103, screenY: 104 }),
+        );
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(1);
+
+      // 2. Dragging > 5px (e.g., 20px) SHOULD suppress child button onClick via stopPropagation in capture phase
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 120, screenY: 100 }),
+        );
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      const draggedClickEv = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      });
+      const preventDefaultSpy = vi.spyOn(draggedClickEv, "preventDefault");
+      fireEvent(btn, draggedClickEv);
+      expect(preventDefaultSpy).toHaveBeenCalledTimes(1);
+      expect(onButtonClick).toHaveBeenCalledTimes(1); // Still 1 — child handler did not fire!
+
+      // 3. Touch drag > 5px also suppresses synthesized click on child link, while <= 5px touch jitter allows it
+      fireEvent.touchStart(link, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(link, {
+        targetTouches: [{ screenX: 102, screenY: 102 }],
+      });
+      fireEvent.touchEnd(link, { targetTouches: [] });
+      fireEvent.click(link);
+      expect(onLinkClick).toHaveBeenCalledTimes(1);
+
+      fireEvent.touchStart(link, {
+        targetTouches: [{ screenX: 100, screenY: 100 }],
+      });
+      fireEvent.touchMove(link, {
+        targetTouches: [{ screenX: 130, screenY: 100 }],
+      });
+      fireEvent.touchEnd(link, { targetTouches: [] });
+      fireEvent.click(link);
+      expect(onLinkClick).toHaveBeenCalledTimes(1); // Still 1 — suppressed after touch drag!
+
+      // 4. Dragging and releasing outside (no click event fired) resets cancelNextClick on the next press
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 150, screenY: 100 }),
+        );
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      // No click fired after that drag! Now user performs a normal stationary click on the button:
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe("keyboard navigation", () => {

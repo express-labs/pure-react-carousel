@@ -34,6 +34,8 @@ export function slidesMoved(
   return retval === 0 ? 0 : retval;
 }
 
+const DRAG_CLICK_THRESHOLD = 5;
+
 interface SliderDragState {
   cancelNextClick: boolean;
   deltaX: number;
@@ -361,6 +363,7 @@ const Slider = (props: SliderViewProps) => {
       }
 
       updateDragState({
+        cancelNextClick: false,
         isBeingTouchDragged: touchDrag,
         isBeingMouseDragged: mouseDrag,
         startX: screenX,
@@ -461,7 +464,14 @@ const Slider = (props: SliderViewProps) => {
   const handleOnMouseMove = useCallback(
     (ev: MouseEvent) => {
       if (!dragStateRef.current.isBeingMouseDragged) return;
-      updateDragState({ cancelNextClick: true });
+      if (
+        Math.hypot(
+          ev.screenX - dragStateRef.current.startX,
+          ev.screenY - dragStateRef.current.startY,
+        ) > DRAG_CLICK_THRESHOLD
+      ) {
+        updateDragState({ cancelNextClick: true });
+      }
       ev.preventDefault();
       fakeOnDragMove(ev.screenX, ev.screenY);
     },
@@ -484,6 +494,7 @@ const Slider = (props: SliderViewProps) => {
         return;
       }
       ev.preventDefault();
+      ev.stopPropagation();
       updateDragState({ cancelNextClick: false });
       callCallback("onClickCapture", ev);
     },
@@ -536,11 +547,19 @@ const Slider = (props: SliderViewProps) => {
 
       const touch = ev.targetTouches[0];
       if (touch) {
+        if (
+          Math.hypot(
+            touch.screenX - dragStateRef.current.startX,
+            touch.screenY - dragStateRef.current.startY,
+          ) > DRAG_CLICK_THRESHOLD
+        ) {
+          updateDragState({ cancelNextClick: true });
+        }
         fakeOnDragMove(touch.screenX, touch.screenY);
         callCallback("onTouchMove", ev);
       }
     },
-    [callCallback, fakeOnDragMove],
+    [callCallback, fakeOnDragMove, updateDragState],
   );
 
   const endTouchMove = useCallback(() => {
