@@ -14,6 +14,7 @@ import {
   Example12,
   Example13,
   Example14,
+  Example15,
 } from "./examples";
 import s from "./style.scss";
 
@@ -187,6 +188,9 @@ const DevelopmentApp = (): React.ReactElement => {
                 <option value="12">Infinite Carousel</option>
                 <option value="13">Using Intrinsic Axis Dimension</option>
                 <option value="14">RTL</option>
+                <option value="15">
+                  Carousel with interactive buttons &amp; links (dragClickThreshold)
+                </option>
               </select>
             </label>
           </p>
@@ -280,6 +284,13 @@ const DevelopmentApp = (): React.ReactElement => {
               <section id="example--14">
                 <hr />
                 <Example14 />
+              </section>
+            )}
+
+            {(value === "0" || value === "15") && (
+              <section id="example--15">
+                <hr />
+                <Example15 />
               </section>
             )}
           </div>
