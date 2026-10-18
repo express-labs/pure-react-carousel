@@ -760,9 +760,6 @@ export interface CarouselState {
   readonly isPageScrollLocked?: boolean;
   readonly isPlaying: boolean;
   readonly lockOnWindowScroll: boolean;
-  readonly preventVerticalScrollOnTouch?: boolean;
-  readonly horizontalPixelThreshold?: number;
-  readonly verticalPixelThreshold?: number;
   readonly masterSpinnerFinished: boolean;
   readonly masterSpinnerThreshold?: number;
   readonly MasterSpinnerThreshold?: number;

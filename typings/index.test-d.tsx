@@ -92,9 +92,6 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
     tag: "section",
     touchEnabled: true,
     dragEnabled: true,
-    preventVerticalScrollOnTouch: true,
-    horizontalPixelThreshold: 15,
-    verticalPixelThreshold: 10,
     children: null,
   };
 
@@ -409,3 +406,36 @@ export const verifySliderTrayPropsRejectsRef = (): React.ReactElement => {
     </Slider>
   );
 };
+
+// 8. Verify CarouselProvider Rejects Slider-Only Touch Scroll Threshold Props (#470)
+export const verifyCarouselProviderRejectsSliderTouchThresholdProps = (): React.ReactElement => (
+  <>
+    <CarouselProvider
+      naturalSlideWidth={100}
+      naturalSlideHeight={100}
+      totalSlides={3}
+      // @ts-expect-error -- preventVerticalScrollOnTouch is a Slider prop, not a CarouselProvider prop
+      preventVerticalScrollOnTouch
+    >
+      <div>Slide</div>
+    </CarouselProvider>
+    <CarouselProvider
+      naturalSlideWidth={100}
+      naturalSlideHeight={100}
+      totalSlides={3}
+      // @ts-expect-error -- horizontalPixelThreshold is a Slider prop, not a CarouselProvider prop
+      horizontalPixelThreshold={15}
+    >
+      <div>Slide</div>
+    </CarouselProvider>
+    <CarouselProvider
+      naturalSlideWidth={100}
+      naturalSlideHeight={100}
+      totalSlides={3}
+      // @ts-expect-error -- verticalPixelThreshold is a Slider prop, not a CarouselProvider prop
+      verticalPixelThreshold={10}
+    >
+      <div>Slide</div>
+    </CarouselProvider>
+  </>
+);

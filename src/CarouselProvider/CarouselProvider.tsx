@@ -35,8 +35,19 @@ const CarouselProvider = (props: CarouselProviderProps) => {
     touchEnabled = defaultProps.touchEnabled,
     dragEnabled = defaultProps.dragEnabled,
     visibleSlides = defaultProps.visibleSlides,
-    ...filteredProps
+    ...restProps
   } = props;
+
+  const {
+    preventVerticalScrollOnTouch: _preventVerticalScrollOnTouch,
+    horizontalPixelThreshold: _horizontalPixelThreshold,
+    verticalPixelThreshold: _verticalPixelThreshold,
+    ...filteredProps
+  } = restProps as typeof restProps & {
+    preventVerticalScrollOnTouch?: unknown;
+    horizontalPixelThreshold?: unknown;
+    verticalPixelThreshold?: unknown;
+  };
 
   if (isIntrinsicHeight && orientation !== "horizontal") {
     throw new Error(

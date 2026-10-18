@@ -229,4 +229,28 @@ describe("<CarouselProvider />", () => {
       ),
     ).toThrow(Error);
   });
+
+  it("should not leak Slider-only touch scroll threshold props to the root DOM element", () => {
+    const runtimeProps = {
+      ...props,
+      preventVerticalScrollOnTouch: true,
+      horizontalPixelThreshold: 15,
+      verticalPixelThreshold: 10,
+    } as unknown as CarouselProviderProps;
+
+    const { container } = render(
+      <CarouselProvider {...runtimeProps} data-testid="provider-root">
+        Hello
+      </CarouselProvider>,
+    );
+
+    const providerEl = container.querySelector('[data-testid="provider-root"]');
+    expect(providerEl).not.toBeNull();
+    expect(providerEl?.hasAttribute("preventVerticalScrollOnTouch")).toBe(false);
+    expect(providerEl?.hasAttribute("preventverticalscrollontouch")).toBe(false);
+    expect(providerEl?.hasAttribute("horizontalPixelThreshold")).toBe(false);
+    expect(providerEl?.hasAttribute("horizontalpixelthreshold")).toBe(false);
+    expect(providerEl?.hasAttribute("verticalPixelThreshold")).toBe(false);
+    expect(providerEl?.hasAttribute("verticalpixelthreshold")).toBe(false);
+  });
 });
