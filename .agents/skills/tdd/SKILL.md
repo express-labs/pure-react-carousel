@@ -13,7 +13,7 @@ Use this skill to implement changes through a verifiable Red-Green-Refactor loop
 
 ## When to Delegate vs. Run Inline
 
-- **Delegate to a `self` subagent (`invoke_subagent`)** when implementing a well-defined fix or running the full verification gate (`npm test`, `npm run build`), so hundreds of lines of test/coverage output stay in the subagent's disposable context.
+- **Delegate to a subagent** (`invoke_subagent` with `TypeName: "self"`, or your environment's subagent/task tool) when implementing a well-defined fix or running the full verification gate (`npm test`, `npm run build`), so hundreds of lines of test/coverage output stay in the subagent's disposable context. If subagents are unavailable in your environment, run the steps inline and report a concise summary.
 - **Run targeted tests inline** (`npm run test -- <path-to-test>`) only when iterating on a single test file and you need immediate feedback.
 
 ## The Red-Green-Refactor Loop
@@ -47,7 +47,7 @@ Use this skill to implement changes through a verifiable Red-Green-Refactor loop
 
 ### 4. Subagent-Isolated Quality Gates
 
-Before committing, run the full repository quality gates (ideally inside the `self` subagent executing the TDD loop, returning only the concise pass/fail summary):
+Before committing, run the full repository quality gates (ideally inside the `self` subagent executing the TDD loop, or inline if subagents are unavailable, returning only the concise pass/fail summary):
 
 1. `npm run typecheck`
 2. `npm run lint`
