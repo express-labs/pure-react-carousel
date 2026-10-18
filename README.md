@@ -201,7 +201,7 @@ Any remaining props not consumed by the component are passed directly to the roo
 | **children** | [string&#124;node] | | **Yes** | Children is a special React property. Basically, the CarouselProvider needs to wrap other Carousel components and JSX. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | currentSlide | number | 0 | No | Sets the active &lt;Slide /> index (0-indexed) on mount and dynamically updates the active slide whenever this prop changes. |
-| disableAnimation | boolean | false | No | Disables the CSS transition animation when moving between slides. |
+| disableAnimation | boolean | false | No | Disables the CSS transition animation when moving between slides and suppresses live touch/mouse drag translation of the slider tray while keeping swipe-to-advance navigation active. |
 | disableKeyboard | boolean | false | No | When set to true, disables left/right arrow keyboard navigation on the &lt;Slider />. |
 | hasMasterSpinner | boolean | false | No | When true, a spinner will cover the &lt;Slider /> component until all &lt;Image /> and &lt;ImageWithZoom /> components are done loading images. If there are no &lt;Image /> or &lt;ImageWithZoom /> components, the spinner will spin until this property is set to false. |
 | interval | number | 5000 | No | Number of milliseconds to wait when the auto slideshow is active. |
@@ -248,7 +248,7 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 | classNameAnimation | [string&#124;null] | null | No | Optional className string. The slider uses the CSS `transform` property, applying `translateX` to move the slider tray horizontally and `translateY` to move the slider tray vertically. The animation is the result of applying a CSS transition effect. If you supply your own `classNameAnimation` class, the default transition is disabled and ONLY the transitions specified by your `classNameAnimation` class are applied. Learn more about [CSS transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions). |
 | classNameTray | [string&#124;null] | null | No | Optional className string that is applied to the Slider's tray. The "tray" is the DOM element that contains the slides. The type of DOM element is specified by the `trayTag` property. |
 | classNameTrayWrap | [string&#124;null] | null | No | Optional className string that is applied to the `div` that surrounds the Slider's tray. |
-| disableAnimation | boolean | false | No | Inherited from `<CarouselProvider />` or overridden directly on `<Slider />` to disable slide transition animations. |
+| disableAnimation | boolean | false | No | Inherited from `<CarouselProvider />` or overridden directly on `<Slider />` to disable slide transition animations and suppress live touch/mouse drag translation of the slider tray while keeping swipe-to-advance navigation active. |
 | disableKeyboard | boolean | false | No | Inherited from `<CarouselProvider />` or overridden directly on `<Slider />` to disable keyboard arrow navigation. |
 | dragClickThreshold | number | 5 | No | Pointer movement threshold in pixels beyond which a mouse or touch drag gesture suppresses subsequent `click` events on child elements inside `<Slide />`. |
 | moveThreshold | number | 0.1 | No | Threshold to control the drag distance that triggers a scroll to the next or previous slide (`slideWidthOrHeight * moveThreshold` = drag pixel distance required to scroll). |
@@ -302,10 +302,47 @@ export function FocusableSlider() {
 
 #### How to Change the Default Transition Animation
 
-- Read the documentation for the classNameAnimation property on the Slider component.
-- Read about [CSS3 transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions).
-- Create your own CSS class that uses a CSS3 transition.
-- Pass the CSS class you create to the classNameAnimation property of Slider.
+1. **Custom Tray Slide Transition (`classNameAnimation`)**:
+   - Read the documentation for the `classNameAnimation` property on the `Slider` component and [CSS transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions).
+   - Create your own CSS class that defines a `transition` on `transform` (for example, `transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);`).
+   - Pass the CSS class to the `classNameAnimation` prop of `<Slider />` to replace the built-in `.sliderAnimation` transition.
+
+2. **Fade / Non-Sliding Transitions with Touch Swipe (`disableAnimation` + `classNameVisible` / `classNameHidden`)**:
+   - When using custom non-sliding transitions (such as cross-fade or opacity transitions), set `disableAnimation={true}` on `<CarouselProvider />` (or `<Slider />`).
+   - `disableAnimation` sets `transition: none` on the slider tray **and** suppresses live finger/mouse `translateX`/`translateY` dragging of the tray while keeping swipe-to-advance on `touchend` / `mouseup` active.
+   - Pair this with `classNameVisible` and `classNameHidden` on `<Slide />` to animate opacity or scale when the active slide changes:
+
+```jsx
+import React from 'react';
+import { CarouselProvider, Slider, Slide } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+import styles from './FadeCarousel.module.css';
+
+export function FadeCarousel() {
+  return (
+    <CarouselProvider
+      naturalSlideWidth={400}
+      naturalSlideHeight={500}
+      totalSlides={3}
+      visibleSlides={1}
+      disableAnimation
+      touchEnabled
+    >
+      <Slider>
+        <Slide index={0} classNameVisible={styles.slideVisible} classNameHidden={styles.slideHidden}>
+          Slide 1
+        </Slide>
+        <Slide index={1} classNameVisible={styles.slideVisible} classNameHidden={styles.slideHidden}>
+          Slide 2
+        </Slide>
+        <Slide index={2} classNameVisible={styles.slideVisible} classNameHidden={styles.slideHidden}>
+          Slide 3
+        </Slide>
+      </Slider>
+    </CarouselProvider>
+  );
+}
+```
 
 ### &lt;Slide />
 

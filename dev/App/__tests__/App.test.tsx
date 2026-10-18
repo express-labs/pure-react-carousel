@@ -62,6 +62,26 @@ describe("<App />", () => {
     expect(log).toHaveTextContent("No slide buttons or links clicked yet.");
   });
 
+  it("should render Example16 and toggle disableAnimation with custom CSS transition classes", () => {
+    const { container, getByTestId } = render(<App />);
+    const select = container.querySelector(".select") as HTMLSelectElement;
+    fireEvent.change(select, { target: { value: "16" } });
+
+    const section = container.querySelector("#example--16") as HTMLElement;
+    expect(section).toBeInTheDocument();
+
+    const tray = section.querySelector(".carousel__slider-tray") as HTMLElement;
+    expect(tray).toHaveClass("customTrayAnimation");
+    expect(tray.style.transition).toBe("none");
+
+    const toggle = getByTestId("disable-animation-toggle") as HTMLInputElement;
+    expect(toggle.checked).toBe(true);
+
+    fireEvent.click(toggle);
+    expect(toggle.checked).toBe(false);
+    expect(tray.style.transition).toBe("");
+  });
+
   it("should navigate to the React Compatibility Chart page and back to the demo app", () => {
     const { container } = render(<App />);
     const select = container.querySelector(".select") as HTMLSelectElement;
