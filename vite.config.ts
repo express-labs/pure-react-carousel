@@ -15,8 +15,11 @@ function createPackCssModulesPlugin(): Plugin {
   return {
     name: "pack-scss-css-modules",
     async resolveId(source, importer, options) {
-      if (source.endsWith(".scss") || source.endsWith(".css")) {
-        const resolved = await this.resolve(source, importer, options);
+      if ((source.endsWith(".scss") || source.endsWith(".css")) && !source.includes("?")) {
+        const resolved = await this.resolve(source, importer, {
+          ...options,
+          skipSelf: true,
+        });
         if (resolved) {
           return `${resolved.id}?css-module.js`;
         }

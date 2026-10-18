@@ -929,7 +929,7 @@ npm start
 - `npm run lint` / `npm run lint:fix` (`vp lint`) — Runs linting across `src`, `dev`, `typings`, and `vite.config.ts` using **Oxlint**.<br><br>
 - `npm run format` / `npm run format:check` (`vp fmt`) — Formats or checks formatting across `src`, `dev`, `typings`, and `vite.config.ts` using **Oxfmt**.<br><br>
 - `npm run build` (`vp pack && npm run build:types`) — Bundles the ES module (`dist/index.es.js`), CommonJS (`dist/index.cjs.js`), CSS (`dist/react-carousel.es.css`, `dist/react-carousel.cjs.css`), and TypeScript declaration (`dist/types/index.d.ts`) artifacts into `dist/` using **Vite Plus (`vp pack`)** and **TypeScript (`tsc`)**.<br><br>
-- `npm run build:demo` (`vp build`) — Builds the static demo SPA (`dev/`) into `demo-dist/` for GitHub Pages deployment.<br><br>
+- `npm run build:demo` (`vp build`) — Builds the static demo SPA (`dev/`) into `dist-demo/` for GitHub Pages deployment.<br><br>
 - `npm run test:compat` — Runs the automated multi-version React peer-dependency compatibility matrix across React 16.8, 17, 18, and 19.<br><br>
 - `npm run prepublishOnly` — Runs all verification gates in sequence (`typecheck`, `lint`, `test`, `build`).<br><br>
 
