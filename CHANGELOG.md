@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.1](https://github.com/express-labs/pure-react-carousel/compare/v3.1.0...v3.1.1) (2026-10-18)
+
+
+### Bug Fixes
+
+* **provider:** prevent touch scroll threshold props from leaking to DOM ([#501](https://github.com/express-labs/pure-react-carousel/issues/501)) ([be3d649](https://github.com/express-labs/pure-react-carousel/commit/be3d649846553a17b13426b89f6ea52b343b3747))
+* **slider:** respect dynamic playDirection and interval changes during autoplay ([#502](https://github.com/express-labs/pure-react-carousel/issues/502)) ([84ffa13](https://github.com/express-labs/pure-react-carousel/commit/84ffa13ca577d7b2bcf6c3109c52e3f9ab6309e3)), closes [#170](https://github.com/express-labs/pure-react-carousel/issues/170)
+
 ## [3.1.0](https://github.com/express-labs/pure-react-carousel/compare/v3.0.0...v3.1.0) (2026-10-16)
 
 
