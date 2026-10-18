@@ -519,6 +519,109 @@ describe("<NativeSlider />", () => {
       });
       expect(store.getStoreState().currentSlide).toBe(1);
     });
+
+    it("translates scrollsnapchange center and end snap targets to the leading visible slide when visibleSlides > 1", () => {
+      const store = new Store({
+        currentSlide: 2,
+        totalSlides: 5,
+        visibleSlides: 3,
+        snapAlign: "center",
+      });
+      const { container } = render(
+        <NativeSliderView
+          {...props}
+          carouselStore={store}
+          currentSlide={2}
+          totalSlides={5}
+          visibleSlides={3}
+          orientation="horizontal"
+          snapType="mandatory"
+        >
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 0</div>
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 1</div>
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 2</div>
+          <div className="carousel__slide carousel__slide--snap-align-end">Slide 3</div>
+          <div className="carousel__slide carousel__slide--snap-align-center">Slide 4</div>
+        </NativeSliderView>,
+      );
+
+      const trayWrap = container.querySelector(
+        ".carousel__native-slider-tray-wrapper",
+      ) as HTMLElement;
+      const slides = container.querySelectorAll(".carousel__slide");
+
+      // Release initial mount lockout first
+      fireEvent.pointerDown(trayWrap);
+
+      // Center-aligned slide 1 snapped with visibleSlides=3 -> leading visible slide is 1 - 1 = 0
+      const centerSnapEvent = new Event("scrollsnapchange");
+      Object.defineProperty(centerSnapEvent, "snapTargetInline", { value: slides[1] });
+      act(() => {
+        trayWrap.dispatchEvent(centerSnapEvent);
+      });
+      expect(store.getStoreState().currentSlide).toBe(0);
+
+      // End-aligned slide 3 snapped with visibleSlides=3 -> leading visible slide is 3 - 2 = 1
+      const endSnapEvent = new Event("scrollsnapchange");
+      Object.defineProperty(endSnapEvent, "snapTargetInline", { value: slides[3] });
+      act(() => {
+        trayWrap.dispatchEvent(endSnapEvent);
+      });
+      expect(store.getStoreState().currentSlide).toBe(1);
+
+      // When IntersectionObserver has active ratios for slides 2, 3, 4, scrollsnapchange on slide 3 uses observed leading slide 2
+      act(() => {
+        observerCallback?.([
+          { target: slides[2], isIntersecting: true, intersectionRatio: 1.0 },
+          { target: slides[3], isIntersecting: true, intersectionRatio: 1.0 },
+          { target: slides[4], isIntersecting: true, intersectionRatio: 1.0 },
+        ]);
+      });
+      store.setStoreState({ currentSlide: 0 });
+      const ratioSnapEvent = new Event("scrollsnapchange");
+      Object.defineProperty(ratioSnapEvent, "snapTargetInline", { value: slides[3] });
+      act(() => {
+        trayWrap.dispatchEvent(ratioSnapEvent);
+      });
+      expect(store.getStoreState().currentSlide).toBe(2);
+    });
+
+    it("prefers IntersectionObserver leading visible slide over raw scroll offset math on scrollend", () => {
+      const store = new Store({ currentSlide: 0, totalSlides: 5, visibleSlides: 2 });
+      const { container } = renderWithSlides({
+        carouselStore: store,
+        currentSlide: 0,
+        totalSlides: 5,
+        visibleSlides: 2,
+        orientation: "horizontal",
+      });
+
+      const trayWrap = container.querySelector(
+        ".carousel__native-slider-tray-wrapper",
+      ) as HTMLElement;
+
+      // IntersectionObserver tracks slides 1 and 2 as visible (leading slide = 1)
+      act(() => {
+        observerCallback?.([
+          { target: observedElements[1], isIntersecting: true, intersectionRatio: 1.0 },
+          { target: observedElements[2], isIntersecting: true, intersectionRatio: 0.8 },
+        ]);
+      });
+      expect(store.getStoreState().currentSlide).toBe(1);
+
+      // Even if raw scrollLeft / slideWidth rounds to 2, scrollend preserves observer's leading slide 1
+      Object.defineProperty(trayWrap, "scrollWidth", { value: 500, configurable: true });
+      Object.defineProperty(trayWrap, "scrollLeft", {
+        value: 200,
+        writable: true,
+        configurable: true,
+      });
+
+      act(() => {
+        trayWrap.dispatchEvent(new Event("scrollend"));
+      });
+      expect(store.getStoreState().currentSlide).toBe(1);
+    });
   });
 
   describe("Two-way store sync & programmatic scroll lockout guard", () => {

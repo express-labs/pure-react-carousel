@@ -97,6 +97,49 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     [getSlideElements],
   );
 
+  const resolveSlideFromRatios = useCallback((): number => {
+    const slideRatios = slideRatiosRef.current;
+    if (slideRatios.size === 0) return -1;
+
+    const slides = getSlideElements();
+    const visibleCount = Math.max(1, latestStateRef.current.visibleSlides);
+    let slideIndex = -1;
+    let bestRatio = -1;
+
+    slides.forEach((slide, idx) => {
+      const ratio = slideRatios.get(slide);
+      if (ratio !== undefined && (visibleCount > 1 ? slideIndex < 0 : ratio > bestRatio)) {
+        slideIndex = idx;
+        bestRatio = ratio;
+      }
+    });
+
+    return slideIndex;
+  }, [getSlideElements]);
+
+  const resolveSnapTargetIndex = useCallback(
+    (targetElement: Element | null): number => {
+      const snappedIndex = getSlideIndexFromElement(targetElement);
+      if (snappedIndex < 0 || !targetElement) return -1;
+
+      const visibleCount = Math.max(1, latestStateRef.current.visibleSlides);
+      if (visibleCount <= 1) return snappedIndex;
+
+      if (slideRatiosRef.current.has(targetElement)) {
+        return resolveSlideFromRatios();
+      }
+
+      if (targetElement.classList.contains("carousel__slide--snap-align-center")) {
+        return Math.max(0, snappedIndex - Math.floor((visibleCount - 1) / 2));
+      }
+      if (targetElement.classList.contains("carousel__slide--snap-align-end")) {
+        return Math.max(0, snappedIndex - (visibleCount - 1));
+      }
+      return snappedIndex;
+    },
+    [getSlideIndexFromElement, resolveSlideFromRatios],
+  );
+
   const commitObservedSlide = useCallback((rawIndex: number) => {
     const {
       carouselStore: store,
@@ -107,7 +150,9 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     const maxSlide = Math.max(0, total - visible);
     const clampedIndex = Math.min(Math.max(0, rawIndex), maxSlide);
     lastObservedSlideRef.current = clampedIndex;
-    if (clampedIndex !== activeSlide) {
+    const storeSlide =
+      typeof store.getStoreState === "function" ? store.getStoreState().currentSlide : activeSlide;
+    if (clampedIndex !== activeSlide || clampedIndex !== storeSlide) {
       store.setStoreState({ currentSlide: clampedIndex });
     }
   }, []);
@@ -145,17 +190,9 @@ const NativeSlider = (props: NativeSliderViewProps) => {
           }
         }
 
-        if (!hasValidSlideEntry || slideRatios.size === 0) return;
-
-        let slideIndex = -1;
-        let bestRatio = -1;
-        slides.forEach((slide, idx) => {
-          const ratio = slideRatios.get(slide);
-          if (ratio !== undefined && (visibleCount > 1 ? slideIndex < 0 : ratio > bestRatio)) {
-            slideIndex = idx;
-            bestRatio = ratio;
-          }
-        });
+        if (!hasValidSlideEntry) return;
+        const slideIndex = resolveSlideFromRatios();
+        if (slideIndex < 0) return;
 
         if (isProgrammaticScrollRef.current) {
           if (slideIndex === programmaticTargetRef.current) {
@@ -181,7 +218,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       observedSlides.clear();
       slideRatios.clear();
     };
-  }, [clearProgrammaticLockout, commitObservedSlide, getSlideElements]);
+  }, [clearProgrammaticLockout, commitObservedSlide, getSlideElements, resolveSlideFromRatios]);
 
   // Synchronize observed slide elements when rendered slides change
   useEffect(() => {
@@ -222,7 +259,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       };
       const targetElement =
         orientation === "vertical" ? snapEvent.snapTargetBlock : snapEvent.snapTargetInline;
-      const slideIndex = getSlideIndexFromElement(targetElement ?? null);
+      const slideIndex = resolveSnapTargetIndex(targetElement ?? null);
       if (slideIndex < 0) return;
 
       if (isProgrammaticScrollRef.current) {
@@ -239,6 +276,12 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     const handleScrollEnd = () => {
       if (isProgrammaticScrollRef.current) {
         clearProgrammaticLockout();
+        return;
+      }
+
+      const ratioSlideIndex = resolveSlideFromRatios();
+      if (ratioSlideIndex >= 0) {
+        commitObservedSlide(ratioSlideIndex);
         return;
       }
 
@@ -270,7 +313,8 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     snapType,
     clearProgrammaticLockout,
     commitObservedSlide,
-    getSlideIndexFromElement,
+    resolveSlideFromRatios,
+    resolveSnapTargetIndex,
   ]);
 
   // Two-way store sync: scroll natively when currentSlide changes externally
