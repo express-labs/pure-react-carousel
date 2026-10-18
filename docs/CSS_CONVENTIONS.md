@@ -84,3 +84,72 @@ const MyComponent = ({className}) => (
   color: red;
 }
 ```
+
+---
+
+## Sub-element Styling: Use `className*` Props
+
+If you need to apply a class to an element deep within the component, create a camelCase formatted prop `className*` on the top level of the component and pass it to the targeted element.
+
+**Bad - forcing descendant selectors to style inner elements:**
+
+```typescript
+// ❌ BAD: Component only accepts a top-level className prop
+const Card = ({ className, children }) => (
+  <div className={cn(s.card, className)}>
+    <div className={s.body}>{children}</div>
+  </div>
+);
+```
+
+```scss
+// ❌ BAD: Consumer must use nested or descendant selectors to target inner elements
+.myCustomCard {
+  .body {
+    background-color: #f5f5f5;
+  }
+}
+```
+
+**Good - exposing targeted camelCase `className*` props:**
+
+```typescript
+// ✅ GOOD: Component defines camelCase className* props for internal elements
+interface CardProps {
+  className?: string;
+  classNameBody?: string;
+  children: React.ReactNode;
+}
+
+const Card = ({ className, classNameBody, children }: CardProps) => (
+  <div className={cn(s.card, "carousel__card", className)}>
+    <div className={cn(s.body, "carousel__card-body", classNameBody)}>
+      {children}
+    </div>
+  </div>
+);
+```
+
+```typescript
+// ✅ GOOD: Consumer passes specific classes directly
+<Card
+  className={s.customCard}
+  classNameBody={s.customBody}
+>
+  Content
+</Card>
+```
+
+```scss
+// ✅ GOOD: Selectors remain flat and independent
+.customCard {
+  border: 1px solid #ccc;
+}
+
+.customBody {
+  background-color: #f5f5f5;
+}
+```
+
+> **Note**: This pattern is used throughout the library (for example, `Slider` accepts `classNameTray` and `classNameTrayWrap` to allow direct styling of internal track wrappers without nested selectors).
+
