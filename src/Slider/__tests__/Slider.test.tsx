@@ -1285,6 +1285,8 @@ describe("<Slider />", () => {
       const path = await import("node:path");
       const compiled = sass.compile(path.resolve(import.meta.dirname, "../Slider.scss"));
       expect(compiled.css).toMatch(/\.sliderTray\s*\{[^}]*display:\s*flex/);
+      expect(compiled.css).toMatch(/\.sliderAnimation\s*\{[^}]*transition:\s*transform 500ms/);
+      expect(compiled.css).not.toMatch(/will-change/);
       expect(compiled.css).toMatch(/\.horizontalTray\s*\{/);
       expect(compiled.css).toMatch(/\.verticalTray\s*\{/);
 
