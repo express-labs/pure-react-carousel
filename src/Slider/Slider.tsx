@@ -128,6 +128,10 @@ const Slider = (props: SliderViewProps) => {
   const isDocumentScrollingRef = useRef<boolean | null>(null);
   const moveTimerRef = useRef<number | null>(null);
   const originalOverflowRef = useRef<string | null>(null);
+  const originalPaddingLeftRef = useRef<string | null>(null);
+  const originalPaddingRightRef = useRef<string | null>(null);
+  const originalWidthRef = useRef<string | null>(null);
+  const originalMinWidthRef = useRef<string | null>(null);
   const scrollParentRef = useRef<HTMLElement | Element | null>(null);
   const scrollStopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clickGuardRef = useRef<{
@@ -279,15 +283,48 @@ const Slider = (props: SliderViewProps) => {
 
   const lockScroll = useCallback(() => {
     const getScrollParent = new GetScrollParent();
-    scrollParentRef.current = getScrollParent.getScrollParent(sliderTrayElementRef.current);
-    if (
-      scrollParentRef.current &&
-      "style" in scrollParentRef.current &&
-      scrollParentRef.current.style
-    ) {
-      originalOverflowRef.current =
-        originalOverflowRef.current || scrollParentRef.current.style.overflow;
-      scrollParentRef.current.style.overflow = "hidden";
+    const scrollParent = getScrollParent.getScrollParent(sliderTrayElementRef.current);
+    scrollParentRef.current = scrollParent;
+    if (scrollParent && "style" in scrollParent && scrollParent.style) {
+      originalOverflowRef.current = scrollParent.style.overflow;
+      const prevClientWidth = scrollParent.clientWidth;
+      const prevClientLeft = scrollParent.clientLeft;
+      scrollParent.style.overflow = "hidden";
+      const scrollbarWidth = scrollParent.clientWidth - prevClientWidth;
+      if (scrollbarWidth > 0) {
+        const computedStyle = window.getComputedStyle(scrollParent, null);
+        const widthBeforePadding = parseFloat(computedStyle.getPropertyValue("width")) || 0;
+        const isLeftScrollbar = scrollParent.clientLeft < prevClientLeft;
+        if (isLeftScrollbar) {
+          originalPaddingLeftRef.current = scrollParent.style.paddingLeft;
+          const computedPaddingLeft =
+            parseFloat(computedStyle.getPropertyValue("padding-left")) || 0;
+          scrollParent.style.paddingLeft = `${computedPaddingLeft + scrollbarWidth}px`;
+        } else {
+          originalPaddingRightRef.current = scrollParent.style.paddingRight;
+          const computedPaddingRight =
+            parseFloat(computedStyle.getPropertyValue("padding-right")) || 0;
+          scrollParent.style.paddingRight = `${computedPaddingRight + scrollbarWidth}px`;
+        }
+        const widthAfterPadding = parseFloat(computedStyle.getPropertyValue("width")) || 0;
+        const targetWidth = widthBeforePadding - scrollbarWidth;
+        if (
+          computedStyle.getPropertyValue("box-sizing") !== "border-box" &&
+          targetWidth > 0 &&
+          widthAfterPadding > targetWidth
+        ) {
+          originalWidthRef.current = scrollParent.style.width;
+          scrollParent.style.width = `${targetWidth}px`;
+          const minWidthValue = computedStyle.getPropertyValue("min-width");
+          const shouldAdjustMinWidth = minWidthValue.endsWith("px")
+            ? parseFloat(minWidthValue) > targetWidth
+            : Boolean(minWidthValue && minWidthValue !== "auto");
+          if (shouldAdjustMinWidth) {
+            originalMinWidthRef.current = scrollParent.style.minWidth;
+            scrollParent.style.minWidth = `${targetWidth}px`;
+          }
+        }
+      }
     }
   }, []);
 
@@ -298,7 +335,23 @@ const Slider = (props: SliderViewProps) => {
       scrollParentRef.current.style
     ) {
       scrollParentRef.current.style.overflow = originalOverflowRef.current || "";
+      if (originalPaddingLeftRef.current !== null) {
+        scrollParentRef.current.style.paddingLeft = originalPaddingLeftRef.current;
+      }
+      if (originalPaddingRightRef.current !== null) {
+        scrollParentRef.current.style.paddingRight = originalPaddingRightRef.current;
+      }
+      if (originalWidthRef.current !== null) {
+        scrollParentRef.current.style.width = originalWidthRef.current;
+      }
+      if (originalMinWidthRef.current !== null) {
+        scrollParentRef.current.style.minWidth = originalMinWidthRef.current;
+      }
       originalOverflowRef.current = null;
+      originalPaddingLeftRef.current = null;
+      originalPaddingRightRef.current = null;
+      originalWidthRef.current = null;
+      originalMinWidthRef.current = null;
       scrollParentRef.current = null;
     }
   }, []);
@@ -890,6 +943,7 @@ const Slider = (props: SliderViewProps) => {
       window.removeEventListener("touchmove", blockWindowScroll, false);
 
       stop();
+      unlockScroll();
       if (moveTimerRef.current !== null) {
         window.cancelAnimationFrame.call(window, moveTimerRef.current);
       }
@@ -910,6 +964,7 @@ const Slider = (props: SliderViewProps) => {
     handleOnMouseUp,
     play,
     stop,
+    unlockScroll,
   ]);
 
   const prevEffectsRef = useRef({

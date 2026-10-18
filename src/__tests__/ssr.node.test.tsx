@@ -117,6 +117,9 @@ describe("SSR compatibility (Node environment without DOM globals)", () => {
 
     expect(GetScrollParent.isNodeValid(null)).toBe(false);
     expect(GetScrollParent.isNodeValid({})).toBe(false);
+    expect(GetScrollParent.style({} as Element, "overflow")).toBe("");
+    expect(scrollParent.parents({ parentNode: {} } as unknown as Node, [])).toEqual([]);
+    expect(scrollParent.scrollParent({ parentNode: null } as unknown as HTMLElement)).toBeNull();
     expect(scrollParent.getScrollParent({})).toBeNull();
   });
 
