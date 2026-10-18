@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/express-labs/pure-react-carousel/compare/v3.2.1...v3.3.0) (2026-10-18)
+
+
+### Features
+
+* **slider:** suppress child click events on drag with configurable dragClickThreshold ([#508](https://github.com/express-labs/pure-react-carousel/issues/508)) ([65c1062](https://github.com/express-labs/pure-react-carousel/commit/65c1062f4223d7c7cd853e544884afdbd0328a1b))
+
 ## [3.2.1](https://github.com/express-labs/pure-react-carousel/compare/v3.2.0...v3.2.1) (2026-10-18)
 
 
