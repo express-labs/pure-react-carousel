@@ -54,6 +54,7 @@ Carousels: Love them or hate them.  However, if you are a React developer, and y
   * [Components](#components)
     * [&lt;CarouselProvider /&gt;](#carouselprovider-)
     * [&lt;Slider /&gt;](#slider-)
+    * [&lt;NativeSlider /&gt;](#nativeslider-)
     * [&lt;Slide /&gt;](#slide-)
     * [&lt;Dot /&gt;](#dot-)
     * [&lt;DotGroup /&gt;](#dotgroup-)
@@ -116,7 +117,7 @@ Let's make a simple carousel with three slides, a next button, and a back button
   }
   ```
 
-5. Place the components in any order you wish as long as they are children of a single `CarouselProvider` component. Some components have ancestor/descendant relationships, but they don't have to be direct relatives. For example: `Slide` components need to go inside of a `Slider`. `Slide` components also require a sequentially numbered `index` prop starting at zero. Chances are, a lot of the time, you're going to be populating the slides from data and looping through the data, so it is easy to pass the index in your loop.
+5. Place the components in any order you wish as long as they are children of a single `CarouselProvider` component. Some components have ancestor/descendant relationships, but they don't have to be direct relatives. For example: `Slide` components need to go inside of a `Slider` (or `NativeSlider`). `Slide` components also require a sequentially numbered `index` prop starting at zero. Chances are, a lot of the time, you're going to be populating the slides from data and looping through the data, so it is easy to pass the index in your loop.
 
   ```jsx
   import React from 'react';
@@ -168,7 +169,7 @@ Let's make a simple carousel with three slides, a next button, and a back button
 
 That's it. You have a super basic Carousel.
 
-There are other components you can add, like `ButtonFirst`, `ButtonLast`, `ButtonPlay`, `Dot`, `DotGroup`, `Spinner`, an `Image` component, and even an `ImageWithZoom` component that zooms on mouse hover or two-finger pinch/touch.
+There are other components you can add, like `NativeSlider` (for native CSS overflow scrolling and CSS Scroll Snap), `ButtonFirst`, `ButtonLast`, `ButtonPlay`, `Dot`, `DotGroup`, `Spinner`, an `Image` component, and even an `ImageWithZoom` component that zooms on mouse hover or two-finger pinch/touch.
 
 Obviously, you can customize the heck out of the layout.  If you need to bury your Slider component in 18 parent divs, go for it.  It will still do its job.  Feel free to add the className property to any of the Components to further customize your carousel.  Or, hook into the many BEM named default CSS class names built into the carousel components.
 
@@ -213,6 +214,9 @@ Any remaining props not consumed by the component are passed directly to the roo
 | orientation | ['horizontal'&#124;'vertical'] | 'horizontal' | No | Possible values are `'horizontal'` and `'vertical'`. Lets you have a horizontal or vertical carousel. |
 | pauseOnInteract | boolean | true | No | When set to `true` (default), user interactions (navigation buttons, dots, keyboard arrow keys, and dragging) pause the auto slideshow (`isPlaying` becomes `false`). When set to `false`, user interactions keep the auto slideshow playing and reset the interval timer. |
 | playDirection | ['forward'&#124;'backward'] | 'forward' | No | The direction for the auto slideshow. |
+| snapAlign | ['start'&#124;'center'&#124;'end'&#124;'none'] | 'start' | No | Default CSS `scroll-snap-align` value applied to each `<Slide />` (can be overridden per `<Slide />`). Used with `<NativeSlider />`. |
+| snapStop | ['normal'&#124;'always'] | 'normal' | No | Default CSS `scroll-snap-stop` value applied to each `<Slide />` (can be overridden per `<Slide />`). Used with `<NativeSlider />`. |
+| snapType | ['mandatory'&#124;'proximity'&#124;'none'] | 'mandatory' | No | Default CSS `scroll-snap-type` strictness applied to `<NativeSlider />` (can be overridden on `<NativeSlider />`). Use `'none'` for free-momentum scrolling without snapping. |
 | step | number | 1 | No | The number of slides to move when pressing the &lt;ButtonBack /> and &lt;ButtonNext /> buttons. |
 | dragStep | number | 1 | No | The number of slides to move when performing a short touch or mouse drag. |
 | tag | string | 'div' | No | The HTML element to use for the provider wrapper. |
@@ -344,6 +348,89 @@ export function FadeCarousel() {
 }
 ```
 
+### &lt;NativeSlider />
+
+`NativeSlider` is an alternative slider viewport that uses native browser CSS overflow scrolling (`overflow-x: auto` / `overflow-y: auto`) and [CSS Scroll Snap](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll_snap) while working seamlessly with `<CarouselProvider />` and the rest of the component suite (`<Slide />`, `<ButtonBack />`, `<ButtonNext />`, `<ButtonFirst />`, `<ButtonLast />`, `<ButtonPlay />`, `<DotGroup />`, `<Dot />`, `<Spinner />`, `<Image />`, and `<ImageWithZoom />`).
+
+Active and visible slides are tracked without timers using `IntersectionObserver` alongside progressive enhancement for native `scrollsnapchange` and `scrollend` events. When `snapType="none"` is set on `<CarouselProvider />` or `<NativeSlider />`, slides scroll with native momentum without snapping to slide boundaries.
+
+| property | type | default | required | purpose |
+| -------- | ---- | ------- | -------- | ------- |
+| **children** | [string&#124;node] | | **Yes** | Children is a special React property. Basically, `NativeSlider` needs to wrap `<Slide />` components and/or JSX. |
+| ariaLabel | string | 'slider' | No | Optional string that sets the `aria-label` attribute. |
+| backwardKeyCode | number | 37 | No | Key code for moving backward via keyboard (defaults to `37`, Left Arrow). |
+| forwardKeyCode | number | 39 | No | Key code for moving forward via keyboard (defaults to `39`, Right Arrow). |
+| className | [string&#124;null] | null | No | Optional className string that will be appended to the component's root className string. |
+| classNameTray | [string&#124;null] | null | No | Optional className string applied to the inner tray element (`trayTag`). |
+| classNameTrayWrap | [string&#124;null] | null | No | Optional className string applied to the scrollable tray wrapper `div`. |
+| disableAnimation | boolean | false | No | Inherited from `<CarouselProvider />` or overridden directly on `<NativeSlider />`. When `true`, uses `scroll-behavior: auto` (`behavior: 'instant'`) instead of smooth scrolling. |
+| disableKeyboard | boolean | false | No | Inherited from `<CarouselProvider />` or overridden directly on `<NativeSlider />` to disable keyboard arrow navigation. |
+| hideScrollbar | boolean | true | No | Hides the native browser scrollbar on the tray wrapper (`scrollbar-width: none` and `::-webkit-scrollbar { display: none }`). Set to `false` to show the native scrollbar. |
+| onMasterSpinner | [function&#124;null] | null | No | Optional callback function called when the Master Spinner is visible (`hasMasterSpinner={true}`). |
+| role | string | 'listbox' | No | Optional string that sets the ARIA `role` attribute on the slider viewport element. |
+| snapType | ['mandatory'&#124;'proximity'&#124;'none'] | 'mandatory' | No | Inherited from `<CarouselProvider />` or overridden directly on `<NativeSlider />`. Controls CSS `scroll-snap-type` strictness (`'mandatory'`, `'proximity'`, or `'none'` for free scrolling). |
+| spinner | [function&#124;null] | null | No | Optional render function to render your own custom spinner, e.g. `() => <MyCustomSpinnerComponent />`. If omitted, the default `<Spinner />` is used. |
+| style | object | {} | No | Optional CSS styles to add to the `NativeSlider` root element. |
+| tabIndex | number | undefined | No | Optional `tabIndex` passed through to the root slider element. |
+| trayProps | object | {} | No | Additional HTML attributes or event handlers to attach to the tray element (excluding `className`, `style`, and `ref`). |
+| trayTag | string | 'div' | No | The HTML tag to use for the inner tray element that holds the slides. |
+
+#### The NativeSlider component creates the following pseudo HTML by default:
+
+```HTML
+<div class="carousel__slider carousel__native-slider [carousel__slider--vertical|carousel__slider--horizontal] [carousel__native-slider--vertical|carousel__native-slider--horizontal] [props.className]" aria-live="polite" aria-label="[props.ariaLabel]" role="[props.role]" style="[props.style]" ...props>
+  <div class="carousel__slider-tray-wrapper carousel__native-slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal] [carousel__native-slider-tray-wrapper--snap-mandatory|carousel__native-slider-tray-wrapper--snap-proximity|carousel__native-slider-tray-wrapper--snap-none] [carousel__native-slider-tray-wrapper--hide-scrollbar] [carousel__native-slider-tray-wrapper--smooth-scroll|carousel__native-slider-tray-wrapper--instant-scroll] [props.classNameTrayWrap]">
+    <props.trayTag|div class="carousel__slider-tray carousel__native-slider-tray [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]">
+      [props.children]
+    </props.trayTag|div>
+    <div class="carousel__master-spinner-container">
+      <div class="carousel__spinner" />
+    </div>
+  </div>
+</div>
+```
+
+#### Example: Native Scroll Snap or Free-Momentum Scrolling
+
+```jsx
+import React from 'react';
+import {
+  CarouselProvider,
+  NativeSlider,
+  Slide,
+  ButtonBack,
+  ButtonNext,
+  DotGroup,
+} from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+
+export function MyNativeCarousel() {
+  return (
+    <CarouselProvider
+      naturalSlideWidth={400}
+      naturalSlideHeight={300}
+      totalSlides={6}
+      visibleSlides={2}
+      snapType="proximity" // or "mandatory" (default) or "none" (free scroll without snapping)
+      snapAlign="start"    // "start" (default) | "center" | "end" | "none"
+      snapStop="normal"    // "normal" (default) | "always"
+    >
+      <NativeSlider>
+        <Slide index={0}>Slide 1</Slide>
+        <Slide index={1}>Slide 2</Slide>
+        <Slide index={2}>Slide 3</Slide>
+        <Slide index={3}>Slide 4</Slide>
+        <Slide index={4}>Slide 5</Slide>
+        <Slide index={5}>Slide 6</Slide>
+      </NativeSlider>
+      <ButtonBack>Back</ButtonBack>
+      <ButtonNext>Next</ButtonNext>
+      <DotGroup />
+    </CarouselProvider>
+  );
+}
+```
+
 ### &lt;Slide />
 
 The Slide component is a container with an intrinsic ratio computed by the CarouselProvider naturalSlideWidth and naturalSlideHeight properties.  By default, only one slide is visible in the Slider at a time.  You can change this by altering the visibleSlides property of the CarouselProvider.  Slide components also contain a div that acts as an aria compliant focus ring when the Slide receives focus either by using a keyboard tab, mouse click, or touch.
@@ -362,6 +449,8 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 | onBlur | [function&#124;null] | null | No | Optional callback function that is called after the internal `onBlur` handler is called. Passed the React synthetic focus event. |
 | onFocus | [function&#124;null] | null | No | Optional callback function that is called after the internal `onFocus` handler is called. Passed the React synthetic focus event. |
 | role | string | 'option' | No | Optional string that sets the ARIA `role` attribute on the slide element. |
+| snapAlign | ['start'&#124;'center'&#124;'end'&#124;'none'] | 'start' | No | Inherited from `<CarouselProvider />` or overridden on the Slide to set CSS `scroll-snap-align` (`carousel__slide--snap-align-*`). |
+| snapStop | ['normal'&#124;'always'] | 'normal' | No | Inherited from `<CarouselProvider />` or overridden on the Slide to set CSS `scroll-snap-stop` (`carousel__slide--snap-stop-*`). |
 | style | object | {} | No | Optional CSS styles to merge onto the outer slide element. |
 | tabIndex | number | undefined | No | Optional `tabIndex` passed through to the root slide element. |
 | tag | string | 'div' | No | The root HTML element for each Slide. |
@@ -369,7 +458,7 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 #### The Slide component creates the following pseudo HTML by default:
 
 ```HTML
-<props.tag|div class="carousel__slide [carousel__slide--focused] [props.classNameVisible|props.classNameHidden] [carousel__slide--visible|carousel__slide--hidden] [props.className]" aria-selected="[isVisible]" aria-label="[props.ariaLabel]" role="[props.role]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
+<props.tag|div class="carousel__slide [carousel__slide--focused] [props.classNameVisible|props.classNameHidden] [carousel__slide--visible|carousel__slide--hidden] [carousel__slide--snap-align-start|carousel__slide--snap-align-center|carousel__slide--snap-align-end|carousel__slide--snap-align-none] [carousel__slide--snap-stop-normal|carousel__slide--snap-stop-always] [props.className]" aria-selected="[isVisible]" aria-label="[props.ariaLabel]" role="[props.role]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
   <props.innerTag|div class="carousel__inner-slide [props.innerClassName]">
     [props.children]
     <!-- rendered when focused -->
@@ -712,6 +801,9 @@ export default WithStore(YourComponentHere, (state) => ({
   playDirection: state.playDirection,
   slideSize: state.slideSize,
   slideTraySize: state.slideTraySize,
+  snapAlign: state.snapAlign,
+  snapStop: state.snapStop,
+  snapType: state.snapType,
   step: state.step,
   dragStep: state.dragStep,
   totalSlides: state.totalSlides,
@@ -811,6 +903,9 @@ export interface CarouselState {
   readonly privateUnDisableAnimation?: boolean;
   readonly slideSize: number;
   readonly slideTraySize: number;
+  readonly snapAlign?: 'start' | 'center' | 'end' | 'none';
+  readonly snapStop?: 'normal' | 'always';
+  readonly snapType?: 'mandatory' | 'proximity' | 'none';
   readonly step: number;
   readonly dragStep: number;
   readonly totalSlides: number;

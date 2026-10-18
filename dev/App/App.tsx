@@ -16,6 +16,7 @@ import {
   Example14,
   Example15,
   Example16,
+  Example17,
 } from "./examples";
 import s from "./style.scss";
 
@@ -195,6 +196,9 @@ const DevelopmentApp = (): React.ReactElement => {
                 <option value="16">
                   Carousel with Custom CSS Transitions (Fade &amp; Tray Animation)
                 </option>
+                <option value="17">
+                  Native CSS Scroll &amp; Scroll-Snap Carousel (NativeSlider)
+                </option>
               </select>
             </label>
           </p>
@@ -302,6 +306,13 @@ const DevelopmentApp = (): React.ReactElement => {
               <section id="example--16">
                 <hr />
                 <Example16 />
+              </section>
+            )}
+
+            {(value === "0" || value === "17") && (
+              <section id="example--17">
+                <hr />
+                <Example17 />
               </section>
             )}
           </div>
