@@ -550,6 +550,43 @@ describe("<Slider />", () => {
       fireEvent.click(btn);
       expect(onButtonClick).toHaveBeenCalledTimes(2);
     });
+
+    it("should respect a custom dragClickThreshold prop", () => {
+      const onButtonClick = vi.fn();
+      const { getByTestId } = render(
+        <Slider {...props} dragClickThreshold={15}>
+          <div className="carousel__slide">
+            <button type="button" data-testid="custom-thresh-btn" onClick={onButtonClick}>
+              Action
+            </button>
+          </div>
+        </Slider>,
+      );
+
+      const btn = getByTestId("custom-thresh-btn");
+
+      // Movement of 10px is <= custom dragClickThreshold (15px), so click should still fire
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 110, screenY: 100 }),
+        );
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(1);
+
+      // Movement of 20px is > custom dragClickThreshold (15px), so click should be suppressed
+      fireEvent.mouseDown(btn, { screenX: 100, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 120, screenY: 100 }),
+        );
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn);
+      expect(onButtonClick).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe("keyboard navigation", () => {

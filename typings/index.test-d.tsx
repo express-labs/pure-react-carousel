@@ -103,6 +103,7 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
     classNameTrayWrap: "custom-tray-wrap",
     disableAnimation: false,
     disableKeyboard: false,
+    dragClickThreshold: 5,
     moveThreshold: 0.1,
     preventVerticalScrollOnTouch: true,
     horizontalPixelThreshold: 15,

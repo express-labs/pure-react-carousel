@@ -34,8 +34,6 @@ export function slidesMoved(
   return retval === 0 ? 0 : retval;
 }
 
-const DRAG_CLICK_THRESHOLD = 5;
-
 interface SliderDragState {
   cancelNextClick: boolean;
   deltaX: number;
@@ -60,6 +58,7 @@ const Slider = (props: SliderViewProps) => {
     currentSlide,
     disableAnimation = false,
     disableKeyboard = false,
+    dragClickThreshold = 5,
     dragEnabled,
     dragStep = 1,
     forwardKeyCode = 39,
@@ -133,6 +132,7 @@ const Slider = (props: SliderViewProps) => {
     carouselStore,
     currentSlide,
     disableKeyboard,
+    dragClickThreshold,
     dragEnabled,
     dragStep,
     forwardKeyCode,
@@ -161,6 +161,7 @@ const Slider = (props: SliderViewProps) => {
       carouselStore,
       currentSlide,
       disableKeyboard,
+      dragClickThreshold,
       dragEnabled,
       dragStep,
       forwardKeyCode,
@@ -468,7 +469,7 @@ const Slider = (props: SliderViewProps) => {
         Math.hypot(
           ev.screenX - dragStateRef.current.startX,
           ev.screenY - dragStateRef.current.startY,
-        ) > DRAG_CLICK_THRESHOLD
+        ) > latestPropsRef.current.dragClickThreshold
       ) {
         updateDragState({ cancelNextClick: true });
       }
@@ -551,7 +552,7 @@ const Slider = (props: SliderViewProps) => {
           Math.hypot(
             touch.screenX - dragStateRef.current.startX,
             touch.screenY - dragStateRef.current.startY,
-          ) > DRAG_CLICK_THRESHOLD
+          ) > latestPropsRef.current.dragClickThreshold
         ) {
           updateDragState({ cancelNextClick: true });
         }
