@@ -7,7 +7,10 @@
  */
 export default class GetScrollParent {
   static style(node: Element, prop: string): string {
-    return getComputedStyle(node, null).getPropertyValue(prop);
+    if (typeof window === "undefined" || typeof window.getComputedStyle !== "function") {
+      return "";
+    }
+    return window.getComputedStyle(node, null).getPropertyValue(prop);
   }
 
   static overflow(node: Element): string {
@@ -29,8 +32,11 @@ export default class GetScrollParent {
   }
 
   parents(node: Node | null, ps: Element[]): Element[] {
-    if (node === null || node.parentNode === null) return ps;
-    return this.parents(node.parentNode, node instanceof Element ? ps.concat([node]) : ps);
+    if (node == null || node.parentNode == null) return ps;
+    return this.parents(
+      node.parentNode,
+      typeof Element !== "undefined" && node instanceof Element ? ps.concat([node]) : ps,
+    );
   }
 
   scrollParent(node: HTMLElement | SVGElement): HTMLElement | Element | null {
@@ -41,6 +47,7 @@ export default class GetScrollParent {
       }
     }
 
+    if (typeof document === "undefined") return null;
     return (document.scrollingElement as HTMLElement | null) || document.documentElement;
   }
 

@@ -128,6 +128,7 @@ const Slider = (props: SliderViewProps) => {
   const isDocumentScrollingRef = useRef<boolean | null>(null);
   const moveTimerRef = useRef<number | null>(null);
   const originalOverflowRef = useRef<string | null>(null);
+  const originalPaddingRightRef = useRef<string | null>(null);
   const scrollParentRef = useRef<HTMLElement | Element | null>(null);
   const scrollStopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clickGuardRef = useRef<{
@@ -279,15 +280,24 @@ const Slider = (props: SliderViewProps) => {
 
   const lockScroll = useCallback(() => {
     const getScrollParent = new GetScrollParent();
-    scrollParentRef.current = getScrollParent.getScrollParent(sliderTrayElementRef.current);
-    if (
-      scrollParentRef.current &&
-      "style" in scrollParentRef.current &&
-      scrollParentRef.current.style
-    ) {
-      originalOverflowRef.current =
-        originalOverflowRef.current || scrollParentRef.current.style.overflow;
-      scrollParentRef.current.style.overflow = "hidden";
+    const scrollParent = getScrollParent.getScrollParent(sliderTrayElementRef.current);
+    scrollParentRef.current = scrollParent;
+    if (scrollParent && "style" in scrollParent && scrollParent.style) {
+      originalOverflowRef.current = originalOverflowRef.current || scrollParent.style.overflow;
+      const prevClientWidth = scrollParent.clientWidth;
+      scrollParent.style.overflow = "hidden";
+      const scrollbarWidth = scrollParent.clientWidth - prevClientWidth;
+      if (scrollbarWidth > 0) {
+        originalPaddingRightRef.current =
+          originalPaddingRightRef.current ?? scrollParent.style.paddingRight;
+        const computedPaddingRight =
+          typeof window !== "undefined" && typeof window.getComputedStyle === "function"
+            ? parseFloat(
+                window.getComputedStyle(scrollParent, null).getPropertyValue("padding-right"),
+              ) || 0
+            : 0;
+        scrollParent.style.paddingRight = `${computedPaddingRight + scrollbarWidth}px`;
+      }
     }
   }, []);
 
@@ -298,7 +308,11 @@ const Slider = (props: SliderViewProps) => {
       scrollParentRef.current.style
     ) {
       scrollParentRef.current.style.overflow = originalOverflowRef.current || "";
+      if (originalPaddingRightRef.current !== null) {
+        scrollParentRef.current.style.paddingRight = originalPaddingRightRef.current;
+      }
       originalOverflowRef.current = null;
+      originalPaddingRightRef.current = null;
       scrollParentRef.current = null;
     }
   }, []);
@@ -890,6 +904,7 @@ const Slider = (props: SliderViewProps) => {
       window.removeEventListener("touchmove", blockWindowScroll, false);
 
       stop();
+      unlockScroll();
       if (moveTimerRef.current !== null) {
         window.cancelAnimationFrame.call(window, moveTimerRef.current);
       }
@@ -910,6 +925,7 @@ const Slider = (props: SliderViewProps) => {
     handleOnMouseUp,
     play,
     stop,
+    unlockScroll,
   ]);
 
   const prevEffectsRef = useRef({

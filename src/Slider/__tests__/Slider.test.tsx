@@ -27,6 +27,7 @@ describe("<Slider />", () => {
     vi.restoreAllMocks();
     vi.useRealTimers();
     document.documentElement.style.overflow = "";
+    document.documentElement.style.paddingRight = "";
   });
 
   describe("static helpers & GetScrollParent", () => {
@@ -293,6 +294,40 @@ describe("<Slider />", () => {
 
       rerender(<Slider {...props} orientation="vertical" isPageScrollLocked={false} />);
       expect(document.documentElement.style.overflow).toBe("scroll");
+    });
+
+    it("should compensate scrollbar width on lockScroll and restore overflow and paddingRight on unlockScroll or unmount", () => {
+      const scrollParent = document.documentElement;
+      scrollParent.style.overflow = "scroll";
+      scrollParent.style.paddingRight = "20px";
+
+      Object.defineProperty(scrollParent, "clientWidth", {
+        configurable: true,
+        get() {
+          return scrollParent.style.overflow === "hidden" ? 1015 : 1000;
+        },
+      });
+
+      const { rerender, unmount } = render(<Slider {...props} orientation="vertical" />);
+
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked />);
+      expect(scrollParent.style.overflow).toBe("hidden");
+      expect(scrollParent.style.paddingRight).toBe("35px");
+
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked={false} />);
+      expect(scrollParent.style.overflow).toBe("scroll");
+      expect(scrollParent.style.paddingRight).toBe("20px");
+
+      // Re-lock and unmount while locked -> should restore overflow and paddingRight on cleanup
+      rerender(<Slider {...props} orientation="vertical" isPageScrollLocked />);
+      expect(scrollParent.style.overflow).toBe("hidden");
+      expect(scrollParent.style.paddingRight).toBe("35px");
+
+      unmount();
+      expect(scrollParent.style.overflow).toBe("scroll");
+      expect(scrollParent.style.paddingRight).toBe("20px");
+
+      Reflect.deleteProperty(scrollParent, "clientWidth");
     });
 
     it("should ignore touchmove while document is scrolling when lockOnWindowScroll is true", () => {
