@@ -54,6 +54,8 @@ const NativeSlider = (props: NativeSliderViewProps) => {
   const sliderElementRef = useRef<HTMLDivElement | null>(null);
   const trayWrapRef = useRef<HTMLDivElement | null>(null);
   const trayRef = useRef<HTMLElement | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const observedSlidesRef = useRef<Set<HTMLElement>>(new Set());
   const playTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isProgrammaticScrollRef = useRef<boolean>(false);
   const programmaticTargetRef = useRef<number | null>(null);
@@ -116,7 +118,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       return undefined;
     }
 
-    const slides = getSlideElements();
+    const observedSlides = observedSlidesRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
         let bestEntry: IntersectionObserverEntry | null = null;
@@ -148,12 +150,38 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       },
     );
 
-    slides.forEach((slide) => observer.observe(slide));
+    observerRef.current = observer;
 
     return () => {
       observer.disconnect();
+      observerRef.current = null;
+      observedSlides.clear();
     };
-  }, [clearProgrammaticLockout, commitObservedSlide, getSlideElements, getSlideIndexFromElement]);
+  }, [clearProgrammaticLockout, commitObservedSlide, getSlideIndexFromElement]);
+
+  // Synchronize observed slide elements when rendered slides change
+  useEffect(() => {
+    const observer = observerRef.current;
+    if (!observer) return;
+
+    const currentSlides = getSlideElements();
+    const currentSlideSet = new Set(currentSlides);
+    const observedSlides = observedSlidesRef.current;
+
+    observedSlides.forEach((slide) => {
+      if (!currentSlideSet.has(slide)) {
+        observer.unobserve(slide);
+        observedSlides.delete(slide);
+      }
+    });
+
+    currentSlides.forEach((slide) => {
+      if (!observedSlides.has(slide)) {
+        observer.observe(slide);
+        observedSlides.add(slide);
+      }
+    });
+  });
 
   // Progressive enhancement: scrollsnapchange and scrollend listeners
   useEffect(() => {

@@ -21,6 +21,8 @@ describe("<NativeSlider />", () => {
   let props: ReturnType<typeof createComponentConfig>["NativeSlider"]["props"];
   let observerCallback: ObserverCallback | null = null;
   let observedElements: Element[] = [];
+  let observeSpy: ReturnType<typeof vi.fn>;
+  let unobserveSpy: ReturnType<typeof vi.fn>;
   let disconnectSpy: ReturnType<typeof vi.fn>;
   let originalIntersectionObserver: typeof globalThis.IntersectionObserver | undefined;
 
@@ -29,6 +31,12 @@ describe("<NativeSlider />", () => {
     props = createComponentConfig().NativeSlider.props;
     observerCallback = null;
     observedElements = [];
+    observeSpy = vi.fn((el: Element) => {
+      observedElements.push(el);
+    });
+    unobserveSpy = vi.fn((el: Element) => {
+      observedElements = observedElements.filter((item) => item !== el);
+    });
     disconnectSpy = vi.fn();
     originalIntersectionObserver = globalThis.IntersectionObserver;
 
@@ -44,11 +52,8 @@ describe("<NativeSlider />", () => {
           : [options?.threshold ?? 0];
       }
 
-      observe = (el: Element) => {
-        observedElements.push(el);
-      };
-
-      unobserve = vi.fn();
+      observe = observeSpy;
+      unobserve = unobserveSpy;
       disconnect = disconnectSpy;
       takeRecords = () => [];
     }
@@ -305,6 +310,64 @@ describe("<NativeSlider />", () => {
 
       unmount();
       expect(disconnectSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("observes dynamically added slides and unobserves removed slides when children or totalSlides change", () => {
+      const { container, rerender } = render(
+        <CarouselProvider naturalSlideWidth={100} naturalSlideHeight={100} totalSlides={2}>
+          <NativeSlider>
+            <Slide index={0}>Slide 0</Slide>
+            <Slide index={1}>Slide 1</Slide>
+          </NativeSlider>
+        </CarouselProvider>,
+      );
+
+      expect(observedElements).toHaveLength(2);
+      expect(observeSpy).toHaveBeenCalledTimes(2);
+
+      // Dynamically add Slide 2 and increase totalSlides to 3
+      rerender(
+        <CarouselProvider naturalSlideWidth={100} naturalSlideHeight={100} totalSlides={3}>
+          <NativeSlider>
+            <Slide index={0}>Slide 0</Slide>
+            <Slide index={1}>Slide 1</Slide>
+            <Slide index={2}>Slide 2</Slide>
+          </NativeSlider>
+        </CarouselProvider>,
+      );
+
+      const slidesAfterAdd = container.querySelectorAll(".carousel__slide");
+      expect(slidesAfterAdd).toHaveLength(3);
+      expect(observedElements).toHaveLength(3);
+      expect(observedElements).toContain(slidesAfterAdd[2]);
+      // Existing unchanged slide DOM nodes are not re-observed or unobserved
+      expect(observeSpy).toHaveBeenCalledTimes(3);
+      expect(unobserveSpy).not.toHaveBeenCalled();
+
+      // Intersecting the newly added Slide 2 updates currentSlide to 2
+      act(() => {
+        observerCallback?.([
+          { target: slidesAfterAdd[2], isIntersecting: true, intersectionRatio: 0.75 },
+        ]);
+      });
+      expect(slidesAfterAdd[2]).toHaveAttribute("aria-selected", "true");
+      expect(slidesAfterAdd[0]).toHaveAttribute("aria-selected", "false");
+
+      // Dynamically remove Slide 2 and decrease totalSlides back to 2
+      const removedSlide = slidesAfterAdd[2];
+      rerender(
+        <CarouselProvider naturalSlideWidth={100} naturalSlideHeight={100} totalSlides={2}>
+          <NativeSlider>
+            <Slide index={0}>Slide 0</Slide>
+            <Slide index={1}>Slide 1</Slide>
+          </NativeSlider>
+        </CarouselProvider>,
+      );
+
+      expect(unobserveSpy).toHaveBeenCalledTimes(1);
+      expect(unobserveSpy).toHaveBeenCalledWith(removedSlide);
+      expect(observedElements).toHaveLength(2);
+      expect(observedElements).not.toContain(removedSlide);
     });
   });
 
