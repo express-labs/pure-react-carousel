@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.3.1](https://github.com/express-labs/pure-react-carousel/compare/v3.3.0...v3.3.1) (2026-10-18)
+
+
+### Bug Fixes
+
+* **slider:** prevent scroll-lock layout shift and remove idle will-change layer ([#512](https://github.com/express-labs/pure-react-carousel/issues/512)) ([7c7e187](https://github.com/express-labs/pure-react-carousel/commit/7c7e187f5e0141830998bfa5a6800c865ec57e83))
+* **slider:** suppress live drag translation when animation is disabled ([825c2a0](https://github.com/express-labs/pure-react-carousel/commit/825c2a0899e3735e1b9153a0b272f269c2e26e90)), closes [#322](https://github.com/express-labs/pure-react-carousel/issues/322)
+
 ## [3.3.0](https://github.com/express-labs/pure-react-carousel/compare/v3.2.1...v3.3.0) (2026-10-18)
 
 
