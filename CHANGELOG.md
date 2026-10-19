@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.0](https://github.com/express-labs/pure-react-carousel/compare/v3.3.1...v3.4.0) (2026-10-19)
+
+
+### Features
+
+* **native-slider:** add NativeSlider component with CSS scroll snap support ([#514](https://github.com/express-labs/pure-react-carousel/issues/514)) ([781bfc3](https://github.com/express-labs/pure-react-carousel/commit/781bfc307b40955a3f5889717c22563cada18b32))
+
 ## [3.3.1](https://github.com/express-labs/pure-react-carousel/compare/v3.3.0...v3.3.1) (2026-10-18)
 
 
