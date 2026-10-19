@@ -1272,13 +1272,20 @@ describe("<NativeSlider />", () => {
 
       const slider = container.querySelector(".carousel__native-slider") as HTMLElement;
 
-      // Forward arrow (39) advances to slide 1, pauses autoplay, and calls custom onKeyDown
-      fireEvent.keyDown(slider, { keyCode: 39 });
+      // Forward arrow (39) advances to slide 1, pauses autoplay, prevents default native scroll, and calls custom onKeyDown
+      expect(fireEvent.keyDown(slider, { keyCode: 39 })).toBe(false);
       expect(store.getStoreState().currentSlide).toBe(1);
       expect(store.getStoreState().isPlaying).toBe(false);
       expect(onKeyDownSpy).toHaveBeenCalledTimes(1);
+      expect(onKeyDownSpy.mock.calls[0][0].defaultPrevented).toBe(true);
 
-      // Backward arrow (37) from slide 1 moves back to 0 when infinite=false
+      // Unhandled keys (e.g. Enter / 13) do not prevent default or change slide
+      expect(fireEvent.keyDown(slider, { keyCode: 13 })).toBe(true);
+      expect(store.getStoreState().currentSlide).toBe(1);
+      expect(onKeyDownSpy).toHaveBeenCalledTimes(2);
+      expect(onKeyDownSpy.mock.calls[1][0].defaultPrevented).toBe(false);
+
+      // Backward arrow (37) from slide 1 moves back to 0 when infinite=false and prevents default
       rerender(
         <NativeSliderView
           {...props}
@@ -1292,10 +1299,10 @@ describe("<NativeSlider />", () => {
           <div className="carousel__slide">Slide 0</div>
         </NativeSliderView>,
       );
-      fireEvent.keyDown(slider, { keyCode: 37 });
+      expect(fireEvent.keyDown(slider, { keyCode: 37 })).toBe(false);
       expect(store.getStoreState().currentSlide).toBe(0);
 
-      // Backward arrow (37) at slide 0 with infinite=true wraps to maxSlide (3)
+      // Backward arrow (37) at slide 0 with infinite=true wraps to maxSlide (3) and prevents default
       rerender(
         <NativeSliderView
           {...props}
@@ -1310,10 +1317,10 @@ describe("<NativeSlider />", () => {
           <div className="carousel__slide">Slide 0</div>
         </NativeSliderView>,
       );
-      fireEvent.keyDown(slider, { keyCode: 37 });
+      expect(fireEvent.keyDown(slider, { keyCode: 37 })).toBe(false);
       expect(store.getStoreState().currentSlide).toBe(3);
 
-      // Forward arrow (39) at maxSlide (3) with infinite=true wraps to 0
+      // Forward arrow (39) at maxSlide (3) with infinite=true wraps to 0 and prevents default
       rerender(
         <NativeSliderView
           {...props}
@@ -1326,10 +1333,10 @@ describe("<NativeSlider />", () => {
           <div className="carousel__slide">Slide 0</div>
         </NativeSliderView>,
       );
-      fireEvent.keyDown(slider, { keyCode: 39 });
+      expect(fireEvent.keyDown(slider, { keyCode: 39 })).toBe(false);
       expect(store.getStoreState().currentSlide).toBe(0);
 
-      // disableKeyboard ignores key presses
+      // disableKeyboard ignores key presses and does not prevent default
       rerender(
         <NativeSliderView
           {...props}
@@ -1342,7 +1349,7 @@ describe("<NativeSlider />", () => {
           <div className="carousel__slide">Slide 0</div>
         </NativeSliderView>,
       );
-      fireEvent.keyDown(slider, { keyCode: 39 });
+      expect(fireEvent.keyDown(slider, { keyCode: 39 })).toBe(true);
       expect(store.getStoreState().currentSlide).toBe(0);
     });
   });

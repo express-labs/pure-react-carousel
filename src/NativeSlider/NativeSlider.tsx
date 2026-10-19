@@ -506,6 +506,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     }
 
     if (keyCode === backwardKeyCode) {
+      ev.preventDefault();
       if (currentSlide === 0 && infinite) {
         nextState.currentSlide = maxSlide;
       } else {
@@ -515,6 +516,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     }
 
     if (keyCode === forwardKeyCode) {
+      ev.preventDefault();
       if (currentSlide >= maxSlide && infinite) {
         nextState.currentSlide = 0;
       } else {
