@@ -12,6 +12,8 @@ const ConnectedSlide: React.ComponentType<SlideProps> = WithStore<
     | "naturalSlideWidth"
     | "orientation"
     | "slideSize"
+    | "snapAlign"
+    | "snapStop"
     | "totalSlides"
     | "visibleSlides"
     | "isIntrinsicHeight"
@@ -22,6 +24,8 @@ const ConnectedSlide: React.ComponentType<SlideProps> = WithStore<
   naturalSlideWidth: state.naturalSlideWidth,
   orientation: state.orientation,
   slideSize: state.slideSize,
+  snapAlign: state.snapAlign,
+  snapStop: state.snapStop,
   totalSlides: state.totalSlides,
   visibleSlides: state.visibleSlides,
   isIntrinsicHeight: state.isIntrinsicHeight,

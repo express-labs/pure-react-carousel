@@ -20,6 +20,8 @@ import {
   ImageView,
   ImageWithZoom,
   ImageWithZoomView,
+  NativeSlider,
+  NativeSliderView,
   Slide,
   Slider,
   SliderView,
@@ -56,10 +58,15 @@ import {
   type ImageWithZoomViewProps,
   type MapStateToProps,
   type MasterSpinnerSubscription,
+  type NativeSliderProps,
+  type NativeSliderViewProps,
   type Orientation,
   type OrientationType,
   type PlayDirection,
   type RenderDotsProps,
+  type ScrollSnapAlign,
+  type ScrollSnapStop,
+  type ScrollSnapType,
   type SlideProps,
   type SliderProps,
   type SliderViewProps,
@@ -88,6 +95,9 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
     orientation: "horizontal",
     pauseOnInteract: false,
     playDirection: "forward",
+    snapAlign: "start",
+    snapStop: "normal",
+    snapType: "mandatory",
     step: 1,
     dragStep: 1,
     tag: "section",
@@ -126,6 +136,8 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
     innerClassName: "inner",
     innerTag: "div",
     isIntrinsicHeight: true,
+    snapAlign: "center",
+    snapStop: "always",
     tabIndex: 0,
     tag: "div",
   };
@@ -188,6 +200,9 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
           <ImageWithZoom {...imageWithZoomProps} />
         </Slide>
       </Slider>
+      <NativeSlider {...nativeSliderPropsContract}>
+        <Slide {...slideProps} />
+      </NativeSlider>
       <ButtonFirst {...firstProps}>First</ButtonFirst>
       <ButtonBack {...backProps}>Back</ButtonBack>
       <ButtonNext {...nextProps}>Next</ButtonNext>
@@ -198,6 +213,28 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
       <Spinner {...spinnerProps} />
     </CarouselProvider>
   );
+};
+
+export const nativeSliderPropsContract: NativeSliderProps = {
+  ariaLabel: "native-slider",
+  backwardKeyCode: 37,
+  className: "custom-native-slider",
+  classNameTray: "custom-native-tray",
+  classNameTrayWrap: "custom-native-tray-wrap",
+  disableAnimation: false,
+  disableKeyboard: false,
+  forwardKeyCode: 39,
+  hideScrollbar: true,
+  onMasterSpinner: () => <span>Loading...</span>,
+  role: "listbox",
+  snapType: "mandatory",
+  spinner: () => <Spinner className="custom-spinner" />,
+  tabIndex: 0,
+  trayProps: {
+    "aria-label": "native-tray",
+  },
+  trayTag: "div",
+  children: null,
 };
 
 // 2. Verify WithStore Overloads: Inferred No-Mapper, Single-Type-Argument, and Two-Type-Argument Contracts
@@ -352,6 +389,7 @@ export type VerifyExportedTypes = [
   DotGroupViewProps,
   ImageViewProps,
   ImageWithZoomViewProps,
+  NativeSliderViewProps,
   SlideViewProps,
   SliderViewProps,
   SpinnerViewProps,
@@ -365,6 +403,9 @@ export type VerifyExportedTypes = [
   OrientationType,
   PlayDirection,
   RenderDotsProps,
+  ScrollSnapAlign,
+  ScrollSnapStop,
+  ScrollSnapType,
   Tag,
   WithStoreInterface,
   WithStoreProps<ButtonBackViewProps, { currentSlide: number }>,
@@ -377,6 +418,7 @@ export type VerifyExportedTypes = [
   typeof DotGroupView,
   typeof ImageView,
   typeof ImageWithZoomView,
+  typeof NativeSliderView,
   typeof SlideView,
   typeof SliderView,
   typeof SpinnerView,
@@ -396,16 +438,24 @@ export const verifyReadonlyCarouselState = (): void => {
   mockFullCarouselStore.state.isPlaying = true;
 };
 
-// 7. Verify Slider trayProps Rejects Unsupported ref Prop
+// 7. Verify Slider and NativeSlider trayProps Reject Unsupported ref Prop
 export const verifySliderTrayPropsRejectsRef = (): React.ReactElement => {
   const trayRef = React.createRef<HTMLDivElement>();
   return (
-    <Slider
-      // @ts-expect-error -- trayProps.ref is discarded at runtime and unsupported in the public SliderProps contract
-      trayProps={{ ref: trayRef }}
-    >
-      <div>Slide</div>
-    </Slider>
+    <>
+      <Slider
+        // @ts-expect-error -- trayProps.ref is discarded at runtime and unsupported in the public SliderProps contract
+        trayProps={{ ref: trayRef }}
+      >
+        <div>Slide</div>
+      </Slider>
+      <NativeSlider
+        // @ts-expect-error -- trayProps.ref is discarded at runtime and unsupported in the public NativeSliderProps contract
+        trayProps={{ ref: trayRef }}
+      >
+        <div>Slide</div>
+      </NativeSlider>
+    </>
   );
 };
 

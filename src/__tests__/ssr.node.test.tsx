@@ -15,6 +15,7 @@ import {
   DotGroup,
   Image,
   ImageWithZoom,
+  NativeSlider,
   Slide,
   Slider,
   Spinner,
@@ -54,6 +55,11 @@ const buildCarouselTree = (props?: Partial<React.ComponentProps<typeof CarouselP
       </Slide>
       <Slide index={2}>Slide 3 Content</Slide>
     </Slider>
+    <NativeSlider>
+      <Slide index={0}>Native Slide 1</Slide>
+      <Slide index={1}>Native Slide 2</Slide>
+      <Slide index={2}>Native Slide 3</Slide>
+    </NativeSlider>
     <ButtonFirst>First</ButtonFirst>
     <ButtonBack>Back</ButtonBack>
     <ButtonNext>Next</ButtonNext>
@@ -78,6 +84,7 @@ describe("SSR compatibility (Node environment without DOM globals)", () => {
 
     expect(html).toContain("carousel");
     expect(html).toContain("carousel__slider");
+    expect(html).toContain("carousel__native-slider");
     expect(html).toContain("carousel__slide");
     expect(html).toContain("carousel__first-button");
     expect(html).toContain("carousel__back-button");
@@ -98,6 +105,7 @@ describe("SSR compatibility (Node environment without DOM globals)", () => {
     );
 
     expect(verticalMarkup).toContain("carousel__slider--vertical");
+    expect(verticalMarkup).toContain("carousel__native-slider--vertical");
     expect(verticalMarkup).toContain("Slide 3 Content");
 
     const intrinsicMarkup = renderToStaticMarkup(
@@ -109,6 +117,7 @@ describe("SSR compatibility (Node environment without DOM globals)", () => {
     );
 
     expect(intrinsicMarkup).toContain("carousel__slider--horizontal");
+    expect(intrinsicMarkup).toContain("carousel__native-slider--horizontal");
     expect(intrinsicMarkup).toContain("Slide 3 Content");
   });
 

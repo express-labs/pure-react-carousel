@@ -1,7 +1,9 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { describe, it, expect, beforeEach, vi } from "vite-plus/test";
+import ConnectedSlide from "..";
 import Slide from "../Slide";
+import CarouselProvider from "../../CarouselProvider";
 import type { SlideViewProps } from "../../types";
 
 describe("<Slide />", () => {
@@ -123,5 +125,76 @@ describe("<Slide />", () => {
 
     const innerSlide = container.querySelector(".carousel__inner-slide") as HTMLElement;
     expect(innerSlide.style.position).toBe("unset");
+  });
+
+  it("should apply default scroll-snap classes and not leak snapAlign or snapStop to the DOM element", () => {
+    const { container, rerender } = render(<Slide {...props} />);
+    const slide = container.querySelector(".slide") as HTMLElement;
+    expect(slide).toHaveClass(
+      "snapAlignStart",
+      "carousel__slide--snap-align-start",
+      "snapStopNormal",
+      "carousel__slide--snap-stop-normal",
+    );
+
+    rerender(<Slide {...props} snapAlign="start" snapStop="normal" />);
+    expect(slide.hasAttribute("snapAlign")).toBe(false);
+    expect(slide.hasAttribute("snapalign")).toBe(false);
+    expect(slide.hasAttribute("snapStop")).toBe(false);
+    expect(slide.hasAttribute("snapstop")).toBe(false);
+  });
+
+  it("should apply snapAlign and snapStop classes when configured", () => {
+    const { container, rerender } = render(
+      <Slide {...props} snapAlign="center" snapStop="always" className="custom-slide" />,
+    );
+    const slide = container.querySelector(".slide") as HTMLElement;
+    expect(slide).toHaveClass(
+      "snapAlignCenter",
+      "carousel__slide--snap-align-center",
+      "snapStopAlways",
+      "carousel__slide--snap-stop-always",
+      "custom-slide",
+    );
+    expect(slide.className.endsWith("custom-slide")).toBe(true);
+
+    rerender(<Slide {...props} snapAlign="end" snapStop="normal" />);
+    expect(slide).toHaveClass(
+      "snapAlignEnd",
+      "carousel__slide--snap-align-end",
+      "snapStopNormal",
+      "carousel__slide--snap-stop-normal",
+    );
+
+    rerender(<Slide {...props} snapAlign="none" />);
+    expect(slide).toHaveClass("snapAlignNone", "carousel__slide--snap-align-none");
+  });
+
+  it("should inherit snapAlign and snapStop from CarouselProvider store and allow per-slide overrides", () => {
+    const { container } = render(
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={100}
+        totalSlides={2}
+        snapAlign="center"
+        snapStop="always"
+      >
+        <ConnectedSlide index={0} />
+        <ConnectedSlide index={1} snapAlign="end" snapStop="normal" />
+      </CarouselProvider>,
+    );
+    const slides = container.querySelectorAll(".slide");
+    expect(slides[0]).toHaveClass(
+      "snapAlignCenter",
+      "carousel__slide--snap-align-center",
+      "snapStopAlways",
+      "carousel__slide--snap-stop-always",
+    );
+    expect(slides[1]).toHaveClass(
+      "snapAlignEnd",
+      "carousel__slide--snap-align-end",
+      "snapStopNormal",
+      "carousel__slide--snap-stop-normal",
+    );
   });
 });
