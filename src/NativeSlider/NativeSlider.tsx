@@ -60,6 +60,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
   const playTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isProgrammaticScrollRef = useRef<boolean>(false);
   const programmaticTargetRef = useRef<number | null>(null);
+  const pendingSnapSlideRef = useRef<number | null>(null);
   const lastObservedSlideRef = useRef<number>(0);
   const latestStateRef = useRef({
     carouselStore,
@@ -84,6 +85,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
   const clearProgrammaticLockout = useCallback(() => {
     isProgrammaticScrollRef.current = false;
     programmaticTargetRef.current = null;
+    pendingSnapSlideRef.current = null;
   }, []);
 
   const getSlideElements = useCallback((): HTMLElement[] => {
@@ -117,6 +119,25 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     return slideIndex;
   }, [getSlideElements]);
 
+  const isCenterSnapAligned = useCallback((slideElement?: Element | null): boolean => {
+    if (slideElement) {
+      if (slideElement.classList.contains("carousel__slide--snap-align-center")) {
+        return true;
+      }
+      if (
+        slideElement.classList.contains("carousel__slide--snap-align-start") ||
+        slideElement.classList.contains("carousel__slide--snap-align-end") ||
+        slideElement.classList.contains("carousel__slide--snap-align-none")
+      ) {
+        return false;
+      }
+    }
+    const store = latestStateRef.current.carouselStore;
+    const storeSnapAlign =
+      typeof store.getStoreState === "function" ? store.getStoreState().snapAlign : undefined;
+    return storeSnapAlign === "center";
+  }, []);
+
   const resolveSnapTargetIndex = useCallback(
     (targetElement: Element | null): number => {
       const snappedIndex = getSlideIndexFromElement(targetElement);
@@ -129,7 +150,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
         return resolveSlideFromRatios();
       }
 
-      if (targetElement.classList.contains("carousel__slide--snap-align-center")) {
+      if (isCenterSnapAligned(targetElement)) {
         return Math.max(0, snappedIndex - Math.floor(visibleCount / 2));
       }
       if (targetElement.classList.contains("carousel__slide--snap-align-end")) {
@@ -137,7 +158,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       }
       return snappedIndex;
     },
-    [getSlideIndexFromElement, resolveSlideFromRatios],
+    [getSlideIndexFromElement, isCenterSnapAligned, resolveSlideFromRatios],
   );
 
   const commitObservedSlide = useCallback((rawIndex: number) => {
@@ -266,6 +287,8 @@ const NativeSlider = (props: NativeSliderViewProps) => {
         if (slideIndex === programmaticTargetRef.current) {
           clearProgrammaticLockout();
           lastObservedSlideRef.current = slideIndex;
+        } else {
+          pendingSnapSlideRef.current = slideIndex;
         }
         return;
       }
@@ -275,8 +298,12 @@ const NativeSlider = (props: NativeSliderViewProps) => {
 
     const handleScrollEnd = () => {
       if (isProgrammaticScrollRef.current) {
+        const pendingSnapSlide = pendingSnapSlideRef.current;
         clearProgrammaticLockout();
-        return;
+        if (pendingSnapSlide !== null) {
+          commitObservedSlide(pendingSnapSlide);
+          return;
+        }
       }
 
       const ratioSlideIndex = resolveSlideFromRatios();
@@ -285,18 +312,35 @@ const NativeSlider = (props: NativeSliderViewProps) => {
         return;
       }
 
-      const { totalSlides: total } = latestStateRef.current;
+      const { totalSlides: total, visibleSlides: visible } = latestStateRef.current;
       if (total <= 0) return;
+      const visibleCount = Math.max(1, visible);
+      const slides = getSlideElements();
+      const snapCheckSlide =
+        slides[Math.min(Math.floor(visibleCount / 2), slides.length - 1)] ?? slides[0];
+      const useEvenCenterOffset =
+        snapType !== "none" &&
+        visibleCount > 1 &&
+        visibleCount % 2 === 0 &&
+        isCenterSnapAligned(snapCheckSlide);
 
       if (orientation === "vertical") {
         const slideHeight = trayWrap.scrollHeight / total;
         if (slideHeight > 0) {
-          commitObservedSlide(Math.round(trayWrap.scrollTop / slideHeight));
+          const adjustedScrollTop =
+            useEvenCenterOffset && trayWrap.scrollTop > 0
+              ? Math.max(0, trayWrap.scrollTop - 0.5 * slideHeight)
+              : trayWrap.scrollTop;
+          commitObservedSlide(Math.round(adjustedScrollTop / slideHeight));
         }
       } else {
         const slideWidth = trayWrap.scrollWidth / total;
         if (slideWidth > 0) {
-          commitObservedSlide(Math.round(trayWrap.scrollLeft / slideWidth));
+          const adjustedScrollLeft =
+            useEvenCenterOffset && trayWrap.scrollLeft > 0
+              ? Math.max(0, trayWrap.scrollLeft - 0.5 * slideWidth)
+              : trayWrap.scrollLeft;
+          commitObservedSlide(Math.round(adjustedScrollLeft / slideWidth));
         }
       }
     };
@@ -313,6 +357,8 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     snapType,
     clearProgrammaticLockout,
     commitObservedSlide,
+    getSlideElements,
+    isCenterSnapAligned,
     resolveSlideFromRatios,
     resolveSnapTargetIndex,
   ]);
@@ -329,21 +375,38 @@ const NativeSlider = (props: NativeSliderViewProps) => {
 
     const slides = getSlideElements();
     const targetSlide = slides[currentSlide];
+    const visibleCount = Math.max(1, visibleSlides);
+    const snapTargetSlide =
+      slides[Math.min(currentSlide + Math.floor(visibleCount / 2), slides.length - 1)] ??
+      targetSlide;
+    const useEvenCenterOffset =
+      snapType !== "none" &&
+      visibleCount > 1 &&
+      visibleCount % 2 === 0 &&
+      currentSlide > 0 &&
+      isCenterSnapAligned(snapTargetSlide);
+
+    const slideWidth = totalSlides > 0 ? trayWrap.scrollWidth / totalSlides : 0;
+    const slideHeight = totalSlides > 0 ? trayWrap.scrollHeight / totalSlides : 0;
+    const baseLeft =
+      (targetSlide?.offsetLeft ?? 0) > 0 ? targetSlide.offsetLeft : slideWidth * currentSlide;
+    const baseTop =
+      (targetSlide?.offsetTop ?? 0) > 0 ? targetSlide.offsetTop : slideHeight * currentSlide;
+    const effectiveSlideWidth = slideWidth > 0 ? slideWidth : baseLeft / Math.max(1, currentSlide);
+    const effectiveSlideHeight =
+      slideHeight > 0 ? slideHeight : baseTop / Math.max(1, currentSlide);
 
     const targetLeft =
       orientation === "vertical"
         ? 0
-        : (targetSlide?.offsetLeft ?? 0) > 0
-          ? targetSlide.offsetLeft
-          : (trayWrap.scrollWidth / totalSlides) * currentSlide;
+        : baseLeft + (useEvenCenterOffset ? 0.5 * effectiveSlideWidth : 0);
     const targetTop =
       orientation === "vertical"
-        ? (targetSlide?.offsetTop ?? 0) > 0
-          ? targetSlide.offsetTop
-          : (trayWrap.scrollHeight / totalSlides) * currentSlide
+        ? baseTop + (useEvenCenterOffset ? 0.5 * effectiveSlideHeight : 0)
         : 0;
 
     slideRatiosRef.current.clear();
+    pendingSnapSlideRef.current = null;
     isProgrammaticScrollRef.current = true;
     programmaticTargetRef.current = currentSlide;
 
@@ -358,7 +421,16 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       trayWrap.scrollTop = targetTop;
       trayWrap.scrollLeft = targetLeft;
     }
-  }, [currentSlide, disableAnimation, orientation, totalSlides, getSlideElements]);
+  }, [
+    currentSlide,
+    disableAnimation,
+    orientation,
+    snapType,
+    totalSlides,
+    visibleSlides,
+    getSlideElements,
+    isCenterSnapAligned,
+  ]);
 
   // Reset privateUnDisableAnimation flag when set by store
   useEffect(() => {

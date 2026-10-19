@@ -841,6 +841,11 @@ describe("<NativeSlider />", () => {
           ))}
         </NativeSliderView>,
       );
+      Object.defineProperty(trayWrap, "scrollTop", {
+        value: 300,
+        writable: true,
+        configurable: true,
+      });
       act(() => {
         trayWrap.dispatchEvent(new Event("scrollend"));
       });
@@ -928,6 +933,156 @@ describe("<NativeSlider />", () => {
       } finally {
         HTMLElement.prototype.scrollTo = originalScrollTo;
       }
+    });
+
+    it("offsets programmatic scrollTo and scrollend by half a slide when visibleSlides is even and snapAlign is center", () => {
+      const store = new Store({
+        currentSlide: 0,
+        totalSlides: 4,
+        visibleSlides: 2,
+        snapAlign: "center",
+      });
+      const { container, rerender } = renderWithSlides(
+        {
+          carouselStore: store,
+          currentSlide: 0,
+          totalSlides: 4,
+          visibleSlides: 2,
+          orientation: "horizontal",
+          snapType: "mandatory",
+          disableAnimation: false,
+        },
+        4,
+      );
+
+      const trayWrap = container.querySelector(
+        ".carousel__native-slider-tray-wrapper",
+      ) as HTMLElement;
+      const scrollToSpy = vi.fn();
+      trayWrap.scrollTo = scrollToSpy;
+      Object.defineProperty(trayWrap, "scrollWidth", { value: 400, configurable: true });
+
+      store.setStoreState({ currentSlide: 1 });
+      rerender(
+        <NativeSliderView
+          {...props}
+          carouselStore={store}
+          currentSlide={1}
+          totalSlides={4}
+          visibleSlides={2}
+          orientation="horizontal"
+          snapType="mandatory"
+          disableAnimation={false}
+        >
+          {Array.from({ length: 4 }, (_, i) => (
+            <div key={i} className="carousel__slide">
+              Slide {i}
+            </div>
+          ))}
+        </NativeSliderView>,
+      );
+
+      expect(scrollToSpy).toHaveBeenCalledWith({
+        left: 150,
+        top: 0,
+        behavior: "smooth",
+      });
+
+      Object.defineProperty(trayWrap, "scrollLeft", {
+        value: 150,
+        writable: true,
+        configurable: true,
+      });
+      store.setStoreState({ currentSlide: 0 });
+      act(() => {
+        trayWrap.dispatchEvent(new Event("scrollend"));
+      });
+      expect(store.getStoreState().currentSlide).toBe(1);
+    });
+
+    it("reconciles currentSlide on scrollend when a programmatic scroll settles on a different slide than the target", () => {
+      const store = new Store({ currentSlide: 0, totalSlides: 4, visibleSlides: 1 });
+      const { container, rerender } = renderWithSlides(
+        {
+          carouselStore: store,
+          currentSlide: 0,
+          totalSlides: 4,
+          visibleSlides: 1,
+          orientation: "horizontal",
+          disableAnimation: false,
+        },
+        4,
+      );
+
+      const trayWrap = container.querySelector(
+        ".carousel__native-slider-tray-wrapper",
+      ) as HTMLElement;
+      trayWrap.scrollTo = vi.fn();
+      Object.defineProperty(trayWrap, "scrollWidth", { value: 400, configurable: true });
+
+      store.setStoreState({ currentSlide: 2 });
+      rerender(
+        <NativeSliderView
+          {...props}
+          carouselStore={store}
+          currentSlide={2}
+          totalSlides={4}
+          visibleSlides={1}
+          orientation="horizontal"
+          disableAnimation={false}
+        >
+          {Array.from({ length: 4 }, (_, i) => (
+            <div key={i} className="carousel__slide">
+              Slide {i}
+            </div>
+          ))}
+        </NativeSliderView>,
+      );
+
+      // Browser settled at slide 1 (scrollLeft = 100) instead of target slide 2
+      Object.defineProperty(trayWrap, "scrollLeft", {
+        value: 100,
+        writable: true,
+        configurable: true,
+      });
+      act(() => {
+        trayWrap.dispatchEvent(new Event("scrollend"));
+      });
+      expect(store.getStoreState().currentSlide).toBe(1);
+
+      // Programmatic scroll to slide 3 where browser fires scrollsnapchange for neighboring slide 2 before scrollend
+      store.setStoreState({ currentSlide: 3 });
+      rerender(
+        <NativeSliderView
+          {...props}
+          carouselStore={store}
+          currentSlide={3}
+          totalSlides={4}
+          visibleSlides={1}
+          orientation="horizontal"
+          disableAnimation={false}
+        >
+          {Array.from({ length: 4 }, (_, i) => (
+            <div key={i} className="carousel__slide">
+              Slide {i}
+            </div>
+          ))}
+        </NativeSliderView>,
+      );
+
+      const slides = container.querySelectorAll(".carousel__slide");
+      const neighborSnap = new Event("scrollsnapchange");
+      Object.defineProperty(neighborSnap, "snapTargetInline", { value: slides[2] });
+      act(() => {
+        trayWrap.dispatchEvent(neighborSnap);
+      });
+      // Still locked out until scrollend
+      expect(store.getStoreState().currentSlide).toBe(3);
+
+      act(() => {
+        trayWrap.dispatchEvent(new Event("scrollend"));
+      });
+      expect(store.getStoreState().currentSlide).toBe(2);
     });
   });
 
