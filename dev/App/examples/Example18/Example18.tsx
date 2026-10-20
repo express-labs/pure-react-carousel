@@ -169,7 +169,13 @@ const Example18: React.ElementType = () => {
   }, []);
 
   const effectiveWidth =
-    manualWidthOverride !== null ? manualWidthOverride : containerWidth > 0 ? containerWidth : 1000;
+    manualWidthOverride !== null
+      ? containerWidth > 0
+        ? Math.min(manualWidthOverride, containerWidth)
+        : manualWidthOverride
+      : containerWidth > 0
+        ? containerWidth
+        : 1000;
   const currentBreakpoint = getBreakpointForWidth(effectiveWidth);
   const visibleSlides = currentBreakpoint.visibleSlides;
   const step = stepMode === "page" ? visibleSlides : 1;
@@ -196,7 +202,7 @@ const Example18: React.ElementType = () => {
   };
 
   return (
-    <div className={customStyles.responsiveExampleWrapper}>
+    <div ref={containerRef} className={customStyles.responsiveExampleWrapper}>
       <h2 id="example18" className={s.headline}>
         Responsive Viewport-Adaptive Carousel (Dynamic <code>visibleSlides</code> &amp;{" "}
         <code>step</code>)
@@ -358,7 +364,6 @@ const Example18: React.ElementType = () => {
       </div>
 
       <div
-        ref={containerRef}
         className={customStyles.carouselContainer}
         style={{
           width: manualWidthOverride !== null ? `${manualWidthOverride}px` : "100%",

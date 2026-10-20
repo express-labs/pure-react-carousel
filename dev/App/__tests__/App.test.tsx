@@ -129,6 +129,27 @@ describe("<App />", () => {
     expect(getByTestId("metric-visible-slides")).toHaveTextContent("3");
     expect(getByTestId("metric-step")).toHaveTextContent("3");
 
+    // When available container width is narrower (600px) than manualWidthOverride (780px),
+    // effectiveWidth and breakpoint should cap to the available 600px width
+    const wrapper = section.querySelector(".responsiveExampleWrapper") as HTMLElement;
+    const origGetBCR = wrapper.getBoundingClientRect;
+    wrapper.getBoundingClientRect = () => ({ width: 600 }) as DOMRect;
+    act(() => {
+      window.dispatchEvent(new Event("resize"));
+    });
+
+    fireEvent.click(mobileBtn);
+    expect(getByTestId("metric-width")).toHaveTextContent("360px");
+    expect(getByTestId("metric-breakpoint")).toHaveTextContent("Mobile");
+    expect(getByTestId("metric-visible-slides")).toHaveTextContent("1");
+
+    const tabletLandBtn = getByTestId("preset-tablet-land");
+    fireEvent.click(tabletLandBtn);
+    expect(getByTestId("metric-width")).toHaveTextContent("600px");
+    expect(getByTestId("metric-breakpoint")).toHaveTextContent("Tablet (Portrait)");
+    expect(getByTestId("metric-visible-slides")).toHaveTextContent("2");
+    wrapper.getBoundingClientRect = origGetBCR;
+
     // Test Start Autoplay and Stop Autoplay buttons
     const startBtn = getByTestId("autoplay-start-btn") as HTMLButtonElement;
     const stopBtn = getByTestId("autoplay-stop-btn") as HTMLButtonElement;
