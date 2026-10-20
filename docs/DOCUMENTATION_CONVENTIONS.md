@@ -28,7 +28,7 @@ When preparing to push a branch, inspect the files modified relative to `master`
 To minimize baseline token usage for AI coding agents:
 
 1. **Keep `AGENTS.md` Lean**: `AGENTS.md` (and its `CLAUDE.md` symlink) is loaded into every agent session automatically. Keep it restricted to core guardrails, environment constraints, quality gate commands, and brief pointers to `docs/*.md`.
-2. **Use `docs/*.md` and `.agents/skills/` for Detailed Protocols**: Place detailed checklists, examples, and subsystem conventions in `docs/` and multi-step agent workflows (`address-pr-review`, `sandbox-lessons`, `tdd`, `triage-issue`) in `.agents/skills/<name>/SKILL.md` so agents only load them on demand via progressive disclosure.
+2. **Use `docs/*.md` and `.agents/skills/` for Detailed Protocols**: Place detailed checklists, examples, and subsystem conventions in `docs/` and multi-step agent workflows (`address-pr-review`, `pr-review-loop`, `sandbox-lessons`, `tdd`, `triage-issue`) in `.agents/skills/<name>/SKILL.md` so agents only load them on demand via progressive disclosure.
 
 ---
 

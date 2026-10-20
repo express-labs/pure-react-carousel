@@ -27,7 +27,7 @@
 - **CSS & SCSS Styling Standards**: `docs/CSS_CONVENTIONS.md`
   - Strict flat selectors (no nested class selectors), no HTML tag selectors, and modular styling.
 - **Workspace Agent Skills**: `.agents/skills/<name>/SKILL.md`
-  - On-demand runbooks for `address-pr-review`, `sandbox-lessons`, `tdd`, and `triage-issue` using subagent context isolation and progressive disclosure.
+  - On-demand runbooks for `address-pr-review`, `pr-review-loop`, `sandbox-lessons`, `tdd`, and `triage-issue` using subagent context isolation and progressive disclosure.
 
 ---
 
