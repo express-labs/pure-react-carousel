@@ -1529,11 +1529,13 @@ describe("<Slider />", () => {
       expect(onKeyDown).toHaveBeenCalledTimes(9);
     });
 
-    it("should not call preventDefault on mousedown when target is inside an interactive descendant", () => {
+    it("should not call preventDefault or start mouse drag on form/editable descendants while keeping button/link descendants draggable", () => {
+      const onMouseDown = vi.fn();
       const { container, getByTestId } = render(
-        <Slider {...props} dragEnabled>
+        <Slider {...props} dragEnabled trayProps={{ onMouseDown }}>
           <div className="carousel__slide" data-testid="non-interactive-slide">
             <input data-testid="child-input" type="text" />
+            <textarea data-testid="child-textarea" />
             <button data-testid="child-button" type="button">
               Btn
             </button>
@@ -1544,15 +1546,55 @@ describe("<Slider />", () => {
       const tray = container.querySelector(".carousel__slider-tray") as HTMLElement;
       const nonInteractiveSlide = getByTestId("non-interactive-slide");
       const childInput = getByTestId("child-input");
+      const childTextarea = getByTestId("child-textarea");
       const childButton = getByTestId("child-button");
 
       // Mousedown on tray or non-interactive slide prevents default when dragEnabled is true
       expect(fireEvent.mouseDown(tray, { screenX: 10, screenY: 10 })).toBe(false);
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
       expect(fireEvent.mouseDown(nonInteractiveSlide, { screenX: 10, screenY: 10 })).toBe(false);
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
 
-      // Mousedown on interactive child does NOT prevent default so focus and text selection work
-      expect(fireEvent.mouseDown(childInput, { screenX: 10, screenY: 10 })).toBe(true);
-      expect(fireEvent.mouseDown(childButton, { screenX: 10, screenY: 10 })).toBe(true);
+      // Mousedown on form/editable child does NOT prevent default AND does NOT start mouse drag on mousemove
+      expect(fireEvent.mouseDown(childInput, { screenX: 100, screenY: 100 })).toBe(true);
+      expect(onMouseDown).toHaveBeenCalledTimes(3);
+      const inputMoveEv = new MouseEvent("mousemove", {
+        bubbles: true,
+        cancelable: true,
+        screenX: 40,
+        screenY: 100,
+      });
+      const inputMovePreventSpy = vi.spyOn(inputMoveEv, "preventDefault");
+      act(() => {
+        document.documentElement.dispatchEvent(inputMoveEv);
+      });
+      expect(inputMovePreventSpy).not.toHaveBeenCalled();
+      expect(tray.style.transform).toContain("translateX(0px)");
+
+      expect(fireEvent.mouseDown(childTextarea, { screenX: 100, screenY: 100 })).toBe(true);
+      expect(onMouseDown).toHaveBeenCalledTimes(4);
+
+      // Mousedown on button skips mousedown preventDefault (preserving focus) while participating in mouse drag on mousemove
+      expect(fireEvent.mouseDown(childButton, { screenX: 100, screenY: 100 })).toBe(true);
+      const btnMoveEv = new MouseEvent("mousemove", {
+        bubbles: true,
+        cancelable: true,
+        screenX: 40,
+        screenY: 100,
+      });
+      const btnMovePreventSpy = vi.spyOn(btnMoveEv, "preventDefault");
+      act(() => {
+        document.documentElement.dispatchEvent(btnMoveEv);
+      });
+      expect(btnMovePreventSpy).toHaveBeenCalledTimes(1);
+      expect(tray.style.transform).toContain("translateX(-60px)");
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
     });
   });
 

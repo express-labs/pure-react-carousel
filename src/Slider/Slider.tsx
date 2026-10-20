@@ -2,7 +2,13 @@ import * as React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import GetScrollParent from "./GetScrollParent";
-import { cn, isInteractiveDescendant, pct, boundedRange } from "../helpers";
+import {
+  cn,
+  isInteractiveDescendant,
+  isNonDraggableInteractiveDescendant,
+  pct,
+  boundedRange,
+} from "../helpers";
 import type {
   MutableCarouselStatePatch,
   Orientation,
@@ -590,6 +596,13 @@ const Slider = Object.assign(
         clickGuardRef.current.lastMouseDownWasTouchCompat = false;
 
         if (!latestPropsRef.current.dragEnabled) {
+          callCallback("onMouseDown", ev);
+          return;
+        }
+        // Form, editable, media, and ARIA input descendants need native selection/drag gestures
+        // without starting a custom carousel mouse drag; button and a[href] descendants skip
+        // mousedown preventDefault (preserving focus) while remaining in the dragClickThreshold lifecycle.
+        if (isNonDraggableInteractiveDescendant(ev.target, ev.currentTarget)) {
           callCallback("onMouseDown", ev);
           return;
         }

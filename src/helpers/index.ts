@@ -117,12 +117,15 @@ export function cleanProps<T extends Record<string, unknown>>(props: T): Omit<T,
   return rest;
 }
 
-const INTERACTIVE_DESCENDANT_SELECTOR =
-  'input, textarea, select, button, a[href], audio, video, [contenteditable]:not([contenteditable="false"]), [role="slider"], [role="spinbutton"], [role="textbox"], [role="combobox"], [role="listbox"], [role="menu"], [role="tablist"]';
+const NON_DRAGGABLE_INTERACTIVE_DESCENDANT_SELECTOR =
+  'input, textarea, select, option, audio, video, [contenteditable]:not([contenteditable="false"]), [role="slider"], [role="spinbutton"], [role="textbox"], [role="combobox"], [role="listbox"], [role="menu"], [role="tablist"]';
 
-export function isInteractiveDescendant(
+const INTERACTIVE_DESCENDANT_SELECTOR = `${NON_DRAGGABLE_INTERACTIVE_DESCENDANT_SELECTOR}, button, a[href]`;
+
+function matchesDescendantSelector(
   target: EventTarget | null,
   currentTarget: EventTarget | null,
+  selector: string,
 ): boolean {
   if (!target || target === currentTarget) {
     return false;
@@ -132,10 +135,28 @@ export function isInteractiveDescendant(
     target instanceof Element &&
     currentTarget instanceof Element
   ) {
-    const matched = target.closest(INTERACTIVE_DESCENDANT_SELECTOR);
+    const matched = target.closest(selector);
     return matched !== null && matched !== currentTarget && currentTarget.contains(matched);
   }
   return false;
+}
+
+export function isInteractiveDescendant(
+  target: EventTarget | null,
+  currentTarget: EventTarget | null,
+): boolean {
+  return matchesDescendantSelector(target, currentTarget, INTERACTIVE_DESCENDANT_SELECTOR);
+}
+
+export function isNonDraggableInteractiveDescendant(
+  target: EventTarget | null,
+  currentTarget: EventTarget | null,
+): boolean {
+  return matchesDescendantSelector(
+    target,
+    currentTarget,
+    NON_DRAGGABLE_INTERACTIVE_DESCENDANT_SELECTOR,
+  );
 }
 
 export function getInertValue(version: string = React.version): boolean | "" {
