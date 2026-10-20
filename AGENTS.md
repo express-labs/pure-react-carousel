@@ -17,6 +17,7 @@
 
 > Consult only when actively modifying the relevant subsystem; do not pre-read.
 - **Typescript:** `docs/TYPESCRIPT_STANDARDS.md`
+- **Accessibility (JSX/HTML):** `docs/ACCESSIBILITY_STANDARDS.md`
 - **Git & Branching Protocols**: `docs/GITHUB_CONVENTIONS.md`
   - Conventional & atomic commit requirements, branch prefixes for Release Please, and push restrictions (`main`/`master` protection).
 - **Pull Request Conventions**: `docs/PULL_REQUEST_CONVENTIONS.md`
