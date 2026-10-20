@@ -69,3 +69,6 @@ coverage.json
 
 # Machine-local agent sandbox lessons (never commit to repository)
 .agents/skills/sandbox-lessons/lessons/
+
+# Gemini makes .worktrees in the repository root
+.worktrees/
