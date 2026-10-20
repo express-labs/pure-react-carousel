@@ -189,6 +189,10 @@ You can attach your own `style` property to components in this library; however,
 
 You can supply your own event callbacks to any component.  Your event callbacks are called after a component's internal event handling.  Basically, your callback becomes a callback to our callback.  Say that 10 times fast. :-)
 
+#### ref
+
+All public and unconnected `*View` components in this library support `React.forwardRef` and forward `ref` to their underlying root DOM element.
+
 #### all other props
 
 Any remaining props not consumed by the component are passed directly to the root element of a component unless otherwise noted in that component's documentation. This makes all the components in this library HIGHLY configurable.  You can, for example, add your own event handlers, or change aria tags, etc.
@@ -245,7 +249,7 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | **children** | [string&#124;node] | | **Yes** | Children is a special React property. Basically, the Slider needs to wrap other components and/or JSX. |
-| ariaLabel | string | 'slider' | No | Optional string that sets the `aria-label` attribute. |
+| ariaLabel | string | 'slider' | No | Optional string that sets the `aria-label` attribute (omitted automatically when `aria-labelledby` is provided). |
 | backwardKeyCode | number | 37 | No | Key code for moving backward via keyboard (defaults to `37`, Left Arrow). |
 | forwardKeyCode | number | 39 | No | Key code for moving forward via keyboard (defaults to `39`, Right Arrow). |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
@@ -265,13 +269,14 @@ A Slider is a viewport that masks slides.  The Slider component must wrap one or
 | style | object | {} | No | Optional CSS styles to add to the Slider root element. |
 | trayProps | object | {} | No | Any props you want to attach to the slider tray element, with the exception of `className`, `style`, and `ref`. `className` is handled via `classNameTray`, and `style`/`ref` are managed internally. Event handlers such as `onMouseDown`, `onTouchStart`, `onTouchMove`, `onTouchEnd`, `onTouchCancel`, and `onClickCapture` are called after the Slider's internal event handlers. |
 | trayTag | string | 'div' | No | The HTML tag to use for the tray (the element that holds all the slides and moves them back and forth). |
+| trayWrapProps | object | {} | No | Additional HTML attributes or event handlers to attach to the tray wrapper `div` (excluding `className`, which is handled via `classNameTrayWrap`). |
 
 #### The Slider component creates the following pseudo HTML by default.
 
 ```HTML
-<div class="carousel__slider [carousel__slider--vertical|carousel__slider--horizontal] [props.className]" aria-live="polite" aria-label="[props.ariaLabel]" role="[props.role]" style="[props.style]" ...props>
-  <div class="carousel__slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal] [props.classNameTrayWrap]">
-    <props.trayTag|div class="carousel__slider-tray [props.classNameAnimation] [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]">
+<div class="carousel__slider [carousel__slider--vertical|carousel__slider--horizontal] [props.className]" aria-live="[off|polite]" aria-label="[props.ariaLabel]" role="[props.role]" style="[props.style]" ...props>
+  <div class="carousel__slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal] [props.classNameTrayWrap]" ...props.trayWrapProps>
+    <props.trayTag|div class="carousel__slider-tray [props.classNameAnimation] [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]" ...props.trayProps>
       [props.children]
     </props.trayTag|div>
     <div class="carousel__master-spinner-container">
@@ -357,7 +362,7 @@ Active and visible slides are tracked without timers using `IntersectionObserver
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
 | **children** | [string&#124;node] | | **Yes** | Children is a special React property. Basically, `NativeSlider` needs to wrap `<Slide />` components and/or JSX. |
-| ariaLabel | string | 'slider' | No | Optional string that sets the `aria-label` attribute. |
+| ariaLabel | string | 'slider' | No | Optional string that sets the `aria-label` attribute (omitted automatically when `aria-labelledby` is provided). |
 | backwardKeyCode | number | 37 | No | Key code for moving backward via keyboard (defaults to `37`, Left Arrow). |
 | forwardKeyCode | number | 39 | No | Key code for moving forward via keyboard (defaults to `39`, Right Arrow). |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's root className string. |
@@ -374,13 +379,14 @@ Active and visible slides are tracked without timers using `IntersectionObserver
 | tabIndex | number | undefined | No | Optional `tabIndex` passed through to the root slider element. |
 | trayProps | object | {} | No | Additional HTML attributes or event handlers to attach to the tray element (excluding `className`, `style`, and `ref`). |
 | trayTag | string | 'div' | No | The HTML tag to use for the inner tray element that holds the slides. |
+| trayWrapProps | object | {} | No | Additional HTML attributes or event handlers to attach to the scrollable tray wrapper `div` (excluding `className` and `ref`). |
 
 #### The NativeSlider component creates the following pseudo HTML by default:
 
 ```HTML
-<div class="carousel__slider carousel__native-slider [carousel__slider--vertical|carousel__slider--horizontal] [carousel__native-slider--vertical|carousel__native-slider--horizontal] [props.className]" aria-live="polite" aria-label="[props.ariaLabel]" role="[props.role]" style="[props.style]" ...props>
-  <div class="carousel__slider-tray-wrapper carousel__native-slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal] [carousel__native-slider-tray-wrapper--snap-mandatory|carousel__native-slider-tray-wrapper--snap-proximity|carousel__native-slider-tray-wrapper--snap-none] [carousel__native-slider-tray-wrapper--hide-scrollbar] [carousel__native-slider-tray-wrapper--smooth-scroll|carousel__native-slider-tray-wrapper--instant-scroll] [props.classNameTrayWrap]">
-    <props.trayTag|div class="carousel__slider-tray carousel__native-slider-tray [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]">
+<div class="carousel__slider carousel__native-slider [carousel__slider--vertical|carousel__slider--horizontal] [carousel__native-slider--vertical|carousel__native-slider--horizontal] [props.className]" aria-live="[off|polite]" aria-label="[props.ariaLabel]" role="[props.role]" style="[props.style]" ...props>
+  <div class="carousel__slider-tray-wrapper carousel__native-slider-tray-wrapper [carousel__slider-tray-wrap--vertical|carousel__slider-tray-wrap--horizontal] [carousel__native-slider-tray-wrapper--snap-mandatory|carousel__native-slider-tray-wrapper--snap-proximity|carousel__native-slider-tray-wrapper--snap-none] [carousel__native-slider-tray-wrapper--hide-scrollbar] [carousel__native-slider-tray-wrapper--smooth-scroll|carousel__native-slider-tray-wrapper--instant-scroll] [props.classNameTrayWrap]" ...props.trayWrapProps>
+    <props.trayTag|div class="carousel__slider-tray carousel__native-slider-tray [carousel__slider-tray--vertical|carousel__slider-tray--horizontal] [props.classNameTray]" ...props.trayProps>
       [props.children]
     </props.trayTag|div>
     <div class="carousel__master-spinner-container">
@@ -437,18 +443,21 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| ariaLabel | string | 'slide' | No | Optional string that sets the `aria-label` attribute. |
+| ariaLabel | string | 'slide' | No | Optional string that sets the `aria-label` attribute (omitted automatically when `aria-labelledby` is provided). |
 | children | [string&#124;node&#124;null] | null | No | Optional slide content. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | classNameHidden | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string when the slide is not visible. |
 | classNameVisible | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string when the slide is visible. |
+| focusRing | boolean | true | No | Renders `<div class="carousel__slide-focus-ring" />` inside the inner slide wrapper when the slide element itself is focused (`ev.target === ev.currentTarget`). Set to `false` to disable the inner focus ring element. |
 | **index** | number | | **Yes** | You must consecutively number the &lt;Slide /> components in order starting with zero. |
+| inert | boolean | `!isVisible` | No | Controls the HTML `inert` attribute on the slide element. Defaults to `true` when the slide is hidden (`!isVisible`) so off-screen interactive descendants are removed from the tab order and accessibility tree, or can be overridden explicitly. |
 | innerClassName | [string&#124;null] | null | No | Optional className string that will be appended to the inner slide wrapper element (`carousel__inner-slide`). |
+| innerProps | object | {} | No | Additional HTML attributes or event handlers to attach to the inner slide wrapper element (`innerTag`), excluding `className` (handled via `innerClassName`). |
 | innerTag | string | 'div' | No | The inner HTML element for each Slide. |
 | isIntrinsicHeight | boolean | false | No | Inherited from `<CarouselProvider />` or overridden on the Slide to use intrinsic height rather than aspect-ratio padding. |
 | onBlur | [function&#124;null] | null | No | Optional callback function that is called after the internal `onBlur` handler is called. Passed the React synthetic focus event. |
 | onFocus | [function&#124;null] | null | No | Optional callback function that is called after the internal `onFocus` handler is called. Passed the React synthetic focus event. |
-| role | string | 'option' | No | Optional string that sets the ARIA `role` attribute on the slide element. |
+| role | string | 'option' | No | Optional string that sets the ARIA `role` attribute on the slide element. Default `aria-selected` is only rendered when `role` is a selectable ARIA role (`'option'`, `'tab'`, `'gridcell'`, `'row'`, `'treeitem'`) or when `aria-selected` is explicitly passed. |
 | snapAlign | ['start'&#124;'center'&#124;'end'&#124;'none'] | 'start' | No | Inherited from `<CarouselProvider />` or overridden on the Slide to set CSS `scroll-snap-align` (`carousel__slide--snap-align-*`). |
 | snapStop | ['normal'&#124;'always'] | 'normal' | No | Inherited from `<CarouselProvider />` or overridden on the Slide to set CSS `scroll-snap-stop` (`carousel__slide--snap-stop-*`). |
 | style | object | {} | No | Optional CSS styles to merge onto the outer slide element. |
@@ -458,10 +467,10 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 #### The Slide component creates the following pseudo HTML by default:
 
 ```HTML
-<props.tag|div class="carousel__slide [carousel__slide--focused] [props.classNameVisible|props.classNameHidden] [carousel__slide--visible|carousel__slide--hidden] [carousel__slide--snap-align-start|carousel__slide--snap-align-center|carousel__slide--snap-align-end|carousel__slide--snap-align-none] [carousel__slide--snap-stop-normal|carousel__slide--snap-stop-always] [props.className]" aria-selected="[isVisible]" aria-label="[props.ariaLabel]" role="[props.role]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
-  <props.innerTag|div class="carousel__inner-slide [props.innerClassName]">
+<props.tag|div class="carousel__slide [carousel__slide--focused] [props.classNameVisible|props.classNameHidden] [carousel__slide--visible|carousel__slide--hidden] [carousel__slide--snap-align-start|carousel__slide--snap-align-center|carousel__slide--snap-align-end|carousel__slide--snap-align-none] [carousel__slide--snap-stop-normal|carousel__slide--snap-stop-always] [props.className]" aria-selected="[isVisible]" aria-hidden="[!isVisible]" inert="[!isVisible]" aria-label="[props.ariaLabel]" role="[props.role]" onFocus="[props.onFocus]" onBlur="[props.onBlur]" style="[props.style]" ...props>
+  <props.innerTag|div class="carousel__inner-slide [props.innerClassName]" ...props.innerProps>
     [props.children]
-    <!-- rendered when focused -->
+    <!-- rendered when the slide element itself is focused and focusRing !== false -->
     <div class="carousel__slide-focus-ring" />
   </props.innerTag|div>
 </props.tag|div>
@@ -469,7 +478,7 @@ The Slide component is a container with an intrinsic ratio computed by the Carou
 
 ### &lt;Dot />
 
-A Dot component is an HTML button. Dots directly correlate to slides. Clicking on a dot causes its correlating slide to scroll into the left-most visible slot of the slider. The dots for currently visible slides are automatically disabled unless overridden via the `disabled` prop.
+A Dot component is an HTML button. Dots directly correlate to slides. Clicking on a dot causes its correlating slide to scroll into the left-most visible slot of the slider. The dots for currently visible slides are automatically disabled unless overridden via the `disabled` prop. When `children` has no accessible text content and neither `aria-label` nor `aria-labelledby` is provided, `aria-label="slide dot"` is applied by default.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
@@ -497,6 +506,8 @@ A compound component that creates a group of `<Dot />` buttons automatically for
 | children | [string&#124;node&#124;null] | null | No | Any JSX wrapped by this component will appear AFTER the dots. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | dotNumbers | boolean | false | No | Setting to `true` automatically adds text numbers to the dot buttons starting at `1`. |
+| dotProps | object | {} | No | Additional props spread onto every default `<Dot />` rendered by `<DotGroup />`. |
+| getDotProps | [function&#124;null] | null | No | Optional callback `(index, isSelected) => Partial<DotProps>` returning per-dot props (such as `aria-label`, `aria-current`, or `role`) merged onto each default `<Dot />`. |
 | disableActiveDots | boolean | true | No | When `true` (default), dots for currently active/selected slides are disabled. Setting to `false` makes all dots, including active dots, enabled. |
 | showAsSelectedForCurrentSlideOnly | boolean | false | No | Setting to `true` shows only the `currentSlide` dot as selected, rather than all `visibleSlides`. |
 | renderDots | [function&#124;null] | null | No | Optional render function `(props) => ReactNode` that overrides the default dot rendering in &lt;DotGroup />. |
@@ -506,7 +517,7 @@ A compound component that creates a group of `<Dot />` buttons automatically for
 ```HTML
 <div class="carousel__dot-group [props.className]" ...props>
   <!-- button repeats for each slide -->
-  <button type="button" aria-label="slide dot" class="carousel__dot carousel__dot--[slide] [carousel__dot--selected]">
+  <button type="button" aria-label="slide dot" class="carousel__dot carousel__dot--[slide] [carousel__dot--selected]" ...props.dotProps ...props.getDotProps(index, isSelected)>
     <span class="carousel__dot-group-dot">[numbers or blank]</span>
   </button>
   [props.children]
@@ -519,7 +530,7 @@ An image component that preloads images in memory, applies loading/success/error
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
-| alt | string | '' | No | Specifies alternate text for an image if the image cannot be displayed. |
+| alt | string | '' | No | Specifies alternate text for an image if the image cannot be displayed. On non-`img` tags (such as `tag="div"` with `isBgImage`), a non-empty `alt` sets `role="img"` and `aria-label={alt}` once loaded unless `role`, `aria-label`, or `aria-labelledby` is explicitly provided. |
 | children | [string&#124;node&#124;null] | null | No | Any optional JSX wrapped by the Image component. |
 | className | [string&#124;null] | null | No | Optional className string that will be appended to the component's className string. |
 | hasMasterSpinner | boolean | false | No | Automatically inherited from `<CarouselProvider />` (or passed explicitly to `<ImageView />`). When `true`, the master spinner will cover the `<Slider />` viewport until all `<Image />` and `<ImageWithZoom />` components have finished loading. |
@@ -536,7 +547,7 @@ An image component that preloads images in memory, applies loading/success/error
 
 ```HTML
 <!-- While loading (or error): -->
-<div class="carousel__image [carousel__image--with-background] carousel__image--loading|carousel__image--error [props.className]" src="[props.src]" alt="[props.alt]" ...props>
+<div class="carousel__image [carousel__image--with-background] carousel__image--loading|carousel__image--error [props.className]" ...props>
   [props.renderLoading() | props.renderError() | props.children]
 </div>
 
@@ -544,14 +555,14 @@ An image component that preloads images in memory, applies loading/success/error
 <img class="carousel__image carousel__image--success [props.className]" src="[props.src]" alt="[props.alt]" style="[props.style]" ...props />
 
 <!-- When loaded with tag="div" and isBgImage: -->
-<div class="carousel__image carousel__image--with-background carousel__image--success [props.className]" style="background-image: url('[props.src]'); background-size: cover; [props.style]" ...props>
+<div class="carousel__image carousel__image--with-background carousel__image--success [props.className]" role="[img when props.alt is non-empty]" aria-label="[props.alt when non-empty]" style="background-image: url('[props.src]'); background-size: cover; [props.style]" ...props>
   [props.children]
 </div>
 ```
 
 ### &lt;ImageWithZoom />
 
-A compound component that wraps `<Image />` to provide hover zoom on desktop (mouse events) and two-finger pinch-to-zoom on touch devices.
+A compound component that wraps `<Image />` to provide hover zoom on desktop (mouse events), keyboard zoom and panning when focused via `overlayProps`, and two-finger pinch-to-zoom on touch devices.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
@@ -561,6 +572,7 @@ A compound component that wraps `<Image />` to provide hover zoom on desktop (mo
 | className | [string&#124;null] | null | No | Optional className string appended to the outer container element. |
 | imageClassName | [string&#124;null] | null | No | Optional className string appended to the base `<Image />` (`carousel__zoom-image`). |
 | overlayClassName | [string&#124;null] | null | No | Optional className string appended to the zoom overlay `<Image />` (`carousel__zoom-image-overlay`). |
+| overlayProps | object | {} | No | Additional HTML attributes or event handlers spread onto the zoom overlay element (supports keyboard zoom/pan via `Enter`/`Space`/`+`/`=` to toggle zoom, arrow keys to pan by 10%, and `Escape`/`-` to exit zoom). |
 | isPinchZoomEnabled | boolean | true | No | Enables two-finger pinch-to-zoom on touch-capable devices. |
 | onError | [function&#124;null] | null | No | Optional callback function called if the image fails to load. |
 | onLoad | [function&#124;null] | null | No | Optional callback function called when the image finishes loading. |
@@ -574,7 +586,7 @@ A compound component that wraps `<Image />` to provide hover zoom on desktop (mo
 ```HTML
 <props.tag|div class="[props.className]" ...props>
   <props.bgImageTag|div class="carousel__image carousel__zoom-image [props.imageClassName]" ...props.bgImageProps />
-  <div class="carousel__image carousel__image--with-background carousel__zoom-image-overlay [carousel__zoom-image-overlay--hovering] [carousel__zoom-image-overlay--zooming] [props.overlayClassName]" />
+  <div class="carousel__image carousel__image--with-background carousel__zoom-image-overlay [carousel__zoom-image-overlay--hovering] [carousel__zoom-image-overlay--zooming] [props.overlayClassName]" ...props.overlayProps />
   <!-- rendered while image is loading -->
   <div class="carousel__image-loading-spinner-container">
     <div class="carousel__spinner" />
@@ -598,7 +610,7 @@ The default loading spinner component used by `<Slider />` and `<ImageWithZoom /
 
 ### &lt;ButtonBack />
 
-A button for moving the slider backwards. Backwards on a horizontal carousel means "move to the left".  Backwards on a vertical carousel means "move to the top".  The slider will traverse an amount of slides determined by the step property of CarouselProvider.
+A button for moving the slider backwards. Backwards on a horizontal carousel means "move to the left".  Backwards on a vertical carousel means "move to the top".  The slider will traverse an amount of slides determined by the step property of CarouselProvider. When `children` has no accessible text content and neither `aria-label` nor `aria-labelledby` is provided, `aria-label="previous"` is applied by default.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
@@ -617,7 +629,7 @@ A button for moving the slider backwards. Backwards on a horizontal carousel mea
 
 ### &lt;ButtonNext />
 
-A button for moving the slider forwards. Forwards on a horizontal carousel means "move to the right".  Backwards on a vertical carousel means "move to the bottom".  The slider will traverse an amount of slides determined by the step property of CarouselProvider.
+A button for moving the slider forwards. Forwards on a horizontal carousel means "move to the right".  Backwards on a vertical carousel means "move to the bottom".  The slider will traverse an amount of slides determined by the step property of CarouselProvider. When `children` has no accessible text content and neither `aria-label` nor `aria-labelledby` is provided, `aria-label="next"` is applied by default.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
@@ -636,7 +648,7 @@ A button for moving the slider forwards. Forwards on a horizontal carousel means
 
 ### &lt;ButtonFirst />
 
-Moves the slider to the beginning of the slides.
+Moves the slider to the beginning of the slides. When `children` has no accessible text content and neither `aria-label` nor `aria-labelledby` is provided, `aria-label="first"` is applied by default.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
@@ -655,7 +667,7 @@ Moves the slider to the beginning of the slides.
 
 ### &lt;ButtonLast />
 
-Moves the slider to the end of the slides (totalSlides - visibleSlides).
+Moves the slider to the end of the slides (totalSlides - visibleSlides). When `children` has no accessible text content and neither `aria-label` nor `aria-labelledby` is provided, `aria-label="last"` is applied by default.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
@@ -674,7 +686,7 @@ Moves the slider to the end of the slides (totalSlides - visibleSlides).
 
 ### &lt;ButtonPlay />
 
-Pressing this button causes the slides to automatically advance by CarouselProvider's step property after an interval determined by CarouselProvider's interval property.
+Pressing this button causes the slides to automatically advance by CarouselProvider's step property after an interval determined by CarouselProvider's interval property. When the active content (`childrenPlaying` / `childrenPaused` and `children`) has no accessible text content and neither `aria-label` nor `aria-labelledby` is provided, `aria-label="play"` is applied by default.
 
 | property | type | default | required | purpose |
 | -------- | ---- | ------- | -------- | ------- |
