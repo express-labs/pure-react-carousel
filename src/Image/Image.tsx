@@ -131,9 +131,7 @@ const Image = Object.assign(
 
     const tempTag = tag === "img" ? "div" : tag;
 
-    const filteredProps = {
-      alt,
-      src,
+    const fallbackProps = {
       ...(style ? { style } : {}),
       ...restProps,
     };
@@ -150,7 +148,7 @@ const Image = Object.assign(
 
       return React.createElement(
         tempTag,
-        { ref, className: newClassName, ...filteredProps },
+        { ref, className: newClassName, ...fallbackProps },
         typeof renderLoading === "function" ? renderLoading() : children,
       );
     }
@@ -167,7 +165,7 @@ const Image = Object.assign(
 
       return React.createElement(
         tempTag,
-        { ref, className: newClassName, ...filteredProps },
+        { ref, className: newClassName, ...fallbackProps },
         typeof renderError === "function" ? renderError() : children,
       );
     }
@@ -181,11 +179,22 @@ const Image = Object.assign(
     ]);
 
     let newStyle: React.CSSProperties = { ...style };
-    let newFilteredProps: Record<string, unknown> = filteredProps;
+    let newFilteredProps: Record<string, unknown> = {
+      alt,
+      src,
+      ...restProps,
+    };
 
     if (tag !== "img") {
-      const { src: _src, alt: _alt, ...tempFilteredProps } = filteredProps;
-      newFilteredProps = tempFilteredProps;
+      const hasNonEmptyAlt = typeof alt === "string" && alt.length > 0;
+      const defaultRole = hasNonEmptyAlt ? "img" : undefined;
+      const defaultAriaLabel =
+        hasNonEmptyAlt && restProps["aria-labelledby"] === undefined ? alt : undefined;
+      newFilteredProps = {
+        ...(defaultRole ? { role: defaultRole } : {}),
+        ...(defaultAriaLabel ? { "aria-label": defaultAriaLabel } : {}),
+        ...restProps,
+      };
       newStyle = {
         ...style,
         backgroundImage: `url("${src}")`,

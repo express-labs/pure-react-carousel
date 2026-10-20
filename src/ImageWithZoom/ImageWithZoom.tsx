@@ -84,12 +84,62 @@ const ImageWithZoom = Object.assign(
       if (isZooming) return;
       setIsHovering(true);
       setScale(MOUSE_SCALE);
+      setX((prevX) => prevX ?? "50%");
+      setY((prevY) => prevY ?? "50%");
     };
 
     const handleOnMouseOut = () => {
       if (isZooming) return;
       setIsHovering(false);
       setScale(1);
+    };
+
+    const handleOnKeyDown = (ev: React.KeyboardEvent<HTMLElement>) => {
+      const { key } = ev;
+      const isCurrentlyZoomed = isHovering || isZooming;
+
+      if (key === "Enter" || key === " " || key === "+" || key === "=") {
+        ev.preventDefault();
+        if (isCurrentlyZoomed) {
+          setIsHovering(false);
+          setIsZooming(false);
+          setScale(1);
+        } else {
+          setIsHovering(true);
+          setScale(MOUSE_SCALE);
+          setX((prevX) => prevX ?? "50%");
+          setY((prevY) => prevY ?? "50%");
+        }
+        return;
+      }
+
+      if (isCurrentlyZoomed && (key === "Escape" || key === "-")) {
+        ev.preventDefault();
+        setIsHovering(false);
+        setIsZooming(false);
+        setScale(1);
+        return;
+      }
+
+      if (!isCurrentlyZoomed) return;
+
+      const currentX = parseFloat(x ?? "50%");
+      const currentY = parseFloat(y ?? "50%");
+      const panStep = 10;
+
+      if (key === "ArrowLeft") {
+        ev.preventDefault();
+        setX(pct(boundedRange({ min: 0, max: 100, x: currentX - panStep })));
+      } else if (key === "ArrowRight") {
+        ev.preventDefault();
+        setX(pct(boundedRange({ min: 0, max: 100, x: currentX + panStep })));
+      } else if (key === "ArrowUp") {
+        ev.preventDefault();
+        setY(pct(boundedRange({ min: 0, max: 100, x: currentY - panStep })));
+      } else if (key === "ArrowDown") {
+        ev.preventDefault();
+        setY(pct(boundedRange({ min: 0, max: 100, x: currentY + panStep })));
+      }
     };
 
     const handleOnMouseMove = (ev: React.MouseEvent<HTMLElement>) => {
@@ -207,6 +257,7 @@ const ImageWithZoom = Object.assign(
       className: overlayPropsClassName,
       style: overlayPropsStyle,
       onFocus: overlayOnFocus,
+      onKeyDown: overlayOnKeyDown,
       onMouseOver: overlayOnMouseOver,
       onBlur: overlayOnBlur,
       onMouseOut: overlayOnMouseOut,
@@ -232,7 +283,9 @@ const ImageWithZoom = Object.assign(
 
     const overlayStyle: React.CSSProperties = {};
     if (isHovering || isZooming) {
-      overlayStyle.transformOrigin = `${x} ${y}`;
+      if (x !== null && y !== null) {
+        overlayStyle.transformOrigin = `${x} ${y}`;
+      }
       overlayStyle.transform = `scale(${scale})`;
     }
     const mergedOverlayStyle: React.CSSProperties = {
@@ -261,6 +314,10 @@ const ImageWithZoom = Object.assign(
         onFocus={(ev: React.FocusEvent<HTMLImageElement>) => {
           handleOnMouseOver();
           overlayOnFocus?.(ev);
+        }}
+        onKeyDown={(ev: React.KeyboardEvent<HTMLImageElement>) => {
+          handleOnKeyDown(ev);
+          overlayOnKeyDown?.(ev);
         }}
         onMouseOver={(ev: React.MouseEvent<HTMLImageElement>) => {
           handleOnMouseOver();
