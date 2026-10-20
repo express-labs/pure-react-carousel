@@ -61,13 +61,14 @@ Track the current **Round Number (`1` to `4` max)**. For each round:
 1. **Wait via `schedule` Timer (Never Shell `sleep`)**:
    - Call the `schedule` tool with `DurationSeconds: 75` (and a prompt noting the PR number, trigger timestamp, and poll attempt `1..4`), then end your turn so the system wakes you when the timer fires.
 2. **Subagent Poll & Recon**:
-   - When the timer fires, invoke a `self` subagent (`TypeName: "self"`) to check for a new Copilot review submitted **after** the trigger comment timestamp (consulting [`sandbox-lessons`](../sandbox-lessons/SKILL.md) for `gh api`):
+   - When the timer fires, invoke a `self` subagent (`TypeName: "self"`) to check for a new Copilot review or comment response (`user.login == "Copilot"` or `copilot-pull-request-reviewer[bot]`) submitted **after** the trigger comment timestamp (consulting [`sandbox-lessons`](../sandbox-lessons/SKILL.md) for `gh api`):
+     - `gh api repos/express-labs/pure-react-carousel/issues/<num>/comments`
      - `gh api repos/express-labs/pure-react-carousel/pulls/<num>/reviews`
    - **If no new review has arrived yet**:
      - The subagent returns a 1-line `"PENDING"` status.
      - Schedule another `75s` timer (up to **4 poll attempts / ~5 minutes max** per round). If Copilot still hasn't responded after 4 attempts, stop and notify the user.
    - **Once the new Copilot review arrives**:
-     - Within the **same subagent invocation**, fetch the review threads (`gh api repos/express-labs/pure-react-carousel/pulls/<num>/comments`), inspect the referenced files/lines, and classify each comment using the [`address-pr-review`](../address-pr-review/SKILL.md) rubric:
+     - Within the **same subagent invocation**, fetch any inline review comments scoped strictly to the newly detected review (`gh api repos/express-labs/pure-react-carousel/pulls/<num>/reviews/<review_id>/comments`, or `gh api repos/express-labs/pure-react-carousel/pulls/<num>/comments` filtered by `pull_request_review_id == <review_id>` and `created_at > <trigger_timestamp>` so comments from earlier review rounds are never re-triaged), inspect the referenced files/lines, and classify each finding using the [`address-pr-review`](../address-pr-review/SKILL.md) rubric:
        1. **Worthwhile Fix**: Valid bug, reproducible edge case, missing test coverage, or low-cost clarity/safety improvement worth implementing.
        2. **Architectural Smell / Breaking Change**: Requires changing public API contracts (`src/types.ts`) in a breaking way or redesigning a core state machine with trade-offs that require user input.
        3. **Skip (Not Worth the Effort)**: Nitpick, false positive, already handled, out of scope, or contradicts project conventions (`docs/*.md`).
