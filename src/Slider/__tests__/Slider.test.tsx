@@ -1789,5 +1789,28 @@ describe("<Slider />", () => {
       );
       expect(trayWrap.style.border).toBe("1px solid red");
     });
+
+    it('should toggle default aria-live between "polite" and "off" based on isPlaying and omit default aria-label when aria-labelledby is set', () => {
+      const { container, rerender } = render(<Slider {...props} isPlaying={false} />);
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      expect(slider).toHaveAttribute("aria-live", "polite");
+      expect(slider).toHaveAttribute("aria-label", "slider");
+
+      rerender(<Slider {...props} isPlaying />);
+      expect(slider).toHaveAttribute("aria-live", "off");
+
+      rerender(<Slider {...props} isPlaying aria-live="assertive" />);
+      expect(slider).toHaveAttribute("aria-live", "assertive");
+
+      rerender(<Slider {...props} aria-labelledby="carousel-heading" />);
+      expect(slider).toHaveAttribute("aria-labelledby", "carousel-heading");
+      expect(slider.hasAttribute("aria-label")).toBe(false);
+
+      rerender(<Slider {...props} aria-label="Featured products" />);
+      expect(slider).toHaveAttribute("aria-label", "Featured products");
+
+      rerender(<Slider {...props} ariaLabel="Explicit slider ariaLabel" />);
+      expect(slider).toHaveAttribute("aria-label", "Explicit slider ariaLabel");
+    });
   });
 });

@@ -55,7 +55,7 @@ const TOUCH_COMPAT_MAX_DELAY_MS = 500;
 const Slider = Object.assign(
   React.forwardRef<HTMLDivElement, SliderViewProps>((props, ref) => {
     const {
-      ariaLabel = "slider",
+      ariaLabel,
       backwardKeyCode = 37,
       carouselStore,
       children,
@@ -1140,12 +1140,20 @@ const Slider = Object.assign(
       ...filteredTrayProps
     } = trayProps;
 
+    const defaultAriaLive = isPlaying ? "off" : "polite";
+    const resolvedAriaLabel =
+      ariaLabel !== undefined
+        ? ariaLabel
+        : restProps["aria-labelledby"] !== undefined
+          ? undefined
+          : "slider";
+
     return (
       <div
         ref={setSliderElementRef}
         className={sliderClasses}
-        aria-live="polite"
-        aria-label={ariaLabel}
+        aria-live={defaultAriaLive}
+        aria-label={resolvedAriaLabel}
         role={role}
         style={sliderStyle}
         onKeyDown={handleOnKeyDown}

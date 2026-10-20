@@ -7,7 +7,7 @@ import s from "./NativeSlider.scss";
 
 const NativeSlider = React.forwardRef<HTMLDivElement, NativeSliderViewProps>((props, ref) => {
   const {
-    ariaLabel = "slider",
+    ariaLabel,
     backwardKeyCode = 37,
     carouselStore,
     children,
@@ -647,12 +647,20 @@ const NativeSlider = React.forwardRef<HTMLDivElement, NativeSliderViewProps>((pr
     ...filteredTrayProps
   } = trayProps;
 
+  const defaultAriaLive = isPlaying ? "off" : "polite";
+  const resolvedAriaLabel =
+    ariaLabel !== undefined
+      ? ariaLabel
+      : restProps["aria-labelledby"] !== undefined
+        ? undefined
+        : "slider";
+
   return (
     <div
       ref={setSliderElementRef}
       className={sliderClasses}
-      aria-live="polite"
-      aria-label={ariaLabel}
+      aria-live={defaultAriaLive}
+      aria-label={resolvedAriaLabel}
       role={role}
       style={sliderStyle}
       tabIndex={tabIndex ?? undefined}

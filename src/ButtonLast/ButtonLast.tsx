@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../helpers";
+import { cn, hasAccessibleContent } from "../helpers";
 import type { ButtonLastViewProps } from "../types";
 import s from "./ButtonLast.scss";
 
@@ -34,12 +34,18 @@ const ButtonLast = React.forwardRef<HTMLButtonElement, ButtonLastViewProps>((pro
   };
 
   const newClassName = cn([s.buttonLast, "carousel__last-button", className]);
+  const defaultAriaLabel =
+    restProps["aria-label"] === undefined &&
+    restProps["aria-labelledby"] === undefined &&
+    !hasAccessibleContent(children)
+      ? "last"
+      : undefined;
 
   return (
     <button
       ref={ref}
       type="button"
-      aria-label="last"
+      aria-label={defaultAriaLabel}
       className={newClassName}
       onClick={handleOnClick}
       disabled={isDisabled}

@@ -1464,5 +1464,28 @@ describe("<NativeSlider />", () => {
       fireEvent.wheel(trayWrap);
       expect(onWheel).toHaveBeenCalledTimes(1);
     });
+
+    it('should toggle default aria-live between "polite" and "off" based on isPlaying and omit default aria-label when aria-labelledby is set', () => {
+      const { container, rerender } = render(<NativeSliderView {...props} isPlaying={false} />);
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      expect(slider).toHaveAttribute("aria-live", "polite");
+      expect(slider).toHaveAttribute("aria-label", "slider");
+
+      rerender(<NativeSliderView {...props} isPlaying />);
+      expect(slider).toHaveAttribute("aria-live", "off");
+
+      rerender(<NativeSliderView {...props} isPlaying aria-live="assertive" />);
+      expect(slider).toHaveAttribute("aria-live", "assertive");
+
+      rerender(<NativeSliderView {...props} aria-labelledby="native-carousel-heading" />);
+      expect(slider).toHaveAttribute("aria-labelledby", "native-carousel-heading");
+      expect(slider.hasAttribute("aria-label")).toBe(false);
+
+      rerender(<NativeSliderView {...props} aria-label="Featured native products" />);
+      expect(slider).toHaveAttribute("aria-label", "Featured native products");
+
+      rerender(<NativeSliderView {...props} ariaLabel="Explicit ariaLabel prop" />);
+      expect(slider).toHaveAttribute("aria-label", "Explicit ariaLabel prop");
+    });
   });
 });

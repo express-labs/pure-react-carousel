@@ -439,6 +439,10 @@ export interface DotGroupProps extends CarouselElement<"div"> {
   currentSlide?: number;
   /** Renders the 1-based slide number inside each generated `<Dot>`. @default false */
   dotNumbers?: boolean;
+  /** Additional props forwarded to every `<Dot>` rendered by the default dot list. */
+  dotProps?: Partial<DotProps>;
+  /** Callback returning per-dot props merged onto each `<Dot>` rendered by the default dot list. */
+  getDotProps?: (index: number, selected: boolean, slideIndex: number) => Partial<DotProps>;
   /** Disables `<Dot>` buttons that correspond to currently visible slides. @default true */
   disableActiveDots?: boolean;
   /**

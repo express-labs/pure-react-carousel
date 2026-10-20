@@ -61,4 +61,20 @@ describe("<ButtonFirst />", () => {
     expect(props.carouselStore.getStoreState().currentSlide).toBe(0);
     expect(props.carouselStore.getStoreState().isPlaying).toBe(true);
   });
+
+  it("should default aria-label to 'first' only when no children, aria-label, or aria-labelledby are provided", () => {
+    const { rerender } = render(<ButtonFirst {...props}>{undefined}</ButtonFirst>);
+    expect(screen.getByRole("button")).toHaveAttribute("aria-label", "first");
+
+    rerender(<ButtonFirst {...props}>First Slide</ButtonFirst>);
+    expect(screen.getByRole("button", { name: "First Slide" })).not.toHaveAttribute("aria-label");
+
+    rerender(
+      <ButtonFirst {...props} aria-labelledby="first-label">
+        {undefined}
+      </ButtonFirst>,
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+    expect(screen.getByRole("button")).toHaveAttribute("aria-labelledby", "first-label");
+  });
 });

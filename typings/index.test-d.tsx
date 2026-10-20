@@ -193,6 +193,11 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
   const dotProps: DotProps = { slide: 0, selected: true, disabled: false };
   const dotGroupProps: DotGroupProps = {
     dotNumbers: true,
+    dotProps: { role: "tab" },
+    getDotProps: (index, selected, slideIndex) => ({
+      "aria-label": `Slide ${index + 1} (${slideIndex})`,
+      "aria-selected": selected,
+    }),
     disableActiveDots: true,
     showAsSelectedForCurrentSlideOnly: false,
     renderDots: (dotsProps: DotGroupViewProps) => <div>{dotsProps.totalSlides}</div>,

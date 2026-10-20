@@ -16,9 +16,19 @@ const SNAP_STOP_CLASS_MAP: Record<ScrollSnapStop, string> = {
   always: s.snapStopAlways,
 };
 
+const SELECTABLE_ROLES = new Set([
+  "option",
+  "tab",
+  "gridcell",
+  "row",
+  "columnheader",
+  "rowheader",
+  "treeitem",
+]);
+
 const Slide = React.forwardRef<HTMLDivElement, SlideViewProps>((props, ref) => {
   const {
-    ariaLabel = "slide",
+    ariaLabel,
     carouselStore: _carouselStore = null,
     children = null,
     className = null,
@@ -131,12 +141,20 @@ const Slide = React.forwardRef<HTMLDivElement, SlideViewProps>((props, ref) => {
     ...innerPropsStyle,
   };
 
+  const defaultAriaSelected = SELECTABLE_ROLES.has(role) ? isVisible : undefined;
+  const resolvedAriaLabel =
+    ariaLabel !== undefined
+      ? ariaLabel
+      : restProps["aria-labelledby"] !== undefined
+        ? undefined
+        : "slide";
+
   return React.createElement(
     Tag,
     {
       ref,
-      "aria-selected": isVisible,
-      "aria-label": ariaLabel,
+      "aria-selected": defaultAriaSelected,
+      "aria-label": resolvedAriaLabel,
       role,
       onFocus: handleOnFocus,
       onBlur: handleOnBlur,

@@ -11,6 +11,8 @@ const DotGroup = React.forwardRef<HTMLDivElement, DotGroupViewProps>((props, ref
     className = undefined,
     currentSlide,
     dotNumbers = false,
+    dotProps = {},
+    getDotProps = null,
     disableActiveDots = true,
     showAsSelectedForCurrentSlideOnly = false,
     totalSlides,
@@ -35,6 +37,12 @@ const DotGroup = React.forwardRef<HTMLDivElement, DotGroupViewProps>((props, ref
       const singleSelected = i === currentSlide;
       const selected = showAsSelectedForCurrentSlideOnly ? singleSelected : multipleSelected;
       const slide = i >= totalSlides - visibleSlides ? totalSlides - visibleSlides : i;
+      const perDotProps = getDotProps ? getDotProps(i, selected, slide) : {};
+      const mergedDotClassName = cn([dotProps.className, perDotProps.className]) || undefined;
+      const { children: customDotChildren, ...restMergedDotProps } = {
+        ...dotProps,
+        ...perDotProps,
+      };
 
       dots.push(
         <Dot
@@ -42,8 +50,14 @@ const DotGroup = React.forwardRef<HTMLDivElement, DotGroupViewProps>((props, ref
           slide={slide}
           selected={selected}
           disabled={disableActiveDots ? selected : false}
+          {...restMergedDotProps}
+          className={mergedDotClassName}
         >
-          <span className={cn("carousel__dot-group-dot")}>{dotNumbers && i + 1}</span>
+          {customDotChildren !== undefined ? (
+            customDotChildren
+          ) : (
+            <span className={cn("carousel__dot-group-dot")}>{dotNumbers && i + 1}</span>
+          )}
         </Dot>,
       );
     }

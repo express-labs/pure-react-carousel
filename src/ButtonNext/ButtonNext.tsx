@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../helpers";
+import { cn, hasAccessibleContent } from "../helpers";
 import type { ButtonNextViewProps } from "../types";
 import s from "./ButtonNext.scss";
 
@@ -49,12 +49,18 @@ const ButtonNext = React.forwardRef<HTMLButtonElement, ButtonNextViewProps>((pro
   };
 
   const newClassName = cn([s.buttonNext, "carousel__next-button", className]);
+  const defaultAriaLabel =
+    restProps["aria-label"] === undefined &&
+    restProps["aria-labelledby"] === undefined &&
+    !hasAccessibleContent(children)
+      ? "next"
+      : undefined;
 
   return (
     <button
       ref={ref}
       type="button"
-      aria-label="next"
+      aria-label={defaultAriaLabel}
       className={newClassName}
       onClick={handleOnClick}
       disabled={isDisabled}

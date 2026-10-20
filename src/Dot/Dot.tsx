@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../helpers";
+import { cn, hasAccessibleContent } from "../helpers";
 import type { DotViewProps } from "../types";
 import s from "./Dot.scss";
 
@@ -45,11 +45,27 @@ const Dot = React.forwardRef<HTMLButtonElement, DotViewProps>((props, ref) => {
     isSelected && "carousel__dot--selected",
     className,
   ]);
+  const defaultAriaLabel =
+    restProps["aria-label"] === undefined &&
+    restProps["aria-labelledby"] === undefined &&
+    !hasAccessibleContent(children)
+      ? "slide dot"
+      : undefined;
+  const isSelectableRole = restProps.role === "tab" || restProps.role === "option";
+  const defaultAriaSelected = isSelectableRole ? isSelected : undefined;
+  const defaultAriaCurrent =
+    !isSelectableRole && restProps["aria-selected"] === undefined
+      ? isSelected
+        ? "true"
+        : undefined
+      : undefined;
 
   return (
     <button
       ref={ref}
-      aria-label="slide dot"
+      aria-label={defaultAriaLabel}
+      aria-selected={defaultAriaSelected}
+      aria-current={defaultAriaCurrent}
       type="button"
       onClick={handleOnClick}
       className={newClassName}

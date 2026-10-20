@@ -242,4 +242,20 @@ describe("<ButtonNext />", () => {
     expect(contextRef?.state.currentSlide).toBe(1);
     expect(contextRef?.state.isPlaying).toBe(true);
   });
+
+  it("should default aria-label to 'next' only when no children, aria-label, or aria-labelledby are provided", () => {
+    const { rerender } = render(<ButtonNext {...props}>{undefined}</ButtonNext>);
+    expect(screen.getByRole("button")).toHaveAttribute("aria-label", "next");
+
+    rerender(<ButtonNext {...props}>Next Slide</ButtonNext>);
+    expect(screen.getByRole("button", { name: "Next Slide" })).not.toHaveAttribute("aria-label");
+
+    rerender(
+      <ButtonNext {...props} aria-labelledby="next-label">
+        {undefined}
+      </ButtonNext>,
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+    expect(screen.getByRole("button")).toHaveAttribute("aria-labelledby", "next-label");
+  });
 });

@@ -1,9 +1,42 @@
+import * as React from "react";
 import type { ClassValue } from "../types";
 
 export type { ClassValue } from "../types";
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
+}
+
+export function hasAccessibleContent(node: unknown): boolean {
+  if (node === null || node === undefined || typeof node === "boolean") {
+    return false;
+  }
+  if (typeof node === "string") {
+    return node.trim().length > 0;
+  }
+  if (typeof node === "number") {
+    return true;
+  }
+  if (Array.isArray(node)) {
+    return node.some((item) => hasAccessibleContent(item));
+  }
+  if (React.isValidElement(node) && isRecord(node.props)) {
+    if (node.props["aria-hidden"] === true || node.props["aria-hidden"] === "true") {
+      return false;
+    }
+    if (
+      (typeof node.props["aria-label"] === "string" &&
+        node.props["aria-label"].trim().length > 0) ||
+      (typeof node.props["aria-labelledby"] === "string" &&
+        node.props["aria-labelledby"].trim().length > 0) ||
+      (typeof node.props.alt === "string" && node.props.alt.trim().length > 0) ||
+      (typeof node.props.title === "string" && node.props.title.trim().length > 0)
+    ) {
+      return true;
+    }
+    return hasAccessibleContent(node.props.children);
+  }
+  return false;
 }
 
 export function cn(...inputs: ClassValue[]): string {

@@ -241,4 +241,34 @@ describe("<Slide />", () => {
     expect(innerSlide.style.position).toBe("unset");
     expect(innerSlide.style.backgroundColor).toBe("rgb(255, 0, 0)");
   });
+
+  it("should only set default aria-selected for roles that support it and omit default aria-label when aria-labelledby is provided", () => {
+    const { container, rerender } = render(<Slide {...props} />);
+    const slide = container.querySelector(".carousel__slide") as HTMLElement;
+    // Default role="option" gets aria-selected
+    expect(slide).toHaveAttribute("role", "option");
+    expect(slide).toHaveAttribute("aria-selected", "true");
+    expect(slide).toHaveAttribute("aria-label", "slide");
+
+    // role="group" or role="tabpanel" should NOT receive aria-selected unless explicitly passed
+    rerender(<Slide {...props} role="group" aria-roledescription="slide" />);
+    expect(slide).toHaveAttribute("role", "group");
+    expect(slide.hasAttribute("aria-selected")).toBe(false);
+
+    rerender(<Slide {...props} role="tabpanel" />);
+    expect(slide.hasAttribute("aria-selected")).toBe(false);
+
+    // Explicit aria-selected is still respected
+    rerender(<Slide {...props} role="group" aria-selected={false} />);
+    expect(slide).toHaveAttribute("aria-selected", "false");
+
+    // aria-labelledby omits default aria-label="slide"
+    rerender(<Slide {...props} aria-labelledby="slide-heading-1" />);
+    expect(slide).toHaveAttribute("aria-labelledby", "slide-heading-1");
+    expect(slide.hasAttribute("aria-label")).toBe(false);
+
+    // Explicit ariaLabel prop is respected
+    rerender(<Slide {...props} ariaLabel="Custom slide label" />);
+    expect(slide).toHaveAttribute("aria-label", "Custom slide label");
+  });
 });
