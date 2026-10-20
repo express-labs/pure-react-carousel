@@ -140,6 +140,8 @@ export const PublicCarouselContractTest = (): React.ReactElement => {
     className: "custom-slide",
     classNameHidden: "hidden",
     classNameVisible: "visible",
+    focusRing: false,
+    inert: false,
     innerClassName: "inner",
     innerTag: "div",
     isIntrinsicHeight: true,

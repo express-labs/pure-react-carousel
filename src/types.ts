@@ -555,7 +555,7 @@ export interface ImageWithZoomProps extends Omit<CarouselElement<"div">, "onErro
 export interface ImageWithZoomViewProps extends ImageWithZoomProps, CarouselInjectedProps {}
 
 /** Props for the connected `<Slide>` component representing a single carousel item. */
-export interface SlideProps extends Omit<CarouselElement<"div">, "onBlur" | "onFocus"> {
+export interface SlideProps extends Omit<CarouselElement<"div">, "inert" | "onBlur" | "onFocus"> {
   /** Accessible `aria-label` applied to the outer slide element. @default "slide" */
   ariaLabel?: string;
   children?: React.ReactNode;
@@ -564,8 +564,12 @@ export interface SlideProps extends Omit<CarouselElement<"div">, "onBlur" | "onF
   classNameHidden?: string;
   /** Additional CSS class applied when the slide is within the visible `[currentSlide, currentSlide + visibleSlides)` window. */
   classNameVisible?: string;
+  /** Renders the built-in `.carousel__slide-focus-ring` overlay when the slide itself is focused. @default true */
+  focusRing?: boolean;
   /** Zero-based position index of this slide within the carousel (`0` to `totalSlides - 1`). */
   index: number;
+  /** Marks the slide as inert. Defaults to `true` when hidden (`!isVisible`) and `false` when visible. */
+  inert?: boolean;
   /** Additional CSS class applied to the inner slide wrapper element. */
   innerClassName?: string;
   /**

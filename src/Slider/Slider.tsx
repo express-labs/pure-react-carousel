@@ -2,7 +2,7 @@ import * as React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import GetScrollParent from "./GetScrollParent";
-import { cn, pct, boundedRange } from "../helpers";
+import { cn, isInteractiveDescendant, pct, boundedRange } from "../helpers";
 import type {
   MutableCarouselStatePatch,
   Orientation,
@@ -84,6 +84,7 @@ const Slider = Object.assign(
       moveThreshold = 0.1,
       naturalSlideHeight,
       naturalSlideWidth,
+      onKeyDown = null,
       onMasterSpinner = null,
       orientation,
       pauseOnInteract = true,
@@ -190,6 +191,7 @@ const Slider = Object.assign(
       isPlaying,
       lockOnWindowScroll,
       moveThreshold,
+      onKeyDown,
       orientation,
       pauseOnInteract,
       playDirection,
@@ -219,6 +221,7 @@ const Slider = Object.assign(
         isPlaying,
         lockOnWindowScroll,
         moveThreshold,
+        onKeyDown,
         orientation,
         pauseOnInteract,
         playDirection,
@@ -590,7 +593,9 @@ const Slider = Object.assign(
           callCallback("onMouseDown", ev);
           return;
         }
-        ev.preventDefault();
+        if (!isInteractiveDescendant(ev.target, ev.currentTarget)) {
+          ev.preventDefault();
+        }
         fakeOnDragStart({
           screenX: ev.screenX,
           screenY: ev.screenY,
@@ -867,12 +872,6 @@ const Slider = Object.assign(
       [updateDragState],
     );
 
-    const focus = useCallback(() => {
-      if (sliderElementRef.current) {
-        sliderElementRef.current.focus();
-      }
-    }, []);
-
     const handleOnKeyDown = useCallback(
       (ev: React.KeyboardEvent<HTMLDivElement>) => {
         const { keyCode } = ev;
@@ -883,40 +882,45 @@ const Slider = Object.assign(
           disableKeyboard: noKb,
           forwardKeyCode: fwdKey,
           isPlaying: playing,
+          onKeyDown: userOnKeyDown,
           pauseOnInteract: pauseOnInt,
           totalSlides: tot,
           visibleSlides: vis,
         } = latestPropsRef.current;
 
-        const newStoreState: MutableCarouselStatePatch = {};
+        const isInteractiveTarget = isInteractiveDescendant(ev.target, ev.currentTarget);
 
-        if (noKb === true || tot <= vis) return;
+        if (!ev.defaultPrevented && !isInteractiveTarget && noKb !== true && tot > vis) {
+          const newStoreState: MutableCarouselStatePatch = {};
 
-        if (keyCode === backKey) {
-          ev.preventDefault();
-          focus();
-          newStoreState.currentSlide = Math.max(0, cur - 1);
-          if (pauseOnInt) {
-            newStoreState.isPlaying = false;
-          } else if (playing) {
-            play();
+          if (keyCode === backKey) {
+            ev.preventDefault();
+            newStoreState.currentSlide = Math.max(0, cur - 1);
+            if (pauseOnInt) {
+              newStoreState.isPlaying = false;
+            } else if (playing) {
+              play();
+            }
+            store.setStoreState(newStoreState);
+          }
+
+          if (keyCode === fwdKey) {
+            ev.preventDefault();
+            newStoreState.currentSlide = Math.min(tot - vis, cur + 1);
+            if (pauseOnInt) {
+              newStoreState.isPlaying = false;
+            } else if (playing) {
+              play();
+            }
+            store.setStoreState(newStoreState);
           }
         }
 
-        if (keyCode === fwdKey) {
-          ev.preventDefault();
-          focus();
-          newStoreState.currentSlide = Math.min(tot - vis, cur + 1);
-          if (pauseOnInt) {
-            newStoreState.isPlaying = false;
-          } else if (playing) {
-            play();
-          }
+        if (typeof userOnKeyDown === "function") {
+          userOnKeyDown(ev);
         }
-
-        store.setStoreState(newStoreState);
       },
-      [focus, play],
+      [play],
     );
 
     const blockWindowScroll = useCallback((ev: TouchEvent) => {

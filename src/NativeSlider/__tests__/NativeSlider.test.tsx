@@ -1336,7 +1336,7 @@ describe("<NativeSlider />", () => {
       expect(fireEvent.keyDown(slider, { keyCode: 39 })).toBe(false);
       expect(store.getStoreState().currentSlide).toBe(0);
 
-      // disableKeyboard ignores key presses and does not prevent default
+      // disableKeyboard ignores key presses and does not prevent default, but still calls consumer onKeyDown
       rerender(
         <NativeSliderView
           {...props}
@@ -1345,12 +1345,53 @@ describe("<NativeSlider />", () => {
           totalSlides={4}
           visibleSlides={1}
           disableKeyboard
+          onKeyDown={onKeyDownSpy}
         >
           <div className="carousel__slide">Slide 0</div>
         </NativeSliderView>,
       );
+      onKeyDownSpy.mockClear();
       expect(fireEvent.keyDown(slider, { keyCode: 39 })).toBe(true);
       expect(store.getStoreState().currentSlide).toBe(0);
+      expect(onKeyDownSpy).toHaveBeenCalledTimes(1);
+
+      // Arrow keys inside interactive descendants or with defaultPrevented do not move slider, but still call consumer onKeyDown
+      rerender(
+        <NativeSliderView
+          {...props}
+          carouselStore={store}
+          currentSlide={0}
+          totalSlides={4}
+          visibleSlides={1}
+          onKeyDown={onKeyDownSpy}
+        >
+          <div className="carousel__slide">
+            <input data-testid="native-slide-input" type="text" />
+            <div data-testid="native-slide-custom-slider" role="slider" tabIndex={0} />
+            <div
+              data-testid="native-slide-prevented"
+              tabIndex={0}
+              onKeyDown={(ev) => ev.preventDefault()}
+            />
+          </div>
+        </NativeSliderView>,
+      );
+      onKeyDownSpy.mockClear();
+      const input = container.querySelector('[data-testid="native-slide-input"]') as HTMLElement;
+      const customSlider = container.querySelector(
+        '[data-testid="native-slide-custom-slider"]',
+      ) as HTMLElement;
+      const preventedEl = container.querySelector(
+        '[data-testid="native-slide-prevented"]',
+      ) as HTMLElement;
+
+      expect(fireEvent.keyDown(input, { keyCode: 39 })).toBe(true);
+      expect(store.getStoreState().currentSlide).toBe(0);
+      expect(fireEvent.keyDown(customSlider, { keyCode: 39 })).toBe(true);
+      expect(store.getStoreState().currentSlide).toBe(0);
+      fireEvent.keyDown(preventedEl, { keyCode: 39 });
+      expect(store.getStoreState().currentSlide).toBe(0);
+      expect(onKeyDownSpy).toHaveBeenCalledTimes(3);
     });
   });
 

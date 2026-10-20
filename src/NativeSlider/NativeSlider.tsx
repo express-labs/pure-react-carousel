@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useCallback, useEffect, useRef } from "react";
 import Spinner from "../Spinner";
-import { cn, pct, slideTraySize as calcSlideTraySize } from "../helpers";
+import { cn, isInteractiveDescendant, pct, slideTraySize as calcSlideTraySize } from "../helpers";
 import type { NativeSliderViewProps } from "../types";
 import s from "./NativeSlider.scss";
 
@@ -508,33 +508,36 @@ const NativeSlider = React.forwardRef<HTMLDivElement, NativeSliderViewProps>((pr
   };
 
   const handleOnKeyDown = (ev: React.KeyboardEvent<HTMLDivElement>) => {
-    if (disableKeyboard) return;
-    const { keyCode } = ev;
-    const maxSlide = Math.max(0, totalSlides - visibleSlides);
-    const nextState: { currentSlide?: number; isPlaying?: boolean } = {};
+    const isInteractiveTarget = isInteractiveDescendant(ev.target, ev.currentTarget);
 
-    if (pauseOnInteract) {
-      nextState.isPlaying = false;
-    }
+    if (!disableKeyboard && !ev.defaultPrevented && !isInteractiveTarget) {
+      const { keyCode } = ev;
+      const maxSlide = Math.max(0, totalSlides - visibleSlides);
+      const nextState: { currentSlide?: number; isPlaying?: boolean } = {};
 
-    if (keyCode === backwardKeyCode) {
-      ev.preventDefault();
-      if (currentSlide === 0 && infinite) {
-        nextState.currentSlide = maxSlide;
-      } else {
-        nextState.currentSlide = Math.max(0, currentSlide - 1);
+      if (pauseOnInteract) {
+        nextState.isPlaying = false;
       }
-      carouselStore.setStoreState(nextState);
-    }
 
-    if (keyCode === forwardKeyCode) {
-      ev.preventDefault();
-      if (currentSlide >= maxSlide && infinite) {
-        nextState.currentSlide = 0;
-      } else {
-        nextState.currentSlide = Math.min(maxSlide, currentSlide + 1);
+      if (keyCode === backwardKeyCode) {
+        ev.preventDefault();
+        if (currentSlide === 0 && infinite) {
+          nextState.currentSlide = maxSlide;
+        } else {
+          nextState.currentSlide = Math.max(0, currentSlide - 1);
+        }
+        carouselStore.setStoreState(nextState);
       }
-      carouselStore.setStoreState(nextState);
+
+      if (keyCode === forwardKeyCode) {
+        ev.preventDefault();
+        if (currentSlide >= maxSlide && infinite) {
+          nextState.currentSlide = 0;
+        } else {
+          nextState.currentSlide = Math.min(maxSlide, currentSlide + 1);
+        }
+        carouselStore.setStoreState(nextState);
+      }
     }
 
     if (typeof onKeyDown === "function") {

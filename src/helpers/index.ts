@@ -116,3 +116,28 @@ export function cleanProps<T extends Record<string, unknown>>(props: T): Omit<T,
   const { carouselStore: _carouselStore, ...rest } = props;
   return rest;
 }
+
+const INTERACTIVE_DESCENDANT_SELECTOR =
+  'input, textarea, select, button, a[href], audio, video, [contenteditable]:not([contenteditable="false"]), [role="slider"], [role="spinbutton"], [role="textbox"], [role="combobox"], [role="listbox"], [role="menu"], [role="tablist"]';
+
+export function isInteractiveDescendant(
+  target: EventTarget | null,
+  currentTarget: EventTarget | null,
+): boolean {
+  if (!target || target === currentTarget) {
+    return false;
+  }
+  if (
+    typeof Element !== "undefined" &&
+    target instanceof Element &&
+    currentTarget instanceof Element
+  ) {
+    const matched = target.closest(INTERACTIVE_DESCENDANT_SELECTOR);
+    return matched !== null && matched !== currentTarget && currentTarget.contains(matched);
+  }
+  return false;
+}
+
+export function getInertValue(version: string = React.version): boolean | "" {
+  return parseInt(version, 10) >= 19 ? true : "";
+}

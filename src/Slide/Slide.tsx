@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { cn, pct } from "../helpers";
+import { cn, getInertValue, pct } from "../helpers";
 import type { ScrollSnapAlign, ScrollSnapStop, SlideViewProps } from "../types";
 import s from "./Slide.scss";
 
@@ -35,7 +35,9 @@ const Slide = React.forwardRef<HTMLDivElement, SlideViewProps>((props, ref) => {
     classNameHidden = null,
     classNameVisible = null,
     currentSlide,
+    focusRing = true,
     index,
+    inert: inertProp,
     innerClassName = null,
     innerProps = {},
     innerTag: InnerTag = "div",
@@ -61,21 +63,25 @@ const Slide = React.forwardRef<HTMLDivElement, SlideViewProps>((props, ref) => {
   const isVisible = index >= currentSlide && index < currentSlide + visibleSlides;
 
   const handleOnFocus = (ev: React.FocusEvent<HTMLElement>) => {
-    setFocused(true);
+    if (ev.target === ev.currentTarget) {
+      setFocused(true);
+    }
     if (onFocus !== null) {
       onFocus(ev);
     }
   };
 
   const handleOnBlur = (ev: React.FocusEvent<HTMLElement>) => {
-    setFocused(false);
+    if (ev.target === ev.currentTarget) {
+      setFocused(false);
+    }
     if (onBlur !== null) {
       onBlur(ev);
     }
   };
 
   const renderFocusRing = () => {
-    if (focused) {
+    if (focused && focusRing) {
       return <div className={[s.focusRing, "carousel__slide-focus-ring"].join(" ")} />;
     }
     return null;
@@ -141,6 +147,9 @@ const Slide = React.forwardRef<HTMLDivElement, SlideViewProps>((props, ref) => {
     ...innerPropsStyle,
   };
 
+  const defaultAriaHidden = !isVisible ? "true" : undefined;
+  const shouldBeInert = inertProp !== undefined ? Boolean(inertProp) : !isVisible;
+  const resolvedInert = shouldBeInert ? getInertValue() : undefined;
   const defaultAriaSelected = SELECTABLE_ROLES.has(role) ? isVisible : undefined;
   const resolvedAriaLabel =
     ariaLabel !== undefined
@@ -153,8 +162,10 @@ const Slide = React.forwardRef<HTMLDivElement, SlideViewProps>((props, ref) => {
     Tag,
     {
       ref,
+      "aria-hidden": defaultAriaHidden,
       "aria-selected": defaultAriaSelected,
       "aria-label": resolvedAriaLabel,
+      inert: resolvedInert,
       role,
       onFocus: handleOnFocus,
       onBlur: handleOnBlur,

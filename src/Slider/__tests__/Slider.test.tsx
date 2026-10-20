@@ -1454,6 +1454,106 @@ describe("<Slider />", () => {
       fireEvent.keyDown(slider, { keyCode: 39 });
       expect(carouselStore.state.currentSlide).toBe(0);
     });
+
+    it("should ignore arrow keys from interactive descendants or defaultPrevented events, preserve child focus, and always chain consumer onKeyDown", () => {
+      const onKeyDown = vi.fn();
+      const carouselStore = new Store({ currentSlide: 1 });
+      const { container, getByTestId, rerender } = render(
+        <Slider {...props} currentSlide={1} carouselStore={carouselStore} onKeyDown={onKeyDown}>
+          <div className="carousel__slide">
+            <input data-testid="slide-input" type="text" />
+            <textarea data-testid="slide-textarea" />
+            <select data-testid="slide-select">
+              <option value="a">A</option>
+            </select>
+            <button data-testid="slide-button" type="button">
+              Btn
+            </button>
+            <a data-testid="slide-link" href="#test">
+              Link
+            </a>
+            <div data-testid="slide-custom-slider" role="slider" aria-valuenow={50} tabIndex={0} />
+            <div
+              data-testid="slide-prevented"
+              tabIndex={0}
+              onKeyDown={(ev) => ev.preventDefault()}
+            />
+          </div>
+        </Slider>,
+      );
+
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      const input = getByTestId("slide-input");
+      const textarea = getByTestId("slide-textarea");
+      const select = getByTestId("slide-select");
+      const button = getByTestId("slide-button");
+      const link = getByTestId("slide-link");
+      const customSlider = getByTestId("slide-custom-slider");
+      const preventedEl = getByTestId("slide-prevented");
+
+      // Arrow keys inside interactive elements should NOT change currentSlide or preventDefault
+      for (const el of [input, textarea, select, button, link, customSlider]) {
+        const notPrevented = fireEvent.keyDown(el, { keyCode: 39 });
+        expect(notPrevented).toBe(true);
+        expect(carouselStore.state.currentSlide).toBe(1);
+      }
+      expect(onKeyDown).toHaveBeenCalledTimes(6);
+
+      // Event with defaultPrevented already set by child should NOT change currentSlide
+      fireEvent.keyDown(preventedEl, { keyCode: 39 });
+      expect(carouselStore.state.currentSlide).toBe(1);
+      expect(onKeyDown).toHaveBeenCalledTimes(7);
+
+      // Pressing arrow key on slider itself navigates without stealing focus from activeElement
+      input.focus();
+      expect(document.activeElement).toBe(input);
+      const focusSpy = vi.spyOn(slider, "focus");
+      fireEvent.keyDown(slider, { keyCode: 39 });
+      expect(carouselStore.state.currentSlide).toBe(2);
+      expect(focusSpy).not.toHaveBeenCalled();
+      expect(document.activeElement).toBe(input);
+      expect(onKeyDown).toHaveBeenCalledTimes(8);
+
+      // Consumer onKeyDown is still called when disableKeyboard is true
+      rerender(
+        <Slider
+          {...props}
+          currentSlide={2}
+          disableKeyboard
+          carouselStore={carouselStore}
+          onKeyDown={onKeyDown}
+        />,
+      );
+      fireEvent.keyDown(slider, { keyCode: 39 });
+      expect(carouselStore.state.currentSlide).toBe(2);
+      expect(onKeyDown).toHaveBeenCalledTimes(9);
+    });
+
+    it("should not call preventDefault on mousedown when target is inside an interactive descendant", () => {
+      const { container, getByTestId } = render(
+        <Slider {...props} dragEnabled>
+          <div className="carousel__slide" data-testid="non-interactive-slide">
+            <input data-testid="child-input" type="text" />
+            <button data-testid="child-button" type="button">
+              Btn
+            </button>
+          </div>
+        </Slider>,
+      );
+
+      const tray = container.querySelector(".carousel__slider-tray") as HTMLElement;
+      const nonInteractiveSlide = getByTestId("non-interactive-slide");
+      const childInput = getByTestId("child-input");
+      const childButton = getByTestId("child-button");
+
+      // Mousedown on tray or non-interactive slide prevents default when dragEnabled is true
+      expect(fireEvent.mouseDown(tray, { screenX: 10, screenY: 10 })).toBe(false);
+      expect(fireEvent.mouseDown(nonInteractiveSlide, { screenX: 10, screenY: 10 })).toBe(false);
+
+      // Mousedown on interactive child does NOT prevent default so focus and text selection work
+      expect(fireEvent.mouseDown(childInput, { screenX: 10, screenY: 10 })).toBe(true);
+      expect(fireEvent.mouseDown(childButton, { screenX: 10, screenY: 10 })).toBe(true);
+    });
   });
 
   describe("autoplay (play / stop / playForward / playBackward)", () => {

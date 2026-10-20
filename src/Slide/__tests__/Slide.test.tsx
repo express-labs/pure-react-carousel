@@ -4,6 +4,7 @@ import { describe, it, expect, beforeEach, vi } from "vite-plus/test";
 import ConnectedSlide from "..";
 import Slide from "../Slide";
 import CarouselProvider from "../../CarouselProvider";
+import { getInertValue, isInteractiveDescendant } from "../../helpers";
 import type { SlideViewProps } from "../../types";
 
 describe("<Slide />", () => {
@@ -270,5 +271,90 @@ describe("<Slide />", () => {
     // Explicit ariaLabel prop is respected
     rerender(<Slide {...props} ariaLabel="Custom slide label" />);
     expect(slide).toHaveAttribute("aria-label", "Custom slide label");
+  });
+
+  it("should default hidden slides to aria-hidden='true' and inert, omit them on visible slides, and allow explicit overrides", () => {
+    // Visible slide (index=1, currentSlide=1, visibleSlides=1)
+    const { container, rerender } = render(<Slide {...props} currentSlide={1} index={1} />);
+    const slide = container.querySelector(".carousel__slide") as HTMLElement;
+    expect(slide.hasAttribute("aria-hidden")).toBe(false);
+    expect(slide.hasAttribute("inert")).toBe(false);
+
+    // Hidden slide (index=0, currentSlide=1, visibleSlides=1)
+    rerender(<Slide {...props} currentSlide={1} index={0} />);
+    expect(slide).toHaveAttribute("aria-hidden", "true");
+    expect(slide.hasAttribute("inert")).toBe(true);
+
+    // Explicit overrides on hidden slide
+    rerender(<Slide {...props} currentSlide={1} index={0} aria-hidden="false" inert={false} />);
+    expect(slide).toHaveAttribute("aria-hidden", "false");
+    expect(slide.hasAttribute("inert")).toBe(false);
+
+    // Explicit overrides on visible slide
+    rerender(<Slide {...props} currentSlide={1} index={1} aria-hidden="true" inert />);
+    expect(slide).toHaveAttribute("aria-hidden", "true");
+    expect(slide.hasAttribute("inert")).toBe(true);
+
+    // Helper coverage for React <19 inert fallback and non-Element targets
+    expect(getInertValue("19.0.0")).toBe(true);
+    expect(getInertValue("18.3.1")).toBe("");
+    expect(isInteractiveDescendant(null, slide)).toBe(false);
+    expect(isInteractiveDescendant(window, slide)).toBe(false);
+  });
+
+  it("should only activate slide focus state and focus ring when the slide itself is focused, and respect focusRing={false}", () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const { container, getByTestId, rerender } = render(
+      <Slide {...props} onFocus={onFocus} onBlur={onBlur}>
+        <button type="button" data-testid="child-btn">
+          Click me
+        </button>
+      </Slide>,
+    );
+    const slide = container.querySelector(".carousel__slide") as HTMLElement;
+    const childBtn = getByTestId("child-btn");
+
+    // Focusing a child element should NOT mark the slide as focused or show the slide focus ring,
+    // but should still forward the bubbled focus/blur event to consumer callbacks.
+    fireEvent.focus(childBtn);
+    expect(onFocus).toHaveBeenCalledTimes(1);
+    expect(slide).not.toHaveClass("carousel__slide--focused");
+    expect(container.querySelector(".carousel__slide-focus-ring")).not.toBeInTheDocument();
+
+    fireEvent.blur(childBtn);
+    expect(onBlur).toHaveBeenCalledTimes(1);
+
+    // Focusing the slide itself sets focused state and renders focus ring by default
+    fireEvent.focus(slide);
+    expect(slide).toHaveClass("carousel__slide--focused");
+    expect(container.querySelector(".carousel__slide-focus-ring")).toBeInTheDocument();
+
+    // Blurring a child while the slide was focused should NOT clear slide focus unless slide itself blurs
+    fireEvent.blur(childBtn);
+    expect(slide).toHaveClass("carousel__slide--focused");
+    fireEvent.blur(slide);
+    expect(slide).not.toHaveClass("carousel__slide--focused");
+    expect(container.querySelector(".carousel__slide-focus-ring")).not.toBeInTheDocument();
+
+    // focusRing={false} suppresses rendering .carousel__slide-focus-ring when slide is focused
+    rerender(
+      <Slide {...props} focusRing={false}>
+        <button type="button" data-testid="child-btn">
+          Click me
+        </button>
+      </Slide>,
+    );
+    fireEvent.focus(slide);
+    expect(slide).toHaveClass("carousel__slide--focused");
+    expect(container.querySelector(".carousel__slide-focus-ring")).not.toBeInTheDocument();
+  });
+
+  it("should not use !important on .slide:focus outline in Slide.scss", async () => {
+    const sass = await import("sass");
+    const path = await import("node:path");
+    const compiled = sass.compile(path.resolve(import.meta.dirname, "../Slide.scss"));
+    expect(compiled.css).toMatch(/\.slide:focus\s*\{\s*outline:\s*none;\s*\}/);
+    expect(compiled.css).not.toMatch(/!important/);
   });
 });
