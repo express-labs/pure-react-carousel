@@ -70,7 +70,7 @@ const getBadgeClassName = (status: string): string => {
 };
 
 const defaultCompatibilityData: CompatibilityReportData = {
-  ...(rawCompatibilityData as CompatibilityReportData),
+  ...rawCompatibilityData,
   packageVersion: pkg.version,
   peerDependencies: pkg.peerDependencies,
 };

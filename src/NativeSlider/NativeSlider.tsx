@@ -95,7 +95,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
 
   const getSlideIndexFromElement = useCallback(
     (target: Element | null): number =>
-      target ? getSlideElements().indexOf(target as HTMLElement) : -1,
+      target ? getSlideElements().findIndex((slide) => slide === target) : -1,
     [getSlideElements],
   );
 
@@ -194,14 +194,14 @@ const NativeSlider = (props: NativeSliderViewProps) => {
         let hasValidSlideEntry = false;
 
         for (const entry of entries) {
-          const idx = slides.indexOf(entry.target as HTMLElement);
+          const idx = slides.findIndex((slide) => slide === entry.target);
           if (idx < 0) continue;
           hasValidSlideEntry = true;
 
           if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
             slideRatios.set(entry.target, entry.intersectionRatio);
             slideRatios.forEach((_, otherTarget) => {
-              const otherIdx = slides.indexOf(otherTarget as HTMLElement);
+              const otherIdx = slides.findIndex((slide) => slide === otherTarget);
               if (Math.abs(otherIdx - idx) >= visibleCount) {
                 slideRatios.delete(otherTarget);
               }
@@ -274,10 +274,10 @@ const NativeSlider = (props: NativeSliderViewProps) => {
 
     const handleScrollSnapChange = (ev: Event) => {
       if (snapType === "none") return;
-      const snapEvent = ev as Event & {
+      const snapEvent: Event & {
         snapTargetInline?: Element | null;
         snapTargetBlock?: Element | null;
-      };
+      } = ev;
       const targetElement =
         orientation === "vertical" ? snapEvent.snapTargetBlock : snapEvent.snapTargetInline;
       const slideIndex = resolveSnapTargetIndex(targetElement ?? null);
@@ -620,8 +620,6 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     ...filteredTrayProps
   } = trayProps;
 
-  const TrayElement = TrayTag as React.ElementType;
-
   return (
     <div
       ref={sliderElementRef}
@@ -642,9 +640,11 @@ const NativeSlider = (props: NativeSliderViewProps) => {
         onTouchStart={handleUserScrollInteract}
         onWheel={handleUserScrollInteract}
       >
-        <TrayElement ref={trayRef} className={trayClasses} style={trayStyle} {...filteredTrayProps}>
-          {children}
-        </TrayElement>
+        {React.createElement(
+          TrayTag,
+          { ref: trayRef, className: trayClasses, style: trayStyle, ...filteredTrayProps },
+          children,
+        )}
         {renderMasterSpinner()}
       </div>
     </div>

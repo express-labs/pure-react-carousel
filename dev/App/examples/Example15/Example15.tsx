@@ -23,7 +23,7 @@ const SLIDES = [
   { index: 5, image: "./media/img06.jpeg", title: "Slide 6" },
 ];
 
-const Example15: React.ElementType = () => {
+const Example15 = () => {
   const [threshold, setThreshold] = useState<number>(5);
   const [clickCount, setClickCount] = useState<number>(0);
   const [lastAction, setLastAction] = useState<string>("No slide buttons or links clicked yet.");

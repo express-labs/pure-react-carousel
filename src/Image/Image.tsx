@@ -110,7 +110,8 @@ const Image = (props: ImageViewProps) => {
     img.addEventListener("error", handleImageError, false);
     img.src = src;
 
-    if ((img as HTMLImageElement & { readyState?: string }).readyState || img.complete) {
+    const imgWithReadyState: HTMLImageElement & { readyState?: string } = img;
+    if (imgWithReadyState.readyState || img.complete) {
       const currentSrc = img.src;
       img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
       img.src = currentSrc;
@@ -127,8 +128,7 @@ const Image = (props: ImageViewProps) => {
     };
   }, [src]);
 
-  const tempTag = (tag === "img" ? "div" : tag) as React.ElementType;
-  const FinalTag = tag as React.ElementType;
+  const tempTag = tag === "img" ? "div" : tag;
 
   const filteredProps = {
     alt,
@@ -138,7 +138,6 @@ const Image = (props: ImageViewProps) => {
   };
 
   if (imageStatus === LOADING) {
-    const LoadingTag = tempTag;
     const newClassName = cn([
       s.image,
       s.imageLoading,
@@ -148,15 +147,14 @@ const Image = (props: ImageViewProps) => {
       className,
     ]);
 
-    return (
-      <LoadingTag className={newClassName} {...filteredProps}>
-        {typeof renderLoading === "function" ? renderLoading() : children}
-      </LoadingTag>
+    return React.createElement(
+      tempTag,
+      { className: newClassName, ...filteredProps },
+      typeof renderLoading === "function" ? renderLoading() : children,
     );
   }
 
   if (imageStatus === ERROR) {
-    const ErrorTag = tempTag;
     const newClassName = cn([
       s.image,
       s.imageError,
@@ -166,10 +164,10 @@ const Image = (props: ImageViewProps) => {
       className,
     ]);
 
-    return (
-      <ErrorTag className={newClassName} {...filteredProps}>
-        {typeof renderError === "function" ? renderError() : children}
-      </ErrorTag>
+    return React.createElement(
+      tempTag,
+      { className: newClassName, ...filteredProps },
+      typeof renderError === "function" ? renderError() : children,
     );
   }
 
@@ -194,10 +192,10 @@ const Image = (props: ImageViewProps) => {
     };
   }
 
-  return (
-    <FinalTag className={newClassName} style={newStyle} {...newFilteredProps}>
-      {children}
-    </FinalTag>
+  return React.createElement(
+    tag,
+    { className: newClassName, style: newStyle, ...newFilteredProps },
+    children,
   );
 };
 

@@ -24,7 +24,7 @@ const SLIDES = [
   { index: 5, image: "./media/img06.jpeg" },
 ];
 
-const Example16: React.ElementType = () => {
+const Example16 = () => {
   const [disableAnimation, setDisableAnimation] = useState<boolean>(true);
 
   return (

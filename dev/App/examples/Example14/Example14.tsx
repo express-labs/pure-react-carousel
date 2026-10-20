@@ -14,7 +14,7 @@ import {
 import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
-const Example14: React.ElementType = () => (
+const Example14 = () => (
   <div dir="rtl">
     <CarouselProvider
       visibleSlides={2}

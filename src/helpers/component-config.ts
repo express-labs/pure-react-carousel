@@ -1,10 +1,6 @@
-import type {
-  Orientation,
-  PlayDirection,
-  ScrollSnapAlign,
-  ScrollSnapStop,
-  ScrollSnapType,
-} from "../types";
+import type { DefaultCarouselConfig } from "../types";
+
+export type { DefaultCarouselConfig } from "../types";
 
 // Calculates the width (horizontal) or height (vertical) of each slide as a percentage of the slideTray
 export const slideSize = (totalSlides: number, _visibleSlides?: number): number =>
@@ -13,32 +9,6 @@ export const slideSize = (totalSlides: number, _visibleSlides?: number): number 
 // Calculates the width (horizontal) or height (vertical) of the slideTray as a % of the viewport.
 export const slideTraySize = (totalSlides: number, visibleSlides: number): number =>
   (100 * totalSlides) / visibleSlides;
-
-export interface DefaultCarouselConfig {
-  currentSlide: number;
-  disableAnimation: boolean;
-  disableKeyboard: boolean;
-  dragEnabled: boolean;
-  hasMasterSpinner: boolean;
-  infinite: boolean;
-  interval: number;
-  isIntrinsicHeight: boolean;
-  isPageScrollLocked: boolean;
-  isPlaying: boolean;
-  lockOnWindowScroll: boolean;
-  orientation: Orientation;
-  pauseOnInteract: boolean;
-  playDirection: PlayDirection;
-  privateUnDisableAnimation: boolean;
-  snapAlign: ScrollSnapAlign;
-  snapStop: ScrollSnapStop;
-  snapType: ScrollSnapType;
-  step: number;
-  dragStep: number;
-  tag: "div";
-  touchEnabled: boolean;
-  visibleSlides: number;
-}
 
 export const defaultProps: DefaultCarouselConfig = {
   currentSlide: 0,

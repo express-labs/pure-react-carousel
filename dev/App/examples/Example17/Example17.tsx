@@ -26,6 +26,15 @@ const SLIDES = [
   { index: 5, image: "./media/img06.jpeg" },
 ];
 
+const isScrollSnapType = (value: string): value is ScrollSnapType =>
+  value === "mandatory" || value === "proximity" || value === "none";
+
+const isScrollSnapAlign = (value: string): value is ScrollSnapAlign =>
+  value === "start" || value === "center" || value === "end" || value === "none";
+
+const isScrollSnapStop = (value: string): value is ScrollSnapStop =>
+  value === "normal" || value === "always";
+
 const Example17 = () => {
   const [snapType, setSnapType] = useState<ScrollSnapType>("mandatory");
   const [snapAlign, setSnapAlign] = useState<ScrollSnapAlign>("start");
@@ -68,7 +77,11 @@ const Example17 = () => {
                 id="native-slider-snap-type"
                 className={s.select}
                 value={snapType}
-                onChange={(ev) => setSnapType(ev.target.value as ScrollSnapType)}
+                onChange={(ev) => {
+                  if (isScrollSnapType(ev.target.value)) {
+                    setSnapType(ev.target.value);
+                  }
+                }}
               >
                 <option value="mandatory">mandatory</option>
                 <option value="proximity">proximity</option>
@@ -83,7 +96,11 @@ const Example17 = () => {
                 id="native-slider-snap-align"
                 className={s.select}
                 value={snapAlign}
-                onChange={(ev) => setSnapAlign(ev.target.value as ScrollSnapAlign)}
+                onChange={(ev) => {
+                  if (isScrollSnapAlign(ev.target.value)) {
+                    setSnapAlign(ev.target.value);
+                  }
+                }}
               >
                 <option value="start">start</option>
                 <option value="center">center</option>
@@ -99,7 +116,11 @@ const Example17 = () => {
                 id="native-slider-snap-stop"
                 className={s.select}
                 value={snapStop}
-                onChange={(ev) => setSnapStop(ev.target.value as ScrollSnapStop)}
+                onChange={(ev) => {
+                  if (isScrollSnapStop(ev.target.value)) {
+                    setSnapStop(ev.target.value);
+                  }
+                }}
               >
                 <option value="normal">normal</option>
                 <option value="always">always</option>
