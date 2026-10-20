@@ -3,7 +3,7 @@ import { cn } from "../helpers";
 import type { ButtonPlayViewProps } from "../types";
 import s from "./ButtonPlay.scss";
 
-const ButtonPlay = (props: ButtonPlayViewProps) => {
+const ButtonPlay = React.forwardRef<HTMLButtonElement, ButtonPlayViewProps>((props, ref) => {
   const {
     carouselStore,
     children = null,
@@ -28,6 +28,7 @@ const ButtonPlay = (props: ButtonPlayViewProps) => {
 
   return (
     <button
+      ref={ref}
       type="button"
       aria-label="play"
       className={newClassName}
@@ -39,6 +40,6 @@ const ButtonPlay = (props: ButtonPlayViewProps) => {
       {children}
     </button>
   );
-};
+});
 
 export default ButtonPlay;

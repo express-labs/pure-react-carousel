@@ -15,7 +15,7 @@ export function setDisabled(
   return false;
 }
 
-const ButtonNext = (props: ButtonNextViewProps) => {
+const ButtonNext = React.forwardRef<HTMLButtonElement, ButtonNextViewProps>((props, ref) => {
   const {
     carouselStore,
     children,
@@ -52,6 +52,7 @@ const ButtonNext = (props: ButtonNextViewProps) => {
 
   return (
     <button
+      ref={ref}
       type="button"
       aria-label="next"
       className={newClassName}
@@ -62,6 +63,6 @@ const ButtonNext = (props: ButtonNextViewProps) => {
       {children}
     </button>
   );
-};
+});
 
 export default ButtonNext;

@@ -217,4 +217,15 @@ describe("<Image />", () => {
     expect(div.style.backgroundImage).toBe('url("bob.jpg")');
     expect(div.style.backgroundSize).toBe("cover");
   });
+
+  it("should forward ref to the rendered image element", () => {
+    const ref = React.createRef<HTMLImageElement>();
+    render(<Image {...props} ref={ref} />);
+    const internalImg = getInternalImage();
+    act(() => {
+      internalImg.dispatchEvent(new UIEvent("load"));
+    });
+    expect(ref.current).toBeInstanceOf(HTMLImageElement);
+    expect(ref.current).toHaveClass("carousel__image--success");
+  });
 });

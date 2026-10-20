@@ -309,5 +309,47 @@ describe("<ImageWithZoom />", () => {
       });
       expect(overlay).not.toHaveClass("zoom");
     });
+
+    it("should forward ref to the zoom image container and pass overlayProps to the overlay", () => {
+      const ref = React.createRef<HTMLDivElement>();
+      const onMouseOver = vi.fn();
+      const onMouseOut = vi.fn();
+      const { container } = renderWithProvider(
+        <ImageWithZoom
+          {...props}
+          ref={ref}
+          overlayClassName="from-overlay-class-name"
+          overlayProps={{
+            role: "application",
+            "aria-label": "Zoomable image",
+            className: "from-overlay-props",
+            style: { opacity: 0.9 },
+            onMouseOver,
+            onMouseOut,
+          }}
+        />,
+      );
+
+      expect(ref.current).toBeInstanceOf(HTMLDivElement);
+      expect(ref.current).toHaveClass("container");
+
+      const overlay = container.querySelector(".carousel__zoom-image-overlay") as HTMLElement;
+      expect(overlay).toHaveAttribute("role", "application");
+      expect(overlay).toHaveAttribute("aria-label", "Zoomable image");
+      expect(overlay).toHaveClass(
+        "carousel__zoom-image-overlay",
+        "from-overlay-class-name",
+        "from-overlay-props",
+      );
+      expect(overlay.style.opacity).toBe("0.9");
+
+      fireEvent.mouseOver(overlay);
+      expect(onMouseOver).toHaveBeenCalledTimes(1);
+      expect(overlay).toHaveClass("hover");
+
+      fireEvent.mouseOut(overlay);
+      expect(onMouseOut).toHaveBeenCalledTimes(1);
+      expect(overlay).not.toHaveClass("hover");
+    });
   });
 });

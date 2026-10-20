@@ -271,4 +271,15 @@ describe("<ButtonBack />", () => {
     expect(contextRef?.getStoreState().currentSlide).toBe(0);
     expect(contextRef?.getStoreState().isPlaying).toBe(true);
   });
+
+  it("should forward ref to the underlying button element", () => {
+    const ref = React.createRef<HTMLButtonElement>();
+    render(
+      <CarouselProvider naturalSlideWidth={100} naturalSlideHeight={125} totalSlides={3}>
+        <ButtonBackWithStore ref={ref}>Back</ButtonBackWithStore>
+      </CarouselProvider>,
+    );
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+    expect(ref.current).toHaveClass("carousel__back-button");
+  });
 });

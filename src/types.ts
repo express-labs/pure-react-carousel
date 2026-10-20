@@ -20,10 +20,12 @@ export type ScrollSnapStop = "normal" | "always";
 export type Tag = keyof React.JSX.IntrinsicElements;
 
 /**
- * Intrinsic JSX element attributes for tag `T` with `ref` omitted so components can
- * manage their own internal DOM refs without ref type conflicts.
+ * Intrinsic JSX element attributes for tag `T` with `ref` normalized to `React.Ref<React.ComponentRef<T>>`
+ * so components can forward or manage DOM refs cleanly across React versions.
  */
-export type CarouselElement<T extends Tag = "div"> = Omit<React.JSX.IntrinsicElements[T], "ref">;
+export type CarouselElement<T extends Tag = "div"> = Omit<React.JSX.IntrinsicElements[T], "ref"> & {
+  ref?: React.Ref<React.ComponentRef<T>>;
+};
 
 /**
  * Accepted input value for the internal `cn()` class name utility.
@@ -104,6 +106,7 @@ export interface MemoizedPresenterProps<T = Record<string, unknown>> {
   ownProps: Record<string, unknown>;
   stateProps: T;
   carouselStore: CarouselStoreInterface;
+  forwardedRef?: React.ForwardedRef<unknown>;
 }
 
 /** Subscription entry tracking load status for a single image registered with the master spinner. */
@@ -462,7 +465,7 @@ export interface DotGroupViewProps extends DotGroupProps, CarouselInjectedProps 
 export interface ImageProps extends Omit<CarouselElement<"img">, "onError" | "onLoad" | "src"> {
   alt?: string;
   /** Additional props forwarded when rendering a background image container (`isBgImage`). */
-  bgImageProps?: Omit<CarouselElement<"div">, "onError" | "onLoad"> & {
+  bgImageProps?: Omit<CarouselElement<"div">, "onError" | "onLoad" | "ref"> & {
     hasMasterSpinner?: boolean;
     onError?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
     onLoad?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
@@ -511,7 +514,7 @@ export interface ImageViewProps extends ImageProps, CarouselInjectedProps {
 export interface ImageWithZoomProps extends Omit<CarouselElement<"div">, "onError" | "onLoad"> {
   alt?: string;
   /** Additional props forwarded to the underlying base `<Image>` element. */
-  bgImageProps?: Omit<CarouselElement<"div">, "onError" | "onLoad"> & {
+  bgImageProps?: Omit<CarouselElement<"div">, "onError" | "onLoad" | "ref"> & {
     hasMasterSpinner?: boolean;
     onError?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
     onLoad?: (ev: React.SyntheticEvent<HTMLElement> | Event) => void;
@@ -531,6 +534,8 @@ export interface ImageWithZoomProps extends Omit<CarouselElement<"div">, "onErro
   onLoad?: (ev?: React.SyntheticEvent<HTMLElement> | Event) => void;
   /** Additional CSS class applied to the zoomed overlay `<Image>` element. */
   overlayClassName?: string;
+  /** Additional props forwarded to the zoomed overlay `<Image>` element. */
+  overlayProps?: Partial<ImageProps>;
   src: string;
   /** Optional higher-resolution image URL used for the zoomed overlay; falls back to `src`. */
   srcZoomed?: string;
@@ -559,6 +564,11 @@ export interface SlideProps extends Omit<CarouselElement<"div">, "onBlur" | "onF
   index: number;
   /** Additional CSS class applied to the inner slide wrapper element. */
   innerClassName?: string;
+  /**
+   * Additional HTML attributes forwarded to the inner slide wrapper element.
+   * Note: `ref` is intentionally excluded.
+   */
+  innerProps?: Omit<CarouselElement<"div">, "ref"> & { ref?: never };
   /** HTML tag rendered for the inner slide wrapper element. @default "div" */
   innerTag?: Tag;
   /** Sizes the slide from its natural DOM content height instead of a fixed aspect-ratio box. @default false */
@@ -626,9 +636,14 @@ export interface NativeSliderProps extends CarouselElement<"div"> {
    * Additional HTML attributes forwarded to the inner slide tray element.
    * Note: `ref` is intentionally excluded because `NativeSlider` manages the tray ref internally.
    */
-  trayProps?: CarouselElement<"div"> & { ref?: never };
+  trayProps?: Omit<CarouselElement<"div">, "ref"> & { ref?: never };
   /** HTML tag rendered for the inner slide tray element. @default "div" */
   trayTag?: Tag;
+  /**
+   * Additional HTML attributes forwarded to the outer tray wrapper element.
+   * Note: `ref` is intentionally excluded because `NativeSlider` manages the tray wrapper ref internally.
+   */
+  trayWrapProps?: Omit<CarouselElement<"div">, "ref"> & { ref?: never };
 }
 
 /** Props for the unconnected `<NativeSliderView>` component. */
@@ -711,9 +726,14 @@ export interface SliderProps extends CarouselElement<"div"> {
    * Additional HTML attributes forwarded to the inner slide tray element.
    * Note: `ref` is intentionally excluded because `Slider` manages the tray ref internally.
    */
-  trayProps?: CarouselElement<"div"> & { ref?: never };
+  trayProps?: Omit<CarouselElement<"div">, "ref"> & { ref?: never };
   /** HTML tag rendered for the inner slide tray element. @default "div" */
   trayTag?: Tag;
+  /**
+   * Additional HTML attributes forwarded to the outer tray wrapper element.
+   * Note: `ref` is intentionally excluded.
+   */
+  trayWrapProps?: Omit<CarouselElement<"div">, "ref"> & { ref?: never };
 }
 
 /** Props for the unconnected `<SliderView>` component. */

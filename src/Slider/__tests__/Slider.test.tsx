@@ -1742,5 +1742,52 @@ describe("<Slider />", () => {
       expect(slider.getAttribute("step")).toBeNull();
       expect(slider.getAttribute("infinite")).toBeNull();
     });
+
+    it("should forward object and callback refs to the slider root element", () => {
+      const objRef = React.createRef<HTMLDivElement>();
+      let callbackNode: HTMLDivElement | null = null;
+      const { rerender } = render(<Slider {...props} ref={objRef} />);
+      expect(objRef.current).toBeInstanceOf(HTMLDivElement);
+      expect(objRef.current).toHaveClass("carousel__slider");
+
+      rerender(
+        <Slider
+          {...props}
+          ref={(node) => {
+            callbackNode = node;
+          }}
+        />,
+      );
+      expect(callbackNode).toBeInstanceOf(HTMLDivElement);
+      expect(callbackNode).toHaveClass("carousel__slider");
+    });
+
+    it("should pass trayWrapProps to the tray wrapper element and merge className and style", () => {
+      const { container } = render(
+        <Slider
+          {...props}
+          classNameTrayWrap="custom-wrap"
+          trayWrapProps={{
+            id: "tray-wrap-id",
+            "aria-label": "Tray Wrapper",
+            className: "from-tray-wrap-props",
+            style: { border: "1px solid red" },
+          }}
+        />,
+      );
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      expect(slider.hasAttribute("trayWrapProps")).toBe(false);
+      expect(slider.hasAttribute("traywrapprops")).toBe(false);
+
+      const trayWrap = container.querySelector(".carousel__slider-tray-wrapper") as HTMLElement;
+      expect(trayWrap).toHaveAttribute("id", "tray-wrap-id");
+      expect(trayWrap).toHaveAttribute("aria-label", "Tray Wrapper");
+      expect(trayWrap).toHaveClass(
+        "carousel__slider-tray-wrapper",
+        "custom-wrap",
+        "from-tray-wrap-props",
+      );
+      expect(trayWrap.style.border).toBe("1px solid red");
+    });
   });
 });

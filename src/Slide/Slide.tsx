@@ -16,7 +16,7 @@ const SNAP_STOP_CLASS_MAP: Record<ScrollSnapStop, string> = {
   always: s.snapStopAlways,
 };
 
-const Slide = (props: SlideViewProps) => {
+const Slide = React.forwardRef<HTMLDivElement, SlideViewProps>((props, ref) => {
   const {
     ariaLabel = "slide",
     carouselStore: _carouselStore = null,
@@ -27,6 +27,7 @@ const Slide = (props: SlideViewProps) => {
     currentSlide,
     index,
     innerClassName = null,
+    innerProps = {},
     innerTag: InnerTag = "div",
     naturalSlideHeight,
     naturalSlideWidth,
@@ -112,11 +113,28 @@ const Slide = (props: SlideViewProps) => {
     className,
   ]);
 
-  const newInnerClassName = cn([s.slideInner, "carousel__inner-slide", innerClassName]);
+  const {
+    className: innerPropsClassName,
+    ref: _innerPropsRef,
+    style: innerPropsStyle,
+    ...restInnerProps
+  } = innerProps;
+
+  const newInnerClassName = cn([
+    s.slideInner,
+    "carousel__inner-slide",
+    innerClassName,
+    innerPropsClassName,
+  ]);
+  const mergedInnerStyle: React.CSSProperties = {
+    ...innerStyle,
+    ...innerPropsStyle,
+  };
 
   return React.createElement(
     Tag,
     {
+      ref,
       "aria-selected": isVisible,
       "aria-label": ariaLabel,
       role,
@@ -128,11 +146,11 @@ const Slide = (props: SlideViewProps) => {
     },
     React.createElement(
       InnerTag,
-      { className: newInnerClassName, style: innerStyle },
+      { className: newInnerClassName, style: mergedInnerStyle, ...restInnerProps },
       children,
       renderFocusRing(),
     ),
   );
-};
+});
 
 export default Slide;

@@ -13,7 +13,7 @@ function setDisabled(
   return false;
 }
 
-const ButtonBack = (props: ButtonBackViewProps) => {
+const ButtonBack = React.forwardRef<HTMLButtonElement, ButtonBackViewProps>((props, ref) => {
   const {
     carouselStore,
     children,
@@ -49,6 +49,7 @@ const ButtonBack = (props: ButtonBackViewProps) => {
 
   return (
     <button
+      ref={ref}
       type="button"
       aria-label="previous"
       className={newClassName}
@@ -59,6 +60,6 @@ const ButtonBack = (props: ButtonBackViewProps) => {
       {children}
     </button>
   );
-};
+});
 
 export default ButtonBack;

@@ -1393,5 +1393,76 @@ describe("<NativeSlider />", () => {
 
       expect(trayWrap.scrollLeft).toBe(200);
     });
+
+    it("should forward object and callback refs to the native slider root element", () => {
+      const ref = React.createRef<HTMLDivElement>();
+      let callbackNode: HTMLDivElement | null = null;
+      const { rerender } = render(<NativeSliderView {...props} ref={ref} />);
+      expect(ref.current).toBeInstanceOf(HTMLDivElement);
+      expect(ref.current).toHaveClass("carousel__slider");
+
+      rerender(
+        <NativeSliderView
+          {...props}
+          ref={(node) => {
+            callbackNode = node;
+          }}
+        />,
+      );
+      expect(callbackNode).toBeInstanceOf(HTMLDivElement);
+      expect(callbackNode).toHaveClass("carousel__slider");
+    });
+
+    it("should pass trayWrapProps to the tray wrapper element, merge className and style, and chain interaction handlers", () => {
+      const onPointerDown = vi.fn();
+      const onTouchStart = vi.fn();
+      const onWheel = vi.fn();
+      const carouselStore = new Store({
+        currentSlide: 0,
+        totalSlides: 4,
+        visibleSlides: 1,
+        isPlaying: true,
+        pauseOnInteract: true,
+      });
+
+      const { container } = render(
+        <NativeSliderView
+          {...props}
+          carouselStore={carouselStore}
+          isPlaying
+          pauseOnInteract
+          classNameTrayWrap="custom-native-wrap"
+          trayWrapProps={{
+            id: "native-tray-wrap",
+            "aria-label": "Scroll viewport",
+            className: "from-tray-wrap-props",
+            style: { maxHeight: "300px" },
+            onPointerDown,
+            onTouchStart,
+            onWheel,
+          }}
+        />,
+      );
+
+      const trayWrap = container.querySelector(".carousel__slider-tray-wrapper") as HTMLElement;
+      expect(trayWrap).toHaveAttribute("id", "native-tray-wrap");
+      expect(trayWrap).toHaveAttribute("aria-label", "Scroll viewport");
+      expect(trayWrap).toHaveClass(
+        "carousel__slider-tray-wrapper",
+        "custom-native-wrap",
+        "from-tray-wrap-props",
+      );
+      expect(trayWrap.style.maxHeight).toBe("300px");
+
+      fireEvent.pointerDown(trayWrap);
+      expect(onPointerDown).toHaveBeenCalledTimes(1);
+      expect(carouselStore.getStoreState().isPlaying).toBe(false);
+
+      fireEvent.touchStart(trayWrap);
+      expect(onTouchStart).toHaveBeenCalledTimes(1);
+
+      fireEvent.wheel(trayWrap);
+      expect(onWheel).toHaveBeenCalledTimes(1);
+    });
   });
 });

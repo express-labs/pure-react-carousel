@@ -5,7 +5,7 @@ import { cn, pct, slideTraySize as calcSlideTraySize } from "../helpers";
 import type { NativeSliderViewProps } from "../types";
 import s from "./NativeSlider.scss";
 
-const NativeSlider = (props: NativeSliderViewProps) => {
+const NativeSlider = React.forwardRef<HTMLDivElement, NativeSliderViewProps>((props, ref) => {
   const {
     ariaLabel = "slider",
     backwardKeyCode = 37,
@@ -47,11 +47,23 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     touchEnabled = true,
     trayProps = {},
     trayTag: TrayTag = "div",
+    trayWrapProps = {},
     visibleSlides = 1,
     ...restProps
   } = props;
 
   const sliderElementRef = useRef<HTMLDivElement | null>(null);
+  const setSliderElementRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      sliderElementRef.current = node;
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
   const trayWrapRef = useRef<HTMLDivElement | null>(null);
   const trayRef = useRef<HTMLElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -583,6 +595,16 @@ const NativeSlider = (props: NativeSliderViewProps) => {
         ? [s.snapNone, "carousel__native-slider-tray-wrapper--snap-none"]
         : [s.snapMandatory, "carousel__native-slider-tray-wrapper--snap-mandatory"];
 
+  const {
+    className: trayWrapPropsClassName,
+    onPointerDown: trayWrapOnPointerDown,
+    onTouchStart: trayWrapOnTouchStart,
+    onWheel: trayWrapOnWheel,
+    ref: _trayWrapRefProp,
+    style: trayWrapPropsStyle,
+    ...filteredTrayWrapProps
+  } = trayWrapProps;
+
   const trayWrapClasses = cn([
     s.trayWrap,
     orientation === "vertical" ? s.verticalSlideTrayWrap : s.horizontalSlideTrayWrap,
@@ -600,7 +622,12 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       ? "carousel__slider-tray-wrap--vertical"
       : "carousel__slider-tray-wrap--horizontal",
     classNameTrayWrap,
+    trayWrapPropsClassName,
   ]);
+  const mergedTrayWrapStyle: React.CSSProperties = {
+    ...trayWrapStyle,
+    ...trayWrapPropsStyle,
+  };
 
   const trayClasses = cn([
     s.sliderTray,
@@ -622,7 +649,7 @@ const NativeSlider = (props: NativeSliderViewProps) => {
 
   return (
     <div
-      ref={sliderElementRef}
+      ref={setSliderElementRef}
       className={sliderClasses}
       aria-live="polite"
       aria-label={ariaLabel}
@@ -635,10 +662,20 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       <div
         ref={trayWrapRef}
         className={trayWrapClasses}
-        style={trayWrapStyle}
-        onPointerDown={handleUserScrollInteract}
-        onTouchStart={handleUserScrollInteract}
-        onWheel={handleUserScrollInteract}
+        style={mergedTrayWrapStyle}
+        onPointerDown={(ev: React.PointerEvent<HTMLDivElement>) => {
+          handleUserScrollInteract();
+          trayWrapOnPointerDown?.(ev);
+        }}
+        onTouchStart={(ev: React.TouchEvent<HTMLDivElement>) => {
+          handleUserScrollInteract();
+          trayWrapOnTouchStart?.(ev);
+        }}
+        onWheel={(ev: React.WheelEvent<HTMLDivElement>) => {
+          handleUserScrollInteract();
+          trayWrapOnWheel?.(ev);
+        }}
+        {...filteredTrayWrapProps}
       >
         {React.createElement(
           TrayTag,
@@ -649,6 +686,6 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       </div>
     </div>
   );
-};
+});
 
 export default NativeSlider;

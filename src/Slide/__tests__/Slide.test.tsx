@@ -197,4 +197,48 @@ describe("<Slide />", () => {
       "carousel__slide--snap-stop-normal",
     );
   });
+
+  it("should forward ref to the slide DOM element on both Slide and ConnectedSlide", () => {
+    const viewRef = React.createRef<HTMLDivElement>();
+    render(<Slide {...props} ref={viewRef} />);
+    expect(viewRef.current).toBeInstanceOf(HTMLDivElement);
+    expect(viewRef.current).toHaveClass("carousel__slide");
+
+    const connectedRef = React.createRef<HTMLDivElement>();
+    render(
+      <CarouselProvider naturalSlideWidth={100} naturalSlideHeight={100} totalSlides={2}>
+        <ConnectedSlide index={0} ref={connectedRef} />
+      </CarouselProvider>,
+    );
+    expect(connectedRef.current).toBeInstanceOf(HTMLDivElement);
+    expect(connectedRef.current).toHaveClass("carousel__slide");
+  });
+
+  it("should pass innerProps to the inner slide wrapper and merge className and style with innerClassName", () => {
+    const { container } = render(
+      <Slide
+        {...props}
+        isIntrinsicHeight
+        innerClassName="from-inner-class"
+        innerProps={{
+          id: "inner-slide-1",
+          role: "group",
+          "aria-label": "Inner group",
+          className: "from-inner-props",
+          style: { backgroundColor: "rgb(255, 0, 0)" },
+        }}
+      />,
+    );
+    const outerSlide = container.querySelector(".carousel__slide") as HTMLElement;
+    expect(outerSlide.hasAttribute("innerProps")).toBe(false);
+    expect(outerSlide.hasAttribute("innerprops")).toBe(false);
+
+    const innerSlide = container.querySelector(".carousel__inner-slide") as HTMLElement;
+    expect(innerSlide).toHaveAttribute("id", "inner-slide-1");
+    expect(innerSlide).toHaveAttribute("role", "group");
+    expect(innerSlide).toHaveAttribute("aria-label", "Inner group");
+    expect(innerSlide).toHaveClass("carousel__inner-slide", "from-inner-class", "from-inner-props");
+    expect(innerSlide.style.position).toBe("unset");
+    expect(innerSlide.style.backgroundColor).toBe("rgb(255, 0, 0)");
+  });
 });

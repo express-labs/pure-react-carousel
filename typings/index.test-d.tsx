@@ -452,24 +452,74 @@ export const verifyReadonlyCarouselState = (): void => {
   mockFullCarouselStore.state.isPlaying = true;
 };
 
-// 7. Verify Slider and NativeSlider trayProps Reject Unsupported ref Prop
-export const verifySliderTrayPropsRejectsRef = (): React.ReactElement => {
-  const trayRef = React.createRef<HTMLDivElement>();
+// 7. Verify Slider and NativeSlider trayProps / trayWrapProps and Slide innerProps Reject Unsupported ref Prop
+export const verifyInnerWrapperPropsRejectRef = (): React.ReactElement => {
+  const divRef = React.createRef<HTMLDivElement>();
   return (
     <>
       <Slider
         // @ts-expect-error -- trayProps.ref is discarded at runtime and unsupported in the public SliderProps contract
-        trayProps={{ ref: trayRef }}
+        trayProps={{ ref: divRef }}
+      >
+        <div>Slide</div>
+      </Slider>
+      <Slider
+        // @ts-expect-error -- trayWrapProps.ref is discarded at runtime and unsupported in the public SliderProps contract
+        trayWrapProps={{ ref: divRef }}
       >
         <div>Slide</div>
       </Slider>
       <NativeSlider
         // @ts-expect-error -- trayProps.ref is discarded at runtime and unsupported in the public NativeSliderProps contract
-        trayProps={{ ref: trayRef }}
+        trayProps={{ ref: divRef }}
       >
         <div>Slide</div>
       </NativeSlider>
+      <NativeSlider
+        // @ts-expect-error -- trayWrapProps.ref is discarded at runtime and unsupported in the public NativeSliderProps contract
+        trayWrapProps={{ ref: divRef }}
+      >
+        <div>Slide</div>
+      </NativeSlider>
+      <Slide
+        index={0}
+        // @ts-expect-error -- innerProps.ref is discarded at runtime and unsupported in the public SlideProps contract
+        innerProps={{ ref: divRef }}
+      />
     </>
+  );
+};
+
+// 7b. Verify Ref Forwarding and Inner Wrapper Escape Hatch Props Across Public Components
+export const verifyRefForwardingAndEscapeHatches = (): React.ReactElement => {
+  const divRef = React.createRef<HTMLDivElement>();
+  const buttonRef = React.createRef<HTMLButtonElement>();
+  const imgRef = React.createRef<HTMLImageElement>();
+
+  return (
+    <CarouselProvider ref={divRef} naturalSlideWidth={100} naturalSlideHeight={100} totalSlides={3}>
+      <Slider ref={divRef} trayWrapProps={{ "aria-label": "Tray Wrap" }}>
+        <Slide ref={divRef} index={0} innerProps={{ role: "group", "aria-label": "Inner Slide" }}>
+          <Image ref={imgRef} src="img.jpg" alt="test" />
+          <ImageWithZoom
+            ref={divRef}
+            src="img.jpg"
+            overlayProps={{ role: "application", "aria-label": "Zoom" }}
+          />
+        </Slide>
+      </Slider>
+      <NativeSlider ref={divRef} trayWrapProps={{ "aria-label": "Native Tray Wrap" }}>
+        <Slide ref={divRef} index={0} />
+      </NativeSlider>
+      <ButtonFirst ref={buttonRef} />
+      <ButtonBack ref={buttonRef} />
+      <ButtonNext ref={buttonRef} />
+      <ButtonLast ref={buttonRef} />
+      <ButtonPlay ref={buttonRef} />
+      <Dot ref={buttonRef} slide={0} />
+      <DotGroup ref={divRef} />
+      <Spinner ref={divRef} />
+    </CarouselProvider>
   );
 };
 

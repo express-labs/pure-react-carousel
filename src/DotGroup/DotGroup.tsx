@@ -4,7 +4,7 @@ import { cn } from "../helpers";
 import type { DotGroupViewProps } from "../types";
 import s from "./DotGroup.scss";
 
-const DotGroup = (props: DotGroupViewProps) => {
+const DotGroup = React.forwardRef<HTMLDivElement, DotGroupViewProps>((props, ref) => {
   const {
     carouselStore: _carouselStore,
     children = null,
@@ -53,11 +53,11 @@ const DotGroup = (props: DotGroupViewProps) => {
   const newClassName = cn([s.DotGroup, "carousel__dot-group", className]);
 
   return (
-    <div className={newClassName} {...restProps}>
+    <div ref={ref} className={newClassName} {...restProps}>
       {renderDotsContent()}
       {children}
     </div>
   );
-};
+});
 
 export default DotGroup;

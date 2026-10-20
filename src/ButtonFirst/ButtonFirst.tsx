@@ -3,7 +3,7 @@ import { cn } from "../helpers";
 import type { ButtonFirstViewProps } from "../types";
 import s from "./ButtonFirst.scss";
 
-const ButtonFirst = (props: ButtonFirstViewProps) => {
+const ButtonFirst = React.forwardRef<HTMLButtonElement, ButtonFirstViewProps>((props, ref) => {
   const {
     carouselStore,
     children,
@@ -33,6 +33,7 @@ const ButtonFirst = (props: ButtonFirstViewProps) => {
 
   return (
     <button
+      ref={ref}
       type="button"
       aria-label="first"
       className={newClassName}
@@ -43,6 +44,6 @@ const ButtonFirst = (props: ButtonFirstViewProps) => {
       {children}
     </button>
   );
-};
+});
 
 export default ButtonFirst;

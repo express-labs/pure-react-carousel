@@ -3,7 +3,7 @@ import { cn } from "../helpers";
 import type { ButtonLastViewProps } from "../types";
 import s from "./ButtonLast.scss";
 
-const ButtonLast = (props: ButtonLastViewProps) => {
+const ButtonLast = React.forwardRef<HTMLButtonElement, ButtonLastViewProps>((props, ref) => {
   const {
     carouselStore,
     children,
@@ -37,6 +37,7 @@ const ButtonLast = (props: ButtonLastViewProps) => {
 
   return (
     <button
+      ref={ref}
       type="button"
       aria-label="last"
       className={newClassName}
@@ -47,6 +48,6 @@ const ButtonLast = (props: ButtonLastViewProps) => {
       {children}
     </button>
   );
-};
+});
 
 export default ButtonLast;

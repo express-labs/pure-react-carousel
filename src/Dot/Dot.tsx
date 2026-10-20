@@ -3,7 +3,7 @@ import { cn } from "../helpers";
 import type { DotViewProps } from "../types";
 import s from "./Dot.scss";
 
-const Dot = (props: DotViewProps) => {
+const Dot = React.forwardRef<HTMLButtonElement, DotViewProps>((props, ref) => {
   const {
     carouselStore,
     children = null,
@@ -48,6 +48,7 @@ const Dot = (props: DotViewProps) => {
 
   return (
     <button
+      ref={ref}
       aria-label="slide dot"
       type="button"
       onClick={handleOnClick}
@@ -58,6 +59,6 @@ const Dot = (props: DotViewProps) => {
       {children}
     </button>
   );
-};
+});
 
 export default Dot;

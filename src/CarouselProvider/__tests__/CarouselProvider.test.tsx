@@ -314,4 +314,15 @@ describe("<CarouselProvider />", () => {
     expect(providerEl?.hasAttribute("snapStop")).toBe(false);
     expect(providerEl?.hasAttribute("snapstop")).toBe(false);
   });
+
+  it("should forward ref to the root DOM element", () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(
+      <CarouselProvider {...props} ref={ref}>
+        Hello
+      </CarouselProvider>,
+    );
+    expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    expect(ref.current).toHaveClass("carousel");
+  });
 });
