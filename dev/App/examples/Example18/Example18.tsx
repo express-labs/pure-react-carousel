@@ -61,12 +61,12 @@ interface SlideStateSubscriberProps {
   totalSlides: number;
 }
 
-const SlideStateSubscriber: React.FC<SlideStateSubscriberProps> = ({
+const SlideStateSubscriber = ({
   onSlideChange,
   onPlayingChange,
   visibleSlides,
   totalSlides,
-}) => {
+}: SlideStateSubscriberProps) => {
   const store = useContext(CarouselContext);
   const prevVisibleSlidesRef = useRef(visibleSlides);
 
@@ -105,7 +105,7 @@ const SlideStateSubscriber: React.FC<SlideStateSubscriberProps> = ({
   return null;
 };
 
-const Example18: React.ElementType = () => {
+const Example18 = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const [isResizing, setIsResizing] = useState<boolean>(false);

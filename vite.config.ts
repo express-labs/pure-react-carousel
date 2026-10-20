@@ -89,7 +89,7 @@ export default defineConfig({
     },
     rules: {
       "react/react-in-jsx-scope": "off",
-      "typescript/no-explicit-any": "warn",
+      "typescript/no-explicit-any": "error",
       "unicorn/filename-case": "off",
       "unicorn/no-null": "off",
       "unicorn/prefer-add-event-listener": "off",
