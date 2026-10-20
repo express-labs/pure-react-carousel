@@ -1,11 +1,10 @@
-export type ClassValue =
-  | string
-  | number
-  | boolean
-  | undefined
-  | null
-  | ClassValue[]
-  | { [key: string]: unknown };
+import type { ClassValue } from "../types";
+
+export type { ClassValue } from "../types";
+
+export function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
 
 export function cn(...inputs: ClassValue[]): string {
   const classes: string[] = [];
@@ -51,12 +50,12 @@ export const boundedRange = ({ min, max, x }: { min: number; max: number; x: num
   Math.min(max, Math.max(min, x));
 
 export function deepFreeze<T>(obj: T): T {
-  if (obj === null || typeof obj !== "object") {
+  if (!isRecord(obj)) {
     return obj;
   }
   Object.freeze(obj);
-  for (const value of Object.values(obj as Record<string, unknown>)) {
-    if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
+  for (const value of Object.values(obj)) {
+    if (isRecord(value) && !Object.isFrozen(value)) {
       deepFreeze(value);
     }
   }
@@ -65,25 +64,22 @@ export function deepFreeze<T>(obj: T): T {
 
 export function equal(a: unknown, b: unknown): boolean {
   if (Object.is(a, b)) return true;
-  if (typeof a !== "object" || a === null || typeof b !== "object" || b === null) {
+  if (!isRecord(a) || !isRecord(b)) {
     return false;
   }
   if (Array.isArray(a) !== Array.isArray(b)) return false;
-  const keysA = Object.keys(a as Record<string, unknown>);
-  const keysB = Object.keys(b as Record<string, unknown>);
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
   if (keysA.length !== keysB.length) return false;
   for (const key of keysA) {
-    if (
-      !Object.prototype.hasOwnProperty.call(b, key) ||
-      !equal((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key])
-    ) {
+    if (!Object.prototype.hasOwnProperty.call(b, key) || !equal(a[key], b[key])) {
       return false;
     }
   }
   return true;
 }
 
-export function cleanProps<T extends Record<string, unknown>>(props: T): Partial<T> {
+export function cleanProps<T extends Record<string, unknown>>(props: T): Omit<T, "carouselStore"> {
   const { carouselStore: _carouselStore, ...rest } = props;
-  return rest as Partial<T>;
+  return rest;
 }

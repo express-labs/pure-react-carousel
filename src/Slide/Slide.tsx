@@ -114,25 +114,24 @@ const Slide = (props: SlideViewProps) => {
 
   const newInnerClassName = cn([s.slideInner, "carousel__inner-slide", innerClassName]);
 
-  const OuterElement = Tag as React.ElementType;
-  const InnerElement = InnerTag as React.ElementType;
-
-  return (
-    <OuterElement
-      aria-selected={isVisible}
-      aria-label={ariaLabel}
-      role={role}
-      onFocus={handleOnFocus}
-      onBlur={handleOnBlur}
-      className={newClassName}
-      style={newStyle}
-      {...restProps}
-    >
-      <InnerElement className={newInnerClassName} style={innerStyle}>
-        {children}
-        {renderFocusRing()}
-      </InnerElement>
-    </OuterElement>
+  return React.createElement(
+    Tag,
+    {
+      "aria-selected": isVisible,
+      "aria-label": ariaLabel,
+      role,
+      onFocus: handleOnFocus,
+      onBlur: handleOnBlur,
+      className: newClassName,
+      style: newStyle,
+      ...restProps,
+    },
+    React.createElement(
+      InnerTag,
+      { className: newInnerClassName, style: innerStyle },
+      children,
+      renderFocusRing(),
+    ),
   );
 };
 

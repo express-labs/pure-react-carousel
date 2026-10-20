@@ -48,7 +48,7 @@ export default class GetScrollParent {
     }
 
     if (typeof document === "undefined") return null;
-    return (document.scrollingElement as HTMLElement | null) || document.documentElement;
+    return document.scrollingElement || document.documentElement;
   }
 
   getScrollParent(node: unknown): HTMLElement | Element | null {

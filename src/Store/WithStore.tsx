@@ -7,6 +7,7 @@ import type {
   CarouselState,
   CarouselStoreInterface,
   MapStateToProps,
+  MemoizedPresenterProps,
   WithStoreProps,
 } from "../types";
 
@@ -26,12 +27,6 @@ function shallowEqual(objA: Record<string, unknown>, objB: Record<string, unknow
   return true;
 }
 
-interface MemoizedPresenterProps<T> {
-  ownProps: Record<string, unknown>;
-  stateProps: T;
-  carouselStore: CarouselStoreInterface;
-}
-
 export default function WithStore<P extends object, T = Record<never, never>>(
   WrappedComponent: React.ComponentType<P>,
   mapStateToProps?: MapStateToProps<T>,
@@ -41,50 +36,37 @@ export default function WithStore<CustomProps, CustomStateProps = Record<never, 
   mapStateToProps?: MapStateToProps<CustomStateProps>,
 ): React.ComponentType<CustomProps>;
 export default function WithStore<
-  P extends object = Record<string, unknown>,
+  P extends Record<string, unknown> = Record<string, unknown>,
   T = Record<never, never>,
->(
-  WrappedComponent: React.ComponentType<P>,
-  mapStateToProps: (state: CarouselState) => T = () => ({}) as T,
-): React.ComponentType<WithStoreProps<P, T>> {
+>(WrappedComponent: React.ElementType, mapStateToProps?: (state: CarouselState) => T) {
   const MemoizedComponent = memo(
-    ({ ownProps, stateProps, carouselStore }: MemoizedPresenterProps<T>) => {
-      const mergedProps = {
-        ...stateProps,
-        ...ownProps,
-        carouselStore,
-      } as unknown as P;
-
-      return <WrappedComponent {...mergedProps} />;
-    },
+    ({ ownProps, stateProps, carouselStore }: MemoizedPresenterProps<T | undefined>) => (
+      <WrappedComponent {...stateProps} {...ownProps} carouselStore={carouselStore} />
+    ),
     (prev, next) =>
       prev.carouselStore === next.carouselStore &&
       shallowEqual(prev.ownProps, next.ownProps) &&
       equal(prev.stateProps, next.stateProps),
   );
 
-  function Wrapper(props: WithStoreProps<P, T>) {
+  function Wrapper(props: P & { carouselStore?: CarouselStoreInterface }) {
     const contextStore = useContext(CarouselContext);
-    const propStore = (props as Record<string, unknown>).carouselStore as
-      | CarouselStoreInterface
-      | undefined;
+    const propStore = props.carouselStore;
     const activeStore = propStore || contextStore;
     const carouselStore = activeStore.masterStore || activeStore;
     const rawState = activeStore.state || contextStore.state;
-    const stateProps = mapStateToProps({ ...rawState });
+    const stateProps = mapStateToProps ? mapStateToProps({ ...rawState }) : undefined;
 
     return (
-      <MemoizedComponent
-        ownProps={props as Record<string, unknown>}
-        stateProps={stateProps}
-        carouselStore={carouselStore}
-      />
+      <MemoizedComponent ownProps={props} stateProps={stateProps} carouselStore={carouselStore} />
     );
   }
 
-  Wrapper.displayName = `WithStore(${
-    WrappedComponent.displayName || WrappedComponent.name || "Component"
-  })`;
+  const componentName =
+    typeof WrappedComponent === "string"
+      ? WrappedComponent
+      : WrappedComponent.displayName || WrappedComponent.name || "Component";
+  Wrapper.displayName = `WithStore(${componentName})`;
 
   return Wrapper;
 }

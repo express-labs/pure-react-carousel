@@ -3,7 +3,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import GetScrollParent from "./GetScrollParent";
 import { cn, pct, boundedRange } from "../helpers";
-import type { MutableCarouselStatePatch, Orientation, SliderViewProps } from "../types";
+import type {
+  MutableCarouselStatePatch,
+  Orientation,
+  SliderDragState,
+  SliderViewProps,
+} from "../types";
 import s from "./Slider.scss";
 
 export function slideSizeInPx(
@@ -34,15 +39,13 @@ export function slidesMoved(
   return retval === 0 ? 0 : retval;
 }
 
-interface SliderDragState {
-  cancelNextClick: boolean;
-  deltaX: number;
-  deltaY: number;
-  isBeingMouseDragged: boolean;
-  isBeingTouchDragged: boolean;
-  preventingVerticalScroll: boolean;
-  startX: number;
-  startY: number;
+function hasPersist(value: unknown): value is { persist: () => void } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "persist" in value &&
+    typeof value.persist === "function"
+  );
 }
 
 const DEFAULT_DRAG_CLICK_THRESHOLD = 5;
@@ -213,10 +216,7 @@ const Slider = (props: SliderViewProps) => {
       verticalPixelThreshold,
       visibleSlides,
     };
-  });
-
-  const getSliderRef = useCallback((el: HTMLElement | null) => {
-    sliderTrayElementRef.current = el;
+    const el = sliderTrayElementRef.current;
     if (el && typeof window !== "undefined") {
       const carouselElement = el.closest(".carousel");
       if (carouselElement) {
@@ -224,7 +224,7 @@ const Slider = (props: SliderViewProps) => {
           window.getComputedStyle(carouselElement, null).getPropertyValue("direction") === "rtl";
       }
     }
-  }, []);
+  });
 
   const forward = useCallback(() => {
     const {
@@ -511,28 +511,26 @@ const Slider = (props: SliderViewProps) => {
     isDocumentScrollingRef.current = lockScrollOnWin ? false : null;
   }, [computeCurrentSlide, play, updateDragState]);
 
-  const callCallback = useCallback((propName: string, ev: unknown) => {
-    const { trayProps: tProps } = latestPropsRef.current;
-    const handler = tProps ? (tProps as Record<string, unknown>)[propName] : undefined;
-    if (typeof handler === "function") {
-      if (
-        ev &&
-        typeof ev === "object" &&
-        "persist" in ev &&
-        typeof (ev as { persist?: () => void }).persist === "function"
-      ) {
-        (ev as { persist: () => void }).persist();
+  const callCallback = useCallback(
+    (propName: keyof NonNullable<SliderViewProps["trayProps"]>, ev: unknown) => {
+      const { trayProps: tProps } = latestPropsRef.current;
+      const handler: unknown = tProps ? tProps[propName] : undefined;
+      if (typeof handler === "function") {
+        if (hasPersist(ev)) {
+          ev.persist();
+        }
+        handler(ev);
       }
-      handler(ev);
-    }
-  }, []);
+    },
+    [],
+  );
 
   const classifyTouchCompatMouseDown = useCallback((ev: React.MouseEvent<HTMLElement>) => {
-    const nativeMouseEv = ev.nativeEvent as
+    const nativeMouseEv:
       | (MouseEvent & {
           sourceCapabilities?: { firesTouchEvents?: boolean };
         })
-      | undefined;
+      | undefined = ev.nativeEvent;
     if (nativeMouseEv?.sourceCapabilities?.firesTouchEvents === false) {
       clickGuardRef.current.pendingTouchCompat = null;
     }
@@ -592,9 +590,9 @@ const Slider = (props: SliderViewProps) => {
   const handleOnMouseMove = useCallback(
     (ev: MouseEvent) => {
       if (!dragStateRef.current.isBeingMouseDragged) {
-        const mouseEvWithCap = ev as MouseEvent & {
+        const mouseEvWithCap: MouseEvent & {
           sourceCapabilities?: { firesTouchEvents?: boolean };
-        };
+        } = ev;
         const pendingTouchCompat = clickGuardRef.current.pendingTouchCompat;
         if (
           pendingTouchCompat !== null &&
@@ -1111,8 +1109,6 @@ const Slider = (props: SliderViewProps) => {
     ...filteredTrayProps
   } = trayProps;
 
-  const TrayElement = TrayTag as React.ElementType;
-
   return (
     <div
       ref={sliderElementRef}
@@ -1125,21 +1121,23 @@ const Slider = (props: SliderViewProps) => {
       {...restProps}
     >
       <div className={trayWrapClasses} style={trayWrapStyle}>
-        <TrayElement
-          ref={getSliderRef}
-          className={trayClasses}
-          style={trayStyle}
-          onTouchStart={handleOnTouchStart}
-          onTouchMove={handleOnTouchMove}
-          onTouchEnd={handleOnTouchEnd}
-          onTouchCancel={handleOnTouchCancel}
-          onMouseDownCapture={handleOnMouseDownCapture}
-          onMouseDown={handleOnMouseDown}
-          onClickCapture={handleOnClickCapture}
-          {...filteredTrayProps}
-        >
-          {children}
-        </TrayElement>
+        {React.createElement(
+          TrayTag,
+          {
+            ref: sliderTrayElementRef,
+            className: trayClasses,
+            style: trayStyle,
+            onTouchStart: handleOnTouchStart,
+            onTouchMove: handleOnTouchMove,
+            onTouchEnd: handleOnTouchEnd,
+            onTouchCancel: handleOnTouchCancel,
+            onMouseDownCapture: handleOnMouseDownCapture,
+            onMouseDown: handleOnMouseDown,
+            onClickCapture: handleOnClickCapture,
+            ...filteredTrayProps,
+          },
+          children,
+        )}
         {renderMasterSpinner()}
       </div>
     </div>

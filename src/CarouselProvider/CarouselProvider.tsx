@@ -42,16 +42,18 @@ const CarouselProvider = (props: CarouselProviderProps) => {
     ...restProps
   } = props;
 
+  const restWithLegacyProps: typeof restProps & {
+    preventVerticalScrollOnTouch?: unknown;
+    horizontalPixelThreshold?: unknown;
+    verticalPixelThreshold?: unknown;
+  } = restProps;
+
   const {
     preventVerticalScrollOnTouch: _preventVerticalScrollOnTouch,
     horizontalPixelThreshold: _horizontalPixelThreshold,
     verticalPixelThreshold: _verticalPixelThreshold,
     ...filteredProps
-  } = restProps as typeof restProps & {
-    preventVerticalScrollOnTouch?: unknown;
-    horizontalPixelThreshold?: unknown;
-    verticalPixelThreshold?: unknown;
-  };
+  } = restWithLegacyProps;
 
   if (isIntrinsicHeight && orientation !== "horizontal") {
     throw new Error(
@@ -171,11 +173,32 @@ const CarouselProvider = (props: CarouselProviderProps) => {
       touchEnabled,
     } as const;
 
-    (Object.keys(syncedProps) as Array<keyof typeof syncedProps>).forEach((propName) => {
+    function syncProp<K extends keyof typeof syncedProps>(propName: K): void {
       if (prevProps[propName] !== syncedProps[propName]) {
-        (newState as Record<string, unknown>)[propName] = syncedProps[propName];
+        newState[propName] = syncedProps[propName];
       }
-    });
+    }
+
+    syncProp("disableAnimation");
+    syncProp("disableKeyboard");
+    syncProp("dragEnabled");
+    syncProp("dragStep");
+    syncProp("hasMasterSpinner");
+    syncProp("infinite");
+    syncProp("interval");
+    syncProp("isIntrinsicHeight");
+    syncProp("isPlaying");
+    syncProp("lockOnWindowScroll");
+    syncProp("naturalSlideHeight");
+    syncProp("naturalSlideWidth");
+    syncProp("orientation");
+    syncProp("pauseOnInteract");
+    syncProp("playDirection");
+    syncProp("snapAlign");
+    syncProp("snapStop");
+    syncProp("snapType");
+    syncProp("step");
+    syncProp("touchEnabled");
 
     prevPropsRef.current = {
       currentSlide,
@@ -267,12 +290,11 @@ const CarouselProvider = (props: CarouselProviderProps) => {
   };
 
   const newClassName = cn(["carousel", className]);
-  const ElementTag = Tag as React.ElementType;
 
-  return (
-    <ElementTag className={newClassName} {...filteredProps}>
-      <Context.Provider value={contextValue}>{children}</Context.Provider>
-    </ElementTag>
+  return React.createElement(
+    Tag,
+    { className: newClassName, ...filteredProps },
+    <Context.Provider value={contextValue}>{children}</Context.Provider>,
   );
 };
 

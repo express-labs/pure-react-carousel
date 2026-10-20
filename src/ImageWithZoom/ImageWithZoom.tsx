@@ -3,18 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import Image from "../Image";
 import Spinner from "../Spinner";
 import { boundedRange, cn, pct } from "../helpers";
-import type { ImageWithZoomViewProps } from "../types";
+import type { ImageWithZoomViewProps, TouchCoordinates, TouchPointCacheEntry } from "../types";
 import s from "./ImageWithZoom.scss";
 
 const MOUSE_SCALE = 2;
 const MAX_TOUCH_SCALE = 3;
-
-export interface TouchCoordinates {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-}
 
 export function midpointBetweenTwoTouches({ x1, y1, x2, y2 }: TouchCoordinates): {
   x: number;
@@ -28,11 +21,6 @@ export function midpointBetweenTwoTouches({ x1, y1, x2, y2 }: TouchCoordinates):
 
 export function distanceBetweenTwoTouches({ x1, y1, x2, y2 }: TouchCoordinates): number {
   return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-}
-
-interface TouchPointCacheEntry {
-  clientX: number;
-  clientY: number;
 }
 
 const ImageWithZoom = (props: ImageWithZoomViewProps) => {
@@ -104,7 +92,7 @@ const ImageWithZoom = (props: ImageWithZoomViewProps) => {
 
   const handleOnMouseMove = (ev: React.MouseEvent<HTMLElement>) => {
     if (isZooming) return;
-    const target = ev.target as HTMLElement;
+    const target = ev.currentTarget;
     const nextX = pct((ev.nativeEvent.offsetX / target.offsetWidth) * 100);
     const nextY = pct((ev.nativeEvent.offsetY / target.offsetHeight) * 100);
     setX(nextX);
@@ -133,7 +121,7 @@ const ImageWithZoom = (props: ImageWithZoomViewProps) => {
     if (touches.length === 2) {
       ev.stopPropagation();
 
-      const target = ev.target as HTMLElement;
+      const target = ev.currentTarget;
       const clientRect = target.getBoundingClientRect();
       const id0 = touches[0].identifier;
       const id1 = touches[1].identifier;
@@ -231,36 +219,34 @@ const ImageWithZoom = (props: ImageWithZoomViewProps) => {
     overlayStyle.transform = `scale(${scale})`;
   }
 
-  const ElementTag = Tag as React.ElementType;
-
-  return (
-    <ElementTag className={newClassName} {...filteredProps}>
-      <Image
-        alt={alt}
-        className={newImageClassName}
-        tag={bgImageTag}
-        src={src}
-        onLoad={handleImageComplete}
-        onError={handleImageLoadError}
-        {...bgImageProps}
-      />
-      <Image
-        className={newOverlayClassName}
-        tag="div"
-        src={srcZoomed || src}
-        style={overlayStyle}
-        isBgImage
-        onFocus={handleOnMouseOver}
-        onMouseOver={handleOnMouseOver}
-        onBlur={handleOnMouseOut}
-        onMouseOut={handleOnMouseOut}
-        onMouseMove={handleOnMouseMove}
-        onTouchStart={handleOnTouchStart}
-        onTouchEnd={handleOnTouchEnd}
-        onTouchMove={handleOnTouchMove}
-      />
-      {renderLoading()}
-    </ElementTag>
+  return React.createElement(
+    Tag,
+    { className: newClassName, ...filteredProps },
+    <Image
+      alt={alt}
+      className={newImageClassName}
+      tag={bgImageTag}
+      src={src}
+      onLoad={handleImageComplete}
+      onError={handleImageLoadError}
+      {...bgImageProps}
+    />,
+    <Image
+      className={newOverlayClassName}
+      tag="div"
+      src={srcZoomed || src}
+      style={overlayStyle}
+      isBgImage
+      onFocus={handleOnMouseOver}
+      onMouseOver={handleOnMouseOver}
+      onBlur={handleOnMouseOut}
+      onMouseOut={handleOnMouseOut}
+      onMouseMove={handleOnMouseMove}
+      onTouchStart={handleOnTouchStart}
+      onTouchEnd={handleOnTouchEnd}
+      onTouchMove={handleOnTouchMove}
+    />,
+    renderLoading(),
   );
 };
 
