@@ -82,6 +82,71 @@ describe("<App />", () => {
     expect(tray.style.transition).toBe("");
   });
 
+  it("should render Example18 and dynamically adapt visibleSlides, step, and breakpoints", () => {
+    const { container, getByTestId } = render(<App />);
+    const select = container.querySelector(".select") as HTMLSelectElement;
+    fireEvent.change(select, { target: { value: "18" } });
+
+    const section = container.querySelector("#example--18") as HTMLElement;
+    expect(section).toBeInTheDocument();
+
+    // Default effective width falls back to 1000px in test env (Desktop Wide -> 4 visible slides)
+    expect(getByTestId("metric-visible-slides")).toHaveTextContent("4");
+    expect(getByTestId("metric-step")).toHaveTextContent("4");
+    expect(getByTestId("metric-breakpoint")).toHaveTextContent("Desktop (Wide)");
+
+    // Switch stepping mode to single item
+    const radioSingle = getByTestId("step-mode-single") as HTMLInputElement;
+    fireEvent.click(radioSingle);
+    expect(radioSingle.checked).toBe(true);
+    expect(getByTestId("metric-step")).toHaveTextContent("1");
+    expect(getByTestId("metric-visible-slides")).toHaveTextContent("4");
+
+    // Click mobile preset (360px -> Mobile -> 1 visible slide)
+    const mobileBtn = getByTestId("preset-mobile");
+    fireEvent.click(mobileBtn);
+    expect(getByTestId("metric-width")).toHaveTextContent("360px");
+    expect(getByTestId("metric-breakpoint")).toHaveTextContent("Mobile");
+    expect(getByTestId("metric-visible-slides")).toHaveTextContent("1");
+
+    // Click tablet portrait preset (580px -> Tablet Portrait -> 2 visible slides)
+    const tabletPortBtn = getByTestId("preset-tablet-port");
+    fireEvent.click(tabletPortBtn);
+    expect(getByTestId("metric-width")).toHaveTextContent("580px");
+    expect(getByTestId("metric-breakpoint")).toHaveTextContent("Tablet (Portrait)");
+    expect(getByTestId("metric-visible-slides")).toHaveTextContent("2");
+
+    // Switch back to page-by-page stepping mode
+    const radioPage = getByTestId("step-mode-page") as HTMLInputElement;
+    fireEvent.click(radioPage);
+    expect(getByTestId("metric-step")).toHaveTextContent("2");
+
+    // Test slider change
+    const slider = getByTestId("manual-width-slider") as HTMLInputElement;
+    fireEvent.change(slider, { target: { value: "700" } });
+    expect(getByTestId("metric-width")).toHaveTextContent("700px");
+    expect(getByTestId("metric-breakpoint")).toHaveTextContent("Tablet (Landscape)");
+    expect(getByTestId("metric-visible-slides")).toHaveTextContent("3");
+    expect(getByTestId("metric-step")).toHaveTextContent("3");
+
+    // Test Start Autoplay and Stop Autoplay buttons
+    const startBtn = getByTestId("autoplay-start-btn") as HTMLButtonElement;
+    const stopBtn = getByTestId("autoplay-stop-btn") as HTMLButtonElement;
+    expect(getByTestId("metric-autoplay")).toHaveTextContent("Stopped");
+    expect(startBtn).not.toBeDisabled();
+    expect(stopBtn).toBeDisabled();
+
+    fireEvent.click(startBtn);
+    expect(getByTestId("metric-autoplay")).toHaveTextContent("Playing");
+    expect(startBtn).toBeDisabled();
+    expect(stopBtn).not.toBeDisabled();
+
+    fireEvent.click(stopBtn);
+    expect(getByTestId("metric-autoplay")).toHaveTextContent("Stopped");
+    expect(startBtn).not.toBeDisabled();
+    expect(stopBtn).toBeDisabled();
+  });
+
   it("should navigate to the React Compatibility Chart page and back to the demo app", () => {
     const { container } = render(<App />);
     const select = container.querySelector(".select") as HTMLSelectElement;

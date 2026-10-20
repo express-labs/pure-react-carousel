@@ -17,6 +17,7 @@ import {
   Example15,
   Example16,
   Example17,
+  Example18,
 } from "./examples";
 import s from "./style.scss";
 
@@ -199,6 +200,9 @@ const DevelopmentApp = (): React.ReactElement => {
                 <option value="17">
                   Native CSS Scroll &amp; Scroll-Snap Carousel (NativeSlider)
                 </option>
+                <option value="18">
+                  Responsive Viewport-Adaptive Carousel (Dynamic visibleSlides &amp; step)
+                </option>
               </select>
             </label>
           </p>
@@ -313,6 +317,13 @@ const DevelopmentApp = (): React.ReactElement => {
               <section id="example--17">
                 <hr />
                 <Example17 />
+              </section>
+            )}
+
+            {(value === "0" || value === "18") && (
+              <section id="example--18">
+                <hr />
+                <Example18 />
               </section>
             )}
           </div>
