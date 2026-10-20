@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 function eventLogger(ev: React.SyntheticEvent): void {
@@ -25,7 +26,12 @@ const Example11 = (): React.ReactElement => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
   >
-    <h2 className={s.headline}>Carousel with custom event handlers.</h2>
+    <h2 id="example11" className={s.headline}>
+      Carousel with custom event handlers.
+      <a href="#example11" aria-label="Jump to example11">
+        <ChainLink />
+      </a>
+    </h2>
     <p>
       Simple carousel with custom event handlers attached to the <code>&lt;Slider /&gt;</code>{" "}
       component&apos;s <code>trayProps</code> property. Open your browser developer tools and look

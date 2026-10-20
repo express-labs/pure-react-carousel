@@ -1,0 +1,183 @@
+.responsiveExampleWrapper {
+  margin: 1.5rem 0;
+}
+
+.controlsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  background-color: #ffffff;
+  border: 1px solid #dcd0c0;
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.controlsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.controlsLabel {
+  font-weight: 600;
+  font-size: 1.3rem;
+  min-width: 14rem;
+}
+
+.sliderInput {
+  flex: 1 1 20rem;
+  max-width: 32rem;
+}
+
+.presetBtn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #c0b283;
+  background-color: #f4f4f4;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.presetBtnActive {
+  background-color: #c0b283;
+  color: #ffffff;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.metricCard {
+  background-color: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+.metricTitle {
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #777777;
+  letter-spacing: 0.05rem;
+}
+
+.metricValue {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #373737;
+  margin-top: 0.3rem;
+}
+
+.carouselContainer {
+  margin: 0 auto;
+  border: 2px dashed #c0b283;
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: #fafafa;
+  box-sizing: border-box;
+}
+
+.slideContent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slideBadge {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  background-color: rgba(55, 55, 55, 0.85);
+  color: #ffffff;
+  padding: 0.3rem 0.7rem;
+  border-radius: 3px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.calloutBanner {
+  background-color: #f0f7ff;
+  border-left: 4px solid #0066cc;
+  padding: 1rem 1.4rem;
+  margin: 1.5rem 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.codeBox {
+  background-color: #2d3748;
+  color: #f7fafc;
+  padding: 1.2rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin: 1rem 0;
+}
+
+.carouselControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+  padding: 0.8rem 1rem;
+  background-color: #ffffff;
+  border: 1px solid #dcd0c0;
+  border-radius: 6px;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #c0b283;
+  background-color: #f4f4f4;
+  color: #373737;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
+
+  &:hover:not(:disabled) {
+    background-color: #c0b283;
+    color: #ffffff;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.dotGroupWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dotGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}

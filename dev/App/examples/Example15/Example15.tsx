@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const SLIDES = [
@@ -22,7 +23,7 @@ const SLIDES = [
   { index: 5, image: "./media/img06.jpeg", title: "Slide 6" },
 ];
 
-const Example15 = (): React.ReactElement => {
+const Example15: React.ElementType = () => {
   const [threshold, setThreshold] = useState<number>(5);
   const [clickCount, setClickCount] = useState<number>(0);
   const [lastAction, setLastAction] = useState<string>("No slide buttons or links clicked yet.");
@@ -53,8 +54,11 @@ const Example15 = (): React.ReactElement => {
       naturalSlideWidth={400}
       naturalSlideHeight={500}
     >
-      <h2 className={s.headline}>
+      <h2 id="example15" className={s.headline}>
         Interactive Slide Elements (<code>dragClickThreshold</code>)
+        <a href="#example15" aria-label="Jump to example15">
+          <ChainLink />
+        </a>
       </h2>
       <p>
         Each slide below contains a <code>&lt;button&gt;</code> and an <code>&lt;a&gt;</code> link.
@@ -117,7 +121,11 @@ const Example15 = (): React.ReactElement => {
                     ev.preventDefault();
                     recordClick(`Clicked link on ${slide.title}`);
                   }}
-                  style={{ color: "#fefefe", padding: "8px 12px", fontWeight: "bold" }}
+                  style={{
+                    color: "#fefefe",
+                    padding: "8px 12px",
+                    fontWeight: "bold",
+                  }}
                 >
                   Link: {slide.title}
                 </a>

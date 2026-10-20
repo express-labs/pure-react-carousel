@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const Example12 = (): React.ReactElement => (
@@ -23,7 +24,12 @@ const Example12 = (): React.ReactElement => (
     hasMasterSpinner
     infinite
   >
-    <h2 className={s.headline}>Infinite Carousel</h2>
+    <h2 id="example12" className={s.headline}>
+      Infinite Carousel
+      <a href="#example12" aria-label="Jump to example12">
+        <ChainLink />
+      </a>
+    </h2>
     <p>
       A carousel that returns to the first slide if the user clicks the Next button while on the
       last slide and returns to the last slide if the user clicks the Back button while on the first

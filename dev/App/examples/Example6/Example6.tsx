@@ -9,7 +9,9 @@ import {
   Slider,
 } from "../../../../src";
 
-import s from "./Example6.scss";
+import ChainLink from "../ChainLink";
+import s from "../../style.scss";
+import customStyles from "./Example6.scss";
 
 const Example6 = (): React.ReactElement => (
   <CarouselProvider
@@ -20,12 +22,17 @@ const Example6 = (): React.ReactElement => (
     naturalSlideHeight={500}
     hasMasterSpinner
   >
-    <h2 className={s.headline}>Simple Carousel with vertically aligned nav buttons</h2>
+    <h2 id="example6" className={s.headline}>
+      Simple Carousel with vertically aligned nav buttons
+      <a href="#example6" aria-label="Jump to example6">
+        <ChainLink />
+      </a>
+    </h2>
     <p>
       Wrap the &lt;Slider /&gt;, &lt;ButtonBack /&gt;, &lt;ButtonNext /&gt; components in a div with
       relative positioning. Add absolute positioning to the buttons.
     </p>
-    <div className={s.container}>
+    <div className={customStyles.container}>
       <Slider className={s.slider}>
         <Slide index={0}>
           <ImageWithZoom src="./media/img01.jpeg" />
@@ -46,10 +53,10 @@ const Example6 = (): React.ReactElement => (
           <ImageWithZoom src="./media/img06.jpeg" />
         </Slide>
       </Slider>
-      <ButtonBack className={s.buttonBack}>Back</ButtonBack>
-      <ButtonNext className={s.buttonNext}>Next</ButtonNext>
+      <ButtonBack className={customStyles.buttonBack}>Back</ButtonBack>
+      <ButtonNext className={customStyles.buttonNext}>Next</ButtonNext>
     </div>
-    <DotGroup className={s.dotGroup} />
+    <DotGroup className={customStyles.dotGroup} />
   </CarouselProvider>
 );
 

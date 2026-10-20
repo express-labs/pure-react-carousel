@@ -12,6 +12,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const Example9 = (): React.ReactElement => {
@@ -46,7 +47,12 @@ const Example9 = (): React.ReactElement => {
         currentSlide={slide}
         isPlaying
       >
-        <h2 className={s.headline}>Horizontal Carousel Auto Play</h2>
+        <h2 id="example9" className={s.headline}>
+          Horizontal Carousel Auto Play
+          <a href="#example9" aria-label="Jump to example9">
+            <ChainLink />
+          </a>
+        </h2>
         <Slider className={s.slider}>
           <Slide index={0}>
             <ImageWithZoom src="./media/img01.jpeg" />

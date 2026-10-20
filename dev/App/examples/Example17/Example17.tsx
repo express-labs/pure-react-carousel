@@ -14,6 +14,7 @@ import {
   type ScrollSnapType,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const SLIDES = [
@@ -25,7 +26,7 @@ const SLIDES = [
   { index: 5, image: "./media/img06.jpeg" },
 ];
 
-const Example17 = (): React.ReactElement => {
+const Example17 = () => {
   const [snapType, setSnapType] = useState<ScrollSnapType>("mandatory");
   const [snapAlign, setSnapAlign] = useState<ScrollSnapAlign>("start");
   const [snapStop, setSnapStop] = useState<ScrollSnapStop>("normal");
@@ -44,8 +45,11 @@ const Example17 = (): React.ReactElement => {
       snapStop={snapStop}
       hasMasterSpinner
     >
-      <h2 className={s.headline}>
+      <h2 id="example17" className={s.headline}>
         Native CSS Scroll &amp; Scroll-Snap Carousel (<code>&lt;NativeSlider /&gt;</code>)
+        <a href="#example17" aria-label="Jump to example17">
+          <ChainLink />
+        </a>
       </h2>
       <p>
         <code>&lt;NativeSlider /&gt;</code> uses native browser CSS overflow scrolling and CSS
@@ -56,71 +60,79 @@ const Example17 = (): React.ReactElement => {
         <code>snapType=&quot;none&quot;</code> for free-momentum scrolling without snapping.
       </p>
       <p>
-        <label htmlFor="native-slider-snap-type">
-          <code>snapType</code>:&nbsp;
-          <select
-            id="native-slider-snap-type"
-            className={s.select}
-            value={snapType}
-            onChange={(ev) => setSnapType(ev.target.value as ScrollSnapType)}
-          >
-            <option value="mandatory">mandatory</option>
-            <option value="proximity">proximity</option>
-            <option value="none">none (free scroll)</option>
-          </select>
-        </label>
-        &nbsp;&nbsp;
-        <label htmlFor="native-slider-snap-align">
-          <code>snapAlign</code>:&nbsp;
-          <select
-            id="native-slider-snap-align"
-            className={s.select}
-            value={snapAlign}
-            onChange={(ev) => setSnapAlign(ev.target.value as ScrollSnapAlign)}
-          >
-            <option value="start">start</option>
-            <option value="center">center</option>
-            <option value="end">end</option>
-            <option value="none">none</option>
-          </select>
-        </label>
-        &nbsp;&nbsp;
-        <label htmlFor="native-slider-snap-stop">
-          <code>snapStop</code>:&nbsp;
-          <select
-            id="native-slider-snap-stop"
-            className={s.select}
-            value={snapStop}
-            onChange={(ev) => setSnapStop(ev.target.value as ScrollSnapStop)}
-          >
-            <option value="normal">normal</option>
-            <option value="always">always</option>
-          </select>
-        </label>
-        &nbsp;&nbsp;
-        <label htmlFor="native-slider-visible-slides">
-          <code>visibleSlides</code>:&nbsp;
-          <select
-            id="native-slider-visible-slides"
-            className={s.select}
-            value={visibleSlides}
-            onChange={(ev) => setVisibleSlides(Number(ev.target.value))}
-          >
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-          </select>
-        </label>
-        &nbsp;&nbsp;
-        <label htmlFor="native-slider-hide-scrollbar">
-          <input
-            id="native-slider-hide-scrollbar"
-            type="checkbox"
-            checked={hideScrollbar}
-            onChange={(ev) => setHideScrollbar(ev.target.checked)}
-          />
-          &nbsp;<code>hideScrollbar</code>
-        </label>
+        <div className={s.controlGrid}>
+          <div className={s.controlGridItem}>
+            <label htmlFor="native-slider-snap-type">
+              <code>snapType</code>:&nbsp;
+              <select
+                id="native-slider-snap-type"
+                className={s.select}
+                value={snapType}
+                onChange={(ev) => setSnapType(ev.target.value as ScrollSnapType)}
+              >
+                <option value="mandatory">mandatory</option>
+                <option value="proximity">proximity</option>
+                <option value="none">none (free scroll)</option>
+              </select>
+            </label>
+          </div>
+          <div className={s.controlGridItem}>
+            <label htmlFor="native-slider-snap-align">
+              <code>snapAlign</code>:&nbsp;
+              <select
+                id="native-slider-snap-align"
+                className={s.select}
+                value={snapAlign}
+                onChange={(ev) => setSnapAlign(ev.target.value as ScrollSnapAlign)}
+              >
+                <option value="start">start</option>
+                <option value="center">center</option>
+                <option value="end">end</option>
+                <option value="none">none</option>
+              </select>
+            </label>
+          </div>
+          <div className={s.controlGridItem}>
+            <label htmlFor="native-slider-snap-stop">
+              <code>snapStop</code>:&nbsp;
+              <select
+                id="native-slider-snap-stop"
+                className={s.select}
+                value={snapStop}
+                onChange={(ev) => setSnapStop(ev.target.value as ScrollSnapStop)}
+              >
+                <option value="normal">normal</option>
+                <option value="always">always</option>
+              </select>
+            </label>
+          </div>
+          <div className={s.controlGridItem}>
+            <label htmlFor="native-slider-visible-slides">
+              <code>visibleSlides</code>:&nbsp;
+              <select
+                id="native-slider-visible-slides"
+                className={s.select}
+                value={visibleSlides}
+                onChange={(ev) => setVisibleSlides(Number(ev.target.value))}
+              >
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+              </select>
+            </label>
+          </div>
+          <div className={s.controlGridItem}>
+            <label htmlFor="native-slider-hide-scrollbar">
+              <input
+                id="native-slider-hide-scrollbar"
+                type="checkbox"
+                checked={hideScrollbar}
+                onChange={(ev) => setHideScrollbar(ev.target.checked)}
+              />
+              &nbsp;<code>hideScrollbar</code>
+            </label>
+          </div>
+        </div>
       </p>
       <NativeSlider className={s.slider} hideScrollbar={hideScrollbar}>
         {SLIDES.map((slide) => (
