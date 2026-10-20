@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 import customStyles from "./Example16.scss";
 
@@ -23,7 +24,7 @@ const SLIDES = [
   { index: 5, image: "./media/img06.jpeg" },
 ];
 
-const Example16 = (): React.ReactElement => {
+const Example16: React.ElementType = () => {
   const [disableAnimation, setDisableAnimation] = useState<boolean>(true);
 
   return (
@@ -38,10 +39,13 @@ const Example16 = (): React.ReactElement => {
       dragEnabled
       hasMasterSpinner
     >
-      <h2 className={s.headline}>
+      <h2 id="example16" className={s.headline}>
         Carousel with Custom CSS Transitions (<code>disableAnimation</code>,{" "}
         <code>classNameAnimation</code>, <code>classNameVisible</code> /{" "}
         <code>classNameHidden</code>)
+        <a href="#example16" aria-label="Jump to example16">
+          <ChainLink />
+        </a>
       </h2>
       <p>
         When <code>disableAnimation</code> is enabled on <code>&lt;CarouselProvider&gt;</code>, the

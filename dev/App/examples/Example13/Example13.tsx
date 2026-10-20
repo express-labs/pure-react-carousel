@@ -9,6 +9,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const Example13 = (): React.ReactElement => (
@@ -20,7 +21,12 @@ const Example13 = (): React.ReactElement => (
     naturalSlideHeight={500}
     isIntrinsicHeight
   >
-    <h2 className={s.headline}>With intrinsic axis dimension</h2>
+    <h2 id="example13" className={s.headline}>
+      With intrinsic axis dimension
+      <a href="#example13" aria-label="Jump to example13">
+        <ChainLink />
+      </a>
+    </h2>
     <p />
     <Slider className={s.slider}>
       <Slide index={0}>

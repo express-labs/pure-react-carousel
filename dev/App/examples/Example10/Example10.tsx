@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import CustomSpinner from "./CustomSpinner";
 import s from "../../style.scss";
 
@@ -25,7 +26,12 @@ const Example10 = (): React.ReactElement => (
     naturalSlideHeight={500}
     hasMasterSpinner
   >
-    <h1 className={s.headline}>Carousel (Custom Spinner)</h1>
+    <h2 id="example10" className={s.headline}>
+      Carousel (Custom Spinner)
+      <a href="#example10" aria-label="Jump to example10">
+        <ChainLink />
+      </a>
+    </h2>
     <p>This uses a customized spinner.</p>
     <Slider className={s.slider} spinner={renderCustomSpinner}>
       <Slide index={0}>

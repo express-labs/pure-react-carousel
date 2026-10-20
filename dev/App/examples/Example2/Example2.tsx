@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const Example2 = (): React.ReactElement => (
@@ -22,7 +23,12 @@ const Example2 = (): React.ReactElement => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
   >
-    <h2 className={s.headline}>Carousel (With Individual Spinners)</h2>
+    <h2 id="example2" className={s.headline}>
+      Carousel (With Individual Spinners)
+      <a href="#example2" aria-label="Jump to example2">
+        <ChainLink />
+      </a>
+    </h2>
     <p>
       Each ImageWithZoom component has it&apos;s own spinner. You might want to use Chrome dev tools
       to throttle the network connection so you can see the spinners.

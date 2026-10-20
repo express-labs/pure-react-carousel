@@ -11,9 +11,10 @@ import {
   DotGroup,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
-const Example14 = (): React.ReactElement => (
+const Example14: React.ElementType = () => (
   <div dir="rtl">
     <CarouselProvider
       visibleSlides={2}
@@ -22,7 +23,12 @@ const Example14 = (): React.ReactElement => (
       naturalSlideWidth={400}
       naturalSlideHeight={500}
     >
-      <h2 className={s.headline}>RTL</h2>
+      <h2 id="example14" className={s.headline}>
+        RTL
+        <a href="#example14" aria-label="Jump to example14">
+          <ChainLink />
+        </a>
+      </h2>
       <p>
         A carousel wrapped in an element with <code>dir=&quot;rtl&quot;</code>, demonstrating
         support for use with right-to-left languages.

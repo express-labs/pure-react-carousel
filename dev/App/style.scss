@@ -145,7 +145,8 @@ p {
     background-color: $highlight2;
     h2,
     h3 {
-      color: $white;
+      color: $dark;
+      font-weight: 800;
     }
   }
 
@@ -163,12 +164,14 @@ p {
 .example {
   .headline {
     text-align: left;
+    font-weight: 800;
   }
 }
 
 .headline {
   text-align: center;
   color: $highlight1;
+  font-weight: 800;
 }
 
 .select {
@@ -189,6 +192,17 @@ p {
   top: 0.2rem;
 }
 
+.chainLink {
+  vertical-align: baseline;
+  stroke: $white;
+  fill: none;
+  margin: 0 0.4rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  position: relative;
+  top: 0.2rem;
+}
+
 .verticalSlider {
   width: 100%;
   max-width: 300px;
@@ -197,4 +211,14 @@ p {
 .express {
   text-align: center;
   padding: 2rem;
+}
+
+.controlGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.controlGridItem {
+  flex: 0 0 calc(50% - 1rem);
 }

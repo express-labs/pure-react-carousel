@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const Example3 = (): React.ReactElement => (
@@ -21,7 +22,12 @@ const Example3 = (): React.ReactElement => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
   >
-    <h2 className={s.headline}>Carousel (Just One Image)</h2>
+    <h2 id="example3" className={s.headline}>
+      Carousel (Just One Image)
+      <a href="#example3" aria-label="Jump to example3">
+        <ChainLink />
+      </a>
+    </h2>
     <p>Single image</p>
     <Slider className={s.slider}>
       <Slide tag="a" index={0}>

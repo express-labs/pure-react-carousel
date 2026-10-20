@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const Example1 = (): React.ReactElement => (
@@ -22,7 +23,12 @@ const Example1 = (): React.ReactElement => (
     naturalSlideHeight={500}
     hasMasterSpinner
   >
-    <h2 className={s.headline}>Carousel (With Master Loading Spinner)</h2>
+    <h2 id="example1" className={s.headline}>
+      Carousel (With Master Loading Spinner)
+      <a href="#example1" aria-label="Jump to example1">
+        <ChainLink />
+      </a>
+    </h2>
     <p>
       This spinner will go away after all the images have loaded. You might want to use Chrome dev
       tools to throttle the network connection so you can see the spinner.

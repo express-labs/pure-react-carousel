@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const Example5 = (): React.ReactElement => (
@@ -20,7 +21,12 @@ const Example5 = (): React.ReactElement => (
     naturalSlideWidth={400}
     naturalSlideHeight={500}
   >
-    <h2 className={s.headline}>Horizontal Carousel (With Master Loading Spinner)</h2>
+    <h2 id="example5" className={s.headline}>
+      Horizontal Carousel (With Master Loading Spinner)
+      <a href="#example5" aria-label="Jump to example5">
+        <ChainLink />
+      </a>
+    </h2>
     <p>Horizontal Carousel with regular, non-zooming images and dotNumbers on the Dot Group.</p>
     <Slider className={s.slider}>
       <Slide tag="a" index={0}>

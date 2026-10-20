@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const Example8 = (): React.ReactElement => (
@@ -23,7 +24,12 @@ const Example8 = (): React.ReactElement => (
     hasMasterSpinner
     lockOnWindowScroll
   >
-    <h2 className={s.headline}>Carousel (lockOnWindowScroll set to TRUE)</h2>
+    <h2 id="example8" className={s.headline}>
+      Carousel (lockOnWindowScroll set to TRUE)
+      <a href="#example8" aria-label="Jump to example8">
+        <ChainLink />
+      </a>
+    </h2>
     <p>
       - When scrolling the browser, up and down, horizontal scrollbars will not scroll horizontally.
     </p>

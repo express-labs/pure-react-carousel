@@ -11,6 +11,7 @@ import {
   Slider,
 } from "../../../../src";
 
+import ChainLink from "../ChainLink";
 import s from "../../style.scss";
 
 const Example4 = (): React.ReactElement => (
@@ -22,7 +23,12 @@ const Example4 = (): React.ReactElement => (
     naturalSlideHeight={500}
     step={2}
   >
-    <h2 className={s.headline}>Vertical Carousel (With Master Loading Spinner)</h2>
+    <h2 id="example4" className={s.headline}>
+      Vertical Carousel (With Master Loading Spinner)
+      <a href="#example4" aria-label="Jump to example4">
+        <ChainLink />
+      </a>
+    </h2>
     <p>This is a vertical carousel.</p>
     <p>
       TODO: make vertical carousels responsive based on image. It can be done but it&apos;s not part
