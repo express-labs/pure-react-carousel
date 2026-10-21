@@ -1,9 +1,9 @@
 import * as React from "react";
-import { cn } from "../helpers";
+import { cn, hasAccessibleContent } from "../helpers";
 import type { ButtonPlayViewProps } from "../types";
 import s from "./ButtonPlay.scss";
 
-const ButtonPlay = (props: ButtonPlayViewProps) => {
+const ButtonPlay = React.forwardRef<HTMLButtonElement, ButtonPlayViewProps>((props, ref) => {
   const {
     carouselStore,
     children = null,
@@ -25,11 +25,21 @@ const ButtonPlay = (props: ButtonPlayViewProps) => {
   };
 
   const newClassName = cn([s.buttonNext, "carousel__play-button", className]);
+  const activeChildren = [isPlaying ? childrenPlaying : childrenPaused, children];
+  const defaultAriaLabel =
+    restProps["aria-label"] === undefined &&
+    restProps["aria-labelledby"] === undefined &&
+    !hasAccessibleContent(activeChildren)
+      ? isPlaying
+        ? "pause"
+        : "play"
+      : undefined;
 
   return (
     <button
+      ref={ref}
       type="button"
-      aria-label="play"
+      aria-label={defaultAriaLabel}
       className={newClassName}
       onClick={handleOnClick}
       {...restProps}
@@ -39,6 +49,6 @@ const ButtonPlay = (props: ButtonPlayViewProps) => {
       {children}
     </button>
   );
-};
+});
 
 export default ButtonPlay;

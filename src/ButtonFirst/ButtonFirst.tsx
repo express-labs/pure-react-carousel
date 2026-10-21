@@ -1,9 +1,9 @@
 import * as React from "react";
-import { cn } from "../helpers";
+import { cn, hasAccessibleContent } from "../helpers";
 import type { ButtonFirstViewProps } from "../types";
 import s from "./ButtonFirst.scss";
 
-const ButtonFirst = (props: ButtonFirstViewProps) => {
+const ButtonFirst = React.forwardRef<HTMLButtonElement, ButtonFirstViewProps>((props, ref) => {
   const {
     carouselStore,
     children,
@@ -30,11 +30,18 @@ const ButtonFirst = (props: ButtonFirstViewProps) => {
   };
 
   const newClassName = cn([s.buttonFirst, "carousel__first-button", className]);
+  const defaultAriaLabel =
+    restProps["aria-label"] === undefined &&
+    restProps["aria-labelledby"] === undefined &&
+    !hasAccessibleContent(children)
+      ? "first"
+      : undefined;
 
   return (
     <button
+      ref={ref}
       type="button"
-      aria-label="first"
+      aria-label={defaultAriaLabel}
       className={newClassName}
       onClick={handleOnClick}
       disabled={isDisabled}
@@ -43,6 +50,6 @@ const ButtonFirst = (props: ButtonFirstViewProps) => {
       {children}
     </button>
   );
-};
+});
 
 export default ButtonFirst;

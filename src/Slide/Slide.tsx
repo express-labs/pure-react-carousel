@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { cn, pct } from "../helpers";
+import { cn, getInertValue, pct } from "../helpers";
 import type { ScrollSnapAlign, ScrollSnapStop, SlideViewProps } from "../types";
 import s from "./Slide.scss";
 
@@ -16,17 +16,30 @@ const SNAP_STOP_CLASS_MAP: Record<ScrollSnapStop, string> = {
   always: s.snapStopAlways,
 };
 
-const Slide = (props: SlideViewProps) => {
+const SELECTABLE_ROLES = new Set([
+  "option",
+  "tab",
+  "gridcell",
+  "row",
+  "columnheader",
+  "rowheader",
+  "treeitem",
+]);
+
+const Slide = React.forwardRef<HTMLDivElement, SlideViewProps>((props, ref) => {
   const {
-    ariaLabel = "slide",
+    ariaLabel,
     carouselStore: _carouselStore = null,
     children = null,
     className = null,
     classNameHidden = null,
     classNameVisible = null,
     currentSlide,
+    focusRing = true,
     index,
+    inert: inertProp,
     innerClassName = null,
+    innerProps = {},
     innerTag: InnerTag = "div",
     naturalSlideHeight,
     naturalSlideWidth,
@@ -50,21 +63,25 @@ const Slide = (props: SlideViewProps) => {
   const isVisible = index >= currentSlide && index < currentSlide + visibleSlides;
 
   const handleOnFocus = (ev: React.FocusEvent<HTMLElement>) => {
-    setFocused(true);
+    if (ev.target === ev.currentTarget) {
+      setFocused(true);
+    }
     if (onFocus !== null) {
       onFocus(ev);
     }
   };
 
   const handleOnBlur = (ev: React.FocusEvent<HTMLElement>) => {
-    setFocused(false);
+    if (ev.target === ev.currentTarget) {
+      setFocused(false);
+    }
     if (onBlur !== null) {
       onBlur(ev);
     }
   };
 
   const renderFocusRing = () => {
-    if (focused) {
+    if (focused && focusRing) {
       return <div className={[s.focusRing, "carousel__slide-focus-ring"].join(" ")} />;
     }
     return null;
@@ -112,13 +129,43 @@ const Slide = (props: SlideViewProps) => {
     className,
   ]);
 
-  const newInnerClassName = cn([s.slideInner, "carousel__inner-slide", innerClassName]);
+  const {
+    className: innerPropsClassName,
+    ref: _innerPropsRef,
+    style: innerPropsStyle,
+    ...restInnerProps
+  } = innerProps;
+
+  const newInnerClassName = cn([
+    s.slideInner,
+    "carousel__inner-slide",
+    innerClassName,
+    innerPropsClassName,
+  ]);
+  const mergedInnerStyle: React.CSSProperties = {
+    ...innerStyle,
+    ...innerPropsStyle,
+  };
+
+  const defaultAriaHidden = !isVisible ? "true" : undefined;
+  const shouldBeInert = inertProp !== undefined ? Boolean(inertProp) : !isVisible;
+  const resolvedInert = shouldBeInert ? getInertValue() : undefined;
+  const defaultAriaSelected = SELECTABLE_ROLES.has(role) ? isVisible : undefined;
+  const resolvedAriaLabel =
+    ariaLabel !== undefined
+      ? ariaLabel
+      : restProps["aria-labelledby"] !== undefined
+        ? undefined
+        : "slide";
 
   return React.createElement(
     Tag,
     {
-      "aria-selected": isVisible,
-      "aria-label": ariaLabel,
+      ref,
+      "aria-hidden": defaultAriaHidden,
+      "aria-selected": defaultAriaSelected,
+      "aria-label": resolvedAriaLabel,
+      inert: resolvedInert,
       role,
       onFocus: handleOnFocus,
       onBlur: handleOnBlur,
@@ -128,11 +175,11 @@ const Slide = (props: SlideViewProps) => {
     },
     React.createElement(
       InnerTag,
-      { className: newInnerClassName, style: innerStyle },
+      { className: newInnerClassName, style: mergedInnerStyle, ...restInnerProps },
       children,
       renderFocusRing(),
     ),
   );
-};
+});
 
 export default Slide;

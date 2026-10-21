@@ -1336,7 +1336,7 @@ describe("<NativeSlider />", () => {
       expect(fireEvent.keyDown(slider, { keyCode: 39 })).toBe(false);
       expect(store.getStoreState().currentSlide).toBe(0);
 
-      // disableKeyboard ignores key presses and does not prevent default
+      // disableKeyboard ignores key presses and does not prevent default, but still calls consumer onKeyDown
       rerender(
         <NativeSliderView
           {...props}
@@ -1345,12 +1345,53 @@ describe("<NativeSlider />", () => {
           totalSlides={4}
           visibleSlides={1}
           disableKeyboard
+          onKeyDown={onKeyDownSpy}
         >
           <div className="carousel__slide">Slide 0</div>
         </NativeSliderView>,
       );
+      onKeyDownSpy.mockClear();
       expect(fireEvent.keyDown(slider, { keyCode: 39 })).toBe(true);
       expect(store.getStoreState().currentSlide).toBe(0);
+      expect(onKeyDownSpy).toHaveBeenCalledTimes(1);
+
+      // Arrow keys inside interactive descendants or with defaultPrevented do not move slider, but still call consumer onKeyDown
+      rerender(
+        <NativeSliderView
+          {...props}
+          carouselStore={store}
+          currentSlide={0}
+          totalSlides={4}
+          visibleSlides={1}
+          onKeyDown={onKeyDownSpy}
+        >
+          <div className="carousel__slide">
+            <input data-testid="native-slide-input" type="text" />
+            <div data-testid="native-slide-custom-slider" role="slider" tabIndex={0} />
+            <div
+              data-testid="native-slide-prevented"
+              tabIndex={0}
+              onKeyDown={(ev) => ev.preventDefault()}
+            />
+          </div>
+        </NativeSliderView>,
+      );
+      onKeyDownSpy.mockClear();
+      const input = container.querySelector('[data-testid="native-slide-input"]') as HTMLElement;
+      const customSlider = container.querySelector(
+        '[data-testid="native-slide-custom-slider"]',
+      ) as HTMLElement;
+      const preventedEl = container.querySelector(
+        '[data-testid="native-slide-prevented"]',
+      ) as HTMLElement;
+
+      expect(fireEvent.keyDown(input, { keyCode: 39 })).toBe(true);
+      expect(store.getStoreState().currentSlide).toBe(0);
+      expect(fireEvent.keyDown(customSlider, { keyCode: 39 })).toBe(true);
+      expect(store.getStoreState().currentSlide).toBe(0);
+      fireEvent.keyDown(preventedEl, { keyCode: 39 });
+      expect(store.getStoreState().currentSlide).toBe(0);
+      expect(onKeyDownSpy).toHaveBeenCalledTimes(3);
     });
   });
 
@@ -1392,6 +1433,100 @@ describe("<NativeSlider />", () => {
       );
 
       expect(trayWrap.scrollLeft).toBe(200);
+    });
+
+    it("should forward object and callback refs to the native slider root element", () => {
+      const ref = React.createRef<HTMLDivElement>();
+      let callbackNode: HTMLDivElement | null = null;
+      const { rerender } = render(<NativeSliderView {...props} ref={ref} />);
+      expect(ref.current).toBeInstanceOf(HTMLDivElement);
+      expect(ref.current).toHaveClass("carousel__slider");
+
+      rerender(
+        <NativeSliderView
+          {...props}
+          ref={(node) => {
+            callbackNode = node;
+          }}
+        />,
+      );
+      expect(callbackNode).toBeInstanceOf(HTMLDivElement);
+      expect(callbackNode).toHaveClass("carousel__slider");
+    });
+
+    it("should pass trayWrapProps to the tray wrapper element, merge className and style, and chain interaction handlers", () => {
+      const onPointerDown = vi.fn();
+      const onTouchStart = vi.fn();
+      const onWheel = vi.fn();
+      const carouselStore = new Store({
+        currentSlide: 0,
+        totalSlides: 4,
+        visibleSlides: 1,
+        isPlaying: true,
+        pauseOnInteract: true,
+      });
+
+      const { container } = render(
+        <NativeSliderView
+          {...props}
+          carouselStore={carouselStore}
+          isPlaying
+          pauseOnInteract
+          classNameTrayWrap="custom-native-wrap"
+          trayWrapProps={{
+            id: "native-tray-wrap",
+            "aria-label": "Scroll viewport",
+            className: "from-tray-wrap-props",
+            style: { maxHeight: "300px" },
+            onPointerDown,
+            onTouchStart,
+            onWheel,
+          }}
+        />,
+      );
+
+      const trayWrap = container.querySelector(".carousel__slider-tray-wrapper") as HTMLElement;
+      expect(trayWrap).toHaveAttribute("id", "native-tray-wrap");
+      expect(trayWrap).toHaveAttribute("aria-label", "Scroll viewport");
+      expect(trayWrap).toHaveClass(
+        "carousel__slider-tray-wrapper",
+        "custom-native-wrap",
+        "from-tray-wrap-props",
+      );
+      expect(trayWrap.style.maxHeight).toBe("300px");
+
+      fireEvent.pointerDown(trayWrap);
+      expect(onPointerDown).toHaveBeenCalledTimes(1);
+      expect(carouselStore.getStoreState().isPlaying).toBe(false);
+
+      fireEvent.touchStart(trayWrap);
+      expect(onTouchStart).toHaveBeenCalledTimes(1);
+
+      fireEvent.wheel(trayWrap);
+      expect(onWheel).toHaveBeenCalledTimes(1);
+    });
+
+    it('should toggle default aria-live between "polite" and "off" based on isPlaying and omit default aria-label when aria-labelledby is set', () => {
+      const { container, rerender } = render(<NativeSliderView {...props} isPlaying={false} />);
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      expect(slider).toHaveAttribute("aria-live", "polite");
+      expect(slider).toHaveAttribute("aria-label", "slider");
+
+      rerender(<NativeSliderView {...props} isPlaying />);
+      expect(slider).toHaveAttribute("aria-live", "off");
+
+      rerender(<NativeSliderView {...props} isPlaying aria-live="assertive" />);
+      expect(slider).toHaveAttribute("aria-live", "assertive");
+
+      rerender(<NativeSliderView {...props} aria-labelledby="native-carousel-heading" />);
+      expect(slider).toHaveAttribute("aria-labelledby", "native-carousel-heading");
+      expect(slider.hasAttribute("aria-label")).toBe(false);
+
+      rerender(<NativeSliderView {...props} aria-label="Featured native products" />);
+      expect(slider).toHaveAttribute("aria-label", "Featured native products");
+
+      rerender(<NativeSliderView {...props} ariaLabel="Explicit ariaLabel prop" />);
+      expect(slider).toHaveAttribute("aria-label", "Explicit ariaLabel prop");
     });
   });
 });

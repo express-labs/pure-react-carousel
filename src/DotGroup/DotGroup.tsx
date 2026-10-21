@@ -4,13 +4,15 @@ import { cn } from "../helpers";
 import type { DotGroupViewProps } from "../types";
 import s from "./DotGroup.scss";
 
-const DotGroup = (props: DotGroupViewProps) => {
+const DotGroup = React.forwardRef<HTMLDivElement, DotGroupViewProps>((props, ref) => {
   const {
     carouselStore: _carouselStore,
     children = null,
     className = undefined,
     currentSlide,
     dotNumbers = false,
+    dotProps = {},
+    getDotProps = null,
     disableActiveDots = true,
     showAsSelectedForCurrentSlideOnly = false,
     totalSlides,
@@ -35,6 +37,12 @@ const DotGroup = (props: DotGroupViewProps) => {
       const singleSelected = i === currentSlide;
       const selected = showAsSelectedForCurrentSlideOnly ? singleSelected : multipleSelected;
       const slide = i >= totalSlides - visibleSlides ? totalSlides - visibleSlides : i;
+      const perDotProps = getDotProps ? getDotProps(i, selected, slide) : {};
+      const mergedDotClassName = cn([dotProps.className, perDotProps.className]) || undefined;
+      const { children: customDotChildren, ...restMergedDotProps } = {
+        ...dotProps,
+        ...perDotProps,
+      };
 
       dots.push(
         <Dot
@@ -42,8 +50,14 @@ const DotGroup = (props: DotGroupViewProps) => {
           slide={slide}
           selected={selected}
           disabled={disableActiveDots ? selected : false}
+          {...restMergedDotProps}
+          className={mergedDotClassName}
         >
-          <span className={cn("carousel__dot-group-dot")}>{dotNumbers && i + 1}</span>
+          {customDotChildren !== undefined ? (
+            customDotChildren
+          ) : (
+            <span className={cn("carousel__dot-group-dot")}>{dotNumbers && i + 1}</span>
+          )}
         </Dot>,
       );
     }
@@ -53,11 +67,11 @@ const DotGroup = (props: DotGroupViewProps) => {
   const newClassName = cn([s.DotGroup, "carousel__dot-group", className]);
 
   return (
-    <div className={newClassName} {...restProps}>
+    <div ref={ref} className={newClassName} {...restProps}>
       {renderDotsContent()}
       {children}
     </div>
   );
-};
+});
 
 export default DotGroup;

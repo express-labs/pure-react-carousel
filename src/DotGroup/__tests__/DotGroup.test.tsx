@@ -112,4 +112,50 @@ describe("<DotGroup />", () => {
     expect(screen.getByTestId("custom-dot-1")).toBeInTheDocument();
     expect(screen.getByTestId("custom-dot-2")).toBeInTheDocument();
   });
+
+  it("should keep fallback aria-label when dotNumbers is false, omit it when dotNumbers is true, and forward dotProps and getDotProps", () => {
+    const { rerender } = renderWithProvider(<DotGroup {...props} />);
+    let buttons = screen.getAllByRole("button");
+    expect(buttons[0]).toHaveAttribute("aria-label", "slide dot");
+
+    rerender(
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={100}
+        totalSlides={3}
+        visibleSlides={2}
+        currentSlide={1}
+      >
+        <DotGroup {...props} dotNumbers />
+      </CarouselProvider>,
+    );
+    buttons = screen.getAllByRole("button");
+    expect(buttons[0]).not.toHaveAttribute("aria-label");
+    expect(buttons[0]).toHaveAccessibleName("1");
+    expect(buttons[1]).toHaveAccessibleName("2");
+
+    rerender(
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={100}
+        totalSlides={3}
+        visibleSlides={2}
+        currentSlide={1}
+      >
+        <DotGroup
+          {...props}
+          dotProps={{ className: "shared-dot" }}
+          getDotProps={(i, selected) => ({
+            "aria-label": `Go to slide ${i + 1}${selected ? " (active)" : ""}`,
+            children: `Dot ${i + 1}`,
+          })}
+        />
+      </CarouselProvider>,
+    );
+    buttons = screen.getAllByRole("button");
+    expect(buttons[0]).toHaveClass("shared-dot");
+    expect(buttons[0]).toHaveAttribute("aria-label", "Go to slide 1");
+    expect(buttons[0]).toHaveTextContent("Dot 1");
+    expect(buttons[1]).toHaveAttribute("aria-label", "Go to slide 2 (active)");
+  });
 });

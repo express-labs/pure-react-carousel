@@ -217,4 +217,84 @@ describe("<Image />", () => {
     expect(div.style.backgroundImage).toBe('url("bob.jpg")');
     expect(div.style.backgroundSize).toBe("cover");
   });
+
+  it("should forward ref to the rendered image element", () => {
+    const ref = React.createRef<HTMLImageElement>();
+    render(<Image {...props} ref={ref} />);
+    const internalImg = getInternalImage();
+    act(() => {
+      internalImg.dispatchEvent(new UIEvent("load"));
+    });
+    expect(ref.current).toBeInstanceOf(HTMLImageElement);
+    expect(ref.current).toHaveClass("carousel__image--success");
+  });
+
+  it("should not leak src or alt attributes onto non-img fallback tags during loading or error states", () => {
+    const { container } = render(<Image {...props} src="bob.jpg" alt="Bob alt text" />);
+    const loadingEl = container.querySelector(".carousel__image--loading") as HTMLElement;
+    expect(loadingEl.tagName).toBe("DIV");
+    expect(loadingEl.hasAttribute("src")).toBe(false);
+    expect(loadingEl.hasAttribute("alt")).toBe(false);
+
+    const internalImg = getInternalImage();
+    act(() => {
+      internalImg.dispatchEvent(new UIEvent("error"));
+    });
+
+    const errorEl = container.querySelector(".carousel__image--error") as HTMLElement;
+    expect(errorEl.tagName).toBe("DIV");
+    expect(errorEl.hasAttribute("src")).toBe(false);
+    expect(errorEl.hasAttribute("alt")).toBe(false);
+  });
+
+  it("should default role='img' and aria-label={alt} on non-img tags in success state when alt is non-empty, and respect explicit overrides", () => {
+    const { container, rerender } = render(
+      <Image {...props} tag="div" isBgImage src="bob.jpg" alt="Scenic mountain" />,
+    );
+    const internalImg = getInternalImage();
+    act(() => {
+      internalImg.dispatchEvent(new UIEvent("load"));
+    });
+
+    const el = container.querySelector(".carousel__image--success") as HTMLElement;
+    expect(el).toHaveAttribute("role", "img");
+    expect(el).toHaveAttribute("aria-label", "Scenic mountain");
+    expect(el.hasAttribute("alt")).toBe(false);
+    expect(el.hasAttribute("src")).toBe(false);
+
+    // Decorative empty alt omits default role and aria-label
+    rerender(<Image {...props} tag="div" isBgImage src="bob.jpg" alt="" />);
+    expect(el.hasAttribute("role")).toBe(false);
+    expect(el.hasAttribute("aria-label")).toBe(false);
+
+    // Explicit role and aria-label override defaults
+    rerender(
+      <Image
+        {...props}
+        tag="div"
+        isBgImage
+        src="bob.jpg"
+        alt="Scenic mountain"
+        role="presentation"
+        aria-label="Custom label"
+      />,
+    );
+    expect(el).toHaveAttribute("role", "presentation");
+    expect(el).toHaveAttribute("aria-label", "Custom label");
+
+    // Explicit aria-labelledby omits default aria-label
+    rerender(
+      <Image
+        {...props}
+        tag="div"
+        isBgImage
+        src="bob.jpg"
+        alt="Scenic mountain"
+        aria-labelledby="caption-id"
+      />,
+    );
+    expect(el).toHaveAttribute("role", "img");
+    expect(el).toHaveAttribute("aria-labelledby", "caption-id");
+    expect(el.hasAttribute("aria-label")).toBe(false);
+  });
 });

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../helpers";
+import { cn, hasAccessibleContent } from "../helpers";
 import type { ButtonBackViewProps } from "../types";
 import s from "./ButtonBack.scss";
 
@@ -13,7 +13,7 @@ function setDisabled(
   return false;
 }
 
-const ButtonBack = (props: ButtonBackViewProps) => {
+const ButtonBack = React.forwardRef<HTMLButtonElement, ButtonBackViewProps>((props, ref) => {
   const {
     carouselStore,
     children,
@@ -46,11 +46,18 @@ const ButtonBack = (props: ButtonBackViewProps) => {
   };
 
   const newClassName = cn([s.buttonBack, "carousel__back-button", className]);
+  const defaultAriaLabel =
+    restProps["aria-label"] === undefined &&
+    restProps["aria-labelledby"] === undefined &&
+    !hasAccessibleContent(children)
+      ? "previous"
+      : undefined;
 
   return (
     <button
+      ref={ref}
       type="button"
-      aria-label="previous"
+      aria-label={defaultAriaLabel}
       className={newClassName}
       onClick={handleOnClick}
       disabled={isDisabled}
@@ -59,6 +66,6 @@ const ButtonBack = (props: ButtonBackViewProps) => {
       {children}
     </button>
   );
-};
+});
 
 export default ButtonBack;

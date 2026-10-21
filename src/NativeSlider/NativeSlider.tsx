@@ -1,13 +1,13 @@
 import * as React from "react";
 import { useCallback, useEffect, useRef } from "react";
 import Spinner from "../Spinner";
-import { cn, pct, slideTraySize as calcSlideTraySize } from "../helpers";
+import { cn, isInteractiveDescendant, pct, slideTraySize as calcSlideTraySize } from "../helpers";
 import type { NativeSliderViewProps } from "../types";
 import s from "./NativeSlider.scss";
 
-const NativeSlider = (props: NativeSliderViewProps) => {
+const NativeSlider = React.forwardRef<HTMLDivElement, NativeSliderViewProps>((props, ref) => {
   const {
-    ariaLabel = "slider",
+    ariaLabel,
     backwardKeyCode = 37,
     carouselStore,
     children,
@@ -47,11 +47,23 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     touchEnabled = true,
     trayProps = {},
     trayTag: TrayTag = "div",
+    trayWrapProps = {},
     visibleSlides = 1,
     ...restProps
   } = props;
 
   const sliderElementRef = useRef<HTMLDivElement | null>(null);
+  const setSliderElementRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      sliderElementRef.current = node;
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
   const trayWrapRef = useRef<HTMLDivElement | null>(null);
   const trayRef = useRef<HTMLElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -496,33 +508,36 @@ const NativeSlider = (props: NativeSliderViewProps) => {
   };
 
   const handleOnKeyDown = (ev: React.KeyboardEvent<HTMLDivElement>) => {
-    if (disableKeyboard) return;
-    const { keyCode } = ev;
-    const maxSlide = Math.max(0, totalSlides - visibleSlides);
-    const nextState: { currentSlide?: number; isPlaying?: boolean } = {};
+    const isInteractiveTarget = isInteractiveDescendant(ev.target, ev.currentTarget);
 
-    if (pauseOnInteract) {
-      nextState.isPlaying = false;
-    }
+    if (!disableKeyboard && !ev.defaultPrevented && !isInteractiveTarget) {
+      const { keyCode } = ev;
+      const maxSlide = Math.max(0, totalSlides - visibleSlides);
+      const nextState: { currentSlide?: number; isPlaying?: boolean } = {};
 
-    if (keyCode === backwardKeyCode) {
-      ev.preventDefault();
-      if (currentSlide === 0 && infinite) {
-        nextState.currentSlide = maxSlide;
-      } else {
-        nextState.currentSlide = Math.max(0, currentSlide - 1);
+      if (pauseOnInteract) {
+        nextState.isPlaying = false;
       }
-      carouselStore.setStoreState(nextState);
-    }
 
-    if (keyCode === forwardKeyCode) {
-      ev.preventDefault();
-      if (currentSlide >= maxSlide && infinite) {
-        nextState.currentSlide = 0;
-      } else {
-        nextState.currentSlide = Math.min(maxSlide, currentSlide + 1);
+      if (keyCode === backwardKeyCode) {
+        ev.preventDefault();
+        if (currentSlide === 0 && infinite) {
+          nextState.currentSlide = maxSlide;
+        } else {
+          nextState.currentSlide = Math.max(0, currentSlide - 1);
+        }
+        carouselStore.setStoreState(nextState);
       }
-      carouselStore.setStoreState(nextState);
+
+      if (keyCode === forwardKeyCode) {
+        ev.preventDefault();
+        if (currentSlide >= maxSlide && infinite) {
+          nextState.currentSlide = 0;
+        } else {
+          nextState.currentSlide = Math.min(maxSlide, currentSlide + 1);
+        }
+        carouselStore.setStoreState(nextState);
+      }
     }
 
     if (typeof onKeyDown === "function") {
@@ -583,6 +598,16 @@ const NativeSlider = (props: NativeSliderViewProps) => {
         ? [s.snapNone, "carousel__native-slider-tray-wrapper--snap-none"]
         : [s.snapMandatory, "carousel__native-slider-tray-wrapper--snap-mandatory"];
 
+  const {
+    className: trayWrapPropsClassName,
+    onPointerDown: trayWrapOnPointerDown,
+    onTouchStart: trayWrapOnTouchStart,
+    onWheel: trayWrapOnWheel,
+    ref: _trayWrapRefProp,
+    style: trayWrapPropsStyle,
+    ...filteredTrayWrapProps
+  } = trayWrapProps;
+
   const trayWrapClasses = cn([
     s.trayWrap,
     orientation === "vertical" ? s.verticalSlideTrayWrap : s.horizontalSlideTrayWrap,
@@ -600,7 +625,12 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       ? "carousel__slider-tray-wrap--vertical"
       : "carousel__slider-tray-wrap--horizontal",
     classNameTrayWrap,
+    trayWrapPropsClassName,
   ]);
+  const mergedTrayWrapStyle: React.CSSProperties = {
+    ...trayWrapStyle,
+    ...trayWrapPropsStyle,
+  };
 
   const trayClasses = cn([
     s.sliderTray,
@@ -620,12 +650,20 @@ const NativeSlider = (props: NativeSliderViewProps) => {
     ...filteredTrayProps
   } = trayProps;
 
+  const defaultAriaLive = isPlaying ? "off" : "polite";
+  const resolvedAriaLabel =
+    ariaLabel !== undefined
+      ? ariaLabel
+      : restProps["aria-labelledby"] !== undefined
+        ? undefined
+        : "slider";
+
   return (
     <div
-      ref={sliderElementRef}
+      ref={setSliderElementRef}
       className={sliderClasses}
-      aria-live="polite"
-      aria-label={ariaLabel}
+      aria-live={defaultAriaLive}
+      aria-label={resolvedAriaLabel}
       role={role}
       style={sliderStyle}
       tabIndex={tabIndex ?? undefined}
@@ -635,10 +673,20 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       <div
         ref={trayWrapRef}
         className={trayWrapClasses}
-        style={trayWrapStyle}
-        onPointerDown={handleUserScrollInteract}
-        onTouchStart={handleUserScrollInteract}
-        onWheel={handleUserScrollInteract}
+        style={mergedTrayWrapStyle}
+        onPointerDown={(ev: React.PointerEvent<HTMLDivElement>) => {
+          handleUserScrollInteract();
+          trayWrapOnPointerDown?.(ev);
+        }}
+        onTouchStart={(ev: React.TouchEvent<HTMLDivElement>) => {
+          handleUserScrollInteract();
+          trayWrapOnTouchStart?.(ev);
+        }}
+        onWheel={(ev: React.WheelEvent<HTMLDivElement>) => {
+          handleUserScrollInteract();
+          trayWrapOnWheel?.(ev);
+        }}
+        {...filteredTrayWrapProps}
       >
         {React.createElement(
           TrayTag,
@@ -649,6 +697,6 @@ const NativeSlider = (props: NativeSliderViewProps) => {
       </div>
     </div>
   );
-};
+});
 
 export default NativeSlider;

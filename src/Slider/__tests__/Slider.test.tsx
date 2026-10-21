@@ -1454,6 +1454,205 @@ describe("<Slider />", () => {
       fireEvent.keyDown(slider, { keyCode: 39 });
       expect(carouselStore.state.currentSlide).toBe(0);
     });
+
+    it("should ignore arrow keys from interactive descendants or defaultPrevented events, preserve child focus, and always chain consumer onKeyDown", () => {
+      const onKeyDown = vi.fn();
+      const carouselStore = new Store({ currentSlide: 1 });
+      const { container, getByTestId, rerender } = render(
+        <Slider {...props} currentSlide={1} carouselStore={carouselStore} onKeyDown={onKeyDown}>
+          <div className="carousel__slide">
+            <input data-testid="slide-input" type="text" />
+            <textarea data-testid="slide-textarea" />
+            <select data-testid="slide-select">
+              <option value="a">A</option>
+            </select>
+            <button data-testid="slide-button" type="button">
+              Btn
+            </button>
+            <a data-testid="slide-link" href="#test">
+              Link
+            </a>
+            <div data-testid="slide-custom-slider" role="slider" aria-valuenow={50} tabIndex={0} />
+            <div data-testid="slide-searchbox" role="searchbox" tabIndex={0} />
+            <div data-testid="slide-radio" role="radio" aria-checked="false" tabIndex={0} />
+            <div data-testid="slide-checkbox" role="checkbox" aria-checked="false" tabIndex={0} />
+            <div data-testid="slide-switch" role="switch" aria-checked="false" tabIndex={0} />
+            <div data-testid="slide-tree" role="tree" tabIndex={0}>
+              <div
+                data-testid="slide-treeitem"
+                role="treeitem"
+                aria-selected="false"
+                tabIndex={0}
+              />
+            </div>
+            <div
+              data-testid="slide-prevented"
+              tabIndex={0}
+              onKeyDown={(ev) => ev.preventDefault()}
+            />
+          </div>
+        </Slider>,
+      );
+
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      const input = getByTestId("slide-input");
+      const textarea = getByTestId("slide-textarea");
+      const select = getByTestId("slide-select");
+      const button = getByTestId("slide-button");
+      const link = getByTestId("slide-link");
+      const customSlider = getByTestId("slide-custom-slider");
+      const searchbox = getByTestId("slide-searchbox");
+      const radio = getByTestId("slide-radio");
+      const checkbox = getByTestId("slide-checkbox");
+      const switchEl = getByTestId("slide-switch");
+      const tree = getByTestId("slide-tree");
+      const treeitem = getByTestId("slide-treeitem");
+      const preventedEl = getByTestId("slide-prevented");
+
+      // Arrow keys inside interactive elements should NOT change currentSlide or preventDefault
+      for (const el of [
+        input,
+        textarea,
+        select,
+        button,
+        link,
+        customSlider,
+        searchbox,
+        radio,
+        checkbox,
+        switchEl,
+        tree,
+        treeitem,
+      ]) {
+        const notPrevented = fireEvent.keyDown(el, { keyCode: 39 });
+        expect(notPrevented).toBe(true);
+        expect(carouselStore.state.currentSlide).toBe(1);
+      }
+      expect(onKeyDown).toHaveBeenCalledTimes(12);
+
+      // Event with defaultPrevented already set by child should NOT change currentSlide
+      fireEvent.keyDown(preventedEl, { keyCode: 39 });
+      expect(carouselStore.state.currentSlide).toBe(1);
+      expect(onKeyDown).toHaveBeenCalledTimes(13);
+
+      // Pressing arrow key on slider itself navigates without stealing focus from activeElement
+      input.focus();
+      expect(document.activeElement).toBe(input);
+      const focusSpy = vi.spyOn(slider, "focus");
+      fireEvent.keyDown(slider, { keyCode: 39 });
+      expect(carouselStore.state.currentSlide).toBe(2);
+      expect(focusSpy).not.toHaveBeenCalled();
+      expect(document.activeElement).toBe(input);
+      expect(onKeyDown).toHaveBeenCalledTimes(14);
+
+      // Consumer onKeyDown is still called when disableKeyboard is true
+      rerender(
+        <Slider
+          {...props}
+          currentSlide={2}
+          disableKeyboard
+          carouselStore={carouselStore}
+          onKeyDown={onKeyDown}
+        />,
+      );
+      fireEvent.keyDown(slider, { keyCode: 39 });
+      expect(carouselStore.state.currentSlide).toBe(2);
+      expect(onKeyDown).toHaveBeenCalledTimes(15);
+    });
+
+    it("should not call preventDefault or start mouse drag on form/editable/ARIA-widget descendants while keeping button/link descendants draggable", () => {
+      const onMouseDown = vi.fn();
+      const { container, getByTestId } = render(
+        <Slider {...props} dragEnabled trayProps={{ onMouseDown }}>
+          <div className="carousel__slide" role="option" data-testid="non-interactive-slide">
+            <input data-testid="child-input" type="text" />
+            <textarea data-testid="child-textarea" />
+            <div data-testid="child-searchbox" role="searchbox" tabIndex={0} />
+            <div data-testid="child-radio" role="radio" aria-checked="false" tabIndex={0} />
+            <div data-testid="child-checkbox" role="checkbox" aria-checked="false" tabIndex={0} />
+            <div data-testid="child-switch" role="switch" aria-checked="false" tabIndex={0} />
+            <div data-testid="child-tree" role="tree" tabIndex={0}>
+              <div
+                data-testid="child-treeitem"
+                role="treeitem"
+                aria-selected="false"
+                tabIndex={0}
+              />
+            </div>
+            <button data-testid="child-button" type="button">
+              Btn
+            </button>
+          </div>
+        </Slider>,
+      );
+
+      const tray = container.querySelector(".carousel__slider-tray") as HTMLElement;
+      const nonInteractiveSlide = getByTestId("non-interactive-slide");
+      const childInput = getByTestId("child-input");
+      const childTextarea = getByTestId("child-textarea");
+      const childSearchbox = getByTestId("child-searchbox");
+      const childRadio = getByTestId("child-radio");
+      const childCheckbox = getByTestId("child-checkbox");
+      const childSwitch = getByTestId("child-switch");
+      const childTree = getByTestId("child-tree");
+      const childTreeitem = getByTestId("child-treeitem");
+      const childButton = getByTestId("child-button");
+
+      // Mousedown on tray or non-interactive slide prevents default when dragEnabled is true
+      expect(fireEvent.mouseDown(tray, { screenX: 10, screenY: 10 })).toBe(false);
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      expect(fireEvent.mouseDown(nonInteractiveSlide, { screenX: 10, screenY: 10 })).toBe(false);
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+
+      // Mousedown on form/editable/ARIA-widget child does NOT prevent default AND does NOT start mouse drag on mousemove
+      for (const el of [
+        childInput,
+        childTextarea,
+        childSearchbox,
+        childRadio,
+        childCheckbox,
+        childSwitch,
+        childTree,
+        childTreeitem,
+      ]) {
+        expect(fireEvent.mouseDown(el, { screenX: 100, screenY: 100 })).toBe(true);
+        const moveEv = new MouseEvent("mousemove", {
+          bubbles: true,
+          cancelable: true,
+          screenX: 40,
+          screenY: 100,
+        });
+        const movePreventSpy = vi.spyOn(moveEv, "preventDefault");
+        act(() => {
+          document.documentElement.dispatchEvent(moveEv);
+        });
+        expect(movePreventSpy).not.toHaveBeenCalled();
+        expect(tray.style.transform).toContain("translateX(0px)");
+      }
+      expect(onMouseDown).toHaveBeenCalledTimes(10);
+
+      // Mousedown on button skips mousedown preventDefault (preserving focus) while participating in mouse drag on mousemove
+      expect(fireEvent.mouseDown(childButton, { screenX: 100, screenY: 100 })).toBe(true);
+      const btnMoveEv = new MouseEvent("mousemove", {
+        bubbles: true,
+        cancelable: true,
+        screenX: 40,
+        screenY: 100,
+      });
+      const btnMovePreventSpy = vi.spyOn(btnMoveEv, "preventDefault");
+      act(() => {
+        document.documentElement.dispatchEvent(btnMoveEv);
+      });
+      expect(btnMovePreventSpy).toHaveBeenCalledTimes(1);
+      expect(tray.style.transform).toContain("translateX(-60px)");
+      act(() => {
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+    });
   });
 
   describe("autoplay (play / stop / playForward / playBackward)", () => {
@@ -1741,6 +1940,76 @@ describe("<Slider />", () => {
       expect(slider.getAttribute("dragStep")).toBeNull();
       expect(slider.getAttribute("step")).toBeNull();
       expect(slider.getAttribute("infinite")).toBeNull();
+    });
+
+    it("should forward object and callback refs to the slider root element", () => {
+      const objRef = React.createRef<HTMLDivElement>();
+      let callbackNode: HTMLDivElement | null = null;
+      const { rerender } = render(<Slider {...props} ref={objRef} />);
+      expect(objRef.current).toBeInstanceOf(HTMLDivElement);
+      expect(objRef.current).toHaveClass("carousel__slider");
+
+      rerender(
+        <Slider
+          {...props}
+          ref={(node) => {
+            callbackNode = node;
+          }}
+        />,
+      );
+      expect(callbackNode).toBeInstanceOf(HTMLDivElement);
+      expect(callbackNode).toHaveClass("carousel__slider");
+    });
+
+    it("should pass trayWrapProps to the tray wrapper element and merge className and style", () => {
+      const { container } = render(
+        <Slider
+          {...props}
+          classNameTrayWrap="custom-wrap"
+          trayWrapProps={{
+            id: "tray-wrap-id",
+            "aria-label": "Tray Wrapper",
+            className: "from-tray-wrap-props",
+            style: { border: "1px solid red" },
+          }}
+        />,
+      );
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      expect(slider.hasAttribute("trayWrapProps")).toBe(false);
+      expect(slider.hasAttribute("traywrapprops")).toBe(false);
+
+      const trayWrap = container.querySelector(".carousel__slider-tray-wrapper") as HTMLElement;
+      expect(trayWrap).toHaveAttribute("id", "tray-wrap-id");
+      expect(trayWrap).toHaveAttribute("aria-label", "Tray Wrapper");
+      expect(trayWrap).toHaveClass(
+        "carousel__slider-tray-wrapper",
+        "custom-wrap",
+        "from-tray-wrap-props",
+      );
+      expect(trayWrap.style.border).toBe("1px solid red");
+    });
+
+    it('should toggle default aria-live between "polite" and "off" based on isPlaying and omit default aria-label when aria-labelledby is set', () => {
+      const { container, rerender } = render(<Slider {...props} isPlaying={false} />);
+      const slider = container.querySelector(".carousel__slider") as HTMLElement;
+      expect(slider).toHaveAttribute("aria-live", "polite");
+      expect(slider).toHaveAttribute("aria-label", "slider");
+
+      rerender(<Slider {...props} isPlaying />);
+      expect(slider).toHaveAttribute("aria-live", "off");
+
+      rerender(<Slider {...props} isPlaying aria-live="assertive" />);
+      expect(slider).toHaveAttribute("aria-live", "assertive");
+
+      rerender(<Slider {...props} aria-labelledby="carousel-heading" />);
+      expect(slider).toHaveAttribute("aria-labelledby", "carousel-heading");
+      expect(slider.hasAttribute("aria-label")).toBe(false);
+
+      rerender(<Slider {...props} aria-label="Featured products" />);
+      expect(slider).toHaveAttribute("aria-label", "Featured products");
+
+      rerender(<Slider {...props} ariaLabel="Explicit slider ariaLabel" />);
+      expect(slider).toHaveAttribute("aria-label", "Explicit slider ariaLabel");
     });
   });
 });

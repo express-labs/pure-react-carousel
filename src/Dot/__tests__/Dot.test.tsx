@@ -88,4 +88,78 @@ describe("<Dot />", () => {
     expect(props.carouselStore.getStoreState().currentSlide).toBe(2);
     expect(props.carouselStore.getStoreState().isPlaying).toBe(true);
   });
+
+  it("should set aria-current='true' when selected by default, aria-selected when role is 'tab', and omit default aria-label when children are provided", () => {
+    const { rerender } = render(
+      <Dot {...props} selected>
+        {null}
+      </Dot>,
+    );
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("aria-label", "slide dot");
+    expect(button).toHaveAttribute("aria-current", "true");
+    expect(button).not.toHaveAttribute("aria-selected");
+
+    rerender(
+      <Dot {...props} selected={false}>
+        Slide 3
+      </Dot>,
+    );
+    expect(button).not.toHaveAttribute("aria-label");
+    expect(button).not.toHaveAttribute("aria-current");
+
+    rerender(
+      <Dot {...props} role="tab" selected>
+        {null}
+      </Dot>,
+    );
+    const tab = screen.getByRole("tab");
+    expect(tab).toHaveAttribute("aria-selected", "true");
+    expect(tab).not.toHaveAttribute("aria-current");
+
+    rerender(
+      <Dot {...props} aria-selected={false} selected>
+        {null}
+      </Dot>,
+    );
+    expect(screen.getByRole("button")).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-current");
+
+    // Decorative aria-hidden child keeps fallback aria-label
+    rerender(
+      <Dot {...props} selected={false}>
+        <span aria-hidden="true">*</span>
+      </Dot>,
+    );
+    expect(screen.getByRole("button")).toHaveAttribute("aria-label", "slide dot");
+
+    // Child with alt, title, aria-label, or aria-labelledby counts as accessible content
+    rerender(
+      <Dot {...props} selected={false}>
+        <img src="dot.png" alt="Thumb 1" />
+      </Dot>,
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+
+    rerender(
+      <Dot {...props} selected={false}>
+        <span title="Titled dot" />
+      </Dot>,
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+
+    rerender(
+      <Dot {...props} selected={false}>
+        <span aria-label="Labeled child" />
+      </Dot>,
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+
+    rerender(
+      <Dot {...props} selected={false}>
+        <span aria-labelledby="ext-label" />
+      </Dot>,
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+  });
 });

@@ -17,6 +17,7 @@
 
 > Consult only when actively modifying the relevant subsystem; do not pre-read.
 - **Typescript:** `docs/TYPESCRIPT_STANDARDS.md`
+- **Accessibility (JSX/HTML):** `docs/ACCESSIBILITY_STANDARDS.md`
 - **Git & Branching Protocols**: `docs/GITHUB_CONVENTIONS.md`
   - Conventional & atomic commit requirements, branch prefixes for Release Please, and push restrictions (`main`/`master` protection).
 - **Pull Request Conventions**: `docs/PULL_REQUEST_CONVENTIONS.md`
@@ -26,7 +27,7 @@
 - **CSS & SCSS Styling Standards**: `docs/CSS_CONVENTIONS.md`
   - Strict flat selectors (no nested class selectors), no HTML tag selectors, and modular styling.
 - **Workspace Agent Skills**: `.agents/skills/<name>/SKILL.md`
-  - On-demand runbooks for `address-pr-review`, `sandbox-lessons`, `tdd`, and `triage-issue` using subagent context isolation and progressive disclosure.
+  - On-demand runbooks for `address-pr-review`, `pr-review-loop`, `sandbox-lessons`, `tdd`, and `triage-issue` using subagent context isolation and progressive disclosure.
 
 ---
 

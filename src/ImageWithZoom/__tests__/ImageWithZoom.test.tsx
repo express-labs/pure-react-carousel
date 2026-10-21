@@ -309,5 +309,109 @@ describe("<ImageWithZoom />", () => {
       });
       expect(overlay).not.toHaveClass("zoom");
     });
+
+    it("should forward ref to the zoom image container and pass overlayProps to the overlay", () => {
+      const ref = React.createRef<HTMLDivElement>();
+      const onMouseOver = vi.fn();
+      const onMouseOut = vi.fn();
+      const { container } = renderWithProvider(
+        <ImageWithZoom
+          {...props}
+          ref={ref}
+          overlayClassName="from-overlay-class-name"
+          overlayProps={{
+            role: "application",
+            "aria-label": "Zoomable image",
+            className: "from-overlay-props",
+            style: { opacity: 0.9 },
+            onMouseOver,
+            onMouseOut,
+          }}
+        />,
+      );
+
+      expect(ref.current).toBeInstanceOf(HTMLDivElement);
+      expect(ref.current).toHaveClass("container");
+
+      const overlay = container.querySelector(".carousel__zoom-image-overlay") as HTMLElement;
+      expect(overlay).toHaveAttribute("role", "application");
+      expect(overlay).toHaveAttribute("aria-label", "Zoomable image");
+      expect(overlay).toHaveClass(
+        "carousel__zoom-image-overlay",
+        "from-overlay-class-name",
+        "from-overlay-props",
+      );
+      expect(overlay.style.opacity).toBe("0.9");
+
+      fireEvent.mouseOver(overlay);
+      expect(onMouseOver).toHaveBeenCalledTimes(1);
+      expect(overlay).toHaveClass("hover");
+
+      fireEvent.mouseOut(overlay);
+      expect(onMouseOut).toHaveBeenCalledTimes(1);
+      expect(overlay).not.toHaveClass("hover");
+    });
+
+    it("should initialize transformOrigin to 50% 50% on focus when mouse has not moved, and support keyboard zoom toggle, arrow-key panning, and Escape", () => {
+      const onFocus = vi.fn();
+      const onBlur = vi.fn();
+      const onKeyDown = vi.fn();
+      const { container } = renderWithProvider(
+        <ImageWithZoom
+          {...props}
+          overlayProps={{
+            tabIndex: 0,
+            onFocus,
+            onBlur,
+            onKeyDown,
+          }}
+        />,
+      );
+
+      const overlay = container.querySelector(".carousel__zoom-image-overlay") as HTMLElement;
+
+      // Focus initializes x/y to 50% so transformOrigin is valid CSS ("50% 50%") instead of "null null"
+      fireEvent.focus(overlay);
+      expect(onFocus).toHaveBeenCalledTimes(1);
+      expect(overlay).toHaveClass("carousel__zoom-image-overlay--hovering");
+      expect(overlay.style.transformOrigin).toBe("50% 50%");
+      expect(overlay.style.transform).toBe("scale(2)");
+
+      // Arrow keys pan the zoom origin by 10% increments while zoomed
+      fireEvent.keyDown(overlay, { key: "ArrowRight" });
+      expect(overlay.style.transformOrigin).toBe("60% 50%");
+
+      fireEvent.keyDown(overlay, { key: "ArrowDown" });
+      expect(overlay.style.transformOrigin).toBe("60% 60%");
+
+      fireEvent.keyDown(overlay, { key: "ArrowLeft" });
+      expect(overlay.style.transformOrigin).toBe("50% 60%");
+
+      fireEvent.keyDown(overlay, { key: "ArrowUp" });
+      expect(overlay.style.transformOrigin).toBe("50% 50%");
+
+      // Escape exits zoom while focused
+      fireEvent.keyDown(overlay, { key: "Escape" });
+      expect(overlay).not.toHaveClass("carousel__zoom-image-overlay--hovering");
+
+      // Arrow keys when not zoomed do not pan or prevent default
+      expect(fireEvent.keyDown(overlay, { key: "ArrowRight" })).toBe(true);
+
+      // Enter / Space / + toggles zoom back on and off
+      fireEvent.keyDown(overlay, { key: "Enter" });
+      expect(overlay).toHaveClass("carousel__zoom-image-overlay--hovering");
+      expect(overlay.style.transform).toBe("scale(2)");
+
+      fireEvent.keyDown(overlay, { key: "Enter" });
+      expect(overlay).not.toHaveClass("carousel__zoom-image-overlay--hovering");
+
+      // Blur resets hover zoom and chains overlayProps.onBlur
+      fireEvent.focus(overlay);
+      expect(overlay).toHaveClass("carousel__zoom-image-overlay--hovering");
+      fireEvent.blur(overlay);
+      expect(onBlur).toHaveBeenCalledTimes(1);
+      expect(overlay).not.toHaveClass("carousel__zoom-image-overlay--hovering");
+      expect(onKeyDown).toHaveBeenCalledTimes(8);
+    });
   });
 });

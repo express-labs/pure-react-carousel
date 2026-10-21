@@ -10,7 +10,7 @@ import type {
   MutableCarouselStatePatch,
 } from "../types";
 
-const CarouselProvider = (props: CarouselProviderProps) => {
+const CarouselProvider = React.forwardRef<HTMLDivElement, CarouselProviderProps>((props, ref) => {
   const {
     children,
     className = undefined,
@@ -293,9 +293,9 @@ const CarouselProvider = (props: CarouselProviderProps) => {
 
   return React.createElement(
     Tag,
-    { className: newClassName, ...filteredProps },
+    { ref, className: newClassName, ...filteredProps },
     <Context.Provider value={contextValue}>{children}</Context.Provider>,
   );
-};
+});
 
 export default CarouselProvider;

@@ -39,4 +39,40 @@ describe("<ButtonPlay />", () => {
     fireEvent.click(screen.getByRole("button"));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
+
+  it("should dynamically default aria-label to 'play' or 'pause' when empty and omit default aria-label when accessible children or aria-labelledby are provided", () => {
+    const { rerender } = render(
+      <ButtonPlay {...props} isPlaying={false}>
+        {null}
+      </ButtonPlay>,
+    );
+    expect(screen.getByRole("button")).toHaveAttribute("aria-label", "play");
+
+    rerender(
+      <ButtonPlay {...props} isPlaying>
+        {null}
+      </ButtonPlay>,
+    );
+    expect(screen.getByRole("button")).toHaveAttribute("aria-label", "pause");
+
+    rerender(
+      <ButtonPlay
+        {...props}
+        childrenPaused="Start Autoplay"
+        childrenPlaying="Stop Autoplay"
+        isPlaying
+      >
+        {null}
+      </ButtonPlay>,
+    );
+    expect(screen.getByRole("button", { name: "Stop Autoplay" })).not.toHaveAttribute("aria-label");
+
+    rerender(
+      <ButtonPlay {...props} aria-labelledby="play-heading">
+        {null}
+      </ButtonPlay>,
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+    expect(screen.getByRole("button")).toHaveAttribute("aria-labelledby", "play-heading");
+  });
 });

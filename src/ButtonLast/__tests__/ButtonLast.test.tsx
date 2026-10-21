@@ -104,4 +104,20 @@ describe("<ButtonLast />", () => {
     expect(customStore.getStoreState().currentSlide).toBe(props.totalSlides - 1);
     expect(customStore.getStoreState().isPlaying).toBe(true);
   });
+
+  it("should default aria-label to 'last' only when no children, aria-label, or aria-labelledby are provided", () => {
+    const { rerender } = render(<ButtonLast {...props}>{undefined}</ButtonLast>);
+    expect(screen.getByRole("button")).toHaveAttribute("aria-label", "last");
+
+    rerender(<ButtonLast {...props}>Last Slide</ButtonLast>);
+    expect(screen.getByRole("button", { name: "Last Slide" })).not.toHaveAttribute("aria-label");
+
+    rerender(
+      <ButtonLast {...props} aria-labelledby="last-label">
+        {undefined}
+      </ButtonLast>,
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+    expect(screen.getByRole("button")).toHaveAttribute("aria-labelledby", "last-label");
+  });
 });

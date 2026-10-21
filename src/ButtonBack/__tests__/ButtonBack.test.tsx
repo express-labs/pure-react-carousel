@@ -271,4 +271,57 @@ describe("<ButtonBack />", () => {
     expect(contextRef?.getStoreState().currentSlide).toBe(0);
     expect(contextRef?.getStoreState().isPlaying).toBe(true);
   });
+
+  it("should forward ref to the underlying button element", () => {
+    const ref = React.createRef<HTMLButtonElement>();
+    render(
+      <CarouselProvider naturalSlideWidth={100} naturalSlideHeight={125} totalSlides={3}>
+        <ButtonBackWithStore ref={ref}>Back</ButtonBackWithStore>
+      </CarouselProvider>,
+    );
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+    expect(ref.current).toHaveClass("carousel__back-button");
+  });
+
+  it("should default aria-label to 'previous' only when no children, aria-label, or aria-labelledby are provided", () => {
+    const mockStore = new Store({ currentSlide: 1, step: 1, totalSlides: 3, visibleSlides: 1 });
+    const { rerender } = render(
+      <ButtonBack
+        currentSlide={1}
+        step={1}
+        carouselStore={mockStore}
+        totalSlides={3}
+        visibleSlides={1}
+      />,
+    );
+    expect(screen.getByRole("button")).toHaveAttribute("aria-label", "previous");
+
+    rerender(
+      <ButtonBack
+        currentSlide={1}
+        step={1}
+        carouselStore={mockStore}
+        totalSlides={3}
+        visibleSlides={1}
+      >
+        Previous Slide
+      </ButtonBack>,
+    );
+    expect(screen.getByRole("button", { name: "Previous Slide" })).not.toHaveAttribute(
+      "aria-label",
+    );
+
+    rerender(
+      <ButtonBack
+        currentSlide={1}
+        step={1}
+        carouselStore={mockStore}
+        totalSlides={3}
+        visibleSlides={1}
+        aria-labelledby="prev-label"
+      />,
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+    expect(screen.getByRole("button")).toHaveAttribute("aria-labelledby", "prev-label");
+  });
 });
