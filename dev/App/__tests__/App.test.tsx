@@ -15,12 +15,17 @@ describe("<App />", () => {
     }
   });
 
-  it("should expose WCAG landmark roles and named regions for significant page areas", () => {
+  it("should expose WCAG landmark roles, skip link, and named regions for significant page areas", () => {
     render(<App />);
+
+    const skipLink = screen.getByRole("link", { name: /Skip to main content/i });
+    expect(skipLink).toHaveAttribute("href", "#main-content");
 
     expect(screen.getByRole("banner")).toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: "Primary" })).toBeInTheDocument();
-    expect(screen.getByRole("main")).toBeInTheDocument();
+    const main = screen.getByRole("main");
+    expect(main).toHaveAttribute("id", "main-content");
+    expect(main).toHaveAttribute("tabindex", "-1");
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
 
     expect(screen.getByRole("region", { name: /What is "unopinionated\?"/i })).toBeInTheDocument();
