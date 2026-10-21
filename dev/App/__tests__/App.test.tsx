@@ -1,12 +1,18 @@
 import React from "react";
 import { act, render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect } from "vite-plus/test";
+import { describe, it, expect, vi } from "vite-plus/test";
 import App from "../App";
 
 describe("<App />", () => {
-  it("should render the demo app", () => {
-    render(<App />);
-    expect(screen.getByRole("heading", { name: "Pure React Carousel" })).toBeInTheDocument();
+  it("should render the demo app without DOM nesting or console errors", () => {
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      render(<App />);
+      expect(screen.getByRole("heading", { name: "Pure React Carousel" })).toBeInTheDocument();
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    } finally {
+      consoleErrorSpy.mockRestore();
+    }
   });
 
   it("should call handleChange when a select is changed", () => {
