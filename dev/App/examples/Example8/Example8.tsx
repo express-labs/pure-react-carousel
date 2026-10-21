@@ -30,16 +30,15 @@ const Example8 = (): React.ReactElement => (
         <ChainLink />
       </a>
     </h2>
-    <p>
-      - When scrolling the browser, up and down, horizontal scrollbars will not scroll horizontally.
-    </p>
-    <p>
-      - When scrolling the browser, left and right, vertical scrollbars will not scroll vertically.
-    </p>
-    <p>
-      - This spinner will go away after all the images have loaded.
-      <br />
-    </p>
+    <ul>
+      <li>
+        When scrolling the browser, up and down, horizontal scrollbars will not scroll horizontally.
+      </li>
+      <li>
+        When scrolling the browser, left and right, vertical scrollbars will not scroll vertically.
+      </li>
+      <li>This spinner will go away after all the images have loaded.</li>
+    </ul>
     <Slider className={s.slider}>
       <Slide index={0}>
         <ImageWithZoom src="./media/img01.jpeg" />

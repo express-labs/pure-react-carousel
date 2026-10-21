@@ -91,7 +91,7 @@ const Example15 = () => {
         {SLIDES.map((slide) => (
           <Slide key={slide.index} index={slide.index}>
             <div style={{ position: "relative", width: "100%", height: "100%" }}>
-              <Image src={slide.image} alt={slide.title} />
+              <Image src={slide.image} alt="" />
               <div
                 style={{
                   position: "absolute",

@@ -383,3 +383,8 @@ textarea:focus-visible,
 .controlGridItem {
   min-inline-size: 0;
 }
+
+.bordered {
+  border: 1px solid var(--color-text-primary);
+  padding: 1.6rem;
+}

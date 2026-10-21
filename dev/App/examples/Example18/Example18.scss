@@ -27,6 +27,23 @@
   min-inline-size: min(16rem, 100%);
 }
 
+.controlsFieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+}
+
+.controlsLegend {
+  float: inline-start;
+  padding: 0;
+  margin-inline-end: 1.2rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--color-text-primary);
+  min-inline-size: min(16rem, 100%);
+}
+
 .sliderInput {
   flex: 1 1 20rem;
   max-inline-size: 34rem;

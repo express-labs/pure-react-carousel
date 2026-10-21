@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render, screen, fireEvent } from "@testing-library/react";
+import { act, render, screen, fireEvent, within } from "@testing-library/react";
 import { describe, it, expect, vi } from "vite-plus/test";
 import App from "../App";
 
@@ -35,8 +35,14 @@ describe("<App />", () => {
       screen.getByRole("region", { name: /^Carousel \(With Master Loading Spinner\)/i }),
     ).toBeInTheDocument();
 
-    expect(screen.getByRole("img", { name: "External link" })).toBeInTheDocument();
+    expect(screen.getAllByRole("img", { name: "External link" })).toHaveLength(2);
     expect(screen.getByRole("img", { name: "Express logo" })).toBeInTheDocument();
+
+    const example8 = screen.getByRole("region", {
+      name: /Carousel \(lockOnWindowScroll set to TRUE\)/i,
+    });
+    expect(within(example8).getByRole("list")).toBeInTheDocument();
+    expect(within(example8).getAllByRole("listitem")).toHaveLength(3);
   });
 
   it("should call handleChange when a select is changed", () => {
@@ -50,46 +56,76 @@ describe("<App />", () => {
   });
 
   it("should render Example15 and demo dragClickThreshold with slide buttons and links", () => {
-    const { container, getByTestId } = render(<App />);
-    const select = container.querySelector(".select") as HTMLSelectElement;
-    fireEvent.change(select, { target: { value: "15" } });
+    const createdImages: HTMLImageElement[] = [];
+    const origCreateElement = document.createElement.bind(document);
+    const createElementSpy = vi
+      .spyOn(document, "createElement")
+      .mockImplementation((tagName: string, options?: ElementCreationOptions) => {
+        const el = origCreateElement(tagName, options);
+        if (tagName.toLowerCase() === "img") {
+          createdImages.push(el as HTMLImageElement);
+        }
+        return el;
+      });
 
-    expect(container.querySelector("#example--15")).toBeInTheDocument();
-    const log = getByTestId("interactive-click-log");
-    expect(log).toHaveTextContent("No slide buttons or links clicked yet.");
+    try {
+      const { container, getByTestId } = render(<App />);
+      const select = container.querySelector(".select") as HTMLSelectElement;
+      fireEvent.change(select, { target: { value: "15" } });
 
-    const btn0 = getByTestId("slide-action-btn-0");
-    const link0 = getByTestId("slide-action-link-0");
+      const section15 = container.querySelector("#example--15") as HTMLElement;
+      expect(section15).toBeInTheDocument();
 
-    // Normal click on slide button updates log
-    fireEvent.click(btn0);
-    expect(log).toHaveTextContent("Clicked button on Slide 1 (total clicks: 1)");
+      act(() => {
+        createdImages.forEach((img) => {
+          img.dispatchEvent(new Event("load"));
+        });
+      });
 
-    // Normal click on slide link updates log
-    fireEvent.click(link0);
-    expect(log).toHaveTextContent("Clicked link on Slide 1 (total clicks: 2)");
+      const slideImages = section15.querySelectorAll("img.carousel__image--success");
+      expect(slideImages).toHaveLength(6);
+      slideImages.forEach((img) => {
+        expect(img).toHaveAttribute("alt", "");
+      });
 
-    // Dragging > 5px across the button suppresses its click handler
-    fireEvent.mouseDown(btn0, { screenX: 100, screenY: 100 });
-    act(() => {
-      document.documentElement.dispatchEvent(
-        new MouseEvent("mousemove", { screenX: 140, screenY: 100 }),
-      );
-      document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
-    });
-    fireEvent.click(btn0);
-    expect(log).toHaveTextContent("Clicked link on Slide 1 (total clicks: 2)");
+      const log = getByTestId("interactive-click-log");
+      expect(log).toHaveTextContent("No slide buttons or links clicked yet.");
 
-    // Update dragClickThreshold input and reset log
-    const thresholdInput = getByTestId("drag-click-threshold-input") as HTMLInputElement;
-    fireEvent.change(thresholdInput, { target: { value: "25" } });
-    expect(thresholdInput.value).toBe("25");
+      const btn0 = getByTestId("slide-action-btn-0");
+      const link0 = getByTestId("slide-action-link-0");
 
-    fireEvent.change(thresholdInput, { target: { value: "-5" } });
-    expect(thresholdInput.value).toBe("0");
+      // Normal click on slide button updates log
+      fireEvent.click(btn0);
+      expect(log).toHaveTextContent("Clicked button on Slide 1 (total clicks: 1)");
 
-    fireEvent.click(getByTestId("reset-click-log"));
-    expect(log).toHaveTextContent("No slide buttons or links clicked yet.");
+      // Normal click on slide link updates log
+      fireEvent.click(link0);
+      expect(log).toHaveTextContent("Clicked link on Slide 1 (total clicks: 2)");
+
+      // Dragging > 5px across the button suppresses its click handler
+      fireEvent.mouseDown(btn0, { screenX: 100, screenY: 100 });
+      act(() => {
+        document.documentElement.dispatchEvent(
+          new MouseEvent("mousemove", { screenX: 140, screenY: 100 }),
+        );
+        document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
+      });
+      fireEvent.click(btn0);
+      expect(log).toHaveTextContent("Clicked link on Slide 1 (total clicks: 2)");
+
+      // Update dragClickThreshold input and reset log
+      const thresholdInput = getByTestId("drag-click-threshold-input") as HTMLInputElement;
+      fireEvent.change(thresholdInput, { target: { value: "25" } });
+      expect(thresholdInput.value).toBe("25");
+
+      fireEvent.change(thresholdInput, { target: { value: "-5" } });
+      expect(thresholdInput.value).toBe("0");
+
+      fireEvent.click(getByTestId("reset-click-log"));
+      expect(log).toHaveTextContent("No slide buttons or links clicked yet.");
+    } finally {
+      createElementSpy.mockRestore();
+    }
   });
 
   it("should render Example16 and toggle disableAnimation with custom CSS transition classes", () => {
@@ -119,6 +155,9 @@ describe("<App />", () => {
 
     const section = container.querySelector("#example--18") as HTMLElement;
     expect(section).toBeInTheDocument();
+
+    const steppingModeGroup = within(section).getByRole("group", { name: /Stepping Mode/i });
+    expect(steppingModeGroup.tagName).toBe("FIELDSET");
 
     // Default effective width falls back to 1000px in test env (Desktop Wide -> 4 visible slides)
     expect(getByTestId("metric-visible-slides")).toHaveTextContent("4");
