@@ -118,7 +118,7 @@ export function cleanProps<T extends Record<string, unknown>>(props: T): Omit<T,
 }
 
 const NON_DRAGGABLE_INTERACTIVE_DESCENDANT_SELECTOR =
-  'input, textarea, select, option, audio, video, [contenteditable]:not([contenteditable="false"]), [role="slider"], [role="spinbutton"], [role="textbox"], [role="searchbox"], [role="combobox"], [role="listbox"], [role="menu"], [role="menubar"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="tablist"], [role="radiogroup"], [role="radio"], [role="checkbox"], [role="switch"]';
+  'input, textarea, select, option, audio, video, [contenteditable]:not([contenteditable="false"]), [role="slider"], [role="spinbutton"], [role="textbox"], [role="searchbox"], [role="combobox"], [role="listbox"], [role="option"]:not(.carousel__slide), [role="menu"], [role="menubar"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="tablist"], [role="tab"]:not(.carousel__slide), [role="radiogroup"], [role="radio"], [role="checkbox"], [role="switch"], [role="tree"], [role="treeitem"]:not(.carousel__slide), [role="treegrid"], [role="grid"], [role="gridcell"]:not(.carousel__slide)';
 
 const INTERACTIVE_DESCENDANT_SELECTOR = `${NON_DRAGGABLE_INTERACTIVE_DESCENDANT_SELECTOR}, button, a[href], [role="button"], [role="link"]`;
 
