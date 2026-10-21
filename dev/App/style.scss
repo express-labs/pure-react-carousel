@@ -217,6 +217,13 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  margin: 1.2rem 0;
+  font-size: 1.2rem;
+  line-height: 1.5em;
+
+  @media all and (min-width: 480px) {
+    font-size: 1.3rem;
+  }
 }
 
 .controlGridItem {
