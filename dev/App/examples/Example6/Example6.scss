@@ -1,23 +1,26 @@
 .container {
   position: relative;
-  max-width: 800px;
-  margin: auto;
+  max-inline-size: 80rem;
+  margin-inline: auto;
 }
 
 .buttonBack {
   position: absolute;
-  top: 50%;
-  left: 0;
+  inset-block-start: 50%;
+  inset-inline-start: 0.8rem;
   transform: translateY(-50%);
+  z-index: 2;
 }
 
 .buttonNext {
   position: absolute;
-  top: 50%;
-  right: 0;
+  inset-block-start: 50%;
+  inset-inline-end: 0.8rem;
   transform: translateY(-50%);
+  z-index: 2;
 }
 
 .dotGroup {
   text-align: center;
+  margin-block-start: 0.8rem;
 }

@@ -5,17 +5,27 @@
   animation: rotate 2s linear infinite;
   z-index: 2;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -25px 0 0 -25px;
-  width: 50px;
-  height: 50px;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  margin: -2.5rem 0 0 -2.5rem;
+  inline-size: 5rem;
+  block-size: 5rem;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 6s;
+  }
 }
 
 .path {
-  stroke: hsl(210, 70%, 75%);
+  stroke: #1a5fb4;
   stroke-linecap: round;
   animation: dash 1.5s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
 }
 
 @keyframes rotate {

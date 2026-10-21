@@ -1,6 +1,10 @@
 .customTrayAnimation {
   transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 .slideVisible {
@@ -9,6 +13,10 @@
   transition:
     opacity 500ms ease-in-out,
     transform 500ms ease-in-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: opacity 200ms linear;
+  }
 }
 
 .slideHidden {
@@ -17,4 +25,9 @@
   transition:
     opacity 500ms ease-in-out,
     transform 500ms ease-in-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition: opacity 200ms linear;
+  }
 }
