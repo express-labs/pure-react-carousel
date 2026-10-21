@@ -12,7 +12,7 @@
   block-size: 5rem;
 
   @media (prefers-reduced-motion: reduce) {
-    animation-duration: 6s;
+    animation: none;
   }
 }
 
