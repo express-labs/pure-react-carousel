@@ -29,8 +29,9 @@ const Example6 = (): React.ReactElement => (
       </a>
     </h2>
     <p>
-      Wrap the &lt;Slider /&gt;, &lt;ButtonBack /&gt;, &lt;ButtonNext /&gt; components in a div with
-      relative positioning. Add absolute positioning to the buttons.
+      Wrap the <code>&lt;Slider /&gt;</code>, <code>&lt;ButtonBack /&gt;</code>,
+      <code>&lt;ButtonNext /&gt;</code> components in a div with relative positioning. Add absolute
+      positioning to the buttons.
     </p>
     <div className={customStyles.container}>
       <Slider className={s.slider}>

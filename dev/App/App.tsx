@@ -199,22 +199,40 @@ const DevelopmentApp = (): React.ReactElement => {
               Why are these examples so... ugly?
             </h3>
             <p>
-              These examples are completely un-styled. Pure React Carousel does not come with styles
-              that must be defeated in order to match your organization&apos;s branding. So, to
-              distract you from the seeming lack of finesse, most of our examples involve pictures
-              of cats!
+              These examples are mostly un-styled. The only styles applied are to satisfy WCAG best
+              practices because we also use this demo as a test of our{" "}
+              <a href="https://wave.webaim.org/report#/https://express-labs.github.io/pure-react-carousel/">
+                WCAG compliance
+                <svg
+                  className="externalLink___8LnXJ"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  aria-labelledby="external-link-title"
+                >
+                  <title id="external-link-title">External link</title>
+                  <path d="M5 3c-1.093 0-2 .907-2 2v14c0 1.093.907 2 2 2h14c1.093 0 2-.907 2-2v-7h-2v7H5V5h7V3H5zm9 0v2h3.586l-9.293 9.293 1.414 1.414L19 6.414V10h2V3h-7z"></path>
+                </svg>
+              </a>
+              .
+            </p>
+            <p>
+              Pure React Carousel does not come with styles that must be defeated in order to match
+              your organization&apos;s branding. So, to distract you from the seeming lack of
+              finesse, most of our examples involve pictures of cats!
             </p>
             <p>
               <label className={s.selectLabel}>
                 Please choose a demo. &nbsp;
-                <select className={s.select} value={value} onChange={handleChange}>
+                <select id="demo-select" className={s.select} value={value} onChange={handleChange}>
                   <option value="0">Show All</option>
                   <option value="1">Carousel (With Master Loading Spinner)</option>
                   <option value="2">Carousel (With Individual Spinners)</option>
                   <option value="3">Carousel (Just One Image)</option>
                   <option value="4">Vertical Carousel (With Master Loading Spinner)</option>
                   <option value="5">Horizontal Carousel (With Master Loading Spinner)</option>
-                  <option value="6">Simple Carousel with vertically alligned nav buttons</option>
+                  <option value="6">Simple Carousel with vertically aligned nav buttons</option>
                   <option value="7">Simple Carousel with react-redux</option>
                   <option value="8">
                     Horizontal Carousel (With lockOnWindowScroll set to TRUE)

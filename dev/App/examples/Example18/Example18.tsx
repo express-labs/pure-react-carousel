@@ -288,34 +288,36 @@ const Example18 = () => {
           <span>{manualWidthOverride !== null ? `${manualWidthOverride}px` : "Auto"}</span>
         </div>
 
-        <div className={customStyles.controlsRow}>
-          <span className={customStyles.controlsLabel}>Stepping Mode:</span>
-          <label htmlFor="step-mode-page">
-            <input
-              id="step-mode-page"
-              data-testid="step-mode-page"
-              type="radio"
-              name="stepMode"
-              value="page"
-              checked={stepMode === "page"}
-              onChange={() => setStepMode("page")}
-            />
-            &nbsp;Page-by-Page (<code>step = visibleSlides</code>)
-          </label>
-          &nbsp;&nbsp;
-          <label htmlFor="step-mode-single">
-            <input
-              id="step-mode-single"
-              data-testid="step-mode-single"
-              type="radio"
-              name="stepMode"
-              value="single"
-              checked={stepMode === "single"}
-              onChange={() => setStepMode("single")}
-            />
-            &nbsp;Single Item (<code>step = 1</code>)
-          </label>
-        </div>
+        <fieldset className={customStyles.controlsFieldset}>
+          <legend className={customStyles.controlsLegend}>Stepping Mode:</legend>
+          <div className={customStyles.controlsRow}>
+            <label htmlFor="step-mode-page">
+              <input
+                id="step-mode-page"
+                data-testid="step-mode-page"
+                type="radio"
+                name="stepMode"
+                value="page"
+                checked={stepMode === "page"}
+                onChange={() => setStepMode("page")}
+              />
+              &nbsp;Page-by-Page (<code>step = visibleSlides</code>)
+            </label>
+            &nbsp;&nbsp;
+            <label htmlFor="step-mode-single">
+              <input
+                id="step-mode-single"
+                data-testid="step-mode-single"
+                type="radio"
+                name="stepMode"
+                value="single"
+                checked={stepMode === "single"}
+                onChange={() => setStepMode("single")}
+              />
+              &nbsp;Single Item (<code>step = 1</code>)
+            </label>
+          </div>
+        </fieldset>
 
         <div className={customStyles.metricsGrid}>
           <div className={customStyles.metricCard}>
