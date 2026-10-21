@@ -128,6 +128,9 @@ const CompatibilityPage = ({
 
   return (
     <div className={s.page}>
+      <a href="#compat-main-content" className={s.skipLink}>
+        Skip to main content
+      </a>
       <header className={s.hero}>
         <div className={s.heroInner}>
           <nav className={s.topNav} aria-label="Compatibility page navigation">
@@ -166,7 +169,7 @@ const CompatibilityPage = ({
         </div>
       </header>
 
-      <main className={s.mainContent}>
+      <main id="compat-main-content" className={s.mainContent} tabIndex={-1}>
         <section className={s.summaryGrid} aria-label="Compatibility summary metrics">
           <div className={s.summaryCard}>
             <h2 className={s.summaryCardTitle}>Runtime, SSR &amp; Hydration</h2>

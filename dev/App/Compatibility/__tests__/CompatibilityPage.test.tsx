@@ -103,8 +103,14 @@ const mockCompatibilityData: CompatibilityReportData = {
 };
 
 describe("<CompatibilityPage />", () => {
-  it("renders the compatibility matrix heading, summary metrics, and tables", () => {
+  it("renders the compatibility matrix heading, skip link, summary metrics, and tables", () => {
     render(<CompatibilityPage data={mockCompatibilityData} />);
+
+    const skipLink = screen.getByRole("link", { name: /Skip to main content/i });
+    expect(skipLink).toHaveAttribute("href", "#compat-main-content");
+    const main = screen.getByRole("main");
+    expect(main).toHaveAttribute("id", "compat-main-content");
+    expect(main).toHaveAttribute("tabindex", "-1");
 
     expect(screen.getByText("React Version Compatibility Matrix")).toBeInTheDocument();
     expect(screen.getByText(/Runtime, SSR & Unit Test Compatibility/i)).toBeInTheDocument();
