@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.5.0](https://github.com/express-labs/pure-react-carousel/compare/v3.4.0...v3.5.0) (2026-10-21)
+
+
+### Features
+
+* **a11y:** forward refs, add wrapper escape hatches, and improve WCAG 2.2 AA compliance ([#520](https://github.com/express-labs/pure-react-carousel/issues/520)) ([e1d67f3](https://github.com/express-labs/pure-react-carousel/commit/e1d67f39c6e7e5a253602f47a5b99edeb6a33a09))
+* **demo:** add responsive carousel example and section anchor links ([#516](https://github.com/express-labs/pure-react-carousel/issues/516)) ([fa388da](https://github.com/express-labs/pure-react-carousel/commit/fa388da148179ac8fbc004c7d6453ddce8b5fff3))
+
+
+### Bug Fixes
+
+* **demo:** remove invalid &lt;p&gt; wrapper around Example17 control grid ([#521](https://github.com/express-labs/pure-react-carousel/issues/521)) ([0ade028](https://github.com/express-labs/pure-react-carousel/commit/0ade028ab28f82fc3bd89a6277b96468289194e5))
+
 ## [3.4.0](https://github.com/express-labs/pure-react-carousel/compare/v3.3.1...v3.4.0) (2026-10-19)
 
 
