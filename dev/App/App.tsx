@@ -204,14 +204,14 @@ const DevelopmentApp = (): React.ReactElement => {
               <a href="https://wave.webaim.org/report#/https://express-labs.github.io/pure-react-carousel/">
                 WCAG compliance
                 <svg
-                  className="externalLink___8LnXJ"
+                  className={s.externalLink}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   preserveAspectRatio="xMidYMid meet"
                   role="img"
-                  aria-labelledby="external-link-title"
+                  aria-labelledby="wave-external-link-title"
                 >
-                  <title id="external-link-title">External link</title>
+                  <title id="wave-external-link-title">External link</title>
                   <path d="M5 3c-1.093 0-2 .907-2 2v14c0 1.093.907 2 2 2h14c1.093 0 2-.907 2-2v-7h-2v7H5V5h7V3H5zm9 0v2h3.586l-9.293 9.293 1.414 1.414L19 6.414V10h2V3h-7z"></path>
                 </svg>
               </a>

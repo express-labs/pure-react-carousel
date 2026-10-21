@@ -35,7 +35,7 @@ describe("<App />", () => {
       screen.getByRole("region", { name: /^Carousel \(With Master Loading Spinner\)/i }),
     ).toBeInTheDocument();
 
-    expect(screen.getByRole("img", { name: "External link" })).toBeInTheDocument();
+    expect(screen.getAllByRole("img", { name: "External link" })).toHaveLength(2);
     expect(screen.getByRole("img", { name: "Express logo" })).toBeInTheDocument();
 
     const example8 = screen.getByRole("region", {
