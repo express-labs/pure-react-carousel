@@ -1473,6 +1473,10 @@ describe("<Slider />", () => {
               Link
             </a>
             <div data-testid="slide-custom-slider" role="slider" aria-valuenow={50} tabIndex={0} />
+            <div data-testid="slide-searchbox" role="searchbox" tabIndex={0} />
+            <div data-testid="slide-radio" role="radio" aria-checked="false" tabIndex={0} />
+            <div data-testid="slide-checkbox" role="checkbox" aria-checked="false" tabIndex={0} />
+            <div data-testid="slide-switch" role="switch" aria-checked="false" tabIndex={0} />
             <div
               data-testid="slide-prevented"
               tabIndex={0}
@@ -1489,20 +1493,35 @@ describe("<Slider />", () => {
       const button = getByTestId("slide-button");
       const link = getByTestId("slide-link");
       const customSlider = getByTestId("slide-custom-slider");
+      const searchbox = getByTestId("slide-searchbox");
+      const radio = getByTestId("slide-radio");
+      const checkbox = getByTestId("slide-checkbox");
+      const switchEl = getByTestId("slide-switch");
       const preventedEl = getByTestId("slide-prevented");
 
       // Arrow keys inside interactive elements should NOT change currentSlide or preventDefault
-      for (const el of [input, textarea, select, button, link, customSlider]) {
+      for (const el of [
+        input,
+        textarea,
+        select,
+        button,
+        link,
+        customSlider,
+        searchbox,
+        radio,
+        checkbox,
+        switchEl,
+      ]) {
         const notPrevented = fireEvent.keyDown(el, { keyCode: 39 });
         expect(notPrevented).toBe(true);
         expect(carouselStore.state.currentSlide).toBe(1);
       }
-      expect(onKeyDown).toHaveBeenCalledTimes(6);
+      expect(onKeyDown).toHaveBeenCalledTimes(10);
 
       // Event with defaultPrevented already set by child should NOT change currentSlide
       fireEvent.keyDown(preventedEl, { keyCode: 39 });
       expect(carouselStore.state.currentSlide).toBe(1);
-      expect(onKeyDown).toHaveBeenCalledTimes(7);
+      expect(onKeyDown).toHaveBeenCalledTimes(11);
 
       // Pressing arrow key on slider itself navigates without stealing focus from activeElement
       input.focus();
@@ -1512,7 +1531,7 @@ describe("<Slider />", () => {
       expect(carouselStore.state.currentSlide).toBe(2);
       expect(focusSpy).not.toHaveBeenCalled();
       expect(document.activeElement).toBe(input);
-      expect(onKeyDown).toHaveBeenCalledTimes(8);
+      expect(onKeyDown).toHaveBeenCalledTimes(12);
 
       // Consumer onKeyDown is still called when disableKeyboard is true
       rerender(
@@ -1526,16 +1545,20 @@ describe("<Slider />", () => {
       );
       fireEvent.keyDown(slider, { keyCode: 39 });
       expect(carouselStore.state.currentSlide).toBe(2);
-      expect(onKeyDown).toHaveBeenCalledTimes(9);
+      expect(onKeyDown).toHaveBeenCalledTimes(13);
     });
 
-    it("should not call preventDefault or start mouse drag on form/editable descendants while keeping button/link descendants draggable", () => {
+    it("should not call preventDefault or start mouse drag on form/editable/ARIA-widget descendants while keeping button/link descendants draggable", () => {
       const onMouseDown = vi.fn();
       const { container, getByTestId } = render(
         <Slider {...props} dragEnabled trayProps={{ onMouseDown }}>
           <div className="carousel__slide" data-testid="non-interactive-slide">
             <input data-testid="child-input" type="text" />
             <textarea data-testid="child-textarea" />
+            <div data-testid="child-searchbox" role="searchbox" tabIndex={0} />
+            <div data-testid="child-radio" role="radio" aria-checked="false" tabIndex={0} />
+            <div data-testid="child-checkbox" role="checkbox" aria-checked="false" tabIndex={0} />
+            <div data-testid="child-switch" role="switch" aria-checked="false" tabIndex={0} />
             <button data-testid="child-button" type="button">
               Btn
             </button>
@@ -1547,6 +1570,10 @@ describe("<Slider />", () => {
       const nonInteractiveSlide = getByTestId("non-interactive-slide");
       const childInput = getByTestId("child-input");
       const childTextarea = getByTestId("child-textarea");
+      const childSearchbox = getByTestId("child-searchbox");
+      const childRadio = getByTestId("child-radio");
+      const childCheckbox = getByTestId("child-checkbox");
+      const childSwitch = getByTestId("child-switch");
       const childButton = getByTestId("child-button");
 
       // Mousedown on tray or non-interactive slide prevents default when dragEnabled is true
@@ -1559,24 +1586,30 @@ describe("<Slider />", () => {
         document.documentElement.dispatchEvent(new MouseEvent("mouseup"));
       });
 
-      // Mousedown on form/editable child does NOT prevent default AND does NOT start mouse drag on mousemove
-      expect(fireEvent.mouseDown(childInput, { screenX: 100, screenY: 100 })).toBe(true);
-      expect(onMouseDown).toHaveBeenCalledTimes(3);
-      const inputMoveEv = new MouseEvent("mousemove", {
-        bubbles: true,
-        cancelable: true,
-        screenX: 40,
-        screenY: 100,
-      });
-      const inputMovePreventSpy = vi.spyOn(inputMoveEv, "preventDefault");
-      act(() => {
-        document.documentElement.dispatchEvent(inputMoveEv);
-      });
-      expect(inputMovePreventSpy).not.toHaveBeenCalled();
-      expect(tray.style.transform).toContain("translateX(0px)");
-
-      expect(fireEvent.mouseDown(childTextarea, { screenX: 100, screenY: 100 })).toBe(true);
-      expect(onMouseDown).toHaveBeenCalledTimes(4);
+      // Mousedown on form/editable/ARIA-widget child does NOT prevent default AND does NOT start mouse drag on mousemove
+      for (const el of [
+        childInput,
+        childTextarea,
+        childSearchbox,
+        childRadio,
+        childCheckbox,
+        childSwitch,
+      ]) {
+        expect(fireEvent.mouseDown(el, { screenX: 100, screenY: 100 })).toBe(true);
+        const moveEv = new MouseEvent("mousemove", {
+          bubbles: true,
+          cancelable: true,
+          screenX: 40,
+          screenY: 100,
+        });
+        const movePreventSpy = vi.spyOn(moveEv, "preventDefault");
+        act(() => {
+          document.documentElement.dispatchEvent(moveEv);
+        });
+        expect(movePreventSpy).not.toHaveBeenCalled();
+        expect(tray.style.transform).toContain("translateX(0px)");
+      }
+      expect(onMouseDown).toHaveBeenCalledTimes(8);
 
       // Mousedown on button skips mousedown preventDefault (preserving focus) while participating in mouse drag on mousemove
       expect(fireEvent.mouseDown(childButton, { screenX: 100, screenY: 100 })).toBe(true);
