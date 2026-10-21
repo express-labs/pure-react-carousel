@@ -1,37 +1,54 @@
 @use "../style.scss";
 
-$dark: #373737;
-$light: #f4f4f4;
-$white: #fefefe;
-$highlight1: #c0b283;
-$highlight2: #dcd0c0;
 $passBg: #e6f4ea;
-$passText: #137333;
-$passBorder: #ceead6;
+$passText: #116329;
+$passBorder: #81c995;
 $failBg: #fce8e6;
-$failText: #c5221f;
-$failBorder: #fad2cf;
+$failText: #a50e0e;
+$failBorder: #f28b82;
 $warnBg: #fef7e0;
-$warnText: #b06000;
-$warnBorder: #feefc3;
-$borderSubtle: #e0dad1;
+$warnText: #7c4a00;
+$warnBorder: #fbbc04;
 
 .page {
-  min-height: 100vh;
-  background-color: $light;
-  color: $dark;
-  font-family: "Raleway", sans-serif;
+  min-block-size: 100dvh;
+  background-color: var(--color-surface-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+.skipLink {
+  position: absolute;
+  inset-block-start: -10rem;
+  inset-inline-start: 1.6rem;
+  z-index: 1000;
+  background-color: var(--color-surface-dark);
+  color: var(--color-accent-on-dark);
+  border: 2px solid var(--color-accent-on-dark);
+  border-radius: 0.4rem;
+  padding: 1rem 1.6rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:focus,
+  &:focus-visible {
+    inset-block-start: 1.6rem;
+    outline: 3px solid var(--color-accent-on-dark);
+    outline-offset: 3px;
+  }
 }
 
 .hero {
-  background-color: $dark;
-  color: $light;
-  padding: 3.2rem 2rem 4rem;
+  background-color: var(--color-surface-dark);
+  color: var(--color-text-on-dark);
+  padding: 3.6rem 2rem 4.4rem;
 }
 
 .heroInner {
-  max-width: 112rem;
-  margin: 0 auto;
+  max-inline-size: 116rem;
+  margin-inline: auto;
 }
 
 .topNav {
@@ -40,60 +57,75 @@ $borderSubtle: #e0dad1;
   align-items: center;
   justify-content: space-between;
   gap: 1.2rem;
-  margin-bottom: 2.4rem;
+  margin-block-end: 2.8rem;
 }
 
 .backLink {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  color: $highlight2;
-  background: transparent;
-  border: 1px solid $highlight1;
-  border-radius: 0.4rem;
-  padding: 0.8rem 1.4rem;
-  font-size: 1.4rem;
+  min-block-size: 4rem;
+  color: var(--color-sand-on-dark);
+  background-color: var(--color-surface-dark-elevated);
+  border: 1px solid var(--color-border-on-dark);
+  border-radius: 0.6rem;
+  padding: 0.8rem 1.6rem;
+  font-size: 1.5rem;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
 
   &:hover,
   &:focus-visible {
-    background-color: rgba(192, 178, 131, 0.15);
-    color: $white;
+    background-color: var(--color-accent-on-dark);
+    border-color: var(--color-accent-on-dark);
+    color: var(--color-surface-dark);
+  }
+
+  @media (pointer: coarse) {
+    min-block-size: 4.4rem;
   }
 }
 
 .repoLink {
-  color: $highlight2;
-  font-size: 1.4rem;
-  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 4rem;
+  padding: 0.6rem 1.2rem;
+  color: var(--color-sand-on-dark);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
 
   &:hover,
   &:focus-visible {
-    color: $white;
-    text-decoration: underline;
+    color: var(--color-accent-on-dark);
+  }
+
+  @media (pointer: coarse) {
+    min-block-size: 4.4rem;
   }
 }
 
 .heroTitle {
-  font-family: "Montserrat", sans-serif;
-  font-size: 3.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 2.2rem + 1.8vw, 4.2rem);
   line-height: 1.2;
-  color: $highlight1;
-  margin: 0 0 1.2rem;
-
-  @media all and (min-width: 768px) {
-    font-size: 4.2rem;
-  }
+  color: var(--color-accent-on-dark);
+  margin-block: 0 1.4rem;
 }
 
 .heroSubtitle {
-  font-size: 1.6rem;
-  line-height: 1.6;
-  color: $light;
-  max-width: 84rem;
-  margin: 0 0 2rem;
+  font-size: clamp(1.6rem, 1.5rem + 0.3vw, 1.8rem);
+  line-height: 1.65;
+  color: var(--color-text-on-dark);
+  max-inline-size: 72ch;
+  margin-block: 0 2.4rem;
 }
 
 .metaBar {
@@ -106,71 +138,73 @@ $borderSubtle: #e0dad1;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  background-color: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(192, 178, 131, 0.4);
+  background-color: var(--color-surface-dark-elevated);
+  border: 1px solid var(--color-border-on-dark);
   border-radius: 999px;
-  padding: 0.5rem 1.2rem;
-  font-size: 1.2rem;
-  color: $highlight2;
+  padding: 0.6rem 1.4rem;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  color: var(--color-sand-on-dark);
 }
 
 .metaLabel {
   font-weight: 700;
-  color: $highlight1;
+  color: var(--color-accent-on-dark);
 }
 
 .mainContent {
-  max-width: 112rem;
-  margin: 0 auto;
-  padding: 3.2rem 2rem 6rem;
+  max-inline-size: 116rem;
+  margin-inline: auto;
+  padding: 3.6rem 2rem 6.4rem;
 }
 
 .summaryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
-  gap: 1.6rem;
-  margin-bottom: 3.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
+  gap: 2rem;
+  margin-block-end: 3.6rem;
 }
 
 .summaryCard {
-  background-color: $white;
-  border: 1px solid $borderSubtle;
-  border-top: 4px solid $highlight1;
-  border-radius: 0.6rem;
-  padding: 2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  background-color: var(--color-surface-white);
+  border: 1px solid var(--color-border-subtle);
+  border-block-start: 4px solid var(--color-accent-on-light);
+  border-radius: 0.8rem;
+  padding: 2.4rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .summaryCardTitle {
-  font-family: "Montserrat", sans-serif;
-  font-size: 1.3rem;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #666666;
-  margin: 0 0 0.8rem;
+  color: var(--color-text-secondary);
+  margin-block: 0 0.8rem;
 }
 
 .summaryCardValue {
-  font-size: 3rem;
+  font-size: 3.2rem;
   font-weight: 700;
-  color: $dark;
-  margin: 0 0 0.6rem;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  margin-block: 0 0.8rem;
 }
 
 .summaryCardDesc {
-  font-size: 1.3rem;
-  line-height: 1.5;
-  color: #555555;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .section {
-  background-color: $white;
-  border: 1px solid $borderSubtle;
-  border-radius: 0.6rem;
+  background-color: var(--color-surface-white);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 0.8rem;
   padding: 2.4rem;
-  margin-bottom: 3.2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  margin-block-end: 3.6rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .sectionHeader {
@@ -179,20 +213,21 @@ $borderSubtle: #e0dad1;
   align-items: flex-end;
   justify-content: space-between;
   gap: 1.6rem;
-  margin-bottom: 2rem;
+  margin-block-end: 2rem;
 }
 
 .sectionTitle {
-  font-family: "Montserrat", sans-serif;
-  font-size: 2.2rem;
-  color: $dark;
-  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.7rem + 0.7vw, 2.4rem);
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  margin-block: 0 0.6rem;
 }
 
 .sectionDescription {
-  font-size: 1.4rem;
-  line-height: 1.5;
-  color: #555555;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -201,8 +236,8 @@ $borderSubtle: #e0dad1;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1.2rem;
-  margin-bottom: 1.6rem;
+  gap: 1.6rem;
+  margin-block-end: 2rem;
 }
 
 .trackTabs {
@@ -212,25 +247,42 @@ $borderSubtle: #e0dad1;
 }
 
 .trackTab {
-  background-color: $light;
-  color: $dark;
-  border: 1px solid $borderSubtle;
-  border-radius: 0.4rem;
-  padding: 0.7rem 1.2rem;
-  font-size: 1.3rem;
+  min-block-size: 4rem;
+  background-color: var(--color-surface-page);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-control);
+  border-radius: 0.6rem;
+  padding: 0.8rem 1.4rem;
+  font-size: 1.5rem;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
 
   &:hover,
   &:focus-visible {
-    border-color: $highlight1;
+    border-color: var(--color-text-primary);
+    background-color: var(--color-surface-sand);
+  }
+
+  @media (pointer: coarse) {
+    min-block-size: 4.4rem;
   }
 }
 
 .trackTabActive {
-  background-color: $dark;
-  color: $highlight1;
-  border-color: $dark;
+  background-color: var(--color-surface-dark);
+  color: var(--color-accent-on-dark);
+  border-color: var(--color-surface-dark);
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--color-surface-dark);
+    color: var(--color-accent-on-dark);
+    border-color: var(--color-accent-on-dark);
+  }
 }
 
 .searchField {
@@ -242,35 +294,42 @@ $borderSubtle: #e0dad1;
 }
 
 .searchLabel {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: $dark;
+  color: var(--color-text-primary);
 }
 
 .searchInput {
-  border: 1px solid $borderSubtle;
-  border-radius: 0.4rem;
-  padding: 0.7rem 1.2rem;
-  font-size: 1.3rem;
-  min-inline-size: min(20rem, 100%);
+  min-block-size: 4rem;
+  border: 1px solid var(--color-border-control);
+  border-radius: 0.6rem;
+  padding: 0.8rem 1.4rem;
+  font-size: 1.5rem;
+  min-inline-size: min(22rem, 100%);
   max-inline-size: 100%;
-  background-color: $white;
-  color: $dark;
+  background-color: var(--color-surface-white);
+  color: var(--color-text-primary);
 
-  &:focus {
-    outline: 2px solid $highlight1;
-    border-color: $highlight1;
+  &:focus,
+  &:focus-visible {
+    outline: 3px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-color: var(--color-text-primary);
+  }
+
+  @media (pointer: coarse) {
+    min-block-size: 4.4rem;
   }
 }
 
 .tableWrapper {
   overflow: auto;
   max-inline-size: 100%;
-  max-block-size: 72vh;
+  max-block-size: 72dvh;
   container-type: inline-size;
-  border: 1px solid $borderSubtle;
+  border: 1px solid var(--color-border-control);
   border-radius: 0.6rem;
-  background-color: $white;
+  background-color: var(--color-surface-white);
 }
 
 .compatTable {
@@ -285,8 +344,9 @@ $borderSubtle: #e0dad1;
 
   inline-size: 100%;
   border-collapse: collapse;
-  font-size: 1.3rem;
-  text-align: left;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  text-align: start;
 }
 
 .typesTable {
@@ -297,13 +357,14 @@ $borderSubtle: #e0dad1;
 
   inline-size: 100%;
   border-collapse: collapse;
-  font-size: 1.3rem;
-  text-align: left;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  text-align: start;
 }
 
 .tableHead {
-  background-color: $dark;
-  color: $light;
+  background-color: var(--color-surface-dark);
+  color: var(--color-text-on-dark);
 
   @container (width < 600px) {
     display: none;
@@ -311,20 +372,20 @@ $borderSubtle: #e0dad1;
 }
 
 .tableBody {
-  background-color: $white;
+  background-color: var(--color-surface-white);
 }
 
 .tableRow {
-  background-color: $white;
-  border-bottom: 1px solid $borderSubtle;
+  background-color: var(--color-surface-white);
+  border-block-end: 1px solid var(--color-border-subtle);
 
   &:nth-child(even) {
-    background-color: #faf9f7;
+    background-color: var(--color-surface-page);
   }
 
   @container (width < 600px) {
     display: block;
-    padding: 1.2rem;
+    padding: 1.4rem;
   }
 }
 
@@ -333,8 +394,8 @@ $borderSubtle: #e0dad1;
   inset-block-start: 0;
   inset-inline-start: 0;
   z-index: 2;
-  background-color: $dark;
-  color: $highlight1;
+  background-color: var(--color-surface-dark);
+  color: var(--color-accent-on-dark);
   padding: 1.2rem 1.4rem;
   font-weight: 700;
   white-space: nowrap;
@@ -344,8 +405,8 @@ $borderSubtle: #e0dad1;
   position: sticky;
   inset-block-start: 0;
   z-index: 1;
-  background-color: $dark;
-  color: $highlight2;
+  background-color: var(--color-surface-dark);
+  color: var(--color-sand-on-dark);
   padding: 1.2rem 1.4rem;
   font-weight: 700;
   white-space: nowrap;
@@ -355,30 +416,30 @@ $borderSubtle: #e0dad1;
   position: sticky;
   inset-inline-start: 0;
   background-color: inherit;
-  padding: 1rem 1.4rem;
+  padding: 1.2rem 1.4rem;
   font-weight: 700;
-  font-family: monospace;
-  font-size: 1.35rem;
-  color: $dark;
+  font-family: var(--font-mono);
+  font-size: 1.45rem;
+  color: var(--color-text-primary);
   white-space: nowrap;
 
   @container (width < 600px) {
     position: static;
     display: block;
     padding: 0.4rem 0 0.8rem;
-    font-size: 1.5rem;
-    border-bottom: 1px dashed $borderSubtle;
-    margin-bottom: 0.6rem;
+    font-size: 1.6rem;
+    border-block-end: 1px dashed var(--color-border-control);
+    margin-block-end: 0.8rem;
   }
 }
 
 .tableCell {
-  padding: 1rem 1.4rem;
+  padding: 1.2rem 1.4rem;
   vertical-align: middle;
 
   @container (width < 600px) {
     display: block;
-    padding: 0.4rem 0;
+    padding: 0.5rem 0;
   }
 }
 
@@ -448,10 +509,11 @@ $borderSubtle: #e0dad1;
 .badgePass {
   display: inline-flex;
   align-items: center;
-  padding: 0.3rem 0.8rem;
+  padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 700;
+  line-height: 1.3;
   background-color: $passBg;
   color: $passText;
   border: 1px solid $passBorder;
@@ -461,10 +523,11 @@ $borderSubtle: #e0dad1;
 .badgeFail {
   display: inline-flex;
   align-items: center;
-  padding: 0.3rem 0.8rem;
+  padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 700;
+  line-height: 1.3;
   background-color: $failBg;
   color: $failText;
   border: 1px solid $failBorder;
@@ -474,10 +537,11 @@ $borderSubtle: #e0dad1;
 .badgeWarn {
   display: inline-flex;
   align-items: center;
-  padding: 0.3rem 0.8rem;
+  padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 700;
+  line-height: 1.3;
   background-color: $warnBg;
   color: $warnText;
   border: 1px solid $warnBorder;
@@ -486,72 +550,74 @@ $borderSubtle: #e0dad1;
 
 .trackBadge {
   display: inline-block;
-  padding: 0.2rem 0.7rem;
+  padding: 0.3rem 0.8rem;
   border-radius: 0.4rem;
-  background-color: $light;
-  border: 1px solid $borderSubtle;
-  font-size: 1.2rem;
+  background-color: var(--color-surface-page);
+  border: 1px solid var(--color-border-control);
+  font-size: 1.35rem;
   font-weight: 600;
-  color: $dark;
+  line-height: 1.3;
+  color: var(--color-text-primary);
   white-space: nowrap;
 }
 
 .noteText {
-  font-size: 1.25rem;
-  color: #555555;
+  font-size: 1.45rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
 }
 
 .errorCode {
   display: block;
-  margin-top: 0.4rem;
-  font-family: monospace;
-  font-size: 1.2rem;
+  margin-block-start: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
   color: $failText;
 }
 
 .emptyState {
   padding: 3.2rem;
   text-align: center;
-  font-size: 1.4rem;
-  color: #666666;
+  font-size: 1.6rem;
+  color: var(--color-text-secondary);
 }
 
 .cliGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
   gap: 1.6rem;
 }
 
 .cliCard {
-  background-color: $light;
-  border: 1px solid $borderSubtle;
+  background-color: var(--color-surface-page);
+  border: 1px solid var(--color-border-subtle);
   border-radius: 0.6rem;
-  padding: 1.6rem;
+  padding: 1.8rem;
 }
 
 .cliTitle {
-  font-family: "Montserrat", sans-serif;
-  font-size: 1.4rem;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
   font-weight: 700;
-  color: $dark;
-  margin: 0 0 0.6rem;
+  color: var(--color-text-primary);
+  margin-block: 0 0.8rem;
 }
 
 .cliCommand {
   display: block;
-  background-color: $dark;
-  color: $highlight2;
+  background-color: var(--color-surface-dark);
+  color: var(--color-sand-on-dark);
   padding: 1rem 1.2rem;
   border-radius: 0.4rem;
-  font-family: monospace;
-  font-size: 1.25rem;
-  margin: 0 0 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  margin-block: 0 1rem;
   overflow-x: auto;
 }
 
 .cliDesc {
-  font-size: 1.25rem;
-  line-height: 1.5;
-  color: #555555;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
   margin: 0;
 }

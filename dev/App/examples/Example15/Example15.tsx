@@ -110,7 +110,12 @@ const Example15 = () => {
                   type="button"
                   data-testid={`slide-action-btn-${slide.index}`}
                   onClick={() => recordClick(`Clicked button on ${slide.title}`)}
-                  style={{ padding: "8px 12px", cursor: "pointer" }}
+                  style={{
+                    padding: "0.8rem 1.2rem",
+                    minBlockSize: "3.6rem",
+                    fontSize: "1.5rem",
+                    cursor: "pointer",
+                  }}
                 >
                   Action: {slide.title}
                 </button>
@@ -122,9 +127,14 @@ const Example15 = () => {
                     recordClick(`Clicked link on ${slide.title}`);
                   }}
                   style={{
-                    color: "#fefefe",
-                    padding: "8px 12px",
-                    fontWeight: "bold",
+                    color: "#ffffff",
+                    padding: "0.8rem 1.2rem",
+                    minBlockSize: "3.6rem",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    fontSize: "1.5rem",
+                    fontWeight: 700,
+                    textDecoration: "underline",
                   }}
                 >
                   Link: {slide.title}

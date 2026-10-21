@@ -73,6 +73,9 @@ const DevelopmentApp = (): React.ReactElement => {
 
   return (
     <div>
+      <a href="#main-content" className={s.skipLink}>
+        Skip to main content
+      </a>
       <header className={s.firstSlide}>
         <div className={s.firstSlideCenterVert}>
           <div className={s.firstSlideCenterHoriz}>
@@ -88,21 +91,34 @@ const DevelopmentApp = (): React.ReactElement => {
             <nav aria-label="Primary">
               <ul className={s.heroList}>
                 <li>
-                  <a href="#un">What is &quot;unopinionated?&quot;</a>
+                  <a href="#un" className={s.heroLink}>
+                    What is &quot;unopinionated?&quot;
+                  </a>
                 </li>
                 <li>
-                  <a href="#rw">Real World Example</a>
+                  <a href="#rw" className={s.heroLink}>
+                    Real World Example
+                  </a>
                 </li>
                 <li>
-                  <a href="#de">Demo Examples</a>
+                  <a href="#de" className={s.heroLink}>
+                    Demo Examples
+                  </a>
                 </li>
                 <li>
-                  <a href="./compatibility.html" onClick={handleOpenCompatibility}>
+                  <a
+                    href="./compatibility.html"
+                    className={s.heroLink}
+                    onClick={handleOpenCompatibility}
+                  >
                     React Compatibility Chart
                   </a>
                 </li>
                 <li>
-                  <a href="https://github.com/express-labs/pure-react-carousel">
+                  <a
+                    href="https://github.com/express-labs/pure-react-carousel"
+                    className={s.heroLink}
+                  >
                     Documentation
                     <svg
                       className={s.externalLink}
@@ -118,16 +134,18 @@ const DevelopmentApp = (): React.ReactElement => {
                   </a>
                 </li>
                 <li>
-                  <a href="#el">Express Labs</a>
+                  <a href="#el" className={s.heroLink}>
+                    Express Labs
+                  </a>
                 </li>
               </ul>
             </nav>
           </div>
         </div>
       </header>
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <section id="un" className={s.secondSlide} aria-labelledby="un-heading">
-          <h2 id="un-heading" className={s.headline}>
+          <h2 id="un-heading" className={`${s.headline} ${s.headlineCenter}`}>
             What is &quot;unopinionated?&quot;
           </h2>
           <p>
@@ -149,7 +167,7 @@ const DevelopmentApp = (): React.ReactElement => {
         </section>
         <section id="rw" className={s.examples} aria-labelledby="rw-heading">
           <div className={s.examplesInnerCenter}>
-            <h2 id="rw-heading" className={s.headline}>
+            <h2 id="rw-heading" className={`${s.headline} ${s.headlineCenter}`}>
               Real World Example
             </h2>
             <p>
@@ -174,10 +192,12 @@ const DevelopmentApp = (): React.ReactElement => {
         </section>
         <section id="de" className={s.examplesDemo} aria-labelledby="de-heading">
           <div className={s.examplesInner}>
-            <h2 id="de-heading" className={s.headline}>
+            <h2 id="de-heading" className={`${s.headline} ${s.headlineCenter} ${s.headlineDark}`}>
               Default Carousel Examples
             </h2>
-            <h3 className={s.headline}>Why are these examples so... ugly?</h3>
+            <h3 className={`${s.headline} ${s.headlineCenter} ${s.headlineDark}`}>
+              Why are these examples so... ugly?
+            </h3>
             <p>
               These examples are completely un-styled. Pure React Carousel does not come with styles
               that must be defeated in order to match your organization&apos;s branding. So, to
@@ -185,7 +205,7 @@ const DevelopmentApp = (): React.ReactElement => {
               of cats!
             </p>
             <p>
-              <label>
+              <label className={s.selectLabel}>
                 Please choose a demo. &nbsp;
                 <select className={s.select} value={value} onChange={handleChange}>
                   <option value="0">Show All</option>
@@ -345,7 +365,7 @@ const DevelopmentApp = (): React.ReactElement => {
         </section>
       </main>
       <footer id="el" className={s.express} aria-labelledby="el-heading">
-        <h2 id="el-heading" className={s.headline}>
+        <h2 id="el-heading" className={`${s.headline} ${s.headlineCenter}`}>
           Express Labs
         </h2>
         <p>Created by the React developers at Express</p>
