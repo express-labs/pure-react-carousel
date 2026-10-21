@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.5.1](https://github.com/express-labs/pure-react-carousel/compare/v3.5.0...v3.5.1) (2026-10-21)
+
+
+### Bug Fixes
+
+* **demo:** add WCAG landmarks, named regions, and accessible SVG labels ([#522](https://github.com/express-labs/pure-react-carousel/issues/522)) ([c2e52dc](https://github.com/express-labs/pure-react-carousel/commit/c2e52dc12cd92d28ced6ee79ede5c2a61bff08c3))
+* **demo:** modernize typography, WCAG 2.2 AA contrast, and mobile responsiveness ([#524](https://github.com/express-labs/pure-react-carousel/issues/524)) ([32b8bd4](https://github.com/express-labs/pure-react-carousel/commit/32b8bd47a4cbb47d4f0b3697d37bdd3c079e98c8))
+* **demo:** resolve WAVE accessibility alerts and polish demo layout ([#525](https://github.com/express-labs/pure-react-carousel/issues/525)) ([18a68bb](https://github.com/express-labs/pure-react-carousel/commit/18a68bbc8c9122b4033734874cee6ce806b92be3))
+
 ## [3.5.0](https://github.com/express-labs/pure-react-carousel/compare/v3.4.0...v3.5.0) (2026-10-21)
 
 
