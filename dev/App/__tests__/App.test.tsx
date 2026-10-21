@@ -15,6 +15,25 @@ describe("<App />", () => {
     }
   });
 
+  it("should expose WCAG landmark roles and named regions for significant page areas", () => {
+    render(<App />);
+
+    expect(screen.getByRole("banner")).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Primary" })).toBeInTheDocument();
+    expect(screen.getByRole("main")).toBeInTheDocument();
+    expect(screen.getByRole("contentinfo")).toBeInTheDocument();
+
+    expect(screen.getByRole("region", { name: /What is "unopinionated\?"/i })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Real World Example" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Default Carousel Examples" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("region", { name: /^Carousel \(With Master Loading Spinner\)/i }),
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole("img", { name: "External link" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Express logo" })).toBeInTheDocument();
+  });
+
   it("should call handleChange when a select is changed", () => {
     const { container } = render(<App />);
     const select = container.querySelector(".select") as HTMLSelectElement;
