@@ -29,6 +29,9 @@
   "module": "dist/index.es.js",
   "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "build": "vp pack && npm run build:types",
     "build:demo": "vp build",

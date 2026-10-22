@@ -104,7 +104,17 @@ export default defineConfig({
     ],
   },
   pack: {
-    entry: { index: "src/index.ts" },
+    entry: [
+      "src/index.ts",
+      "src/*/index.ts",
+      "src/*/*.tsx",
+      "src/CarouselProvider/context.ts",
+      "src/Store/Store.ts",
+      "!src/CarouselProvider/index.ts",
+      "!src/Spinner/index.ts",
+      "!src/**/__tests__/**",
+    ],
+    hash: false,
     outDir: "dist",
     format: ["esm", "cjs"],
     platform: "browser",
