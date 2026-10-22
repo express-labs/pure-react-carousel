@@ -34,6 +34,7 @@ Use this skill to implement changes through a verifiable Red-Green-Refactor loop
 2. Respect repository guardrails:
    - Never access `window`, `document`, or DOM globals during render or module evaluation (SSR safety).
    - Preserve `.carousel__*` global class names alongside CSS Module classes.
+   - Keep module exports tree-shakeable (preserve multi-entry `pack.entry` in `vite.config.ts` and `"sideEffects": ["*.css"]` in `package.json`, and avoid runtime side effects at module scope).
 3. Re-run the targeted test file:
    ```sh
    npm run test -- src/<Component>/__tests__/<Component>.test.tsx

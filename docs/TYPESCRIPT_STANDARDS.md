@@ -159,7 +159,7 @@ carouselStore.setStoreState(newStoreState);
 Always type `WithStore`-connected components in `src/[ComponentName]/index.ts` with explicit `React.ComponentType<[ComponentName]Props>` and `WithStore<[ComponentName]ViewProps, Pick<CarouselState, ...>>` generics so `state` in `mapStateToProps` is strictly typed as `CarouselState`:
 
 ```ts
-import * as React from 'react';
+import type * as React from 'react';
 import ButtonBack from './ButtonBack';
 import WithStore from '../Store/WithStore';
 import type { ButtonBackProps, ButtonBackViewProps, CarouselState } from '../types';
@@ -303,6 +303,22 @@ If a property name and type are self-explanatory (such as standard React/DOM att
 
 ---
 
+## 8. Tree-Shakeable Component & Module Exports
+
+The published ESM library (`dist/index.es.js` and per-component modules in `dist/`) is packed with multiple entry points in [`vite.config.ts`](../vite.config.ts) (`pack.entry`) alongside `"sideEffects": ["*.css"]` in [`package.json`](../package.json). Because each component view (`src/<Component>/<Component>.tsx`), `WithStore` container (`src/<Component>/index.ts`), `CarouselContext` (`src/CarouselProvider/context.ts`), and `Store` (`src/Store/Store.ts`) is emitted as its own module, downstream consumer bundlers (Vite, Rollup, Rolldown, Webpack, esbuild) can dead-code-eliminate unused components at the module boundary without requiring manual `/*#__PURE__*/` annotations in component files.
+
+1. **Preserve Multi-Entry Packing in [`vite.config.ts`](../vite.config.ts):**
+   - Keep `pack.entry` configured so [`src/index.ts`](../src/index.ts), connected component barrels (`src/*/index.ts`), unconnected views (`src/*/*.tsx`), `src/CarouselProvider/context.ts`, and `src/Store/Store.ts` emit separate ESM/CJS chunks.
+   - [`dist/index.es.js`](../dist/index.es.js) must remain a pure re-export barrel with no bare side-effect imports (`import "./..."`). When adding a new component or top-level export to [`src/index.ts`](../src/index.ts), ensure its source file is covered by `pack.entry`.
+2. **Keep Module Top-Level Scope Free of Side Effects:**
+   - Never execute runtime side effects (DOM queries, `window`/`document` listeners, global state mutations, or console/network calls) at module evaluation time.
+   - Avoid circular or cross-component imports that pull unrelated components into the same module graph.
+3. **Preserve `"sideEffects": ["*.css"]` in [`package.json`](../package.json) & Regression Coverage:**
+   - [`package.json`](../package.json) must declare `"sideEffects": ["*.css"]` so bundlers treat all `.js` modules in `dist/` as side-effect-free while retaining stylesheet imports (`pure-react-carousel/dist/react-carousel.es.css`).
+   - Any new component or export added to [`src/index.ts`](../src/index.ts) must remain covered by [`src/__tests__/treeshake.test.ts`](../src/__tests__/treeshake.test.ts).
+
+---
+
 ## 🚦 Guidelines for AI and Humans
 
 - **Direct Parameter Typing:** Type component props directly on function arguments (`(props: MyViewProps) => ...` or `({ prop }: MyProps) => ...`). Never use `React.FC`.
@@ -310,3 +326,4 @@ If a property name and type are self-explanatory (such as standard React/DOM att
 - **Narrow, Don't Assert:** Avoid `any` and `as` type assertions (`as const` is encouraged for literal types). Use runtime narrowing (`instanceof`, `"in"`, custom type predicates), explicit variable annotations (`: Type`), `satisfies`, and `MutableCarouselStatePatch`.
 - **Keep `.d.ts` Files Ambient:** Never add top-level or nested `import ... from` statements in hand-authored `.d.ts` files; use inline `import('pkg').Type` syntax instead.
 - **High-Signal JSDoc (`/** ... */`):** Document exported types/interfaces and non-obvious properties (units, ranges, constraints, `@default`, `@internal`) using `/** ... */` docblocks in [`src/types.ts`](../src/types.ts); omit redundant comments on self-explanatory props.
+- **Tree-Shakeable Module Exports:** Preserve multi-entry `pack.entry` in [`vite.config.ts`](../vite.config.ts) and `"sideEffects": ["*.css"]` in [`package.json`](../package.json), keep module top-level scope free of runtime side effects, and keep [`src/__tests__/treeshake.test.ts`](../src/__tests__/treeshake.test.ts) green.
