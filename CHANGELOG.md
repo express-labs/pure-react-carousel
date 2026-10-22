@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.2](https://github.com/express-labs/pure-react-carousel/compare/v3.5.1...v3.5.2) (2026-10-22)
+
+
+### Performance Improvements
+
+* **build:** emit multi-entry modules for consumer tree-shaking ([#526](https://github.com/express-labs/pure-react-carousel/issues/526)) ([e3105e5](https://github.com/express-labs/pure-react-carousel/commit/e3105e531594c0976b2f6ea36b2539e33a0a8ae5))
+
 ## [3.5.1](https://github.com/express-labs/pure-react-carousel/compare/v3.5.0...v3.5.1) (2026-10-21)
 
 
