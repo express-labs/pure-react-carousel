@@ -12,6 +12,9 @@
 - **SSR & Next.js Compatibility**:
   - Never reference browser globals (`window`, `document`, `HTMLElement`, `SVGElement`) during module evaluation or render; keep DOM access inside `useEffect`, event handlers, or guarded with `typeof ... !== "undefined"`.
   - Preserve the `"use client";` banner in `vite.config.ts` (`pack.banner`).
+- **Tree-Shaking & Side-Effect-Free Exports**:
+  - The exported library (`dist/index.es.js` and per-component modules in `dist/`) must remain tree-shakeable so consumers importing individual components do not bundle unused library code (verified by `src/__tests__/treeshake.test.ts`).
+  - Preserve the multi-entry `pack.entry` configuration in `vite.config.ts` and `"sideEffects": ["*.css"]` in `package.json` so `dist/index.es.js` acts as a pure re-export barrel across separate component modules, and keep module top-level scope free of runtime side effects.
 
 ## On-Demand Documentation
 
