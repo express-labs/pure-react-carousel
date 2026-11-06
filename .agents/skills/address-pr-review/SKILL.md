@@ -2,10 +2,10 @@
 name: address-pr-review
 description: >-
   Use this skill when the user asks to read, triage, or address pull request review
-  comments (including automated reviews from @copilot or human reviewers). Keeps the
-  primary agent in the "Smart Zone" by offloading GitHub API fetches and codebase
-  recon to a subagent, running a design grill checkpoint when heuristics
-  accumulate, and delegating fixes via a strict TDD loop.
+  comments (from human reviewers or automated bots). Keeps the primary agent in the
+  "Smart Zone" by offloading GitHub API fetches and codebase recon to a subagent,
+  running a design grill checkpoint when heuristics accumulate, and delegating fixes
+  via a strict TDD loop.
 ---
 
 # Address PR Review Skill
@@ -54,5 +54,5 @@ Once the approach is approved:
 1. Run the documentation audit from [`docs/DOCUMENTATION_CONVENTIONS.md`](../../../docs/DOCUMENTATION_CONVENTIONS.md) (`git diff --name-only origin/master...HEAD`).
 2. **Always ask the user before pushing or commenting on the PR**:
    - Present the commit summary and passing quality gates.
-   - Ask if they want you to push the branch (`git push`) and post a re-review comment (e.g., `gh pr comment <num> --body "@copilot can you do a code review?"`).
+   - Ask if they want you to push the branch (`git push`) and run an isolated `gemini-code-reviewer` subagent re-review pass (per [`pr-review-loop`](../pr-review-loop/SKILL.md)).
 3. Suggest `/compact` (or starting a fresh context session if `/compact` is unavailable) after the round completes to evict resolved PR review context and keep the agent in the Smart Zone.
